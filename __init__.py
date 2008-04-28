@@ -2,7 +2,7 @@ from django.conf import settings
 
 from compress.utils import needs_update, compress_css, compress_js
 
-if settings.DEBUG:
+if gresettings.COMPRESS:
     for css in settings.COMPRESS_CSS.values():
         if needs_update(css['compressed_filename'], css['source_filenames']):
             compress_css(css)
