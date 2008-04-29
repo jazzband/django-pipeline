@@ -10,6 +10,7 @@ class JSMinCompressor:
         for source_filename in js['source_filenames']:
             fd = open(media_root(source_filename), 'r')
             source += fd.read()
+            source += ';'
             fd.close()
         
         compressed = jsmin(source)
