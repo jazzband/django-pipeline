@@ -1,5 +1,4 @@
-from django.conf import settings
-
+from compress.conf import settings
 from compress.utils import needs_update, filter_css, filter_js
 
 if settings.COMPRESS:

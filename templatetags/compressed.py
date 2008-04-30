@@ -1,8 +1,11 @@
 import os
 
 from django import template
-from django.conf import settings
 
+from django.conf import settings as django_settings
+
+from compress.conf import settings
+from compress.utils import media_root
 
 register = template.Library()
 
@@ -12,9 +15,9 @@ def render_common(template_name, obj, filename):
     else:
         context = {}
     
-    url = settings.MEDIA_URL + filename
+    url = django_settings.MEDIA_URL + filename
     if settings.COMPRESS and 'bump_filename' in obj and obj['bump_filename']:
-        url += '?%d' % os.stat(settings.MEDIA_ROOT + '/'+(filename)).st_mtime
+        url += '?%d' % os.stat(media_root(filename)).st_mtime
 
     context.update(url=url)
     return template.loader.render_to_string(template_name, context)

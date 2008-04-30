@@ -1,8 +1,7 @@
 import os
 
-
-
-from django.conf import settings
+from compress.conf import settings
+from django.conf import settings as django_settings
 
 def get_filter(compressor_class):
     """
@@ -55,10 +54,10 @@ def needs_update(compressed_file, source_files):
     return False
 
 def media_root(filename):
-    return os.path.join(settings.MEDIA_ROOT, filename)
+    return os.path.join(django_settings.MEDIA_ROOT, filename)
 
 def media_url(filename):
-    return settings.MEDIA_URL + filename
+    return django_settings.MEDIA_URL + filename
 
 def write_tmpfile(content):
     try:
