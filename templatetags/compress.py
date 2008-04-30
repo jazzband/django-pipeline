@@ -1,20 +1,29 @@
-# {% %}
+import os
+
 from django import template
 from django.conf import settings
 
+
 register = template.Library()
 
+def render_common(template_name, obj, filename):
+    if 'extra_context' in obj:
+        context = obj['extra_context']
+    else:
+        context = {}
+    
+    url = settings.MEDIA_URL + filename
+    if settings.COMPRESS and 'bump_filename' in obj and obj['bump_filename']:
+        url += '?%d' % os.stat(settings.MEDIA_ROOT + '/'+(filename)).st_mtime
+
+    context.update(url=url)
+    return template.loader.render_to_string(template_name, context)
+
 def render_css(css, filename):
-    return template.loader.render_to_string('compress/css.html', {
-        'url': settings.MEDIA_URL + filename,
-        'css': css,
-    })
+    return render_common('compress/css.html', css, filename)
 
 def render_js(js, filename):
-    return template.loader.render_to_string('compress/js.html', {
-        'url': settings.MEDIA_URL + filename,
-        'js': js,
-    })
+    return render_common('compress/js.html', js, filename)
 
 class CompressedCSSNode(template.Node):
     def __init__(self, name):
@@ -23,8 +32,9 @@ class CompressedCSSNode(template.Node):
     def render(self, context):
         css_name = template.Variable(self.name).resolve(context)
         css = settings.COMPRESS_CSS[css_name]
+
         if settings.COMPRESS:
-            return render_css(css, css['compressed_filename'])
+            return render_css(css, css['output_filename'])
         else:
             # output source files
             r = ''
@@ -41,7 +51,7 @@ class CompressedJSNode(template.Node):
         js_name = template.Variable(self.name).resolve(context)
         js = settings.COMPRESS_JS[js_name]
         if settings.COMPRESS:
-            return render_js(js, js['compressed_filename'])
+            return render_js(js, js['output_filename'])
         else:
             # output source files
             r = ''
@@ -49,7 +59,7 @@ class CompressedJSNode(template.Node):
                 r += render_js(js, source_file)
             return r
 
-# @register.tag
+#@register.tag
 def compressed_css(parser, token):
     try:
         tag_name, name = token.split_contents()
@@ -59,7 +69,7 @@ def compressed_css(parser, token):
     return CompressedCSSNode(name)
 compressed_css = register.tag(compressed_css)
 
-# @register.tag
+#@register.tag
 def compressed_js(parser, token):
     try:
         tag_name, name = token.split_contents()
