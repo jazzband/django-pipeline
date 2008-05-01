@@ -17,7 +17,13 @@ def render_common(template_name, obj, filename):
     
     url = django_settings.MEDIA_URL + filename
     if settings.COMPRESS and 'bump_filename' in obj and obj['bump_filename']:
-        url += '?%d' % os.stat(media_root(filename)).st_mtime
+        try:
+            url += '?%d' % os.stat(media_root(filename)).st_mtime
+        except:
+             # do not output specified file if stat() fails
+             # the URL could be cached forever at the client
+             # this will (probably) make the problem visible, while not aborting the entire rendering
+            return ''
 
     context.update(url=url)
     return template.loader.render_to_string(template_name, context)
@@ -34,7 +40,11 @@ class CompressedCSSNode(template.Node):
 
     def render(self, context):
         css_name = template.Variable(self.name).resolve(context)
-        css = settings.COMPRESS_CSS[css_name]
+
+        try:
+            css = settings.COMPRESS_CSS[css_name]
+        except KeyError:
+            return '' # fail silently, do not return anything if an invalid group is specified
 
         if settings.COMPRESS:
             return render_css(css, css['output_filename'])
@@ -52,7 +62,12 @@ class CompressedJSNode(template.Node):
 
     def render(self, context):
         js_name = template.Variable(self.name).resolve(context)
-        js = settings.COMPRESS_JS[js_name]
+        
+        try:
+            js = settings.COMPRESS_JS[js_name]
+        except KeyError:
+            return '' # fail silently, do not return anything if an invalid group is specified
+
         if settings.COMPRESS:
             return render_js(js, js['output_filename'])
         else:
