@@ -1,7 +1,7 @@
 from compress.conf import settings
 from compress.utils import needs_update, filter_css, filter_js
 
-if settings.COMPRESS:
+if settings.COMPRESS and settings.COMPRESS_AUTO:
     for css in settings.COMPRESS_CSS.values():
         if needs_update(css['output_filename'], css['source_filenames']):
             filter_css(css)
