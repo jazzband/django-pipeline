@@ -1,5 +1,7 @@
 import os
 
+from django.utils.http import urlquote
+
 from django import template
 
 from django.conf import settings as django_settings
@@ -15,7 +17,8 @@ def render_common(template_name, obj, filename):
     else:
         context = {}
     
-    url = django_settings.MEDIA_URL + filename
+    url = urlquote(django_settings.MEDIA_URL + filename)
+
     if settings.COMPRESS and 'bump_filename' in obj and obj['bump_filename']:
         try:
             url += '?%d' % os.stat(media_root(filename)).st_mtime
