@@ -17,7 +17,7 @@ def render_common(template_name, obj, filename):
     else:
         context = {}
     
-    url = urlquote(django_settings.MEDIA_URL + filename)
+    url = django_settings.MEDIA_URL + urlquote(filename)
 
     if settings.COMPRESS and 'bump_filename' in obj and obj['bump_filename']:
         try:
@@ -32,10 +32,20 @@ def render_common(template_name, obj, filename):
     return template.loader.render_to_string(template_name, context)
 
 def render_css(css, filename):
-    return render_common('compress/css.html', css, filename)
+    try:
+        template_name = css['template_name']
+    except KeyError:
+        template_name = 'compress/css.html'
+        
+    return render_common(template_name, css, filename)
 
 def render_js(js, filename):
-    return render_common('compress/js.html', js, filename)
+    try:
+        template_name = js['template_name']
+    except KeyError:
+        template_name = 'compress/js.html'
+
+    return render_common(template_name, js, filename)
 
 class CompressedCSSNode(template.Node):
     def __init__(self, name):
