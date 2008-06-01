@@ -7,19 +7,15 @@ from django import template
 from django.conf import settings as django_settings
 
 from compress.conf import settings
-from compress.utils import media_root
+from compress.utils import media_root, needs_update, filter_css, filter_js
 
 register = template.Library()
 
 def render_common(template_name, obj, filename):
-    if 'extra_context' in obj:
-        context = obj['extra_context']
-    else:
-        context = {}
     
     url = django_settings.MEDIA_URL + urlquote(filename)
 
-    if settings.COMPRESS and 'bump_filename' in obj and obj['bump_filename']:
+    if settings.COMPRESS and obj.get('bump_filename', False):
         try:
             url += '?%d' % os.stat(media_root(filename)).st_mtime
         except:
@@ -28,24 +24,16 @@ def render_common(template_name, obj, filename):
              # this will (probably) make the problem visible, while not aborting the entire rendering
             return ''
 
-    context.update(url=url)
+    context = obj.get('extra_context', {})
+    context['url'] = url
+
     return template.loader.render_to_string(template_name, context)
 
 def render_css(css, filename):
-    try:
-        template_name = css['template_name']
-    except KeyError:
-        template_name = 'compress/css.html'
-        
-    return render_common(template_name, css, filename)
+    return render_common(css.get('template_name', 'compress/css.html'), css, filename)
 
 def render_js(js, filename):
-    try:
-        template_name = js['template_name']
-    except KeyError:
-        template_name = 'compress/js.html'
-
-    return render_common(template_name, js, filename)
+    return render_common(js.get('template_name', 'compress/js.html'), js, filename)
 
 class CompressedCSSNode(template.Node):
     def __init__(self, name):
@@ -60,6 +48,10 @@ class CompressedCSSNode(template.Node):
             return '' # fail silently, do not return anything if an invalid group is specified
 
         if settings.COMPRESS:
+
+            if settings.COMPRESS_AUTO_TEMPLATES and needs_update(css['output_filename'], css['source_filenames']):
+                filter_css(css)
+
             return render_css(css, css['output_filename'])
         else:
             # output source files
@@ -82,6 +74,10 @@ class CompressedJSNode(template.Node):
             return '' # fail silently, do not return anything if an invalid group is specified
 
         if settings.COMPRESS:
+
+            if settings.COMPRESS_AUTO_TEMPLATES and needs_update(js['output_filename'], js['source_filenames']):
+                filter_js(js)
+
             return render_js(js, js['output_filename'])
         else:
             # output source files
@@ -95,7 +91,7 @@ def compressed_css(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError, '%r requires exactly one argument, being the name of the COMPRESS_CSS setting'
+        raise template.TemplateSyntaxError, '%r requires exactly one argument: the name of a group in the COMPRESS_CSS setting' % token.split_contents()[0]
 
     return CompressedCSSNode(name)
 compressed_css = register.tag(compressed_css)
@@ -105,7 +101,7 @@ def compressed_js(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError, '%r requires exactly one argument, being the name of the COMPRESS_JS setting'
+        raise template.TemplateSyntaxError, '%r requires exactly one argument: the name of a group in the COMPRESS_JS setting' % token.split_contents()[0]
 
     return CompressedJSNode(name)
 compressed_js = register.tag(compressed_js)
