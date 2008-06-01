@@ -67,7 +67,7 @@ class CompressedJSNode(template.Node):
 
     def render(self, context):
         js_name = template.Variable(self.name).resolve(context)
-        
+
         try:
             js = settings.COMPRESS_JS[js_name]
         except KeyError:
