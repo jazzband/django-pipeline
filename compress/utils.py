@@ -1,21 +1,19 @@
 import os
+import re
+
+from django.conf import settings as django_settings
+from django.utils.http import urlquote
+from django.dispatch import dispatcher
 
 from compress.conf import settings
-from django.conf import settings as django_settings
+from compress.signals import css_filtered, js_filtered
 
 def get_filter(compressor_class):
     """
     Convert a string version of a function name to the callable object.
-
-    If the lookup_view is not an import path, it is assumed to be a URL pattern
-    label and the original string is returned.
-
-    If can_fail is True, lookup_view might be a URL pattern label, so errors
-    during the import fail and the string is returned.
     """
     if not hasattr(compressor_class, '__bases__'):
         try:
-            # Bail early for non-ASCII strings (they can't be functions).
             compressor_class = compressor_class.encode('ascii')
             mod_name, class_name = get_mod_func(compressor_class)
             if class_name != '':
@@ -36,28 +34,27 @@ def get_mod_func(callback):
         return callback, ''
     return callback[:dot], callback[dot+1:]
 
-def needs_update(compressed_file, source_files):
+def needs_update(output_file, source_files):
     """
-    Scan the source files for changes and returns True if the compressed_file needs to be updated.
-    compressed_file and source_files should be given with full paths
+    Scan the source files for changes and returns True if the output_file needs to be updated.
     """
-    compressed_file_full = media_root(compressed_file)
+
+    mtime = max_mtime(source_files)
+    version = get_version(mtime)
+
+    compressed_file_full = media_root(get_output_filename(output_file, version))
 
     if not os.path.exists(compressed_file_full):
-        return True
-    compressed_file_mtime = os.stat(compressed_file_full).st_mtime
+        return True, version
 
-    for source_file in source_files:
-        if compressed_file_mtime < os.stat(media_root(source_file)).st_mtime:
-            return True
-
-    return False
+    # Check if the output file is outdated
+    return (os.stat(compressed_file_full).st_mtime < mtime), mtime
 
 def media_root(filename):
     return os.path.join(django_settings.MEDIA_ROOT, filename)
 
-def media_url(filename):
-    return django_settings.MEDIA_URL + filename
+def media_url(url):
+    return django_settings.MEDIA_URL + urlquote(url)
 
 def write_tmpfile(content):
     try:
@@ -90,24 +87,54 @@ def concat(filenames, separator=''):
         fd.close()
 
     return r
-          
+
+def max_mtime(files):
+    return int(max([os.stat(media_root(f)).st_mtime for f in files]))
+
 def save_file(filename, contents):
     fd = open(media_root(filename), 'w+')
     fd.write(contents)
     fd.close()
 
-def filter_css(css, verbose=False):
-    output = concat(css['source_filenames'])
+def get_output_filename(filename, version):
+    if settings.COMPRESS_VERSION:
+        return filename.replace(settings.COMPRESS_VERSION_PLACEHOLDER, version)
+    else:
+        return filename.replace(settings.COMPRESS_VERSION_PLACEHOLDER, settings.COMPRESS_VERSION_DEFAULT)
 
-    for f in settings.COMPRESS_CSS_FILTERS:
-        output = get_filter(f)(verbose=verbose).filter_css(output)
+def get_version(mtime):
+    return str(int(mtime))
 
-    save_file(css['output_filename'], output)
+def remove_files(path, filename, verbosity=0):        
+    escaped_filename = settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)])
 
-def filter_js(js, verbose=False):
-    output = concat(js['source_filenames'], ';') # add a ; between each files to make sure every file is properly "closed"
+    regex = r'^%s$' % (os.path.basename(get_output_filename(escaped_filename, r'\d+')))
 
-    for f in settings.COMPRESS_JS_FILTERS:
-        output = get_filter(f)(verbose=verbose).filter_js(output)
+    for f in os.listdir(path):
+        if re.match(regex, f):
+            if verbosity >= 1:
+                print "Removing outdated file %s" % f
 
-    save_file(js['output_filename'], output)
+            os.unlink(os.path.join(path, f))
+
+def filter_common(obj, verbosity, filters, attr, separator, signal):
+    output = concat(obj['source_filenames'], separator)
+    filename = get_output_filename(obj['output_filename'], get_version(max_mtime(obj['source_filenames'])))
+
+    if settings.COMPRESS_VERSION:
+        remove_files(os.path.dirname(media_root(filename)), obj['output_filename'], verbosity)
+
+    if verbosity >= 1:
+        print "Saving %s" % filename
+
+    for f in filters:
+        output = getattr(get_filter(f)(verbose=(verbosity >= 2)), attr)(output)
+
+    save_file(filename, output)
+    dispatcher.send(signal=signal)
+
+def filter_css(css, verbosity=0):
+    return filter_common(css, verbosity, filters=settings.COMPRESS_CSS_FILTERS, attr='filter_css', separator='', signal=css_filtered)
+
+def filter_js(js, verbosity=0):
+    return filter_common(js, verbosity, filters=settings.COMPRESS_JS_FILTERS, attr='filter_js', separator=';', signal=js_filtered)

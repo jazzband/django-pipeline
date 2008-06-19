@@ -1,39 +1,28 @@
 import os
 
-from django.utils.http import urlquote
-
 from django import template
 
 from django.conf import settings as django_settings
 
 from compress.conf import settings
-from compress.utils import media_root, needs_update, filter_css, filter_js
+from compress.utils import media_root, media_url, needs_update, filter_css, filter_js, get_output_filename, get_version
 
 register = template.Library()
 
-def render_common(template_name, obj, filename):
-    
-    url = django_settings.MEDIA_URL + urlquote(filename)
-
-    if settings.COMPRESS and obj.get('bump_filename', False):
-        try:
-            url += '?%d' % os.stat(media_root(filename)).st_mtime
-        except:
-             # do not output specified file if stat() fails
-             # the URL could be cached forever at the client
-             # this will (probably) make the problem visible, while not aborting the entire rendering
-            return ''
+def render_common(template_name, obj, filename, version):
+    if settings.COMPRESS:
+        filename = get_output_filename(filename, get_version(version))
 
     context = obj.get('extra_context', {})
-    context['url'] = url
+    context['url'] = media_url(filename)
 
     return template.loader.render_to_string(template_name, context)
 
-def render_css(css, filename):
-    return render_common(css.get('template_name', 'compress/css.html'), css, filename)
+def render_css(css, filename, version=None):
+    return render_common(css.get('template_name', 'compress/css.html'), css, filename, version)
 
-def render_js(js, filename):
-    return render_common(js.get('template_name', 'compress/js.html'), js, filename)
+def render_js(js, filename, version=None):
+    return render_common(js.get('template_name', 'compress/js.html'), js, filename, version)
 
 class CompressedCSSNode(template.Node):
     def __init__(self, name):
@@ -49,10 +38,16 @@ class CompressedCSSNode(template.Node):
 
         if settings.COMPRESS:
 
-            if settings.COMPRESS_AUTO_TEMPLATES and needs_update(css['output_filename'], css['source_filenames']):
-                filter_css(css)
+            if settings.COMPRESS:
 
-            return render_css(css, css['output_filename'])
+                version = None
+
+                if settings.COMPRESS_AUTO:
+                    u, version = needs_update(css['output_filename'], css['source_filenames'])
+                    if u:
+                        filter_css(css)
+
+            return render_css(css, css['output_filename'], version)
         else:
             # output source files
             r = ''
@@ -75,10 +70,14 @@ class CompressedJSNode(template.Node):
 
         if settings.COMPRESS:
 
-            if settings.COMPRESS_AUTO_TEMPLATES and needs_update(js['output_filename'], js['source_filenames']):
-                filter_js(js)
+            version = None
 
-            return render_js(js, js['output_filename'])
+            if settings.COMPRESS_AUTO:
+                u, version = needs_update(js['output_filename'], js['source_filenames'])
+                if u:
+                    filter_js(js)
+
+            return render_js(js, js['output_filename'], version)
         else:
             # output source files
             r = ''

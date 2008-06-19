@@ -21,23 +21,31 @@ class Command(NoArgsCommand):
         from compress.utils import needs_update, filter_css, filter_js
 
         for name, css in settings.COMPRESS_CSS.items():
-            if force or needs_update(css['output_filename'], css['source_filenames']):
+            u, version = needs_update(css['output_filename'], css['source_filenames'])
 
-                if verbosity >= 1:
-                    print ("Updating CSS group %s..." % name),
+            if (force or u) or verbosity >= 2:
+                msg = 'CSS Group \'%s\'' % name
+                print msg
+                print len(msg) * '-'
+                print "Version: %s" % version
 
-                filter_css(css, verbose=(verbosity >= 2))
+            if force or u:
+                filter_css(css, verbosity)
 
-                if verbosity >= 1:
-                    print "done."
+            if (force or u) or verbosity >= 2:
+                print
 
         for name, js in settings.COMPRESS_JS.items():
-            if force or needs_update(js['output_filename'], js['source_filenames']):
+            u, version = needs_update(js['output_filename'], js['source_filenames'])
 
-                if verbosity >= 1:
-                    print ("Updating JavaScript group %s..." % name),
+            if (force or u) or verbosity >= 2:
+                msg = 'JavaScript Group \'%s\'' % name
+                print msg
+                print len(msg) * '-'
+                print "Version: %s" % version
 
-                filter_js(js, verbose=(verbosity >= 2))
+            if force or u:
+                filter_js(js, verbosity)
 
-                if verbosity >= 1:
-                    print "done."
+            if (force or u) or verbosity >= 2:
+                print
