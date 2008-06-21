@@ -12,14 +12,17 @@ def get_filter(compressor_class):
     """
     Convert a string version of a function name to the callable object.
     """
+
     if not hasattr(compressor_class, '__bases__'):
+
         try:
             compressor_class = compressor_class.encode('ascii')
             mod_name, class_name = get_mod_func(compressor_class)
             if class_name != '':
                 compressor_class = getattr(__import__(mod_name, {}, {}, ['']), class_name)
         except (ImportError, AttributeError):
-            pass
+            raise Exception('Failed to import filter %s' % compressor_class)
+
     return compressor_class
 
 def get_mod_func(callback):
