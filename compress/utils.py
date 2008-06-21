@@ -22,12 +22,12 @@ def get_filter(compressor_class):
             pass
     return compressor_class
 
-# since this function is not part of any offical API,
-# it is duplicated here to avoid regressions with future/different versions
-# of django
 def get_mod_func(callback):
-    # Converts 'django.views.news.stories.story_detail' to
-    # ['django.views.news.stories', 'story_detail']
+    """
+    Converts 'django.views.news.stories.story_detail' to
+    ('django.views.news.stories', 'story_detail')
+    """
+
     try:
         dot = callback.rindex('.')
     except ValueError:
@@ -51,6 +51,9 @@ def needs_update(output_file, source_files):
     return (os.stat(compressed_file_full).st_mtime < mtime), mtime
 
 def media_root(filename):
+    """
+    Return the full path to ``filename``. ``filename`` is a relative path name in MEDIA_ROOT
+    """
     return os.path.join(django_settings.MEDIA_ROOT, filename)
 
 def media_url(url):
@@ -62,13 +65,13 @@ def write_tmpfile(content):
     except RuntimeWarning:
         pass
 
-    fd = open(filename, 'w+')
+    fd = open(filename, 'wb+')
     fd.write(content)
     fd.close()
     return filename
 
 def read_tmpfile(filename, delete=True):
-    fd = open(filename, 'r')
+    fd = open(filename, 'rb')
     r = fd.read()
     fd.close()
 
@@ -78,10 +81,13 @@ def read_tmpfile(filename, delete=True):
     return r
 
 def concat(filenames, separator=''):
+    """
+    Concatenate the files from the list of the ``filenames``, ouput separated with ``separator``.
+    """
     r = ''
 
     for filename in filenames:
-        fd = open(media_root(filename), 'r')
+        fd = open(media_root(filename), 'rb')
         r += fd.read()
         r += separator
         fd.close()
@@ -92,7 +98,7 @@ def max_mtime(files):
     return int(max([os.stat(media_root(f)).st_mtime for f in files]))
 
 def save_file(filename, contents):
-    fd = open(media_root(filename), 'w+')
+    fd = open(media_root(filename), 'wb+')
     fd.write(contents)
     fd.close()
 
@@ -105,13 +111,11 @@ def get_output_filename(filename, version):
 def get_version(mtime):
     return str(int(mtime))
 
-def remove_files(path, filename, verbosity=0):        
-    escaped_filename = settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)])
-
-    regex = r'^%s$' % (os.path.basename(get_output_filename(escaped_filename, r'\d+')))
+def remove_files(path, filename, verbosity=0):
+    regex = re.compile(r'^%s$' % (os.path.basename(get_output_filename(settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)]), r'\d+'))))
 
     for f in os.listdir(path):
-        if re.match(regex, f):
+        if regex.match(f):
             if verbosity >= 1:
                 print "Removing outdated file %s" % f
 
