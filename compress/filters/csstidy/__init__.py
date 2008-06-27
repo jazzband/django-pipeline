@@ -1,9 +1,10 @@
 import os
 import warnings
+import tempfile
+
 from django.conf import settings
 
 from compress.filter_base import FilterBase
-from compress.utils import write_tmpfile, read_tmpfile
 
 BINARY = getattr(settings, 'CSSTIDY_BINARY', 'csstidy')
 ARGUMENTS = getattr(settings, 'CSSTIDY_ARGUMENTS', '--template=highest')
@@ -12,17 +13,20 @@ warnings.simplefilter('ignore', RuntimeWarning)
 
 class CSSTidyFilter(FilterBase):
     def filter_css(self, css):
-        tmp_filename = write_tmpfile(css)
-
-        output_filename = os.tmpnam()
-
-        command = '%s %s %s %s' % (BINARY, tmp_filename, ARGUMENTS, output_filename)
-
-        output = os.popen(command).read()
-
+        tmp_file = tempfile.NamedTemporaryFile(mode='w+b')
+        tmp_file.write(css)
+        
+        output_file = tempfile.NamedTemporaryFile(mode='w+b')
+        
+        command = '%s %s %s %s' % (BINARY, tmp_file.name, ARGUMENTS, output_file.name)
+        
+        command_output = os.popen(command).read()
+        
+        filtered_css = output_file.read()
+        output_file.close()
+        tmp_file.close()
+        
         if self.verbose:
-            print output
+            print command_output
         
-        os.unlink(tmp_filename)
-        
-        return read_tmpfile(output_filename)
+        return filtered_css

@@ -1,5 +1,6 @@
 import os
 import re
+import tempfile
 
 from django.conf import settings as django_settings
 from django.utils.http import urlquote
@@ -61,27 +62,6 @@ def media_root(filename):
 
 def media_url(url):
     return django_settings.MEDIA_URL + urlquote(url)
-
-def write_tmpfile(content):
-    try:
-        filename = os.tmpnam()
-    except RuntimeWarning:
-        pass
-
-    fd = open(filename, 'wb+')
-    fd.write(content)
-    fd.close()
-    return filename
-
-def read_tmpfile(filename, delete=True):
-    fd = open(filename, 'rb')
-    r = fd.read()
-    fd.close()
-
-    if delete:
-        os.unlink(filename)
-
-    return r
 
 def concat(filenames, separator=''):
     """
