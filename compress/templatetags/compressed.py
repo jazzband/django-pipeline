@@ -38,14 +38,12 @@ class CompressedCSSNode(template.Node):
 
         if settings.COMPRESS:
 
-            if settings.COMPRESS:
+            version = None
 
-                version = None
-
-                if settings.COMPRESS_AUTO:
-                    u, version = needs_update(css['output_filename'], css['source_filenames'])
-                    if u:
-                        filter_css(css)
+            if settings.COMPRESS_AUTO:
+                u, version = needs_update(css['output_filename'], css['source_filenames'])
+                if u:
+                    filter_css(css)
 
             return render_css(css, css['output_filename'], version)
         else:
