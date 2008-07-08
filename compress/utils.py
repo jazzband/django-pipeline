@@ -91,10 +91,13 @@ def get_output_filename(filename, version):
     else:
         return filename.replace(settings.COMPRESS_VERSION_PLACEHOLDER, settings.COMPRESS_VERSION_DEFAULT)
 
-def get_version(mtime):
-    return str(int(mtime))
+def get_version(version):
+    try:
+        return str(int(version))
+    except ValueError:
+        return str(version)
 
-def remove_files(path, filename, verbosity=0):
+def remove_files(path, filename, verbosity=0):    
     regex = re.compile(r'^%s$' % (os.path.basename(get_output_filename(settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)]), r'\d+'))))
 
     for f in os.listdir(path):
