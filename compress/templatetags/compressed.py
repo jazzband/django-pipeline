@@ -11,7 +11,7 @@ register = template.Library()
 
 def render_common(template_name, obj, filename, version):
     if settings.COMPRESS:
-        filename = get_output_filename(filename, get_version(version))
+        filename = get_output_filename(filename, version)
 
     context = obj.get('extra_context', {})
     context['url'] = media_url(filename)

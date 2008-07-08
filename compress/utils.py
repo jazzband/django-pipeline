@@ -86,8 +86,8 @@ def save_file(filename, contents):
     fd.close()
 
 def get_output_filename(filename, version):
-    if settings.COMPRESS_VERSION:
-        return filename.replace(settings.COMPRESS_VERSION_PLACEHOLDER, version)
+    if settings.COMPRESS_VERSION and version is not None:
+        return filename.replace(settings.COMPRESS_VERSION_PLACEHOLDER, get_version(version))
     else:
         return filename.replace(settings.COMPRESS_VERSION_PLACEHOLDER, settings.COMPRESS_VERSION_DEFAULT)
 
