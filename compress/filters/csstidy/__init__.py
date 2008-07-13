@@ -15,7 +15,8 @@ class CSSTidyFilter(FilterBase):
     def filter_css(self, css):
         tmp_file = tempfile.NamedTemporaryFile(mode='w+b')
         tmp_file.write(css)
-        
+        tmp_file.flush()
+
         output_file = tempfile.NamedTemporaryFile(mode='w+b')
         
         command = '%s %s %s %s' % (BINARY, tmp_file.name, ARGUMENTS, output_file.name)
