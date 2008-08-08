@@ -121,7 +121,7 @@ def filter_common(obj, verbosity, filters, attr, separator, signal):
         output = getattr(get_filter(f)(verbose=(verbosity >= 2)), attr)(output)
 
     save_file(filename, output)
-    dispatcher.send(signal=signal)
+    signal.send(None)
 
 def filter_css(css, verbosity=0):
     return filter_common(css, verbosity, filters=settings.COMPRESS_CSS_FILTERS, attr='filter_css', separator='', signal=css_filtered)
