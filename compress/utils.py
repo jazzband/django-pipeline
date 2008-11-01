@@ -38,21 +38,28 @@ def get_mod_func(callback):
         return callback, ''
     return callback[:dot], callback[dot+1:]
 
-def needs_update(output_file, source_files):
+def needs_update(output_file, source_files, method):
     """
     Scan the source files for changes and returns True if the output_file needs to be updated.
     """
 
-    mtime = max_mtime(source_files)
-    version = get_version(mtime)
-
-    compressed_file_full = media_root(get_output_filename(output_file, version))
+    version = get_version(source_files, method)
+    
+    on = get_output_filename(output_file, version)
+    compressed_file_full = media_root(on)
 
     if not os.path.exists(compressed_file_full):
         return True, version
 
     # Check if the output file is outdated
-    return (os.stat(compressed_file_full).st_mtime < mtime), mtime
+    if method == 'hash':
+        ph = settings.COMPRESS_VERSION_PLACEHOLDER
+        of = output_file
+        phi = of.index(ph)
+        old_version = on[phi:phi+len(ph)-len(of)]
+        return (version != old_version), version
+    else:
+        return (os.stat(compressed_file_full).st_mtime < mtime), mtime
 
 def media_root(filename):
     """
@@ -68,13 +75,11 @@ def concat(filenames, separator=''):
     Concatenate the files from the list of the ``filenames``, ouput separated with ``separator``.
     """
     r = ''
-
     for filename in filenames:
         fd = open(media_root(filename), 'rb')
         r += fd.read()
         r += separator
         fd.close()
-
     return r
 
 def max_mtime(files):
@@ -87,15 +92,24 @@ def save_file(filename, contents):
 
 def get_output_filename(filename, version):
     if settings.COMPRESS_VERSION and version is not None:
-        return filename.replace(settings.COMPRESS_VERSION_PLACEHOLDER, get_version(version))
+        return filename.replace(settings.COMPRESS_VERSION_PLACEHOLDER, version)
     else:
         return filename.replace(settings.COMPRESS_VERSION_PLACEHOLDER, settings.COMPRESS_VERSION_DEFAULT)
 
-def get_version(version):
-    try:
-        return str(int(version))
-    except ValueError:
-        return str(version)
+def get_version(source_files, method):
+    if method == 'hash':
+        import cStringIO
+        buf = concat(source_files)
+        s = cStringIO.StringIO(buf)
+        version = getmd5(s)
+        s.close()
+        return version
+    else:
+        mtime = max_mtime(source_files)
+        try:
+            return str(int(mtime))
+        except ValueError:
+            return str(mtime)
 
 def remove_files(path, filename, verbosity=0):    
     regex = re.compile(r'^%s$' % (os.path.basename(get_output_filename(settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)]), r'\d+'))))
@@ -109,7 +123,9 @@ def remove_files(path, filename, verbosity=0):
 
 def filter_common(obj, verbosity, filters, attr, separator, signal):
     output = concat(obj['source_filenames'], separator)
-    filename = get_output_filename(obj['output_filename'], get_version(max_mtime(obj['source_filenames'])))
+    
+    filename = get_output_filename(obj['output_filename'], get_version(obj['source_filenames'], 
+        settings.COMPRESS_VERSION_METHOD))
 
     if settings.COMPRESS_VERSION:
         remove_files(os.path.dirname(media_root(filename)), obj['output_filename'], verbosity)
@@ -128,3 +144,13 @@ def filter_css(css, verbosity=0):
 
 def filter_js(js, verbosity=0):
     return filter_common(js, verbosity, filters=settings.COMPRESS_JS_FILTERS, attr='filter_js', separator=';', signal=js_filtered)
+
+def getmd5(f, CHUNK=2**16):
+    import md5
+    m = md5.new()
+    while 1:
+        chunk = f.read(CHUNK)
+        if not chunk:
+            break
+        m.update(chunk)
+    return m.hexdigest()
