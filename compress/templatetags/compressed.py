@@ -41,7 +41,8 @@ class CompressedCSSNode(template.Node):
             version = None
 
             if settings.COMPRESS_AUTO:
-                u, version = needs_update(css['output_filename'], css['source_filenames'])
+                u, version = needs_update(css['output_filename'], 
+                    css['source_filenames'], settings.COMPRESS_VERSION_METHOD)
                 if u:
                     filter_css(css)
 
@@ -71,7 +72,8 @@ class CompressedJSNode(template.Node):
             version = None
 
             if settings.COMPRESS_AUTO:
-                u, version = needs_update(js['output_filename'], js['source_filenames'])
+                u, version = needs_update(js['output_filename'], 
+                    js['source_filenames'], settings.COMPRESS_VERSION_METHOD)
                 if u:
                     filter_js(js)
 
