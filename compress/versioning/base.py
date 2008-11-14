@@ -1,6 +1,4 @@
 class VersioningBase(object):
-    def __init__(self, verbose):
-        self.verbose = verbose
 
     def get_version(self, source_files):
         raise NotImplementedError
