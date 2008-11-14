@@ -18,6 +18,3 @@ if COMPRESS_CSS_FILTERS is None:
 
 if COMPRESS_JS_FILTERS is None:
     COMPRESS_JS_FILTERS = []
-
-if COMPRESS_VERSION and not COMPRESS_AUTO:
-    raise ImproperlyConfigured('COMPRESS_AUTO needs to be True when using COMPRESS_VERSION.')
