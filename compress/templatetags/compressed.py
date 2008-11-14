@@ -5,7 +5,7 @@ from django import template
 from django.conf import settings as django_settings
 
 from compress.conf import settings
-from compress.utils import media_root, media_url, needs_update, filter_css, filter_js, get_output_filename, get_version
+from compress.utils import media_root, media_url, needs_update, filter_css, filter_js, get_output_filename, get_version, get_version_from_file
 
 register = template.Library()
 
@@ -45,7 +45,11 @@ class CompressedCSSNode(template.Node):
                     css['source_filenames'])
                 if u:
                     filter_css(css)
-
+            else:
+                filename_base, filename = os.path.split(css['output_filename'])
+                path_name = media_root(filename_base)
+                version = get_version_from_file(path_name, filename)
+                
             return render_css(css, css['output_filename'], version)
         else:
             # output source files
@@ -76,6 +80,10 @@ class CompressedJSNode(template.Node):
                     js['source_filenames'])
                 if u:
                     filter_js(js)
+            else: 
+                filename_base, filename = os.path.split(js['output_filename'])
+                path_name = media_root(filename_base)
+                version = get_version_from_file(path_name, filename)
 
             return render_js(js, js['output_filename'], version)
         else:
