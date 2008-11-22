@@ -4,7 +4,7 @@ There are several ways for generating version strings. Basically, two types are 
 
 h3. mtime version strings (default)
 
-This is the default method for generating version strings. In short, when invoked, it checks whether any of the source files system timestamps (mtime) are newer than the version string of the corresponding compressed file. If that is the case, the compressed output file version string will be the mtime of the most recent source file.
+This is the default method for generating version strings. In short, when invoked, it checks whether any of the source files system timestamps (mtime) is newer than the version string of the corresponding compressed file. If that is the case, the compressed output file version string will be the mtime of the most recent source file.
 
 h3. Hash version strings
 
@@ -49,14 +49,14 @@ class ShortSHA1Versioning(SHA1Versioning):
 In your settings.py add:
 
 <pre><code>
-COMPRESS_VERSIONING = '_app_._module_.ShortSHA1Versioning'
+COMPRESS_VERSIONING = 'app.module.ShortSHA1Versioning'
 </code></pre>
 
 N.B. replace _app_ and _module_ by the app and module that contains your versioning class
 
 h3. Production environment
 
-You probably do not want the source files to be evaluated and regenerated on every request in a production environment. Especially, calculating a hash on every request could be expensive.
+You probably do not want the source files to be evaluated and (if needed) regenerated on every request in a production environment. Especially, calculating a hash on every request could be expensive.
 To avoid this, make sure your source files are compressed before deployment, and put the following settings in your production environment's settings.py:
 
 <pre><code>
@@ -64,4 +64,4 @@ COMPRESS_AUTO = False
 COMPRESS_VERSION = True
 </code></pre>
 
-This way, the compressed filenames will be looked up in the file system, instead of being checked and (if needed) regenerated on every request.
+This way, the compressed filenames will be looked up in the file system, instead of being evaluated and (if needed) regenerated on every request.
