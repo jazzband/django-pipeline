@@ -1,4 +1,7 @@
-#summary Short introduction to performance tweaks and what django-compress does
+h1. Introduction
+
+_Short introduction to performance tweaks and what django-compress does_
+
 JavaScript and CSS minification/compression can decrease load times of sites a lot.
 It is important to reduce the number of requests that are made. Fewer files means better performance. However, when you develop CSS, and particularly if you are building a big site, it can be nice to separate different parts of the site’s CSS into different files. You also want to keep the CSS and JavaScript in different files while you develop, to make debugging easier.
 
@@ -8,11 +11,11 @@ You also want to make sure that as much of the static content is cached as much 
 
 These techniques has been described more in depth at Yahoo:
 
- * http://developer.yahoo.com/performance/rules.html#num_http
- * http://developer.yahoo.com/performance/rules.html#minify
- * http://developer.yahoo.com/performance/rules.html#expires
+* http://developer.yahoo.com/performance/rules.html#num_http
+* http://developer.yahoo.com/performance/rules.html#minify
+* http://developer.yahoo.com/performance/rules.html#expires
 
 django-compress tries to address those issues with as little manual intervention as possible, whilst still being configurable enough to not get in your way. Read more about the [Features].
 
 There are numerous of other techniques that could be used to improve performance, Yahoo has an excellent page that lists the most common:
- * http://developer.yahoo.com/performance/rules.html
+* http://developer.yahoo.com/performance/rules.html

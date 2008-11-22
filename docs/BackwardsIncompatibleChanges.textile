@@ -1,5 +1,6 @@
 h1. Backwards Incompatible Changes
-A list of backwards incompatible changes
+
+_A list of backwards incompatible changes_
 
 h3. Revision 53
 
@@ -10,7 +11,7 @@ h3. Revision 56
 
 http://code.google.com/p/django-compress/source/detail?r=56
 
-<strong>bump_filename completely changed</strong>
+*bump_filename completely changed*
 
 bump_filename was broken because a lot of caches does not properly cache files with querystrings. Therefore it is completely rewritten without any thoughts on backwards compatibility, since it was not possible anyways. This changeset also introduces a couple of other changes that could potentially break old code.
 
