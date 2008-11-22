@@ -11,9 +11,9 @@ h3. Management command
 You can update and force updates of the compressed file(s) with the management command “synccompress”. This makes it possible to keep the files updated manually.
 
 The command is
-<code>
+<pre><code>
 ./manage.py synccompress
-</code>
+</code></pre>
 
 (assuming you are in you project-folder that contains <tt>manage.py</tt>). To force all files to be re-generated, use the argument <tt>--force</tt> (e.g. <tt>./manage.py synccompress --force</tt>)
 
@@ -29,12 +29,12 @@ h4. Example
 
 If you have specified the CSS-groups “my_screen_css” and “my_print_css” and a JavaScript-group with the name “my_scripts”, you would use the following code to output them all:
 
-<code>
+<pre><code>
 {% load compressed %}
 {% compressed_css 'my_screen_css' %}
 {% compressed_css 'my_print_css' %}
 {% compressed_js 'my_scripts' %}
-</code>
+</code></pre>
 
 h3. Far future Expires
 

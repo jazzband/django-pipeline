@@ -28,19 +28,19 @@ See documentation for more information:
 * [http://httpd.apache.org/docs/2.2/mod/mod_expires.html mod_expires in Apache documentation]
 
 h4. Example
-<code>
+<pre><code>
 <Directory /your/media/root/css>
     ExpiresActive on
     ExpiresDefault "access plus 10 years"
 </Directory>
-</code>
+</code></pre>
 
 Apache also allows the specify files by their mime-type:
-<code>
+<pre><code>
 ExpiresActive On
 ExpiresByType text/css "access plus 10 years"
 ExpiresByType application/x-javascript "access plus 10 years"
-</code>
+</code></pre>
 
 h4. lighttpd
 
@@ -51,7 +51,7 @@ h4. Example
 
 Set far future headers on all files under /media/css/ and /media/js/.
 
-<code>
+<pre><code>
 $HTTP["url"] =~ "^/media/css/" {
      expire.url = ( "" => "access 10 years" )
 }
@@ -59,7 +59,7 @@ $HTTP["url"] =~ "^/media/css/" {
 $HTTP["url"] =~ "^/media/js/" {
      expire.url = ( "" => "access 10 years" )
 }
-</code>
+</code></pre>
 
 h4. nginx
 
@@ -69,7 +69,7 @@ nginx's <tt>ngx_http_headers_module</tt> provides the <tt>expires</tt> option, w
 h4. Example 
 
 This will set expiration to the maximum expiration:
-<code>
+<pre><code>
 location /media/js {
     expires max;
 }
@@ -77,4 +77,4 @@ location /media/js {
 location /media/css {
     expires max;
 }
-</code>
+</code></pre>

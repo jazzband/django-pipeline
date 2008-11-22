@@ -8,7 +8,7 @@ h3. Specifying files
 
 You specify groups of files to be compressed in your settings. The basic syntax for specifying CSS/JavaScript groups files is:
 
-<code>
+<pre><code>
 COMPRESS_CSS = {
     'group_one': {
         'source_filenames': ('css/style.css', 'css/foo.css', 'css/bar.css'),
@@ -28,7 +28,7 @@ COMPRESS_JS = {
         'output_filename': 'js/all_compressed.js',
     }
 }
-</code>
+</code></pre>
 
 h4. Group options
 
@@ -45,7 +45,7 @@ h3. Other settings
 * </tt>COMPRESS_VERSION</tt>: regulates whether or not to add a "version number" to the outputted files filename with for use with “far future Expires”. For more information, see [FarFutureExpires]. When you specify </tt>COMPRESS_VERSION</tt> you will also need to add a placeholder (which by default is '?') for the version number in the </tt>output_filename</tt> setting. Files with new filenames will be generated if needed, and old outdated files will be removed at the same time. All files with a matching name e.g. </tt>output_filename</tt> where ? can be replaced by digits will be removed. If you for some reason have files named in the same way, you should consider moving them or putting the compressed files in their own directory.
 
 </tt>COMPRESS_VERSION</tt> Example:
-<code>
+<pre><code>
 COMPRESS = True
 COMPRESS_VERSION = True
 COMPRESS_CSS = {
@@ -54,7 +54,7 @@ COMPRESS_CSS = {
         'output_filename': 'c/screen.r?.css',
     },
 }
-</code>
+</code></pre>
 
 This will output a file like <tt>/media/c/screen.r1213947531.css</tt>, which will be re-generated and updated when you change your source files.
 

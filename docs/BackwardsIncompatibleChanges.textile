@@ -22,12 +22,12 @@ bump_filename was broken because a lot of caches does not properly cache files w
 
 E.g.:
 <pre>
-<code>
+<pre><code>
 'screen': {
     'source_filenames': ('css/screen/style.css', 'css/screen/paginator.css', 'css/screen/agenda.css', 'css/screen/weather.css', 'css/screen/gallery.css', ),
     'output_filename': 'c/screen.r?.css',
 },
-</code>
+</code></pre>
 </pre>
 
 * COMPRESS_VERSION requires COMPRESS_AUTO to be enabled. COMPRESS_AUTO is enabled by default, but if you explicitly set it to `False` an ImproperlyConfiguredError exception will be thrown. 
