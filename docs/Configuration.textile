@@ -1,0 +1,76 @@
+h1. Configuration
+
+Configuration and list of available settings for django-compress
+
+*Don't forgett to read BackwardsIncompatibleChanges*
+
+h3. Specifying files
+
+You specify groups of files to be compressed in your settings. The basic syntax for specifying CSS/JavaScript groups files is:
+
+<pre><code>
+COMPRESS_CSS = {
+    'group_one': {
+        'source_filenames': ('css/style.css', 'css/foo.css', 'css/bar.css'),
+        'output_filename': 'css/one_compressed.css',
+        'extra_context': {
+            'media': 'screen,projection',
+        },
+    },
+    
+    # other CSS groups goes here
+}
+
+COMPRESS_JS = {
+    'all': {
+        'source_filenames': ('js/jquery-1.2.3.js', 'js/jquery-preload.js', 'js/jquery.pngFix.js',
+        'js/my_script.js', 'js/my_other_script.js'),
+        'output_filename': 'js/all_compressed.js',
+    }
+}
+</code></pre>
+
+h4. Group options
+
+* </tt>source_filenames</tt> is a tuple with the source files to be compressed. The files are concatenated in the order it is specified in the tuple. This option is required.
+* </tt>output_filename</tt> is the filename of the (to be) compressed file. This option is required.
+* </tt>extra_context</tt> is a dictionary of values to add to the template context, when generating the HTML for the HTML-tags with the templatetags. This option is not required and can be left out. For CSS, if you do not specify </tt>extra_context</tt>/</tt>media</tt>, the default media in the </tt><link></tt> output will be </tt>media="all"</tt>.
+
+Note that all filenames are specified relative to MEDIA_ROOT, and thus the source files needs to be in your MEDIA_ROOT.
+
+h3. Other settings
+
+* </tt>COMPRESS</tt>: When </tt>COMPRESS</tt> is </tt>True</tt>, CSS and JavaScripts will be concatenated and filtered. When </tt>False</tt>, the source-files will be used instead. Defaults to </tt>not DEBUG</tt> (compressed files will only be used in non-DEBUG-mode (production))
+* </tt>COMPRESS_AUTO</tt>: Auto-generate CSS and JavaScript files whenever needed, when the template tags are invoked. This setting will make sure that the outputted files always are up to date (assuming that you are using the provided templatetags to output the links to your files). If you disable this, you can use the management command to keep your files manually updated. Defaults to </tt>True</tt>.
+* </tt>COMPRESS_VERSION</tt>: regulates whether or not to add a "version number" to the outputted files filename with for use with “far future Expires”. For more information, see [FarFutureExpires]. When you specify </tt>COMPRESS_VERSION</tt> you will also need to add a placeholder (which by default is '?') for the version number in the </tt>output_filename</tt> setting. Files with new filenames will be generated if needed, and old outdated files will be removed at the same time. All files with a matching name e.g. </tt>output_filename</tt> where ? can be replaced by digits will be removed. If you for some reason have files named in the same way, you should consider moving them or putting the compressed files in their own directory.
+
+</tt>COMPRESS_VERSION</tt> Example:
+<pre><code>
+COMPRESS = True
+COMPRESS_VERSION = True
+COMPRESS_CSS = {
+    'screen': {
+        'source_filenames': ('css/screen/style.css', 'css/screen/paginator.css', 'css/screen/agenda.css', 'css/screen/weather.css', 'css/screen/gallery.css', ),
+        'output_filename': 'c/screen.r?.css',
+    },
+}
+</code></pre>
+
+This will output a file like <tt>/media/c/screen.r1213947531.css</tt>, which will be re-generated and updated when you change your source files.
+
+* </tt>COMPRESS_CSS_FILTERS</tt>: A tuple of filters to be applied to CSS files. Defaults to </tt>('compress.filters.csstidy.CSSTidyFilter', )</tt>. Please note that in order to use CSSTidy, you need to install CSSTidy (see [Installation] for more details).
+* </tt>COMPRESS_JS_FILTERS</tt>: A tuple of filters to be applied to JavaScript files. Defaults to </tt>('compress.filters.jsmin.JSMinFilter',)</tt>
+
+</tt>COMPRESS_*_FILTERS</tt> can be set to an empty tuple or None to not use any filters. The files will however still be concatenated to one file.
+
+h4. CSSTidy settings
+
+If you choose to use CSSTidy (which is enabled by default), you can also use the following settings:
+* </tt>CSSTIDY_BINARY</tt>: name or path of the CSSTidy binary to be used for processing JavaScript-files with the CSSTidy filter. Defaults to </tt>'csstidy'</tt>.
+* </tt>CSSTIDY_ARGUMENTS</tt>: specifies arguments to be passed to CSSTidy. Defaults to </tt>'--template=highest'</tt>. See CSSTidy man-page or website for more details.
+
+h4. YUI Compressor settings
+
+* </tt>COMPRESS_YUI_BINARY</tt>: command line to execute for the YUI program. Defaults to </tt>'java -jar yuicompressor.jar'</tt>. You will most likely change this to the location of yuicompressor on your system.
+* </tt>COMPRESS_YUI_CSS_ARGUMENTS</tt>: Additional arguments to use when compressing CSS. Defaults to </tt>''</tt>.
+* </tt>COMPRESS_YUI_JS_ARGUMENTS</tt>: Additional arguments to use when compressing JavaScript. Defaults to </tt>''</tt>.
