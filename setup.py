@@ -24,8 +24,8 @@ for dirpath, dirnames, filenames in os.walk('compress'):
             data_files.append(os.path.join(prefix, f))
 
 setup(
-	name='compress',
-	version='0.1-svn',
+	name='django-compress',
+	version='0.1.1',
 	description='django-compress provides an automated system for compressing CSS and JavaScript files',
 	author='Andreas Pelme',
 	author_email='Andreas Pelme <andreas@pelme.se>',

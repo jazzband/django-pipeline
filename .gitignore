@@ -3,3 +3,7 @@
 :2e_*
 /build
 *.tmproj
+.*.swp
+build
+dist
+MANIFEST

@@ -6,9 +6,6 @@ from django.conf import settings
 class Command(NoArgsCommand):
     option_list = NoArgsCommand.option_list + (
         make_option('--force', action='store_true', default=False, help='Force update of all files, even if the source files are older than the current compressed file.'),
-        make_option('--verbosity', action='store', dest='verbosity', default='1',
-            type='choice', choices=['0', '1', '2'],
-            help='Verbosity level; 0=minimal output, 1=normal output, 2=all output'),
     )
     help = 'Updates and compresses CSS and JavsScript on-demand, without restarting Django'
     args = ''
@@ -51,3 +48,11 @@ class Command(NoArgsCommand):
 
             if (force or u) or verbosity >= 2:
                 print
+
+# Backwards compatibility for Django r9110
+if not [opt for opt in Command.option_list if opt.dest=='verbosity']:
+    Command.option_list += (
+    make_option('--verbosity', '-v', action="store", dest="verbosity",
+        default='1', type='choice', choices=['0', '1', '2'],
+        help="Verbosity level; 0=minimal output, 1=normal output, 2=all output"),
+    )
