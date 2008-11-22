@@ -63,6 +63,64 @@ This will output a file like <tt>/media/c/screen.r1213947531.css</tt>, which wil
 
 </tt>COMPRESS_*_FILTERS</tt> can be set to an empty tuple or None to not use any filters. The files will however still be concatenated to one file.
 
+h4. External urls
+
+While django-compress does a great job of minimizing the amount of http requests on your site (hence increasing performence) there are sometimes cases
+when you want to include external files aswell. Lets take an example:
+
+<pre><code>
+COMPRESS_JS = {
+    'jquery': {
+        'external_urls': (
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js',
+            'http://ajax.googleapis.com/ajax/libs/jqueryui/1.5.2/jquery-ui.min.js'
+        ),
+    },
+    'all': {
+        'source_filenames': ('js/blog.js', 'js/comments.js'),
+        'output_filename': 'js/all.js',
+    },
+}
+</code></pre>
+In template:
+<pre><code>
+    {% load compressed %}
+    {% compressed_js 'jquery' %}
+    {% compressed_js 'all' %}
+</code></pre>
+Output in when <tt>settings.COMPRESS = False</tt>
+<pre><code>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.5.2/jquery-ui.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/media/js/blog.js" charset="utf-8"></script><script type="text/javascript" src="/media/js/comments.js" charset="utf-8"></script>
+</code></pre>
+
+Output in when <tt>settings.COMPRESS = True</tt>
+<pre><code>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.5.2/jquery-ui.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/media/js/all.js" charset="utf-8"></script>
+</code></pre>
+
+Now why is this good you ask? The more script sources the more impact on performence according to http://developer.yahoo.com/performance/rules.html#num_http 
+which is true but if you are low bandwidth or superbig you may want to offload
+some horsepower to google which leads us as hinted in the example above to the next topic.
+
+Note: external urls is currently only available for javascript. There's
+currently no reason to have external css files (Yes there are css frameworks aswell on the net but they are often very small or generated to fit your needs)
+
+h4. Google AJAX Libraries API
+
+So the reason for adding external urls support to django-compress is google ajax libraries api support (example above) but you may want to use it however you want. 
+
+The advantages for offloading huge javascript libraries to google cdn is of course that your site will need a lot less bandwidth, even if you use far futures expires headers. But the superior reason is of course that the more sites that uses it, the bigger the chance is that your favorite js framework is already cached in your visitors browser. 
+
+Google also uses far future expires headers so don't worry about that. Don't worry about latency outside the US either. Here in sweden I measuerd a latencey of 39ms.
+
+To sum somethings up, it's up to you and your situation to decide if merging all js files or offloading js libraries to google gives your site the best performence. Both ways are great to achive great performence.
+
+For a complete list of javascript libraries supported go to http://code.google.com/apis/ajaxlibs/
+
 h4. CSSTidy settings
 
 If you choose to use CSSTidy (which is enabled by default), you can also use the following settings:
