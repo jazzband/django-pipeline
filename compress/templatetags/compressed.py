@@ -14,8 +14,11 @@ def render_common(template_name, obj, filename, version):
         filename = get_output_filename(filename, version)
 
     context = obj.get('extra_context', {})
-    context['url'] = media_url(filename)
-
+    if filename.startswith('http://'):
+        context['url'] = filename
+    else:
+        context['url'] = media_url(filename)
+        
     return template.loader.render_to_string(template_name, context)
 
 def render_css(css, filename, version=None):
@@ -65,7 +68,13 @@ class CompressedJSNode(template.Node):
             js = settings.COMPRESS_JS[js_name]
         except KeyError:
             return '' # fail silently, do not return anything if an invalid group is specified
-
+        
+        if 'external_urls' in js:
+            r = ''
+            for url in js['external_urls']:
+                r += render_js(js, url)
+            return r
+                    
         if settings.COMPRESS:
 
             version = None
