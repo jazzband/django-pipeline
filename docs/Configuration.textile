@@ -2,7 +2,7 @@ h1. Configuration
 
 Configuration and list of available settings for django-compress
 
-*Don't forgett to read BackwardsIncompatibleChanges*
+*Don't forget to read BackwardsIncompatibleChanges*
 
 h3. Specifying files
 
