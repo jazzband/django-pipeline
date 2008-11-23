@@ -24,21 +24,20 @@ for dirpath, dirnames, filenames in os.walk('compress'):
             data_files.append(os.path.join(prefix, f))
 
 setup(
-	name='django-compress',
-	version='0.1.1',
-	description='django-compress provides an automated system for compressing CSS and JavaScript files',
-	author='Andreas Pelme',
-	author_email='Andreas Pelme <andreas@pelme.se>',
-	url='http://code.google.com/p/django-compress/',
-	packages = packages,
-	package_data = {'compress': data_files,},
-	classifiers=[
-		'Development Status :: 4 - Beta',
-              	'Environment :: Web Environment',
-                'Intended Audience :: Developers',
-                'License :: OSI Approved :: MIT License',
-                'Operating System :: OS Independent',
-                'Programming Language :: Python',
-                'Topic :: Utilities',
-	]
+    name='django-compress',
+    version='1.0',
+    description='django-compress provides an automated system for compressing CSS and JavaScript files',
+    author='Andreas Pelme',
+    author_email='Andreas Pelme <andreas@pelme.se>',
+    url='http://code.google.com/p/django-compress/',
+    packages = packages,
+    package_data = {'compress': data_files,},
+    classifiers=[
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Topic :: Utilities',
+    ]
 )
