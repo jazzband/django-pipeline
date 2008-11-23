@@ -1,7 +1,6 @@
 .AppleDouble
 *.pyc
 :2e_*
-/build
 *.tmproj
 .*.swp
 build
