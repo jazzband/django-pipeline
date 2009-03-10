@@ -14,10 +14,11 @@ def render_common(template_name, obj, filename, version):
         filename = get_output_filename(filename, version)
 
     context = obj.get('extra_context', {})
+    prefix = context.get('prefix', None)
     if filename.startswith('http://'):
         context['url'] = filename
     else:
-        context['url'] = media_url(filename)
+        context['url'] = media_url(filename, prefix)
         
     return template.loader.render_to_string(template_name, context)
 
