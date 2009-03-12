@@ -81,6 +81,9 @@ def max_mtime(files):
     return int(max([os.stat(media_root(f)).st_mtime for f in files]))
 
 def save_file(filename, contents):
+    dirname = os.path.dirname(media_root(filename))
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
     fd = open(media_root(filename), 'wb+')
     fd.write(contents)
     fd.close()
@@ -104,12 +107,13 @@ def get_version_from_file(path, filename):
 
 def remove_files(path, filename, verbosity=0):    
     regex = re.compile(r'^%s$' % (os.path.basename(get_output_filename(settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)]), r'[A-Za-z0-9]+'))))
-    for f in os.listdir(path):
-        if regex.match(f):
-            if verbosity >= 1:
-                print "Removing outdated file %s" % f
-
-            os.unlink(os.path.join(path, f))
+    if os.path.exists(path):
+        for f in os.listdir(path):
+            if regex.match(f):
+                if verbosity >= 1:
+                    print "Removing outdated file %s" % f
+        
+                os.unlink(os.path.join(path, f))
 
 def filter_common(obj, verbosity, filters, attr, separator, signal):
     output = concat(obj['source_filenames'], separator)
