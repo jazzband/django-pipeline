@@ -9,6 +9,7 @@ or just made django-compress more awesome.
  * Alexander Pugachev <alexander.pugachev@gmail.com>
  * Sander Smits <jhmsmits@gmail.com>
  * Remco Wendt <remco@maykinmedia.nl>
+ * Patrick Altman <paltman@gmail.com>
 
 The Python-version of jsmin (http://www.crockford.com/javascript/jsmin.html) 
 is included in django-compress. It was translated from to Python by Baruch 
