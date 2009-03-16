@@ -63,6 +63,28 @@ This will output a file like <tt>/media/c/screen.r1213947531.css</tt>, which wil
 
 </tt>COMPRESS_*_FILTERS</tt> can be set to an empty tuple or None to not use any filters. The files will however still be concatenated to one file.
 
+h4. Prefix - An Alternative to MEDIA_URL
+
+In cases where you want to deploy your compiled script and styles to somewhere other than your MEDIA_URL, say a Content Delivery
+Network, you can use the optional _prefix_ parameter:
+
+<pre><code>
+	COMPRESS_CSS = {
+	    'group_one': {
+	        'source_filenames': ('css/style.css', 'css/foo.css', 'css/bar.css'),
+	        'output_filename': 'css/one_compressed.css',
+	        'extra_context': {
+	            'media': 'screen,projection',
+				'prefix': 'http://cdn.example.com/'
+	        },
+	    },
+
+	    # other CSS groups goes here
+	}
+</code></pre>
+
+In this example, the template tags will render _http://cdn.example.com/css/one_compressed.css_ in the link tag.  You will need to manually put there after you build as part of your deployment process.
+
 h4. External urls
 
 While django-compress does a great job of minimizing the amount of http requests on your site (hence increasing performence) there are sometimes cases
