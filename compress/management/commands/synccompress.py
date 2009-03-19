@@ -34,8 +34,11 @@ class Command(NoArgsCommand):
                 print
 
         for name, js in settings.COMPRESS_JS.items():
-            u, version = needs_update(js['output_filename'], 
-                js['source_filenames'])
+            if 'external_urls' in js:
+                u, version = False, "External"
+            else:
+                u, version = needs_update(js['output_filename'], 
+                    js['source_filenames'])
 
             if (force or u) or verbosity >= 2:
                 msg = 'JavaScript Group \'%s\'' % name
