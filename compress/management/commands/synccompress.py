@@ -46,7 +46,7 @@ class Command(NoArgsCommand):
                 print len(msg) * '-'
                 print "Version: %s" % version
 
-            if force or u:
+            if (force or u) and 'external_urls' not in js:
                 filter_js(js, verbosity)
 
             if (force or u) or verbosity >= 2:
