@@ -49,7 +49,7 @@ class CompressedCSSNode(template.Node):
                     css['source_filenames'])
                 if u:
                     filter_css(css)
-            else:
+            elif not css.get('extra_context', {}).get('prefix', None):
                 filename_base, filename = os.path.split(css['output_filename'])
                 path_name = compress_root(filename_base)
                 version = get_version_from_file(path_name, filename)
@@ -90,7 +90,7 @@ class CompressedJSNode(template.Node):
                     js['source_filenames'])
                 if u:
                     filter_js(js)
-            else: 
+            elif not js.get('extra_context', {}).get('prefix', None): 
                 filename_base, filename = os.path.split(js['output_filename'])
                 path_name = compress_root(filename_base)
                 version = get_version_from_file(path_name, filename)
