@@ -9,24 +9,34 @@ from compress.utils import media_root, media_url, needs_update, filter_css, filt
 
 register = template.Library()
 
-def render_common(template_name, obj, filename, version):
+# Preload CSS templates
+css_templates = {}
+for key in settings.COMPRESS_CSS:
+    settings.COMPRESS_CSS[key]['template'] = template.loader.get_template(settings.COMPRESS_CSS[key].get('template_name', 'compress/css.html'))
+
+# Preload JS templates
+js_templates = {}
+for key in settings.COMPRESS_JS:
+    settings.COMPRESS_JS[key]['template'] = template.loader.get_template(settings.COMPRESS_JS[key].get('template_name', 'compress/js.html'))
+
+def render_common(obj, filename, version):
     if settings.COMPRESS:
         filename = get_output_filename(filename, version)
 
-    context = obj.get('extra_context', {})
+    context = template.Context(obj.get('extra_context', {}))
     prefix = context.get('prefix', None)
     if filename.startswith('http://'):
         context['url'] = filename
     else:
         context['url'] = media_url(filename, prefix)
         
-    return template.loader.render_to_string(template_name, context)
+    return obj['template'].render(context)
 
 def render_css(css, filename, version=None):
-    return render_common(css.get('template_name', 'compress/css.html'), css, filename, version)
+    return render_common(css, filename, version)
 
 def render_js(js, filename, version=None):
-    return render_common(js.get('template_name', 'compress/js.html'), js, filename, version)
+    return render_common(js, filename, version)
 
 class CompressedCSSNode(template.Node):
     def __init__(self, name):
