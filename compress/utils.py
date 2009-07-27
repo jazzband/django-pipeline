@@ -120,7 +120,7 @@ def filter_common(obj, verbosity, filters, attr, separator, signal):
     
     filename = get_output_filename(obj['output_filename'], get_version(obj['source_filenames']))
 
-    if settings.COMPRESS_VERSION:
+    if settings.COMPRESS_VERSION and settings.COMPRESS_VERSION_REMOVE_OLD:
         remove_files(os.path.dirname(media_root(filename)), obj['output_filename'], verbosity)
 
     if verbosity >= 1:
