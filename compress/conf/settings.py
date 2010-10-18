@@ -13,6 +13,10 @@ COMPRESS_JS_FILTERS = getattr(settings, 'COMPRESS_JS_FILTERS', ['compress.filter
 COMPRESS_CSS = getattr(settings, 'COMPRESS_CSS', {})
 COMPRESS_JS = getattr(settings, 'COMPRESS_JS', {})
 
+COMPRESS_YUI_BINARY = getattr(settings, 'COMPRESS_YUI_BINARY', 'java -jar yuicompressor.jar')
+COMPRESS_YUI_CSS_ARGUMENTS = getattr(settings, 'COMPRESS_YUI_CSS_ARGUMENTS', '')
+COMPRESS_YUI_JS_ARGUMENTS = getattr(settings, 'COMPRESS_YUI_JS_ARGUMENTS', '')
+
 if COMPRESS_CSS_FILTERS is None:
     COMPRESS_CSS_FILTERS = []
 
