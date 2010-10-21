@@ -5,7 +5,7 @@ from django import template
 from django.conf import settings as django_settings
 
 from compress.conf import settings
-from compress.utils import media_root, media_url, needs_update, filter_css, filter_js, get_output_filename, get_version, get_version_from_file
+from compress.utils import compress_root, compress_url, needs_update, filter_css, filter_js, get_output_filename, get_version, get_version_from_file
 
 register = template.Library()
 
@@ -18,7 +18,7 @@ def render_common(template_name, obj, filename, version):
     if filename.startswith('http://'):
         context['url'] = filename
     else:
-        context['url'] = media_url(filename, prefix)
+        context['url'] = compress_url(filename, prefix)
         
     return template.loader.render_to_string(template_name, context)
 
@@ -49,9 +49,9 @@ class CompressedCSSNode(template.Node):
                     css['source_filenames'])
                 if u:
                     filter_css(css)
-            else:
+            elif not css.get('extra_context', {}).get('prefix', None):
                 filename_base, filename = os.path.split(css['output_filename'])
-                path_name = media_root(filename_base)
+                path_name = compress_root(filename_base)
                 version = get_version_from_file(path_name, filename)
                 
             return render_css(css, css['output_filename'], version)
@@ -90,9 +90,9 @@ class CompressedJSNode(template.Node):
                     js['source_filenames'])
                 if u:
                     filter_js(js)
-            else: 
+            elif not js.get('extra_context', {}).get('prefix', None): 
                 filename_base, filename = os.path.split(js['output_filename'])
-                path_name = media_root(filename_base)
+                path_name = compress_root(filename_base)
                 version = get_version_from_file(path_name, filename)
 
             return render_js(js, js['output_filename'], version)
