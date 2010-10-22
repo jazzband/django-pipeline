@@ -11,7 +11,6 @@ class ClosureCompressorFilter(FilterBase):
         if self.verbose:
             command += ' --verbose'
 
-        print command
         p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, \
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         p.stdin.write(content)
