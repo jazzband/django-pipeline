@@ -34,7 +34,7 @@ class YUICompressorFilter(FilterBase):
         return filtered_css
 
     def filter_js(self, js):
-        return self.filter_common(js, 'js', settings.COMPRESS_YUI_CSS_ARGUMENTS)
+        return self.filter_common(js, 'js', settings.COMPRESS_YUI_JS_ARGUMENTS)
 
     def filter_css(self, css):
-        return self.filter_common(css, 'css', settings.COMPRESS_YUI_JS_ARGUMENTS)
+        return self.filter_common(css, 'css', settings.COMPRESS_YUI_CSS_ARGUMENTS)
