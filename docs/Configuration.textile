@@ -86,6 +86,46 @@ Network, you can use the optional _prefix_ parameter:
 
 In this example, the template tags will render _http://cdn.example.com/css/one_compressed.css_ in the link tag.  You will need to manually put there after you build as part of your deployment process.
 
+h4. CSS URL Replace Filter
+
+This is a really simple filter for doing Python string replacements on your CSS.  The use case for this is when you have root relative 
+urls defined in your css:
+
+<pre><code>
+    body {background-image:url(/media/images/background.gif);}
+</code></pre>
+
+If you are compiling your media to live on another server, for example if you are deploying the compiled resources to Amazon S3, these 
+root relative urls will break.  That is of course unless you also deploy all the media so they stay relative.  However, then you limit yourself 
+from being able to prefix the source with a date or version number.  Ideally, you should be able to control where the images are deployed
+and those might be different from where your js/css media are being served from.
+
+This filter offers a very simple solution.  Really too simple.  One could make the argument for just doing this search and replace manually 
+after the fact, however, I like for my build process to be as automated as possible.  Therefore, I want to write down the rules/settings
+once and be able to repeat the build process when needed without thinking about the find and replace.
+
+Enough babbling, here is an example settings.py section:
+
+<pre><code>
+	COMPRESS_CSS_FILTERS = ('compress.filters.yui.YUICompressorFilter', 'compress.filters.css_url_replace.CSSURLReplace')
+	URL_REPLACE_HOST = 'http://localhost:8000'
+	COMPRESS_CSS_URL_REPLACE = [("url(/media", "url(%s/media" % URL_REPLACE_HOST),]
+</code></pre>
+
+This will run the CSSURLReplace filter after the CSS is compressed (it is safe to do this in any order, at least for this filter).  The URL_REPLACE_HOST
+is not required, just a variable I defined in my settings file to keep things clean (and to override in other environments -- this is obviously my dev
+settings file).  
+
+The COMPRESS_CSS_URL_REPLACE is the only required setting by this filter.  It takes a list of tuples, each tuple being exactly two strings.
+
+The first argument in each tuple is the string to find, and the second is the string to replace it with.  The replace operations will execute
+in the order they are inserted into the list.  Here I am replacing all url(/media....) in my compiled css to an absolute url of url(http://localhost:8000/media...).
+
+This will have the result of my compiled css can be hosted anywhere and the images will still be served off of http://localhost:8000 (or anywhere else
+that I define in URL_REPLACE_HOST prior to build).
+
+You could obviously use this filter to do other types of replacements.
+
 h4. External urls
 
 While django-compress does a great job of minimizing the amount of http requests on your site (hence increasing performence) there are sometimes cases
