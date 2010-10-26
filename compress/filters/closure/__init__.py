@@ -3,10 +3,10 @@ import subprocess
 from compress.conf import settings
 from compress.filter_base import FilterBase, FilterError
 
-class YUICompressorFilter(FilterBase):
+class ClosureCompressorFilter(FilterBase):
 
     def filter_common(self, content, type_, arguments):
-        command = '%s --type=%s %s' % (settings.COMPRESS_YUI_BINARY, type_, arguments)
+        command = '%s %s' % (settings.COMPRESS_CLOSURE_BINARY, arguments)
 
         if self.verbose:
             command += ' --verbose'
@@ -24,7 +24,7 @@ class YUICompressorFilter(FilterBase):
 
         if p.wait() != 0:
             if not err:
-                err = 'Unable to apply YUI Compressor filter'
+                err = 'Unable to apply Closure Compressor filter'
 
             raise FilterError(err)
 
@@ -34,7 +34,4 @@ class YUICompressorFilter(FilterBase):
         return filtered_css
 
     def filter_js(self, js):
-        return self.filter_common(js, 'js', settings.COMPRESS_YUI_JS_ARGUMENTS)
-
-    def filter_css(self, css):
-        return self.filter_common(css, 'css', settings.COMPRESS_YUI_CSS_ARGUMENTS)
+        return self.filter_common(js, 'js', settings.COMPRESS_CLOSURE_JS_ARGUMENTS)

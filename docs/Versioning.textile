@@ -26,6 +26,33 @@ To generate SHA-1 version strings, put this in your settings.py:
 COMPRESS_VERSIONING = 'compress.versioning.hash.SHA1Versioning'
 </code></pre>
 
+h3. Git version strings
+
+Versions formed on git revisions in codebase. Provides a fast way to check if any of your files changed that
+will be consistent across multiple web servers so that they all generate the same version numbers for each
+set of source files, assuming their git repositories are all in sync.
+
+Assumes deployment is git repositiory. Requires GitPython 0.2.0. 
+GitPython 0.3.0 uses an async library that does not currently play well with Django. To install using Git just do
+pip install GitPython==0.2.0-beta1.
+
+h4. Git revision version strings.
+
+To generate versions based on revision of every file in your source file list, put this in your settings.py:
+
+<pre><code>
+COMPRESS_VERSIONING = 'compress.versioning.git.GitVersioningBase'
+</code></pre>
+
+h4.Git HEAD last revision version strings.
+
+To generate versions based on the latest revision of HEAD in your git repository (which assumes all of your source files are in the
+same repository), put this in your settings.py:
+
+<pre><code>
+COMPRESS_VERSIONING = 'compress.versioning.git.GitHeadRevVersioning'
+</code></pre>
+
 h3. Write your own versioning class
 
 To write your own versioning class, you can subclass one of the available versioning classes.
