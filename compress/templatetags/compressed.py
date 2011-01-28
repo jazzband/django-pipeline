@@ -103,7 +103,7 @@ class CompressedJSNode(template.Node):
             else: 
                 filename_base, filename = os.path.split(js['output_filename'])
                 path_name = compress_root(filename_base)
-                version = get_version_from_file(path_name, filename)
+                version = get_version_from_file(path_name, filename) if settings.COMPRESS_VERSION else None
 
             return render_js(js, js['output_filename'], version)
         else:
