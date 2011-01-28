@@ -8,7 +8,7 @@ CSS_REPLACE = getattr(settings, 'COMPRESS_CSS_URL_REPLACE', [])
 class CSSURLReplace(FilterBase):
     def filter_css(self, css):
         for pattern, repl in CSS_REPLACE.iteritems():
-            css = re.sub(pattern, repl, css, flags=re.UNICODE | re.IGNORECASE)
+            css = re.sub(pattern, repl, css)
             if self.verbose:
                 print 'Replaced "%s" with "%s"' % (pattern, repl)
         return css
