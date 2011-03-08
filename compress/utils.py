@@ -100,7 +100,7 @@ def get_version(source_files, verbosity=0):
     
 def get_version_from_file(path, filename):
     regex = re.compile(r'^%s$' % (get_output_filename(settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)]), r'([A-Za-z0-9]+)')))
-    for f in os.listdir(path):
+    for f in sorted(os.listdir(path), reverse=True):
         result = regex.match(f)
         if result and result.groups():
             return result.groups()[0]
@@ -108,7 +108,7 @@ def get_version_from_file(path, filename):
 def remove_files(path, filename, verbosity=0):    
     regex = re.compile(r'^%s$' % (os.path.basename(get_output_filename(settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)]), r'[A-Za-z0-9]+'))))
     if os.path.exists(path):
-        for f in sorted(os.listdir(path), reverse=True):
+        for f in os.listdir(path):
             if regex.match(f):
                 if verbosity >= 1:
                     print "Removing outdated file %s" % f
