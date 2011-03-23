@@ -86,12 +86,29 @@ def concat(filenames, separator=''):
     """
     Concatenate the files from the list of the ``filenames``, ouput separated with ``separator``.
     """
+    # find relative paths in css:
+    # url definition, any spacing, single or double quotes, no starting slash
+    rel_exp = re.compile(
+        '(url\s*\(\s*[\'"]?\s*)([^/\'"\s]\S+?)(\s*[\'"]?\s*\))',
+        flags=re.IGNORECASE)
     r = ''
     for filename in filenames:
         fd = open(compress_source(filename), 'rb')
-        r += fd.read()
-        r += separator
+        contents = fd.read()
         fd.close()
+        if filename.lower().endswith('.css') and \
+           django_settings.MEDIA_ROOT == settings.COMPRESS_SOURCE:
+            if django_settings.MEDIA_URL.endswith('/'):
+                abspath = os.path.normpath(os.path.dirname(filename))
+            else:
+                abspath = os.path.normpath(os.path.join('/',
+                                                    os.path.dirname(filename)))
+            abspath = django_settings.MEDIA_URL + abspath + '/'
+            fixed = rel_exp.sub('\\1' + abspath + '\\2\\3', contents)
+            r += fixed
+        else:
+            r += contents
+        r += separator
     return r
 
 def save_file(filename, contents):

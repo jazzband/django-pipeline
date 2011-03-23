@@ -86,6 +86,32 @@ Network, you can use the optional _prefix_ parameter:
 
 In this example, the template tags will render _http://cdn.example.com/css/one_compressed.css_ in the link tag.  You will need to manually put there after you build as part of your deployment process.
 
+h4. CSS URL not starting with slash
+
+If source CSS contain a relative URL not starting with slash (i.e. relative to current file), those URL will be converted to full relative path using MEDIA_URL. This is done _only when SOURCE_ROOT is the same as MEDIA_ROOT_ (default). This conversion is performed before any filters applied.
+Example:
+<pre><code>
+media/js/fancybox/
+  fancybox.png
+  fancybox-x.png
+  fancybox-y.png
+  jquery.fancybox-1.3.4.css
+  jquery.fancybox-1.3.4.js
+</code></pre>
+jquery.fancybox-1.3.4.css contains:
+<pre><code>
+        background-image: url('fancybox.png');
+        background-image: url('fancybox-x.png');
+        background-image: url('fancybox-y.png');
+</code></pre>
+In resulting CSS it will be rewritten to:
+<pre><code>
+background-image:url(/js/fancybox/fancybox.png);
+background-image:url(/js/fancybox/fancybox-x.png);
+background-image:url(/js/fancybox/fancybox-y.png);
+</code></pre>
+(Assuming MEDIA_URL is '' or '/', with non-empty MEDIA_URL result will be another).
+
 h4. CSS URL Replace Filter
 
 This is a really simple filter for doing Python string replacements on your CSS.  The use case for this is when you have root relative 
