@@ -97,13 +97,13 @@ def concat(filenames, separator=''):
         contents = fd.read()
         fd.close()
         if filename.lower().endswith('.css') and \
-           django_settings.MEDIA_ROOT == settings.COMPRESS_SOURCE:
-            if django_settings.MEDIA_URL.endswith('/'):
+           django_settings.COMPRESS_ROOT == settings.COMPRESS_SOURCE:
+            if django_settings.COMPRESS_URL.endswith('/'):
                 abspath = os.path.normpath(os.path.dirname(filename))
             else:
                 abspath = os.path.normpath(os.path.join('/',
                                                     os.path.dirname(filename)))
-            abspath = django_settings.MEDIA_URL + abspath + '/'
+            abspath = django_settings.COMPRESS_URL + abspath + '/'
             fixed = rel_exp.sub('\\1' + abspath + '\\2\\3', contents)
             r += fixed
         else:
