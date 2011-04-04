@@ -1,6 +1,10 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 
+
+COMPRESS_ROOT = getattr(settings, 'COMPRESS_ROOT', settings.MEDIA_ROOT)
+COMPRESS_URL = getattr(settings, 'COMPRESS_URL', settings.MEDIA_URL)
+
 COMPRESS = getattr(settings, 'COMPRESS', not settings.DEBUG)
 COMPRESS_SOURCE = getattr(settings, 'COMPRESS_SOURCE', settings.MEDIA_ROOT)
 COMPRESS_ROOT = getattr(settings, 'COMPRESS_ROOT', settings.MEDIA_ROOT)
