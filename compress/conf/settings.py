@@ -20,11 +20,11 @@ COMPRESS_JS_FILTERS = getattr(settings, 'COMPRESS_JS_FILTERS', ['compress.filter
 COMPRESS_CSS = getattr(settings, 'COMPRESS_CSS', {})
 COMPRESS_JS = getattr(settings, 'COMPRESS_JS', {})
 
-COMPRESS_YUI_BINARY = getattr(settings, 'COMPRESS_YUI_BINARY', 'java -jar yuicompressor.jar')
+COMPRESS_YUI_BINARY = getattr(settings, 'COMPRESS_YUI_BINARY', '/usr/local/bin/yuicompressor')
 COMPRESS_YUI_CSS_ARGUMENTS = getattr(settings, 'COMPRESS_YUI_CSS_ARGUMENTS', '')
 COMPRESS_YUI_JS_ARGUMENTS = getattr(settings, 'COMPRESS_YUI_JS_ARGUMENTS', '')
 
-COMPRESS_CLOSURE_BINARY = getattr(settings, 'COMPRESS_CLOSURE_BINARY', 'java -jar compiler.jar')
+COMPRESS_CLOSURE_BINARY = getattr(settings, 'COMPRESS_CLOSURE_BINARY', '/usr/local/bin/closure')
 COMPRESS_CLOSURE_ARGUMENTS = getattr(settings, 'COMPRESS_CLOSURE_ARGUMENTS', '')
 
 COMPRESS_UGLIFYJS_BINARY = getattr(settings, 'COMPRESS_UGLIFYJS_BINARY', '/usr/local/bin/uglifyjs')
