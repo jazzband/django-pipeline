@@ -35,18 +35,6 @@ def get_mod_func(callback):
     return callback[:dot], callback[dot + 1:]
 
 
-def get_hexdigest(plaintext):
-    """
-    Create a hexdigest from a plaintext string
-    """
-    try:
-        import hashlib
-        return hashlib.sha1(plaintext).hexdigest()
-    except ImportError:
-        import sha
-        return sha.new(plaintext).hexdigest()
-
-
 def needs_update(output_file, source_files, verbosity=0):
     """
     Scan the source files for changes and returns True if the output_file needs to be updated.
