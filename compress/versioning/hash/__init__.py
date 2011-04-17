@@ -3,7 +3,7 @@ from hashlib import md5, sha1
 
 from compress.conf import settings
 from compress.utils import concat, get_output_filename
-from compress.versioning.base import VersioningBase
+from compress.versioning import VersioningBase
 
 
 class HashVersioningBase(VersioningBase):

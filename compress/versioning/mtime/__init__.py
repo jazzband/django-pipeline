@@ -1,7 +1,7 @@
 import os
 
 from compress.utils import get_output_filename, compress_source, compress_root
-from compress.versioning.base import VersioningBase
+from compress.versioning import VersioningBase
 
 
 class MTimeVersioning(VersioningBase):

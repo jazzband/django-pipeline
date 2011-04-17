@@ -1,6 +1,6 @@
 from compress.conf import settings
 from compress.utils import get_output_filename, get_hexdigest, compress_source
-from compress.versioning.base import VersioningBase, VersioningError
+from compress.versioning import VersioningBase, VersioningError
 
 try:
     import git
