@@ -3,8 +3,8 @@ import subprocess
 from compress.conf import settings
 from compress.filter_base import FilterBase, FilterError
 
-class ClosureCompressorFilter(FilterBase):
 
+class ClosureCompressorFilter(FilterBase):
     def filter_common(self, content, type_, arguments):
         command = '%s %s' % (settings.COMPRESS_CLOSURE_BINARY, arguments)
 

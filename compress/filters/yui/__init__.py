@@ -3,8 +3,8 @@ import subprocess
 from compress.conf import settings
 from compress.filter_base import FilterBase, FilterError
 
-class YUICompressorFilter(FilterBase):
 
+class YUICompressorFilter(FilterBase):
     def filter_common(self, content, type_, arguments):
         command = '%s --type=%s %s' % (settings.COMPRESS_YUI_BINARY, type_, arguments)
 
