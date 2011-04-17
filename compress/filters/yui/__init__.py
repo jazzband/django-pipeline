@@ -11,12 +11,12 @@ class YUICompressorFilter(FilterBase):
         if self.verbose:
             command += ' --verbose'
 
-        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, \
+        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         p.stdin.write(content)
         p.stdin.close()
 
-        filtered_css = p.stdout.read()
+        compressed_content = p.stdout.read()
         p.stdout.close()
 
         err = p.stderr.read()
@@ -31,7 +31,7 @@ class YUICompressorFilter(FilterBase):
         if self.verbose:
             print err
 
-        return filtered_css
+        return compressed_content
 
     def filter_js(self, js):
         return self.filter_common(js, 'js', settings.COMPRESS_YUI_JS_ARGUMENTS)

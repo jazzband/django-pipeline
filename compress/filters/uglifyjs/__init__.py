@@ -11,7 +11,7 @@ class UglifyJSCompressorFilter(FilterBase):
         if self.verbose:
             command += ' --verbose'
 
-        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, \
+        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         p.stdin.write(js)
         p.stdin.close()
