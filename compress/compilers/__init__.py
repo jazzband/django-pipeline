@@ -30,7 +30,7 @@ class SubProcessCompiler(CompilerBase):
 
         if pipe.wait() != 0:
             if not error:
-                error = "Unable to apply %s filter" % self.__class__.__name__
+                error = "Unable to apply %s compiler" % self.__class__.__name__
             raise FilterError(error)
 
         if self.verbose:
