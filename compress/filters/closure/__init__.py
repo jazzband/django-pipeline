@@ -5,18 +5,18 @@ from compress.filters import FilterBase, FilterError
 
 
 class ClosureCompressorFilter(FilterBase):
-    def filter_common(self, content, type_, arguments):
-        command = '%s %s' % (settings.COMPRESS_CLOSURE_BINARY, arguments)
+    def filter_js(self, js):
+        command = '%s %s' % (settings.COMPRESS_CLOSURE_BINARY, settings.COMPRESS_CLOSURE_ARGUMENTS)
 
         if self.verbose:
             command += ' --verbose'
 
-        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, \
+        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        p.stdin.write(content)
+        p.stdin.write(js)
         p.stdin.close()
 
-        filtered_css = p.stdout.read()
+        filtered_js = p.stdout.read()
         p.stdout.close()
 
         err = p.stderr.read()
@@ -31,7 +31,4 @@ class ClosureCompressorFilter(FilterBase):
         if self.verbose:
             print err
 
-        return filtered_css
-
-    def filter_js(self, js):
-        return self.filter_common(js, 'js', settings.COMPRESS_CLOSURE_JS_ARGUMENTS)
+        return filtered_js
