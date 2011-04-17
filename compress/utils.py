@@ -86,7 +86,7 @@ def compress_url(url, prefix=None):
 
 def concat(filenames, separator=''):
     """
-    Concatenate the files from the list of the ``filenames``, ouput separated with ``separator``.
+    Concatenate the files from the list of the ``filenames``, output separated with ``separator``.
     """
     # find relative paths in css:
     # url definition, any spacing, single or double quotes, no starting slash
@@ -106,10 +106,8 @@ def concat(filenames, separator=''):
                 abspath = os.path.normpath(os.path.join('/',
                                                     os.path.dirname(filename)))
             abspath = django_settings.COMPRESS_URL + abspath + '/'
-            fixed = rel_exp.sub('\\1' + abspath + '\\2\\3', contents)
-            r += fixed
-        else:
-            r += contents
+            contents = rel_exp.sub('\\1' + abspath + '\\2\\3', contents)
+        r += contents
         r += separator
     return r
 
