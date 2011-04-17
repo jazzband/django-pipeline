@@ -41,6 +41,9 @@ COMPRESS_COFFEE_SCRIPT_ARGUMENTS = getattr(settings, 'COFFEE_SCRIPT_ARGUMENTS', 
 COMPRESS_SASS_BINARY = getattr(settings, 'COMPRESS_SASS_BINARY', '/usr/local/bin/sass')
 COMPRESS_SASS_ARGUMENTS = getattr(settings, 'COMPRESS_SASS_ARGUMENTS', '--scss')
 
+COMPRESS_LESS_BINARY = getattr(settings, 'COMPRESS_LESS_BINARY', '/usr/local/bin/lessc')
+COMPRESS_LESS_ARGUMENTS = getattr(settings, 'COFFEE_LESS_ARGUMENTS', '')
+
 if COMPRESS_CSS_COMPRESSORS is None:
     COMPRESS_CSS_COMPRESSORS = []
 
