@@ -1,37 +1,13 @@
-import subprocess
-
 from compress.conf import settings
-from compress.filters import FilterBase, FilterError
+from compress.filters import SubProcessFilter
 
 
-class YUICompressorFilter(FilterBase):
+class YUICompressorFilter(SubProcessFilter):
     def filter_common(self, content, type_, arguments):
         command = '%s --type=%s %s' % (settings.COMPRESS_YUI_BINARY, type_, arguments)
-
         if self.verbose:
             command += ' --verbose'
-
-        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        p.stdin.write(content)
-        p.stdin.close()
-
-        compressed_content = p.stdout.read()
-        p.stdout.close()
-
-        err = p.stderr.read()
-        p.stderr.close()
-
-        if p.wait() != 0:
-            if not err:
-                err = 'Unable to apply YUI Compressor filter'
-
-            raise FilterError(err)
-
-        if self.verbose:
-            print err
-
-        return compressed_content
+        return self.execute_command(command, content)
 
     def filter_js(self, js):
         return self.filter_common(js, 'js', settings.COMPRESS_YUI_JS_ARGUMENTS)
