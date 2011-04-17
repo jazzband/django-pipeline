@@ -1,7 +1,7 @@
 import subprocess
 
 from compress.conf import settings
-from compress.filter_base import FilterBase, FilterError
+from compress.filters import FilterBase, FilterError
 
 
 class UglifyJSCompressorFilter(FilterBase):

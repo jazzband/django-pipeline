@@ -4,7 +4,7 @@ import tempfile
 
 from django.conf import settings
 
-from compress.filter_base import FilterBase
+from compress.filters import FilterBase
 
 BINARY = getattr(settings, 'CSSTIDY_BINARY', 'csstidy')
 ARGUMENTS = getattr(settings, 'CSSTIDY_ARGUMENTS', '--template=highest')
