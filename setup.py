@@ -1,9 +1,8 @@
-import os
 from setuptools import setup, find_packages
 
 setup(
     name='django-compress',
-    version='1.0.1-disqus1',
+    version='1.0.1',
     description='django-compress provides an automated system for compressing CSS and JavaScript files',
     author='Andreas Pelme',
     author_email='Andreas Pelme <andreas@pelme.se>',
