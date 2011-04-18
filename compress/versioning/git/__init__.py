@@ -1,5 +1,4 @@
 from compress.conf import settings
-from compress.utils import get_output_filename, compress_source
 from compress.versioning import VersioningBase, VersioningError
 
 from django.utils.hashcompat import sha_constructor
@@ -11,16 +10,15 @@ except ImportError:
 
 
 class GitVersioningBase(VersioningBase):
-    def needs_update(self, output_file, source_files, version):
-        output_file_name = get_output_filename(output_file, version)
-        ph = settings.COMPRESS_VERSION_PLACEHOLDER
-        of = output_file
+    def need_update(self, output_file, paths, version):
+        output_file_name = self.output_filename(output_file, version)
+        placeholder = settings.COMPRESS_VERSION_PLACEHOLDER
         try:
-            phi = of.index(ph)
-            old_version = output_file_name[phi:phi + len(ph) - len(of)]
+            placeholder_index = output_file.index(placeholder)
+            old_version = output_file_name[placeholder_index:placeholder_index + len(placeholder) - len(output_file)]
             return (version != old_version), version
         except ValueError:
-            # no placeholder found, do not update, manual update if needed
+            # No placeholder found, do not update, manual update if needed
             return False, version
 
     def hexdigest(self, plaintext):
@@ -31,12 +29,12 @@ class GitRevVersioning(GitVersioningBase):
     """
     Version as hash of revision of all files in sources_files list.
     """
-    def get_version(self, source_files):
-        repo = git.Repo(compress_source(source_files[0]))
+    def version(self, paths):
+        repo = git.Repo(paths[0])
         kwargs = {'max_count': 1}
         commit_revs = []
-        for f in source_files:
-            commit = [i for i in repo.iter_commits(paths=compress_source(f), **kwargs)][0]
+        for f in paths:
+            commit = [i for i in repo.iter_commits(paths=f, **kwargs)][0]
             commit_revs.append(commit.name_rev)
         return self.hexdigest(', '.join(commit_revs))[0:16]
 
@@ -45,7 +43,7 @@ class GitHeadRevVersioning(GitVersioningBase):
     """
     Version as hash of latest revision in HEAD. Assumes all sources_files in same git repo.
     """
-    def get_version(self, source_files):
-        f = source_files[0]
-        repo = git.Repo(compress_source(f))
+    def version(self, paths):
+        f = paths[0]
+        repo = git.Repo(f)
         return self.hexdigest(repo.head.commit.name_rev)[0:16]

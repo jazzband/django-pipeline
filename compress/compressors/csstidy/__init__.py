@@ -4,7 +4,7 @@ import tempfile
 
 from django.conf import settings
 
-from compress.filters import FilterBase
+from compress.compressors import CompressorBase
 
 BINARY = getattr(settings, 'CSSTIDY_BINARY', 'csstidy')
 ARGUMENTS = getattr(settings, 'CSSTIDY_ARGUMENTS', '--template=highest')
@@ -12,8 +12,8 @@ ARGUMENTS = getattr(settings, 'CSSTIDY_ARGUMENTS', '--template=highest')
 warnings.simplefilter('ignore', RuntimeWarning)
 
 
-class CSSTidyFilter(FilterBase):
-    def filter_css(self, css):
+class CSSTidyCompressor(CompressorBase):
+    def compress_css(self, css):
         tmp_file = tempfile.NamedTemporaryFile(mode='w+b')
         tmp_file.write(css)
         tmp_file.flush()

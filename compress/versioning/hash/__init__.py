@@ -2,7 +2,6 @@ import cStringIO
 from hashlib import md5, sha1
 
 from compress.conf import settings
-from compress.utils import concat, get_output_filename
 from compress.versioning import VersioningBase
 
 
@@ -10,20 +9,30 @@ class HashVersioningBase(VersioningBase):
     def __init__(self, hash_method):
         self.hash_method = hash_method
 
-    def needs_update(self, output_file, source_files, version):
-        output_file_name = get_output_filename(output_file, version)
-        ph = settings.COMPRESS_VERSION_PLACEHOLDER
-        of = output_file
+    def need_update(self, output_file, paths, version):
+        output_file_name = self.output_filename(output_file, version)
+        placeholder = settings.COMPRESS_VERSION_PLACEHOLDER
         try:
-            phi = of.index(ph)
-            old_version = output_file_name[phi:phi + len(ph) - len(of)]
+            placeholder_index = output_file.index(placeholder)
+            old_version = output_file_name[placeholder_index:placeholder_index + len(placeholder) - len(output_file)]
             return (version != old_version), version
         except ValueError:
             # no placeholder found, do not update, manual update if needed
             return False, version
 
-    def get_version(self, source_files):
-        buf = concat(source_files)
+    def concatenate(self, paths):
+        """Concatenate together a list of files"""
+        return '\n'.join([self.read_file(path) for path in paths])
+
+    def read_file(self, path):
+        """Read file content in binary mode"""
+        f = open(path, 'rb')
+        content = f.read()
+        f.close()
+        return content
+
+    def version(self, paths):
+        buf = self.concatenate(paths)
         s = cStringIO.StringIO(buf)
         version = self.get_hash(s)
         s.close()

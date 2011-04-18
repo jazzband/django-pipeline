@@ -1,9 +1,9 @@
 from compress.conf import settings
-from compress.filters import SubProcessFilter
+from compress.compressors import SubProcessCompressor
 
 
-class ClosureCompressorFilter(SubProcessFilter):
-    def filter_js(self, js):
+class ClosureCompressor(SubProcessCompressor):
+    def compress_js(self, js):
         command = '%s %s' % (settings.COMPRESS_CLOSURE_BINARY, settings.COMPRESS_CLOSURE_ARGUMENTS)
         if self.verbose:
             command += ' --verbose'

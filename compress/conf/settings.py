@@ -15,8 +15,12 @@ COMPRESS_VERSION_DEFAULT = getattr(settings, 'COMPRESS_VERSION_DEFAULT', '0')
 COMPRESS_VERSION_REMOVE_OLD = getattr(settings, 'COMPRESS_VERSION_REMOVE_OLD', True)
 COMPRESS_VERSIONING = getattr(settings, 'COMPRESS_VERSIONING', 'compress.versioning.mtime.MTimeVersioning')
 
-COMPRESS_CSS_FILTERS = getattr(settings, 'COMPRESS_CSS_FILTERS', ['compress.filters.csstidy.CSSTidyFilter'])
-COMPRESS_JS_FILTERS = getattr(settings, 'COMPRESS_JS_FILTERS', ['compress.filters.jsmin.JSMinFilter'])
+COMPRESS_CSS_COMPRESSORS = getattr(settings, 'COMPRESS_CSS_COMPRESSORS', [
+    'compress.compressors.csstidy.YUICompressor']
+)
+COMPRESS_JS_COMPRESSORS = getattr(settings, 'COMPRESS_JS_COMPRESSORS', [
+    'compress.compressors.csstidy.YUICompressor']
+)
 COMPRESS_CSS = getattr(settings, 'COMPRESS_CSS', {})
 COMPRESS_JS = getattr(settings, 'COMPRESS_JS', {})
 
@@ -30,8 +34,8 @@ COMPRESS_CLOSURE_ARGUMENTS = getattr(settings, 'COMPRESS_CLOSURE_ARGUMENTS', '')
 COMPRESS_UGLIFYJS_BINARY = getattr(settings, 'COMPRESS_UGLIFYJS_BINARY', '/usr/local/bin/uglifyjs')
 COMPRESS_UGLIFYJS_ARGUMENTS = getattr(settings, 'COMPRESS_UGLIFYJS_ARGUMENTS', '-nc')
 
-if COMPRESS_CSS_FILTERS is None:
-    COMPRESS_CSS_FILTERS = []
+if COMPRESS_CSS_COMPRESSORS is None:
+    COMPRESS_CSS_COMPRESSORS = []
 
-if COMPRESS_JS_FILTERS is None:
-    COMPRESS_JS_FILTERS = []
+if COMPRESS_JS_COMPRESSORS is None:
+    COMPRESS_JS_COMPRESSORS = []
