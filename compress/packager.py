@@ -28,7 +28,6 @@ class Packager(object):
             )
 
     def individual_url(self, filename):
-        print settings.COMPRESS_URL, filename
         return urlparse.urljoin(settings.COMPRESS_URL, self.compressor.relative_path(filename)[1:])
 
     def pack_stylesheets(self, package):
@@ -44,7 +43,8 @@ class Packager(object):
                     self.versioning.version(package['paths']))
                 self.versioning.cleanup(package['output'])
                 if self.verbose or self.force:
-                    print "Saving %s" % self.compressor.relative_path(output_filename)
+                    print "Version: %s" % version
+                    print "Saving: %s" % self.compressor.relative_path(output_filename)
                 self.save_file(output_filename, content)
                 signal.send(sender=self, package=package, version=version)
         else:
