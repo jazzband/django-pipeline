@@ -1,3 +1,6 @@
+import os
+import tempfile
+
 from compress.conf import settings
 from compress.compilers import CompilerBase
 
@@ -8,7 +11,7 @@ class LessCompiler(CompilerBase):
 
     def compile_file(self, content):
         tmp_file = tempfile.NamedTemporaryFile(mode='w+b')
-        tmp_file.write(css)
+        tmp_file.write(content)
         tmp_file.flush()
 
         output_file = tempfile.NamedTemporaryFile(mode='w+b')
