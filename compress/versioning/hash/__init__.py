@@ -2,6 +2,7 @@ import cStringIO
 from hashlib import md5, sha1
 
 from compress.conf import settings
+from compress.storage import storage
 from compress.versioning import VersioningBase
 
 
@@ -26,9 +27,9 @@ class HashVersioningBase(VersioningBase):
 
     def read_file(self, path):
         """Read file content in binary mode"""
-        f = open(path, 'rb')
-        content = f.read()
-        f.close()
+        file = storage.open(path, 'rb')
+        content = file.read()
+        file.close()
         return content
 
     def version(self, paths):

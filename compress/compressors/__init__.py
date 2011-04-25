@@ -4,6 +4,7 @@ import subprocess
 import urlparse
 
 from compress.conf import settings
+from compress.storage import storage
 from compress.utils import to_class
 
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+)[\'"]?\)'
@@ -77,9 +78,9 @@ class Compressor(object):
 
     def read_file(self, path):
         """Read file content in binary mode"""
-        f = open(path, 'rb')
-        content = f.read()
-        f.close()
+        file = storage.open(path, mode='rb')
+        content = file.read()
+        file.close()
         return content
 
 

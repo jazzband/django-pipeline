@@ -5,8 +5,9 @@ import urlparse
 from compress.conf import settings
 from compress.compilers import Compiler
 from compress.compressors import Compressor
-from compress.versioning import Versioning
 from compress.signals import css_compressed, js_compressed
+from compress.storage import storage
+from compress.versioning import Versioning
 
 
 class Packager(object):
@@ -65,12 +66,9 @@ class Packager(object):
         return self.pack(package, self.compressor.compress_js, js_compressed)
 
     def save_file(self, filename, content):
-        dirname = os.path.dirname(filename)
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
-        fd = open(filename, 'wb+')
-        fd.write(content)
-        fd.close()
+        file = storage.open(filename, mode='wb+')
+        file.write(content)
+        file.close()
 
     def create_packages(self, config):
         packages = {}
@@ -81,7 +79,8 @@ class Packager(object):
             paths = []
             for path in config[name]['source_filenames']:
                 full_path = os.path.join(settings.COMPRESS_ROOT, path)
-                paths.extend([os.path.normpath(path) for path in glob.glob(full_path)])
+                paths.extend([os.path.normpath(path)
+                    for path in glob.glob(full_path)])
             packages[name]['paths'] = paths
             packages[name]['output'] = config[name]['output_filename']
             packages[name]['context'] = {}

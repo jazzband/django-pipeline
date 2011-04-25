@@ -15,6 +15,8 @@ COMPRESS_VERSION_DEFAULT = getattr(settings, 'COMPRESS_VERSION_DEFAULT', '0')
 COMPRESS_VERSION_REMOVE_OLD = getattr(settings, 'COMPRESS_VERSION_REMOVE_OLD', True)
 COMPRESS_VERSIONING = getattr(settings, 'COMPRESS_VERSIONING', 'compress.versioning.mtime.MTimeVersioning')
 
+COMPRESS_STORAGE = getattr(settings, 'COMPRESS_STORAGE',
+    'compress.storage.CompressStorage')
 
 COMPRESS_CSS_COMPRESSORS = getattr(settings, 'COMPRESS_CSS_COMPRESSORS', [
     'compress.compressors.csstidy.YUICompressor'
