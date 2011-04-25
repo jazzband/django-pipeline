@@ -1,4 +1,45 @@
+import os
 import subprocess
+
+from compress.conf import settings
+from compress.utils import to_class
+
+
+class Compiler(object):
+    def __init__(self, verbose=False):
+        self.verbose = verbose
+
+    def compilers(self):
+        return [to_class(compiler) for compiler in settings.COMPRESS_COMPILERS]
+    compilers = property(compilers)
+
+    def compile(self, paths):
+        for index, path in enumerate(paths):
+            for compiler in self.compilers:
+                compiler = compiler(self.verbose)
+                if compiler.match_file(path):
+                    new_path = self.output_path(path, compiler.output_extension)
+                    content = self.read_file(path)
+                    compiled_content = compiler.compile_file(content)
+                    self.save_file(new_path, compiled_content)
+                    paths[index] = new_path
+        return paths
+
+    def output_path(self, path, extension):
+        path = os.path.splitext(path)
+        return '.'.join((path[0], extension))
+
+    def read_file(self, path):
+        f = open(path, 'rb')
+        content = f.read()
+        f.close()
+        return content
+
+    def save_file(self, path, content):
+        f = open(path, 'w')
+        f.write(content)
+        f.close()
+
 
 class CompilerBase(object):
     def __init__(self, verbose):
@@ -9,6 +50,12 @@ class CompilerBase(object):
 
     def compile_file(self, content):
         raise NotImplementedError
+
+    def save_file(self, path, content):
+        f = open(path, 'w')
+        f.write(content)
+        f.close()
+        return path
 
 
 class CompilerError(Exception):
@@ -31,7 +78,7 @@ class SubProcessCompiler(CompilerBase):
         if pipe.wait() != 0:
             if not error:
                 error = "Unable to apply %s compiler" % self.__class__.__name__
-            raise FilterError(error)
+            raise CompilerError(error)
 
         if self.verbose:
             print error

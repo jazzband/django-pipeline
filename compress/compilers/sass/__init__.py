@@ -3,6 +3,8 @@ from compress.compilers import SubProcessCompiler
 
 
 class SASSCompiler(SubProcessCompiler):
+    output_extension = 'css'
+
     def match_file(self, filename):
         return filename.endswith('.scss')
 

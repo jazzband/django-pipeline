@@ -3,8 +3,10 @@ from compress.compilers import SubProcessCompiler
 
 
 class CoffeeScriptCompiler(SubProcessCompiler):
-    def match_file(self, filename):
-        return filename.endswith('.coffee')
+    output_extension = 'js'
+
+    def match_file(self, path):
+        return path.endswith('.coffee')
 
     def compile_file(self, content):
         command = "%s %s" % (settings.COMPRESS_COFFEE_SCRIPT_BINARY, settings.COMPRESS_COFFEE_SCRIPT_ARGUMENTS)

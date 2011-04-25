@@ -6,6 +6,8 @@ from compress.compilers import CompilerBase
 
 
 class LessCompiler(CompilerBase):
+    output_extension = 'css'
+
     def match_file(self, filename):
         return filename.endswith('.less')
 

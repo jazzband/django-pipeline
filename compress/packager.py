@@ -3,9 +3,10 @@ import os
 import urlparse
 
 from compress.conf import settings
+from compress.compilers import Compiler
 from compress.compressors import Compressor
 from compress.versioning import Versioning
-from compress.signals import css_filtered, js_filtered
+from compress.signals import css_compressed, js_compressed
 
 
 class Packager(object):
@@ -14,6 +15,7 @@ class Packager(object):
         self.verbose = verbose
         self.compressor = Compressor(verbose)
         self.versioning = Versioning(verbose)
+        self.compiler = Compiler(verbose)
         self.packages = {
             'css': self.create_packages(settings.COMPRESS_CSS),
             'js': self.create_packages(settings.COMPRESS_JS),
@@ -21,20 +23,25 @@ class Packager(object):
 
     def package_for(self, kind, package_name):
         try:
-            return self.packages[kind][package_name]
+            return self.packages[kind][package_name].copy()
         except KeyError:
-            raise PackageNotFound("No corresponding package for %s package name : %s"
-                % (kind, package_name)
+            raise PackageNotFound(
+                "No corresponding package for %s package name : %s" % (
+                    kind, package_name
+                )
             )
 
     def individual_url(self, filename):
-        return urlparse.urljoin(settings.COMPRESS_URL, self.compressor.relative_path(filename)[1:])
+        return urlparse.urljoin(settings.COMPRESS_URL,
+            self.compressor.relative_path(filename)[1:])
 
     def pack_stylesheets(self, package):
-        css = self.compressor.compress_css(package['paths'])
-        return self.pack(package, css, css_filtered)
+        return self.pack(package, self.compressor.compress_css, css_compressed)
 
-    def pack(self, package, content, signal):
+    def compile(self, paths):
+        return self.compiler.compile(paths)
+
+    def pack(self, package, compress, signal):
         if settings.COMPRESS_AUTO or self.force:
             need_update, version = self.versioning.need_update(
                 package['output'], package['paths'])
@@ -45,6 +52,8 @@ class Packager(object):
                 if self.verbose or self.force:
                     print "Version: %s" % version
                     print "Saving: %s" % self.compressor.relative_path(output_filename)
+                paths = self.compile(package['paths'])
+                content = compress(paths)
                 self.save_file(output_filename, content)
                 signal.send(sender=self, package=package, version=version)
         else:
@@ -53,8 +62,7 @@ class Packager(object):
         return self.versioning.output_filename(package['output'], version)
 
     def pack_javascripts(self, package):
-        js = self.compressor.compress_js(package['paths'])
-        return self.pack(package, js, js_filtered)
+        return self.pack(package, self.compressor.compress_js, js_compressed)
 
     def save_file(self, filename, content):
         dirname = os.path.dirname(filename)

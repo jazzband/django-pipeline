@@ -15,21 +15,25 @@ class Command(NoArgsCommand):
     args = ''
 
     def handle_noargs(self, **options):
-        from compress import packager
-        packager.force = options.get('force', False)
-        packager.verbose = int(options.get('verbosity', 1)) >= 2
-        
-        for package_name, package in packager.packages['css'].items():
+        from compress.packager import Packager
+        packager = Packager(
+            force=options.get('force', False),
+            verbose=int(options.get('verbosity', 1)) >= 2
+        )
+
+        for package_name in packager.packages['css']:
+            package = packager.package_for('css', package_name)
             if packager.verbose or packager.force:
-                print 
+                print
                 message = "CSS Group '%s'" % package_name
                 print message
                 print len(message) * '-'
             packager.pack_stylesheets(package)
 
-        for package_name, package in packager.packages['js'].items():
+        for package_name in packager.packages['js']:
+            package = packager.package_for('js', package_name)
             if packager.verbose or packager.force:
-                print 
+                print
                 message = "JS Group '%s'" % package_name
                 print message
                 print len(message) * '-'
