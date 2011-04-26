@@ -23,6 +23,7 @@ class CompressedCSSNode(template.Node):
             compressed_path = self.packager.pack_stylesheets(package)
             return self.render_css(package, compressed_path)
         else:
+            package['paths'] = self.packager.compile(package['paths'])
             return self.render_individual(package)
 
     def render_css(self, package, path):
@@ -60,6 +61,7 @@ class CompressedJSNode(template.Node):
             compressed_path = self.packager.pack_javascripts(package)
             return self.render_js(package, compressed_path)
         else:
+            package['paths'] = self.packager.compile(package['paths'])
             return self.render_individual(package)
 
     def render_js(self, package, path):
