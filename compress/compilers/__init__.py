@@ -20,8 +20,12 @@ class Compiler(object):
                 if compiler.match_file(path):
                     new_path = self.output_path(path, compiler.output_extension)
                     content = self.read_file(path)
-                    compiled_content = compiler.compile_file(content)
-                    self.save_file(new_path, compiled_content)
+                    try:
+                        compiled_content = compiler.compile_file(content)
+                        self.save_file(new_path, compiled_content)
+                    except CompilerError, e:
+                        if not os.path.exists(new_path):
+                            raise
                     paths[index] = new_path
         return paths
 
