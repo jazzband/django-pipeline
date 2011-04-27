@@ -71,7 +71,7 @@ class VersioningBase(object):
     def version(self, source_files):
         raise NotImplementedError
 
-    def needs_update(self, output_file, source_files, version):
+    def needs_update(self, output_file, paths, version):
         raise NotImplementedError
 
 
