@@ -41,6 +41,8 @@ class Compressor(object):
         for path in paths:
             def reconstruct(match):
                 asset_path = match.group(1)
+                if asset_path.startswith("http") or asset_path.startswith("//"):
+                    return "url(%s)" % asset_path
                 asset_url = urlparse.urljoin(
                     settings.COMPRESS_URL,
                     self.construct_asset_path(asset_path, path)[1:]
