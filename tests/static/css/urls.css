@@ -1,0 +1,9 @@
+.relative-url {
+  background-image: url(../images/sprite-buttons.png);
+}
+.absolute-url {
+  background-image: url(http://localhost/images/sprite-buttons.png);
+}
+.no-protocol-url {
+  background-image: url(//images/sprite-buttons.png);  
+}

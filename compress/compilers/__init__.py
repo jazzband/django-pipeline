@@ -23,7 +23,7 @@ class Compiler(object):
                     try:
                         compiled_content = compiler.compile_file(content)
                         self.save_file(new_path, compiled_content)
-                    except CompilerError, e:
+                    except CompilerError:
                         if not os.path.exists(new_path):
                             raise
                     paths[index] = new_path
