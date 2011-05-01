@@ -21,13 +21,13 @@ Management command
 You can update and force updates of the compressed file(s) with the management command “synccompress”.
 This makes it possible to keep the files updated manually.
 
-The command is ::
+The command is (assuming you are in you project-folder that contains ``manage.py``). ::
 
-    manage.py synccompress
+    ./manage.py synccompress
 
-
-(assuming you are in you project-folder that contains ``manage.py``).
-To force all files to be re-generated, use the argument ``--force`` (e.g. ``./manage.py synccompress --force``)
+To force all files to be re-generated, use the argument ``--force`` :: 
+  
+    ./manage.py synccompress --force
 
 Templatetags
 ============
@@ -44,7 +44,7 @@ depending on the ``COMPRESS`` setting, if you do not specify the ``COMPRESS`` se
 the source files will be used in DEBUG-mode, and compressed files in non-DEBUG-mode.
 
 Example
-=======
+-------
 
 If you have specified the CSS-groups “screen” and “print” and a JavaScript-group
 with the name “scripts”, you would use the following code to output them all ::
@@ -53,8 +53,3 @@ with the name “scripts”, you would use the following code to output them all
    {% compressed_css 'screen' %}
    {% compressed_css 'print' %}
    {% compressed_js 'scripts' %}
-
-Far future Expires
-==================
-
-Far future Expires can be used with the bump_filename-option, see the :doc:`farfuturexpires` page for more information. 

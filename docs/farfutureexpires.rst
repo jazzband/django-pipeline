@@ -1,12 +1,12 @@
-.. _ref-farfuturexpires:
+.. _ref-farfutureexpires:
 
 ==================
-Far Future Expires
+Far future expires
 ==================
 
-Details about the "Far Future Expires" technique, and how to implement it with help from django-compress
+Details about the "Far future expires" technique, and how to implement it with help from django-compress
 
-General details and considerations about the "Far Future Expires" technique
+General details and considerations about the "Far future expires" technique
 ===========================================================================
 
 If you really want to make sure that your CSS and JavaScript files get cached by
@@ -15,14 +15,14 @@ This means that you send the Expires HTTP-header with a date that is far in the 
 resulting in the file being cached at the client (almost) forever
 
 If you do not specify an Expires header, the files will be requested again,
-and the server will respond "304 Not Modified" - which means that the file that
+and the server will respond "*304 Not Modified*" - which means that the file that
 the client got in its cache is still up-to-date. *However, a HTTP request will still be made anyway.*
 The actual data does not get sent, but there will still be unnecessary HTTP requests, which can be avoided.
 
-Most modern browser implement "Heuristic expiration", so it will actually not be
-"304 Not Modified" for your static files on every request, however, the
+Most modern browser implement "*Heuristic expiration*", so it will actually not be
+"*304 Not Modified*" for your static files on every request, however, the
 `HTTP specification does not specify <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html>`_ (see section 13.2.2)
-how "Heuristic expiration" should be handled by the browsers.
+how "*Heuristic expiration*" should be handled by the browsers.
 Therefore it is recommended to explicitly set the Expires header, to make sure all
 browsers cache the files in the preferred way.
 
@@ -30,16 +30,18 @@ This technique obviously has a drawback, when you want to change your files,
 you need to change their names, since their URLs will be cached... that's right: forever!
 The solution to that is pretty obvious too: change the URLs.
 
-django-compress with COMPRESS_VERSION 
-=====================================
+COMPRESS_VERSION 
+================
 
 If you specify ``COMPRESS_VERSION`` in your configuration, you can add a placeholder
 to the filenames to output the version number of the different files.
-See :doc:`configuration` for more information.
+
 The filename itself will be changed when any of the source files are updated.
 
-Configuration of web server (that serves MEDIA_URL)
-===================================================
+See :doc:`configuration` for more information.
+
+Configuration of web server
+===========================
 
 Apache
 ------
@@ -57,12 +59,11 @@ For example ::
         ExpiresDefault "access plus 10 years"
     </Directory>
 
-Apache also allows the specify files by their mime-type:
-<pre><code>
-ExpiresActive On
-ExpiresByType text/css "access plus 10 years"
-ExpiresByType application/x-javascript "access plus 10 years"
-</code></pre>
+Apache also allows the specify files by their mime-type ::
+
+  ExpiresActive On
+  ExpiresByType text/css "access plus 10 years"
+  ExpiresByType application/x-javascript "access plus 10 years"
 
 lighttpd
 --------

@@ -7,33 +7,33 @@ Versioning
 There are several ways for generating version strings. Basically, two types are available.
 These are: mtime version strings and hash version strings.
 
-mtime version strings (default)
-===============================
+Modification time version
+=========================
 
 This is the default method for generating version strings. In short, when invoked, it checks whether any of the source files system timestamps (mtime) is newer than the version string of the corresponding compressed file. If that is the case, the compressed output file version string will be the mtime of the most recent source file.
 
-hash version strings
-====================
+Hash version
+============
 
 Hash-based versioning works by generating a hash string based on the contents of the source files. Available hash-based versioning methods are MD5 and SHA-1.
 
-MD5 version strings
--------------------
+MD5 version
+-----------
 
 To generate MD5 version strings, put this in your `settings.py` ::
 
     COMPRESS_VERSIONING = 'compress.versioning.hash.MD5Versioning'
 
-SHA-1 version string
---------------------
+SHA-1 version
+-------------
 
 To generate SHA-1 version strings, put this in your `settings.py`::
 
     COMPRESS_VERSIONING = 'compress.versioning.hash.SHA1Versioning'
 
 
-Git version strings
-===================
+Git version
+===========
 
 Versions formed on git revisions in codebase. Provides a fast way to check if any of your files changed that
 will be consistent across multiple web servers so that they all generate the same version numbers for each
@@ -43,15 +43,15 @@ Assumes deployment is git repositiory. Requires GitPython 0.2.0.
 GitPython 0.3.0 uses an async library that does not currently play well with Django. To install using Git just do
 pip install GitPython==0.2.0-beta1.
 
-Git revision version strings
-----------------------------
+Git revision version
+--------------------
 
 To generate versions based on revision of every file in your source file list, put this in your `settings.py`::
 
     COMPRESS_VERSIONING = 'compress.versioning.git.GitVersioningBase'
 
-Git HEAD last revision version strings
---------------------------------------
+Git HEAD last revision version
+------------------------------
 
 To generate versions based on the latest revision of HEAD in your git repository (which assumes all of your source files are in the
 same repository), put this in your `settings.py`::

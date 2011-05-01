@@ -49,7 +49,7 @@ Table Of Contents
    configuration
    versioning
    customization
-   farfuturexpires
+   farfutureexpires
    backwardsincompatiblechanges
 
 Indices and tables
