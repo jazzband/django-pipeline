@@ -48,7 +48,8 @@ Table Of Contents
    usage
    configuration
    versioning
-   customization
+   compressors
+   compilers
    farfutureexpires
    backwardsincompatiblechanges
 

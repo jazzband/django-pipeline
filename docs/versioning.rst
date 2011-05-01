@@ -4,8 +4,12 @@
 Versioning
 ==========
 
-There are several ways for generating version strings. Basically, two types are available.
-These are: mtime version strings and hash version strings.
+There are several ways for generating version strings. Basically, three types are available.
+These are: 
+
+* `mtime <#modification-time-version>`_
+* `hash <#hash-version>`_
+* `git <#git-version>`_
 
 Modification time version
 =========================
