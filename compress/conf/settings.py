@@ -29,6 +29,9 @@ COMPRESS_COMPILERS = getattr(settings, 'COMPRESS_COMPILERS', [])
 COMPRESS_CSS = getattr(settings, 'COMPRESS_CSS', {})
 COMPRESS_JS = getattr(settings, 'COMPRESS_JS', {})
 
+COMPRESS_CSSTIDY_BINARY = '/usr/local/bin/csstidy'
+COMPRESS_CSSTIDY_ARGUMENTS = '--template=highest'
+
 COMPRESS_YUI_BINARY = getattr(settings, 'COMPRESS_YUI_BINARY', '/usr/local/bin/yuicompressor')
 COMPRESS_YUI_CSS_ARGUMENTS = getattr(settings, 'COMPRESS_YUI_CSS_ARGUMENTS', '')
 COMPRESS_YUI_JS_ARGUMENTS = getattr(settings, 'COMPRESS_YUI_JS_ARGUMENTS', '')

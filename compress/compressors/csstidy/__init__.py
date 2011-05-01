@@ -2,12 +2,8 @@ import os
 import warnings
 import tempfile
 
-from django.conf import settings
-
+from compress.conf import settings
 from compress.compressors import CompressorBase
-
-BINARY = getattr(settings, 'CSSTIDY_BINARY', 'csstidy')
-ARGUMENTS = getattr(settings, 'CSSTIDY_ARGUMENTS', '--template=highest')
 
 warnings.simplefilter('ignore', RuntimeWarning)
 
@@ -20,7 +16,10 @@ class CSSTidyCompressor(CompressorBase):
 
         output_file = tempfile.NamedTemporaryFile(mode='w+b')
 
-        command = '%s %s %s %s' % (BINARY, tmp_file.name, ARGUMENTS, output_file.name)
+        command = '%s %s %s %s' % (
+            settings.COMPRESS_CSSTIDY_BINARY, tmp_file.name,
+            settings.COMPRESS_CSSTIDY_ARGUMENTS, output_file.name
+        )
 
         command_output = os.popen(command).read()
 
