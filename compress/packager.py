@@ -89,7 +89,7 @@ class Packager(object):
             if 'template_name' in config[name]:
                 packages[name]['template'] = config[name]['template_name']
             if 'externals_urls' in config[name]:
-                packages[name]['externals'] = config[name]['externals_urls']
+                packages[name]['externals'] = config[name]['external_urls']
         return packages
 
 

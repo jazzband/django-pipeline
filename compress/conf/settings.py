@@ -19,10 +19,10 @@ COMPRESS_STORAGE = getattr(settings, 'COMPRESS_STORAGE',
     'compress.storage.CompressStorage')
 
 COMPRESS_CSS_COMPRESSORS = getattr(settings, 'COMPRESS_CSS_COMPRESSORS', [
-    'compress.compressors.csstidy.YUICompressor'
+    'compress.compressors.yui.YUICompressor'
 ])
 COMPRESS_JS_COMPRESSORS = getattr(settings, 'COMPRESS_JS_COMPRESSORS', [
-    'compress.compressors.csstidy.YUICompressor'
+    'compress.compressors.yui.YUICompressor'
 ])
 COMPRESS_COMPILERS = getattr(settings, 'COMPRESS_COMPILERS', [])
 
