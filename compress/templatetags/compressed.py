@@ -55,7 +55,7 @@ class CompressedJSNode(template.Node):
             return ''  # fail silently, do not return anything if an invalid group is specified
 
         if 'externals' in package:
-            return '\n'.joins([self.render_external(package, url) for url in package['externals']])
+            return '\n'.join([self.render_external(package, url) for url in package['externals']])
 
         if settings.COMPRESS:
             compressed_path = self.packager.pack_javascripts(package)
