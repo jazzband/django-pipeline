@@ -8,20 +8,20 @@ TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 if not settings.configured:
     settings.configure(
-        COMPRESS_CACHE_BACKEND = 'dummy://',
+        COMPRESS_CACHE_BACKEND='dummy://',
         DATABASE_ENGINE='sqlite3',
         INSTALLED_APPS=[
             'compress',
             'tests',
         ],
-        MEDIA_URL = '/media/',
-        MEDIA_ROOT = os.path.join(TEST_DIR, 'media'),
-        STATIC_URL = '/static/',
-        STATIC_ROOT = os.path.join(TEST_DIR, 'static'),
-        TEMPLATE_DIRS = (
+        MEDIA_URL='/media/',
+        MEDIA_ROOT=os.path.join(TEST_DIR, 'media'),
+        STATIC_URL='/static/',
+        STATIC_ROOT=os.path.join(TEST_DIR, 'static'),
+        TEMPLATE_DIRS=(
             os.path.join(TEST_DIR, 'templates'),
         ),
-        TEST_DIR = TEST_DIR,
+        TEST_DIR=TEST_DIR,
     )
 
 from django.test.simple import run_tests
