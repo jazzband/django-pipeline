@@ -37,12 +37,14 @@ class Packager(object):
             self.compressor.relative_path(filename)[1:])
 
     def pack_stylesheets(self, package):
-        return self.pack(package, self.compressor.compress_css, css_compressed)
+        variant = package.get('variant', None)
+        return self.pack(package, self.compressor.compress_css, css_compressed,
+            variant=variant)
 
     def compile(self, paths):
         return self.compiler.compile(paths)
 
-    def pack(self, package, compress, signal):
+    def pack(self, package, compress, signal, **kwargs):
         if settings.COMPRESS_AUTO or self.force:
             need_update, version = self.versioning.need_update(
                 package['output'], package['paths'])
@@ -54,7 +56,7 @@ class Packager(object):
                     print "Version: %s" % version
                     print "Saving: %s" % self.compressor.relative_path(output_filename)
                 paths = self.compile(package['paths'])
-                content = compress(paths)
+                content = compress(paths, **kwargs)
                 self.save_file(output_filename, content)
                 signal.send(sender=self, package=package, version=version)
         else:
@@ -93,6 +95,8 @@ class Packager(object):
                 packages[name]['context'] = config[name]['extra_context']
             if 'template_name' in config[name]:
                 packages[name]['template'] = config[name]['template_name']
+            if 'variant' in config[name]:
+                packages[name]['variant'] = config[name]['variant']
         return packages
 
 
