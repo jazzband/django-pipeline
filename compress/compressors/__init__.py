@@ -56,7 +56,8 @@ class Compressor(object):
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
-        return '\n'.join([self.read_file(path) for path in paths])
+        content = '\n'.join([self.read_file(path) for path in paths])
+        return "(function() { %s }).call(this);" % content
 
     def construct_asset_path(self, asset_path, css_path):
         public_path = self.absolute_path(asset_path, css_path)
