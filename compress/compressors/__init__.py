@@ -43,9 +43,11 @@ class Compressor(object):
         return [to_class(compressor) for compressor in settings.COMPRESS_CSS_COMPRESSORS]
     css_compressors = property(css_compressors)
 
-    def compress_js(self, paths):
+    def compress_js(self, paths, templates=None):
         """Concatenate and compress JS files"""
         js = self.concatenate(paths)
+        if templates:
+            js = js + self.compile_templates(templates)
         for compressor in self.js_compressors:
             js = getattr(compressor(verbose=self.verbose), 'compress_js')(js)
         return js
@@ -61,6 +63,51 @@ class Compressor(object):
             return self.with_data_uri(css)
         else:
             raise CompressorError("\"%s\" is not a valid variant" % variant)
+
+    def compile_templates(self, paths):
+        compiled = ""
+        namespace = settings.COMPRESS_TEMPLATE_NAMESPACE
+        base_path = self.base_path(paths)
+        for path in paths:
+            contents = self.read_file(path)
+            contents = re.sub(r"\r?\n", "", contents)
+            contents = re.sub(r"'", "\\'", contents)
+            name = self.template_name(path, base_path)
+            compiled += "%s['%s'] = %s('%s');\n" % (
+                namespace,
+                name,
+                settings.COMPRESS_TEMPLATE_FUNC,
+                contents
+            )
+        return "\n".join([
+            "(function(){",
+            "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
+            compiled,
+            "})();"
+        ])
+
+    def template_name(self, path, base):
+        name = os.path.basename(path)
+        if base:
+            name = re.sub(r"^%s\/(.*)%s$" % (
+                re.escape(base), re.escape(settings.COMPRESS_TEMPLATE_EXT) 
+            ), r"\1", path)
+        return re.sub(r"[\/\\]", "_", name)
+
+    def base_path(self, paths):
+        if len(paths) <= 1:
+            return None
+        paths.sort()
+        first = paths[0].split('/')
+        last  = paths[-1].split('/')
+        i = 0
+        while first[i] == last[i] and i <= len(first):
+            i += 1
+        base = '/'.join(first[0:i])
+        if not base:
+            return None
+        else:
+            return base
 
     def concatenate_and_rewrite(self, paths, variant=None):
         """Concatenate together files and rewrite urls"""

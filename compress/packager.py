@@ -65,7 +65,10 @@ class Packager(object):
         return self.versioning.output_filename(package['output'], version)
 
     def pack_javascripts(self, package):
-        return self.pack(package, self.compressor.compress_js, js_compressed)
+        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package['templates'])
+
+    def pack_templates(self, package):
+        return self.compressor.compile_templates(package['templates'])
 
     def save_file(self, filename, content):
         file = storage.open(filename, mode='wb+')
@@ -88,7 +91,8 @@ class Packager(object):
                     path = os.path.normpath(path).replace(settings.COMPRESS_ROOT, '')
                     if not path in paths:
                         paths.append(path)
-            packages[name]['paths'] = paths
+            packages[name]['paths'] = [path for path in paths if not path.endswith(settings.COMPRESS_TEMPLATE_EXT)]
+            packages[name]['templates'] = [path for path in paths if path.endswith(settings.COMPRESS_TEMPLATE_EXT)]
             packages[name]['output'] = config[name]['output_filename']
             packages[name]['context'] = {}
             if 'extra_context' in config[name]:

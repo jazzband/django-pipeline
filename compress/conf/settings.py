@@ -29,6 +29,10 @@ COMPRESS_COMPILERS = getattr(settings, 'COMPRESS_COMPILERS', [])
 COMPRESS_CSS = getattr(settings, 'COMPRESS_CSS', {})
 COMPRESS_JS = getattr(settings, 'COMPRESS_JS', {})
 
+COMPRESS_TEMPLATE_NAMESPACE = getattr(settings, 'COMPRESS_TEMPLATE_NAMESPACE', "window.JST")
+COMPRESS_TEMPLATE_EXT = getattr(settings, 'COMPRESS_TEMPLATE_EXT', ".jst")
+COMPRESS_TEMPLATE_FUNC = getattr(settings, 'COMPRESS_TEMPLATE_FUNC', "_.template")
+
 COMPRESS_CSSTIDY_BINARY = '/usr/local/bin/csstidy'
 COMPRESS_CSSTIDY_ARGUMENTS = '--template=highest'
 

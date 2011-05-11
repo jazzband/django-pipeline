@@ -62,7 +62,8 @@ class CompressedJSNode(template.Node):
             return self.render_js(package, compressed_path)
         else:
             package['paths'] = self.packager.compile(package['paths'])
-            return self.render_individual(package)
+            templates = self.packager.pack_templates(package)
+            return self.render_individual(package, templates)
 
     def render_js(self, package, path):
         context = {}
@@ -82,8 +83,19 @@ class CompressedJSNode(template.Node):
             'url': url
         })
 
-    def render_individual(self, package):
+    def render_inline(self, package, js):
+        context = {}
+        if not 'context' in package:
+            context = package['context']
+        context.update({
+            'source': js
+        })
+        return render_to_string("compress/inline_js.html", context)
+
+    def render_individual(self, package, templates=None):
         tags = [self.render_js(package, js) for js in package['paths']]
+        if templates:
+            tags.append(self.render_inline(package, templates))
         return '\n'.join(tags)
 
 
@@ -92,7 +104,6 @@ def compressed_css(parser, token):
         tag_name, name = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError, '%r requires exactly one argument: the name of a group in the COMPRESS_CSS setting' % token.split_contents()[0]
-
     return CompressedCSSNode(name)
 compressed_css = register.tag(compressed_css)
 
