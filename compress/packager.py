@@ -83,7 +83,7 @@ class Packager(object):
             for path in config[name]['source_filenames']:
                 full_path = os.path.join(settings.COMPRESS_ROOT, path)
                 paths.extend([os.path.normpath(path).replace(settings.COMPRESS_ROOT, '')
-                    for path in glob.glob(full_path)])
+                    for path in glob.glob(full_path) if not path in paths])
             packages[name]['paths'] = paths
             packages[name]['output'] = config[name]['output_filename']
             packages[name]['context'] = {}
