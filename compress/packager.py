@@ -76,14 +76,16 @@ class Packager(object):
             return packages
         for name in config:
             packages[name] = {}
-            paths = []
             if 'external_urls' in config[name]:
                 packages[name]['externals'] = config[name]['external_urls']
                 continue
+            paths = []
             for path in config[name]['source_filenames']:
                 full_path = os.path.join(settings.COMPRESS_ROOT, path)
-                paths.extend([os.path.normpath(path).replace(settings.COMPRESS_ROOT, '')
-                    for path in glob.glob(full_path) if not path in paths])
+                for path in glob.glob(full_path):
+                    path = os.path.normpath(path).replace(settings.COMPRESS_ROOT, '')
+                    if not path in paths:
+                        paths.append(path)
             packages[name]['paths'] = paths
             packages[name]['output'] = config[name]['output_filename']
             packages[name]['context'] = {}
