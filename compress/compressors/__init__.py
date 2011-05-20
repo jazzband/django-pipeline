@@ -90,7 +90,7 @@ class Compressor(object):
         name = os.path.basename(path)
         if base:
             name = re.sub(r"^%s\/(.*)%s$" % (
-                re.escape(base), re.escape(settings.COMPRESS_TEMPLATE_EXT) 
+                re.escape(base), re.escape(settings.COMPRESS_TEMPLATE_EXT)
             ), r"\1", path)
         return re.sub(r"[\/\\]", "_", name)
 
@@ -99,7 +99,7 @@ class Compressor(object):
             return None
         paths.sort()
         first = paths[0].split('/')
-        last  = paths[-1].split('/')
+        last = paths[-1].split('/')
         i = 0
         while first[i] == last[i] and i <= len(first):
             i += 1
