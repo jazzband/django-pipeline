@@ -51,11 +51,11 @@ class Versioning(object):
     def cleanup(self, filename):
         if not settings.COMPRESS_VERSION and not settings.COMPRESS_VERSION_REMOVE_OLD:
             return  # Nothing to delete here
-        filename = settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)])
         path = os.path.dirname(filename)
+        filename = settings.COMPRESS_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.COMPRESS_VERSION_PLACEHOLDER)])
         regex = re.compile(r'^%s$' % os.path.basename(self.output_filename(filename, r'([A-Za-z0-9]+)')))
         if storage.exists(path):
-            for f in storage.listdir(path):
+            for f in storage.listdir(path)[1]:
                 if regex.match(f):
                     if self.verbose:
                         print "Removing outdated file %s" % f
