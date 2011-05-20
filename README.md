@@ -1,19 +1,15 @@
-**django-compress** provides an automated system for compressing CSS and 
-JavaScript files. By default, it only outputs compressed files while not in 
-DEBUG-mode. That means you can still debug and edit your source files while 
-coding, and when going to production, the compressed files will be 
-automatically generated.
+django-compress
+===============
 
-Support for jsmin and CSSTidy is included and enabled by default (but can 
-easily be disabled). Support for YUI Compressor is also supported out of the 
-box.
+django-compress is an asset packaging library for Django, providing both CSS and JavaScript concatenation and compression, built-in JavaScript template support, and optional data-URI image embedding.
 
-**django-compress** includes template tags for outputting the URLs to the 
-CSS/JavaScript?-files and some other goodies to improve the performance of 
-serving static media.
+To install it :
 
-**django-compress** [code][] and [documentation][] is available at [github][].
+    pip install -e git://github.com/cyberdelia/django-compress.git#egg=compress
 
-[github]: http://github.com/
-[code]: http://github.com/pelme/django-compress/tree/master
-[documentation]: http://github.com/pelme/django-compress/tree/master/docs
+
+For documentation, usage, and examples, see :
+http://django-compress.readthedocs.org/
+
+To suggest a feature or report a bug :
+https://github.com/cyberdelia/django-compress/issues
