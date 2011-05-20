@@ -182,9 +182,36 @@ The files will however still be concatenated to one file.
 
   Please note that in order to use YUI Compressor, you need to install YUI Compressor (see :doc:`installation` for more details).
 
+``COMPRESS_TEMPLATE_NAMESPACE``
+...............................
 
-Rewriting CSS url()
--------------------
+  Object name where all of your compiled templates will be added, from within your browser.
+  To access them with your own JavaScript namespace, change it to the object of your choice.
+
+  Defaults to ``"window.JST"``
+
+
+``COMPRESS_TEMPLATE_EXT``
+.........................
+
+  The extension for which django-compress will consider the file as a Javascript templates.
+  To use a different extension, like ``.mustache``, set this settings to ``.mustache``.
+
+  Defaults to ``".jst"``
+
+``COMPRESS_TEMPLATE_FUNC``
+..........................
+
+  JavaScript function that compiles your JavaScript templates.
+  django-compress doesn't bundle a javascript template library, but the default
+  settings is to use the
+  `underscore <http://documentcloud.github.com/underscore/>`_ template function.
+  
+  Defaults to ``"_.template"``
+
+
+Rewriting CSS urls
+==================
 
 If source CSS contain a relative URL (i.e. relative to current file),
 those URL will be converted to full relative path using ``COMPRESS_URL``.
@@ -214,7 +241,7 @@ In resulting CSS it will be rewritten to ::
 
 
 External urls
--------------
+=============
 
 While django-compress does a great job of minimizing the amount of http requests
 on your site (hence increasing performance) there are sometimes cases when you
@@ -243,7 +270,8 @@ Output in when ``settings.COMPRESS = False``::
 
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.5.2/jquery-ui.min.js" charset="utf-8"></script>
-  <script type="text/javascript" src="/media/js/blog.js" charset="utf-8"></script><script type="text/javascript" src="/media/js/comments.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/media/js/blog.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/media/js/comments.js" charset="utf-8"></script>
 
 Output in when ``settings.COMPRESS = True``::
 
