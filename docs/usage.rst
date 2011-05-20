@@ -53,3 +53,17 @@ with the name “scripts”, you would use the following code to output them all
    {% compressed_css 'screen' %}
    {% compressed_css 'print' %}
    {% compressed_js 'scripts' %}
+
+
+Middleware
+==========
+
+To enable HTML compression add ``compress.middleware.MinifyHTMLMiddleware``, 
+to your ``MIDDLEWARE_CLASSES`` settings.
+
+Ensure that it comes after any middleware which modify your HTML, like ``GZipMiddleware`` ::
+
+   MIDDLEWARE_CLASSES = (
+    'django.middleware.gzip.GZipMiddleware',
+    'compress.middleware.MinifyHTMLMiddleware',
+   )
