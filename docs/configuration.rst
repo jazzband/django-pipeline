@@ -67,10 +67,21 @@ Group options
  
   Is the filename of the (to be) compressed file.
 
+``variant``
+...........
+
+  **Optional**
+  
+  Is the variant you want to apply to your CSS. This allow you to embed images and 
+  fonts in CSS with data-URI.
+  Allowed values are : ``None`` or ``datauri``.
+  
+  Defaults to ``None``.
+
 ``extra_context``
 .................
 
-  **Optionnal**
+  **Optional**
   
   Is a dictionary of values to add to the template context,
   when generating the HTML for the HTML-tags with the templatetags.
@@ -92,7 +103,7 @@ Other settings
   When ``COMPRESS`` is ``True``, CSS and JavaScripts will be concatenated and filtered.
   When ``False``, the source-files will be used instead.
 
-  Defaults to ``not DEBUG`` (compressed files will only be used when ``DEBUG`` is ``False``)
+  Defaults to ``not DEBUG`` (compressed files will only be used when ``DEBUG`` is ``False``).
 
 ``COMPRESS_AUTO``
 .................
@@ -247,6 +258,4 @@ some horsepower to google which leads us as hinted in the example above to the n
 
 .. note::
   
-  external urls is currently only available for javascript. There's currently no
-  reason to have external css files (Yes there are css frameworks as well on the net
-  but they are often very small or generated to fit your needs)
+  External urls is currently only available for javascript.

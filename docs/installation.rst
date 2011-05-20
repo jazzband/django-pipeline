@@ -4,18 +4,16 @@
 Installation
 ============
 
-Installation is pretty straight-forward and follows the same installation
-procedure as many other *Django* applications.
+1. Either check out django-compress from GitHub_ or to pull a release off PyPI_ ::
+   
+       pip install django-compress
+    
 
-``django-compress`` does not create any models, so you do not need to configure a database.
+2. Add 'compress' to your ``INSTALLED_APPS`` ::
 
-Install instructions
-====================
-
-1. Either check out django-compress from GitHub_ or to pull a release off PyPI_.
-   Doing ``pip install django-compress`` or ``easy_install django-compress`` is all that should be required.
-
-2. Add 'compress' to your ``INSTALLED_APPS``
+       INSTALLED_APPS = (
+           'compress',
+       )
 
 
 .. _GitHub: http://github.com/pelme/django-compress

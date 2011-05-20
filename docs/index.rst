@@ -6,36 +6,11 @@
 Introduction
 ============
 
-JavaScript and CSS minification/compression can decrease load times of sites a lot.
-It is important to reduce the number of requests that are made.
-Fewer files means better performance. However, when you develop CSS, and particularly
-if you are building a big site, it can be nice to separate different parts of the site’s CSS into different files.
-You also want to keep the CSS and JavaScript in different files while you develop, to make debugging easier.
+django-compress is an asset packaging library for Django, providing
+both CSS and JavaScript concatenation and compression, built-in JavaScript
+template support, and optional data-URI image and font embedding.
 
-It is also nice to comment CSS and JavaScript, but you do not want the overhead
-of sending the comments and whitespaces to the clients.
-
-You also want to make sure that as much of the static content is cached as much
-as possible at the client.
-The ideal is to even avoid “304 Not Modified” which are returned when a client
-requested something that has already been cached, and does not need to be updated.
-This can be accomplished by setting the HTTP Expire header to a date far in the future.
-That will force the browser not to ask for updates for that URL.
-However, when you need to update your files, you will need to give them a new URL,
-to push the updated files to the clients.
-
-These techniques has been described more in depth at Yahoo:
-
-* http://developer.yahoo.com/performance/rules.html#num_http
-* http://developer.yahoo.com/performance/rules.html#minify
-* http://developer.yahoo.com/performance/rules.html#expires
-
-django-compress tries to address those issues with as little manual intervention
-as possible, whilst still being configurable enough to not get in your way.
-Read more about the :doc:`features`.
-
-There are numerous of other techniques that could be used to improve performance,
-Yahoo has an excellent page that lists the most common: http://developer.yahoo.com/performance/rules.html
+You can report bugs and discuss features on the `issues page <https://github.com/cyberdelia/django-compress/issues>`_.
 
 Table Of Contents
 =================
@@ -43,13 +18,12 @@ Table Of Contents
 .. toctree::
    :maxdepth: 2
    
-   features
    installation
-   usage
    configuration
-   versioning
+   usage
    compressors
    compilers
+   versioning
    farfutureexpires
    backwardsincompatiblechanges
 

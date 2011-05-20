@@ -64,6 +64,6 @@ to your ``MIDDLEWARE_CLASSES`` settings.
 Ensure that it comes after any middleware which modify your HTML, like ``GZipMiddleware`` ::
 
    MIDDLEWARE_CLASSES = (
-    'django.middleware.gzip.GZipMiddleware',
-    'compress.middleware.MinifyHTMLMiddleware',
+      'django.middleware.gzip.GZipMiddleware',
+      'compress.middleware.MinifyHTMLMiddleware',
    )
