@@ -6,11 +6,14 @@ Backwards Incompatible Changes
 
 A list of backwards incompatible changes
 
-Version 1.2
+Version 1.1.0
 ===========
 
+* Most of the settings name have change to be prefixed by ``PIPELINE_``.
 * CSSTidy isn't the default anymore, YUI Compressor is now the default.
 * Filters are now called compressors.
+* You can only specify one compressor via ``PIPELINE_CSS_COMPRESSOR`` or
+  ``PIPELINE_JS_COMPRESSOR``
 
 Revision 53
 ===========
