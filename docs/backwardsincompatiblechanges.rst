@@ -35,10 +35,14 @@ bump_filename was broken because a lot of caches does not properly cache files w
 Therefore it is completely rewritten without any thoughts on backwards compatibility, since it was not possible anyways.
 This changeset also introduces a couple of other changes that could potentially break old code.
 
-* The `bump_filename` option was removed from the group settings. There is no need specifying it for ALL groups, if you actually use it, you most likely want to use it on all your compressed files.
-* The bump_filename options is replaced by the setting PIPELINE_VERSION, and is completely ignored.
-* The querystring is no longer used to determine a files version, since it was use
-* If ``PIPELINE_VERSION`` is used, you specify the version part of the `output_filename` file with '?'. This placeholder can be changed with PIPELINE_VERSION_PLACEHOLDER. 
+* The `bump_filename` option was removed from the group settings.
+  There is no need specifying it for all groups, if you actually use it,
+  you most likely want to use it on all your compressed files.
+* The bump_filename options is replaced by the setting ``PIPELINE_VERSION``,
+  and is completely ignored.
+* The querystring is no longer used to determine a files version, since it was use.
+* If ``PIPELINE_VERSION`` is used, you specify the version part of the `output_filename` file with '?'.
+  This placeholder can be changed with ``PIPELINE_VERSION_PLACEHOLDER``. 
 
 E.g.::
   
