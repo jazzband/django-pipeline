@@ -1,12 +1,16 @@
+# -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
 setup(
-    name='django-compress',
-    version='1.0.1',
-    description='django-compress provides an automated system for compressing CSS and JavaScript files',
-    author='Andreas Pelme',
-    author_email='Andreas Pelme <andreas@pelme.se>',
-    url='http://code.google.com/p/django-compress/',
+    name='django-pipeline',
+    version='1.1.0',
+    description='Pipeline is an asset packaging library for Django.',
+    long_description="""Pipeline is an asset packaging library for Django, providing
+both CSS and JavaScript concatenation and compression, built-in JavaScript
+template support, and optional data-URI image and font embedding.""",
+    author='Timothée Peignier',
+    author_email='timothee.peignier@tryphon.org',
+    url='https://github.com/cyberdelia/django-pipeline',
     packages=find_packages(),
     zip_safe=False,
     include_package_data=True,

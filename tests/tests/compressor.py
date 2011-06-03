@@ -2,19 +2,19 @@ import os
 
 from django.test import TestCase
 
-from compress.conf import settings
-from compress.compressors import Compressor
+from pipeline.conf import settings
+from pipeline.compressors import Compressor
 
 
 class CompressorTest(TestCase):
     def setUp(self):
-        self.old_compress_url = settings.COMPRESS_URL
-        settings.COMPRESS_URL = 'http://localhost/static/'
+        self.old_pipeline_url = settings.PIPELINE_URL
+        settings.PIPELINE_URL = 'http://localhost/static/'
 
     def test_url_rewrite(self):
         compressor = Compressor()
         output = compressor.concatenate_and_rewrite([
-            os.path.join(settings.COMPRESS_ROOT, 'css/urls.css'),
+            os.path.join(settings.PIPELINE_ROOT, 'css/urls.css'),
         ])
         self.assertEquals(""".relative-url {
   background-image: url(http://localhost/static/images/sprite-buttons.png);
@@ -27,4 +27,4 @@ class CompressorTest(TestCase):
 }""", output)
 
     def tearDown(self):
-        settings.COMPRESS_URL = self.old_compress_url
+        settings.PIPELINE_URL = self.old_pipeline_url

@@ -1,6 +1,7 @@
-django-compress
----------------
+Pipeline
+--------
 Copyright (c) 2008 Andreas Pelme <andreas@pelme.se>
+Copyright (c) 2011 Timothée Peignier <timothee.peignier@tryphon.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

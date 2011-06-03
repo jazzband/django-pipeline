@@ -8,7 +8,7 @@ Template tags
 =============
 
 If you need to change the output of the HTML-tags generated from the templatetags,
-this can be done by overriding the templates ``compress/css.html`` and ``compress/js.html``.
+this can be done by overriding the templates ``pipeline/css.html`` and ``pipeline/js.html``.
 
 
 YUI Compressor compressor
@@ -17,20 +17,20 @@ YUI Compressor compressor
 The YUI compressor use `yui-compressor <http://developer.yahoo.com/yui/compressor/>`_
 for compressing javascript and stylesheets. 
 
-To us it for your stylesheets add this to your ``COMPRESS_CSS_COMPRESSORS`` ::
+To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSORS`` ::
 
-  COMPRESS_CSS_COMPRESSORS = (
-    'compress.compressors.yui.YUICompressor',
+  PIPELINE_CSS_COMPRESSORS = (
+    'pipeline.compressors.yui.YUICompressor',
   )
 
-To use it for your javascripts add this to your ``COMPRESS_JS_COMPRESSORS`` ::
+To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSORS`` ::
 
-  COMPRESS_JS_COMPRESSORS = (
-    'compress.compressors.yui.YUICompressor',
+  PIPELINE_JS_COMPRESSORS = (
+    'pipeline.compressors.yui.YUICompressor',
   )
 
 
-``COMPRESS_YUI_BINARY``
+``PIPELINE_YUI_BINARY``
 -----------------------
 
   Command line to execute for the YUI program.
@@ -38,14 +38,14 @@ To use it for your javascripts add this to your ``COMPRESS_JS_COMPRESSORS`` ::
   
   Defaults to ``'/usr/local/bin/yuicompressor'``.
 
-``COMPRESS_YUI_CSS_ARGUMENTS``
+``PIPELINE_YUI_CSS_ARGUMENTS``
 ------------------------------
 
   Additional arguments to use when compressing CSS.
 
   Defaults to ``''``.
 
-``COMPRESS_YUI_JS_ARGUMENTS``
+``PIPELINE_YUI_JS_ARGUMENTS``
 -----------------------------
 
   Additional arguments to use when compressing JavaScript.
@@ -59,14 +59,14 @@ Closure Compiler compressor
 The Closure compressor use `Google Closure Compiler <http://code.google.com/closure/compiler/>`_
 to compress javascripts.
 
-To use it add this to your ``COMPRESS_JS_COMPRESSORS`` ::
+To use it add this to your ``PIPELINE_JS_COMPRESSORS`` ::
 
-  COMPRESS_JS_COMPRESSORS = (
-    'compress.compressors.closure.ClosureCompressor',
+  PIPELINE_JS_COMPRESSORS = (
+    'pipeline.compressors.closure.ClosureCompressor',
   )
 
 
-``COMPRESS_CLOSURE_BINARY``
+``PIPELINE_CLOSURE_BINARY``
 ---------------------------
 
   Command line to execute for the Closure Compiler program.
@@ -74,7 +74,7 @@ To use it add this to your ``COMPRESS_JS_COMPRESSORS`` ::
   
   Default to ``'/usr/local/bin/closure'``
 
-``COMPRESS_CLOSURE_ARGUMENTS``
+``PIPELINE_CLOSURE_ARGUMENTS``
 ------------------------------
 
   Additional arguments to use when closure is called.
@@ -88,14 +88,14 @@ UglifyJS compressor
 The UglifyJS compressor use `UglifyJS <https://github.com/mishoo/UglifyJS/>`_ to
 compress javascripts.
 
-To use it add this to your ``COMPRESS_JS_COMPRESSORS`` ::
+To use it add this to your ``PIPELINE_JS_COMPRESSORS`` ::
 
-  COMPRESS_JS_COMPRESSORS = (
-    'compress.compressors.uglifyjs.UglifyJSCompressor',
+  PIPELINE_JS_COMPRESSORS = (
+    'pipeline.compressors.uglifyjs.UglifyJSCompressor',
   )
 
 
-``COMPRESS_UGLIFYJS_BINARY``
+``PIPELINE_UGLIFYJS_BINARY``
 ----------------------------
 
   Command line to execute for the Closure Compiler program.
@@ -103,7 +103,7 @@ To use it add this to your ``COMPRESS_JS_COMPRESSORS`` ::
   
   Defaults to ``'/usr/local/bin/uglifyjs'``.
 
-``COMPRESS_UGLIFYJS_ARGUMENTS``
+``PIPELINE_UGLIFYJS_ARGUMENTS``
 -------------------------------
 
   Additional arguments to use when uglifyjs is called.
@@ -117,10 +117,10 @@ JSMin compressor
 The jsmin compressor use Douglas Crockford jsmin tool to
 compress javascripts.
 
-To use it add this to your ``COMPRESS_JS_COMPRESSORS`` ::
+To use it add this to your ``PIPELINE_JS_COMPRESSORS`` ::
 
-  COMPRESS_JS_COMPRESSORS = (
-    'compress.compressors.jsmin.JSMinCompressor',
+  PIPELINE_JS_COMPRESSORS = (
+    'pipeline.compressors.jsmin.JSMinCompressor',
   )
 
 CSSTidy compressor
@@ -129,13 +129,13 @@ CSSTidy compressor
 The CSStidy compressor use `CSStidy <http://csstidy.sourceforge.net/>`_ to compress
 stylesheets.
 
-To us it for your stylesheets add this to your ``COMPRESS_CSS_COMPRESSORS`` ::
+To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSORS`` ::
 
-  COMPRESS_CSS_COMPRESSORS = (
-    'compress.compressors.csstidy.CSSTidyCompressor',
+  PIPELINE_CSS_COMPRESSORS = (
+    'pipeline.compressors.csstidy.CSSTidyCompressor',
   )
 
-``COMPRESS_CSSTIDY_BINARY``
+``PIPELINE_CSSTIDY_BINARY``
 ---------------------------
 
   Command line to execute for csstidy program.
@@ -143,7 +143,7 @@ To us it for your stylesheets add this to your ``COMPRESS_CSS_COMPRESSORS`` ::
   
   Defaults to ``'/usr/local/bin/csstidy'``
 
-``COMPRESS_CSSTIDY_ARGUMENTS``
+``PIPELINE_CSSTIDY_ARGUMENTS``
 ------------------------------
 
   Additional arguments to use when csstidy is called.
@@ -157,18 +157,18 @@ Write your own compressor class
 To write your own compressor class, for example want to implement other types
 of compressors.
 
-All you need to do is to create a class that inherits from ``compress.compressors.CompressorBase``
+All you need to do is to create a class that inherits from ``pipeline.compressors.CompressorBase``
 and implements ``compress_css`` and/or a ``compress_js`` when needed.
 
-Finally, specify it in the tuple of compressors ``COMPRESS_CSS_COMPRESSORS`` or 
-``COMPRESS_JS_COMPRESSORS`` (see :doc:`configuration` for more information) in the settings.
+Finally, specify it in the tuple of compressors ``PIPELINE_CSS_COMPRESSORS`` or 
+``PIPELINE_JS_COMPRESSORS`` (see :doc:`configuration` for more information) in the settings.
 
 Example
 -------
 
 A custom compressor for a imaginary compressor called jam ::
 
-  from compress.compressors import CompressorBase
+  from pipeline.compressors import CompressorBase
   
   class JamCompressor(CompressorBase):
     def compress_js(self, js):

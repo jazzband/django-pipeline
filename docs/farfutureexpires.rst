@@ -4,7 +4,7 @@
 Far future expires
 ==================
 
-Details about the "Far future expires" technique, and how to implement it with help from django-compress
+Details about the "Far future expires" technique, and how to implement it with help from Pipeline
 
 General details and considerations about the "Far future expires" technique
 ===========================================================================
@@ -30,10 +30,10 @@ This technique obviously has a drawback, when you want to change your files,
 you need to change their names, since their URLs will be cached... that's right: forever!
 The solution to that is pretty obvious too: change the URLs.
 
-COMPRESS_VERSION 
+PIPELINE_VERSION 
 ================
 
-If you specify ``COMPRESS_VERSION`` in your configuration, you can add a placeholder
+If you specify ``PIPELINE_VERSION`` in your configuration, you can add a placeholder
 to the filenames to output the version number of the different files.
 
 The filename itself will be changed when any of the source files are updated.

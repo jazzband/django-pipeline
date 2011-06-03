@@ -4,12 +4,12 @@
 Usage
 =====
 
-Describes how to use django-compress when it is installed and configured.
+Describes how to use Pipeline when it is installed and configured.
 
 Automated generation
 ====================
 
-If ``COMPRESS`` and ``COMPRESS_AUTO`` is enabled (``True``), the source files
+If ``PIPELINE`` and ``PIPELINE_AUTO`` is enabled (``True``), the source files
 will be automatically updated, and re-generated if needed when invoked from the
 templatetags.
 The last modified time of the files will be compared, and if any of the
@@ -32,7 +32,7 @@ To force all files to be re-generated, use the argument ``--force`` ::
 Templatetags
 ============
 
-django-compress includes two template tags: ``compressed_css`` and ``compressed_js``,
+Pipeline includes two template tags: ``compressed_css`` and ``compressed_js``,
 in a template library called ``compressed``.
 
 They are used to output the ``<link>`` and ``<script>``-tags for the
@@ -40,7 +40,7 @@ specified CSS/JavaScript-groups (as specified in the settings).
 The first argument must be the name of the CSS/JavaScript group.
 
 The templatetags will either output the source filenames or the compressed filenames,
-depending on the ``COMPRESS`` setting, if you do not specify the ``COMPRESS`` setting,
+depending on the ``PIPELINE`` setting, if you do not specify the ``PIPELINE`` setting,
 the source files will be used in DEBUG-mode, and compressed files in non-DEBUG-mode.
 
 Example
@@ -58,12 +58,12 @@ with the name “scripts”, you would use the following code to output them all
 Middleware
 ==========
 
-To enable HTML compression add ``compress.middleware.MinifyHTMLMiddleware``, 
+To enable HTML compression add ``pipeline.middleware.MinifyHTMLMiddleware``, 
 to your ``MIDDLEWARE_CLASSES`` settings.
 
 Ensure that it comes after any middleware which modify your HTML, like ``GZipMiddleware`` ::
 
    MIDDLEWARE_CLASSES = (
       'django.middleware.gzip.GZipMiddleware',
-      'compress.middleware.MinifyHTMLMiddleware',
+      'pipeline.middleware.MinifyHTMLMiddleware',
    )

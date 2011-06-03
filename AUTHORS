@@ -1,8 +1,8 @@
-django-compress was originally created by Andreas Pelme <andreas@pelme.se> in 
-2008.
+Pipeline is a fork of django-compress which was originally created by
+Andreas Pelme <andreas@pelme.se> in 2008.
 
 These people have provided bug fixes, new features, improved the documentation 
-or just made django-compress more awesome.
+or just made Pipeline more awesome.
 
  * Alexander Artemenko <svetlyak40wt>
  * Andreas Cederström <andreas@klydd.se>
@@ -21,6 +21,6 @@ or just made django-compress more awesome.
  * Ara Anjargolian <ara818@gmail.com>
  * Timothée Peignier <timothee.peignier@tryphon.org>
 
-The Python-version of jsmin (http://www.crockford.com/javascript/jsmin.html) 
-is included in django-compress. It was translated from to Python by Baruch 
+The python version of jsmin (http://www.crockford.com/javascript/jsmin.html) 
+is included in Pipeline. It was translated from to Python by Baruch 
 Evan, from the original jsmin implementation by Douglas Crockford.

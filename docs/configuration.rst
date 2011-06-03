@@ -5,7 +5,7 @@ Configuration
 =============
 
 
-Configuration and list of available settings for django-compress
+Configuration and list of available settings for Pipeline
 
 .. note::
   
@@ -19,7 +19,7 @@ syntax to select multiples files.
 
 The basic syntax for specifying CSS/JavaScript groups files is ::
 
-  COMPRESS_CSS = {
+  PIPELINE_CSS = {
       'group_one': {
           'source_filenames': (
             'css/style.css',
@@ -35,7 +35,7 @@ The basic syntax for specifying CSS/JavaScript groups files is ::
       # other CSS groups goes here
   }
 
-  COMPRESS_JS = {
+  PIPELINE_JS = {
       'all': {
           'source_filenames': (
             'js/jquery-1.2.3.js',
@@ -91,21 +91,21 @@ Group options
 
 .. note::
 
-  Note that all filenames are specified relative to ``COMPRESS_ROOT``, and thus the source
-  files needs to be in your ``COMPRESS_ROOT``.
+  Note that all filenames are specified relative to ``PIPELINE_ROOT``, and thus the source
+  files needs to be in your ``PIPELINE_ROOT``.
 
 Other settings
 --------------
 
-``COMPRESS``
+``PIPELINE``
 ............
 
-  When ``COMPRESS`` is ``True``, CSS and JavaScripts will be concatenated and filtered.
+  When ``PIPELINE`` is ``True``, CSS and JavaScripts will be concatenated and filtered.
   When ``False``, the source-files will be used instead.
 
   Defaults to ``not DEBUG`` (compressed files will only be used when ``DEBUG`` is ``False``).
 
-``COMPRESS_AUTO``
+``PIPELINE_AUTO``
 .................
 
   Auto-generate CSS and JavaScript files whenever needed, when the template tags
@@ -120,7 +120,7 @@ Other settings
   
   Defaults to ``True``.
 
-``COMPRESS_VERSION``
+``PIPELINE_VERSION``
 ....................
 
   Regulates whether or not to add a "version number" to the outputted files
@@ -128,10 +128,10 @@ Other settings
   
   For more information, see :doc:`farfutureexpires`.
   
-  When you specify ``COMPRESS_VERSION`` you will also need to add a placeholder
+  When you specify ``PIPELINE_VERSION`` you will also need to add a placeholder
   (which by default is ``?``) for the version number in the ``output_filename`` setting.
 
-``COMPRESS_VERSION_REMOVE_OLD``
+``PIPELINE_VERSION_REMOVE_OLD``
 ...............................
 
   When ``True``, old compressed files will be removed when new versions are generated.
@@ -145,9 +145,9 @@ Other settings
 
   Example::
 
-    COMPRESS = True
-    COMPRESS_VERSION = True
-    COMPRESS_CSS = {
+    PIPELINE = True
+    PIPELINE_VERSION = True
+    PIPELINE_CSS = {
         'screen': {
             'source_filenames': (
                 'css/screen/style.css', 'css/screen/paginator.css',
@@ -161,28 +161,28 @@ Other settings
     This will output a file like ``/media/c/screen.r1213947531.css``,
     which will be re-generated and updated when you change your source files.
 
-``COMPRESS_CSS_COMPRESSORS``
+``PIPELINE_CSS_COMPRESSORS``
 ............................
 
   A tuple of compressors to be applied to CSS files.
   
-  Defaults to ``('compress.compressors.yui.YUICompressor',)``.
+  Defaults to ``('pipeline.compressors.yui.YUICompressor',)``.
 
-``COMPRESS_JS_COMPRESSORS``
+``PIPELINE_JS_COMPRESSORS``
 ...........................
 
   A tuple of compressors to be applied to JavaScript files.
   
-  Defaults to ``('compress.compressors.yui.YUICompressor',)``
+  Defaults to ``('pipeline.compressors.yui.YUICompressor',)``
 
-Also ``COMPRESS_*_COMPRESSORS`` can be set to an empty tuple or ``None`` to not use any compressor.
+Also ``PIPELINE_*_COMPRESSORS`` can be set to an empty tuple or ``None`` to not use any compressor.
 The files will however still be concatenated to one file.
 
 .. note::
 
   Please note that in order to use YUI Compressor, you need to install YUI Compressor (see :doc:`installation` for more details).
 
-``COMPRESS_TEMPLATE_NAMESPACE``
+``PIPELINE_TEMPLATE_NAMESPACE``
 ...............................
 
   Object name where all of your compiled templates will be added, from within your browser.
@@ -191,19 +191,19 @@ The files will however still be concatenated to one file.
   Defaults to ``"window.JST"``
 
 
-``COMPRESS_TEMPLATE_EXT``
+``PIPELINE_TEMPLATE_EXT``
 .........................
 
-  The extension for which django-compress will consider the file as a Javascript templates.
+  The extension for which Pipeline will consider the file as a Javascript templates.
   To use a different extension, like ``.mustache``, set this settings to ``.mustache``.
 
   Defaults to ``".jst"``
 
-``COMPRESS_TEMPLATE_FUNC``
+``PIPELINE_TEMPLATE_FUNC``
 ..........................
 
   JavaScript function that compiles your JavaScript templates.
-  django-compress doesn't bundle a javascript template library, but the default
+  Pipeline doesn't bundle a javascript template library, but the default
   settings is to use the
   `underscore <http://documentcloud.github.com/underscore/>`_ template function.
   
@@ -214,7 +214,7 @@ Rewriting CSS urls
 ==================
 
 If source CSS contain a relative URL (i.e. relative to current file),
-those URL will be converted to full relative path using ``COMPRESS_URL``.
+those URL will be converted to full relative path using ``PIPELINE_URL``.
 This conversion is performed before any compressors are applied ::
 
   media/js/fancybox/
@@ -237,17 +237,17 @@ In resulting CSS it will be rewritten to ::
   background-image:url(/js/fancybox/fancybox-x.png);
   background-image:url(/js/fancybox/fancybox-y.png);
 
-(Assuming ``COMPRESS_URL`` is '' or '/', with non-empty ``COMPRESS_URL`` result will be another).
+(Assuming ``PIPELINE_URL`` is '' or '/', with non-empty ``PIPELINE_URL`` result will be another).
 
 
 External urls
 =============
 
-While django-compress does a great job of minimizing the amount of http requests
+While Pipeline does a great job of minimizing the amount of http requests
 on your site (hence increasing performance) there are sometimes cases when you
 want to include external files as well. Let's take an example::
 
-  COMPRESS_JS = {
+  PIPELINE_JS = {
       'jquery': {
           'external_urls': (
               'http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js',
@@ -266,14 +266,14 @@ In template::
     {% compressed_js 'jquery' %}
     {% compressed_js 'all' %}
 
-Output in when ``settings.COMPRESS = False``::
+Output in when ``settings.PIPELINE = False``::
 
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.5.2/jquery-ui.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="/media/js/blog.js" charset="utf-8"></script>
   <script type="text/javascript" src="/media/js/comments.js" charset="utf-8"></script>
 
-Output in when ``settings.COMPRESS = True``::
+Output in when ``settings.PIPELINE = True``::
 
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.5.2/jquery-ui.min.js" charset="utf-8"></script>

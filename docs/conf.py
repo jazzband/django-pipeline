@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# django-compress documentation build configuration file, created by
+# Pipeline documentation build configuration file, created by
 # sphinx-quickstart on Sat Apr 30 17:47:55 2011.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -40,8 +40,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-compress'
-copyright = u'2011, Andreas Pelme'
+project = u'django-pipeline'
+copyright = u'2011, Timothée Peignier'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -164,7 +164,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'django-compressdoc'
+htmlhelp_basename = 'django-pipelinedoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -178,8 +178,8 @@ htmlhelp_basename = 'django-compressdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-compress.tex', u'django-compress Documentation',
-   u'Andreas Pelme', 'manual'),
+  ('index', 'django-pipeline.tex', u'Pipeline Documentation',
+   u'Timothée Peignier', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -211,6 +211,6 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-compress', u'django-compress Documentation',
-     [u'Andreas Pelme'], 1)
+    ('index', 'django-pipeline', u'Pipeline Documentation',
+     [u'Timothée Peignier'], 1)
 ]

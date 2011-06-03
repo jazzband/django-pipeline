@@ -26,14 +26,14 @@ MD5 version
 
 To generate MD5 version strings, put this in your `settings.py` ::
 
-    COMPRESS_VERSIONING = 'compress.versioning.hash.MD5Versioning'
+    PIPELINE_VERSIONING = 'pipeline.versioning.hash.MD5Versioning'
 
 SHA-1 version
 -------------
 
 To generate SHA-1 version strings, put this in your `settings.py`::
 
-    COMPRESS_VERSIONING = 'compress.versioning.hash.SHA1Versioning'
+    PIPELINE_VERSIONING = 'pipeline.versioning.hash.SHA1Versioning'
 
 
 Git version
@@ -52,7 +52,7 @@ Git revision version
 
 To generate versions based on revision of every file in your source file list, put this in your `settings.py`::
 
-    COMPRESS_VERSIONING = 'compress.versioning.git.GitVersioningBase'
+    PIPELINE_VERSIONING = 'pipeline.versioning.git.GitVersioningBase'
 
 Git HEAD last revision version
 ------------------------------
@@ -60,7 +60,7 @@ Git HEAD last revision version
 To generate versions based on the latest revision of HEAD in your git repository (which assumes all of your source files are in the
 same repository), put this in your `settings.py`::
 
-    COMPRESS_VERSIONING = 'compress.versioning.git.GitHeadRevVersioning'
+    PIPELINE_VERSIONING = 'pipeline.versioning.git.GitHeadRevVersioning'
 
 Write your own versioning class
 ===============================
@@ -73,7 +73,7 @@ Example
 For example, you want a short version string based on the SHA-1 version string.
 You can do this by subclassing the SHA1Versioning class and overriding its get_version() method, like this::
 
-    from compress.versioning.hash import SHA1Versioning
+    from pipeline.versioning.hash import SHA1Versioning
 
     class ShortSHA1Versioning(SHA1Versioning):
         """Custom SHA1Versioning class"""
@@ -85,7 +85,7 @@ You can do this by subclassing the SHA1Versioning class and overriding its get_v
 
 In your ``settings.py`` add::
 
-    COMPRESS_VERSIONING = 'app.module.ShortSHA1Versioning'
+    PIPELINE_VERSIONING = 'app.module.ShortSHA1Versioning'
 
 .. note::
 
@@ -100,7 +100,7 @@ Especially when calculating a hash on every request could be expensive.
 To avoid this, make sure your source files are compressed before deployment,
 and put the following settings in your production environment's ``settings.py``::
 
-    COMPRESS_AUTO = False
-    COMPRESS_VERSION = True
+    PIPELINE_AUTO = False
+    PIPELINE_VERSION = True
 
 This way, the names of the compressed files will be looked up in the file system, instead of being evaluated and (if needed) regenerated on every request.

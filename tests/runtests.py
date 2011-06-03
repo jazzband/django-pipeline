@@ -8,10 +8,10 @@ TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 if not settings.configured:
     settings.configure(
-        COMPRESS_CACHE_BACKEND='dummy://',
+        PIPELINE_CACHE_BACKEND='dummy://',
         DATABASE_ENGINE='sqlite3',
         INSTALLED_APPS=[
-            'compress',
+            'pipeline',
             'tests',
         ],
         MEDIA_URL='/media/',

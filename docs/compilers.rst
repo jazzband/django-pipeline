@@ -11,13 +11,13 @@ Coffee Script compiler
 The Coffee Script compiler use `Coffee Script <http://jashkenas.github.com/coffee-script/>`_
 to compile your javascripts.
 
-To use it add this to your ``COMPRESS_COMPILERS`` ::
+To use it add this to your ``PIPELINE_COMPILERS`` ::
 
-  COMPRESS_COMPILERS = (
-    'compress.compilers.coffee.CoffeeScriptCompiler',
+  PIPELINE_COMPILERS = (
+    'pipeline.compilers.coffee.CoffeeScriptCompiler',
   )
 
-``COMPRESS_COFFEE_SCRIPT_BINARY``
+``PIPELINE_COFFEE_SCRIPT_BINARY``
 ---------------------------------
 
   Command line to execute for coffee program.
@@ -25,7 +25,7 @@ To use it add this to your ``COMPRESS_COMPILERS`` ::
 
   Defaults to ``'/usr/local/bin/coffee'``.
 
-``COMPRESS_COFFEE_SCRIPT_ARGUMENTS``
+``PIPELINE_COFFEE_SCRIPT_ARGUMENTS``
 ------------------------------------
   
   Additional arguments to use when coffee is called.
@@ -38,13 +38,13 @@ LESS compiler
 The LESS compiler use `LESS <http://lesscss.org/>`_
 to compile your stylesheets.
 
-To use it add this to your ``COMPRESS_COMPILERS`` ::
+To use it add this to your ``PIPELINE_COMPILERS`` ::
 
-  COMPRESS_COMPILERS = (
-    'compress.compilers.less.LessCompiler',
+  PIPELINE_COMPILERS = (
+    'pipeline.compilers.less.LessCompiler',
   )
 
-``COMPRESS_LESS_BINARY``
+``PIPELINE_LESS_BINARY``
 ------------------------
 
   Command line to execute for lessc program.
@@ -52,7 +52,7 @@ To use it add this to your ``COMPRESS_COMPILERS`` ::
 
   Defaults to ``'/usr/local/bin/lessc'``.
 
-``COMPRESS_LESS_ARGUMENTS``
+``PIPELINE_LESS_ARGUMENTS``
 ---------------------------
 
   Additional arguments to use when lessc is called.
@@ -65,14 +65,14 @@ SASS compiler
 The SASS compiler use `SASS <http://sass-lang.com/>`_
 to compile your stylesheets.
 
-To use it add this to your ``COMPRESS_COMPILERS`` ::
+To use it add this to your ``PIPELINE_COMPILERS`` ::
 
-  COMPRESS_COMPILERS = (
-    'compress.compilers.sass.SASSCompiler',
+  PIPELINE_COMPILERS = (
+    'pipeline.compilers.sass.SASSCompiler',
   )
 
 
-``COMPRESS_SASS_BINARY``
+``PIPELINE_SASS_BINARY``
 ------------------------
   
   Command line to execute for sass program.
@@ -80,7 +80,7 @@ To use it add this to your ``COMPRESS_COMPILERS`` ::
 
   Defaults to ``'/usr/local/bin/sass'``.
 
-``COMPRESS_SASS_ARGUMENTS``
+``PIPELINE_SASS_ARGUMENTS``
 ---------------------------
   
   Additional arguments to use when sass is called.
@@ -94,17 +94,17 @@ Write your own compiler class
 To write your own compiler class, for example want to implement other types
 of compilers.
 
-All you need to do is to create a class that inherits from ``compress.compilers.CompilerBase``
+All you need to do is to create a class that inherits from ``pipeline.compilers.CompilerBase``
 and implements ``match_file`` and ``compile_file`` when needed.
 
-Finally, specify it in the tuple of compilers ``COMPRESS_COMPILERS`` in the settings.
+Finally, specify it in the tuple of compilers ``PIPELINE_COMPILERS`` in the settings.
 
 Example
 -------
 
 A custom compiler for a imaginary compiler called jam ::
 
-  from compress.compilers import CompilerBase
+  from pipeline.compilers import CompilerBase
   
   class JamCompiler(CompilerBase):
     output_extension = 'js'

@@ -33,9 +33,9 @@ Therefore it is completely rewritten without any thoughts on backwards compatibi
 This changeset also introduces a couple of other changes that could potentially break old code.
 
 * The `bump_filename` option was removed from the group settings. There is no need specifying it for ALL groups, if you actually use it, you most likely want to use it on all your compressed files.
-* The bump_filename options is replaced by the setting COMPRESS_VERSION, and is completely ignored.
+* The bump_filename options is replaced by the setting PIPELINE_VERSION, and is completely ignored.
 * The querystring is no longer used to determine a files version, since it was use
-* If ``COMPRESS_VERSION`` is used, you specify the version part of the `output_filename` file with '?'. This placeholder can be changed with COMPRESS_VERSION_PLACEHOLDER. 
+* If ``PIPELINE_VERSION`` is used, you specify the version part of the `output_filename` file with '?'. This placeholder can be changed with PIPELINE_VERSION_PLACEHOLDER. 
 
 E.g.::
   
@@ -44,13 +44,13 @@ E.g.::
       'output_filename': 'c/screen.r?.css',
   },
 
-* ``COMPRESS_VERSION`` requires ``COMPRESS_AUTO`` to be enabled.
-  ``COMPRESS_AUTO`` is enabled by default, but if you explicitly set it to ``False`` an ``ImproperlyConfiguredError`` exception will be thrown. 
+* ``PIPELINE_VERSION`` requires ``PIPELINE_AUTO`` to be enabled.
+  ``PIPELINE_AUTO`` is enabled by default, but if you explicitly set it to ``False`` an ``ImproperlyConfiguredError`` exception will be thrown. 
 
-``COMPRESS_AUTO`` changes
+``PIPELINE_AUTO`` changes
 
 * The CSS/Javascript files are not checked during Django's initialization anymore.
   It was not really useful and did not make sense.
-  The automatic part is now handled by the templatetags (i.e. what used to be ``COMPRESS_TEMPLATE_AUTO``).
-* ``COMPRESS_AUTO`` is replaced by ``COMPRESS_AUTO_TEMPLATE``, and the old behavior
-  of ``COMPRESS_AUTO`` is removed. This might be really confusing, the :doc:`configuration` should make it clear. 
+  The automatic part is now handled by the templatetags (i.e. what used to be ``PIPELINE_TEMPLATE_AUTO``).
+* ``PIPELINE_AUTO`` is replaced by ``PIPELINE_AUTO_TEMPLATE``, and the old behavior
+  of ``PIPELINE_AUTO`` is removed. This might be really confusing, the :doc:`configuration` should make it clear. 
