@@ -17,17 +17,13 @@ YUI Compressor compressor
 The YUI compressor use `yui-compressor <http://developer.yahoo.com/yui/compressor/>`_
 for compressing javascript and stylesheets. 
 
-To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSORS`` ::
+To use it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
 
-  PIPELINE_CSS_COMPRESSORS = (
-    'pipeline.compressors.yui.YUICompressor',
-  )
+  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 
-To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSORS`` ::
+To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
-  PIPELINE_JS_COMPRESSORS = (
-    'pipeline.compressors.yui.YUICompressor',
-  )
+  PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 
 
 ``PIPELINE_YUI_BINARY``
@@ -59,9 +55,9 @@ Closure Compiler compressor
 The Closure compressor use `Google Closure Compiler <http://code.google.com/closure/compiler/>`_
 to compress javascripts.
 
-To use it add this to your ``PIPELINE_JS_COMPRESSORS`` ::
+To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
-  PIPELINE_JS_COMPRESSORS = (
+  PIPELINE_JS_COMPRESSOR = (
     'pipeline.compressors.closure.ClosureCompressor',
   )
 
@@ -88,11 +84,9 @@ UglifyJS compressor
 The UglifyJS compressor use `UglifyJS <https://github.com/mishoo/UglifyJS/>`_ to
 compress javascripts.
 
-To use it add this to your ``PIPELINE_JS_COMPRESSORS`` ::
+To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
-  PIPELINE_JS_COMPRESSORS = (
-    'pipeline.compressors.uglifyjs.UglifyJSCompressor',
-  )
+  PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 
 
 ``PIPELINE_UGLIFYJS_BINARY``
@@ -117,11 +111,9 @@ JSMin compressor
 The jsmin compressor use Douglas Crockford jsmin tool to
 compress javascripts.
 
-To use it add this to your ``PIPELINE_JS_COMPRESSORS`` ::
+To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
-  PIPELINE_JS_COMPRESSORS = (
-    'pipeline.compressors.jsmin.JSMinCompressor',
-  )
+  PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
 
 CSSTidy compressor
 ==================
@@ -129,11 +121,9 @@ CSSTidy compressor
 The CSStidy compressor use `CSStidy <http://csstidy.sourceforge.net/>`_ to compress
 stylesheets.
 
-To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSORS`` ::
+To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
 
-  PIPELINE_CSS_COMPRESSORS = (
-    'pipeline.compressors.csstidy.CSSTidyCompressor',
-  )
+  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.csstidy.CSSTidyCompressor'
 
 ``PIPELINE_CSSTIDY_BINARY``
 ---------------------------
@@ -160,8 +150,8 @@ of compressors.
 All you need to do is to create a class that inherits from ``pipeline.compressors.CompressorBase``
 and implements ``compress_css`` and/or a ``compress_js`` when needed.
 
-Finally, specify it in the tuple of compressors ``PIPELINE_CSS_COMPRESSORS`` or 
-``PIPELINE_JS_COMPRESSORS`` (see :doc:`configuration` for more information) in the settings.
+Finally, specify it in the tuple of compressors ``PIPELINE_CSS_COMPRESSOR`` or 
+``PIPELINE_JS_COMPRESSOR`` (see :doc:`configuration` for more information) in the settings.
 
 Example
 -------

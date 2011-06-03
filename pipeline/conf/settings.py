@@ -18,12 +18,12 @@ PIPELINE_VERSIONING = getattr(settings, 'PIPELINE_VERSIONING', 'pipeline.version
 PIPELINE_STORAGE = getattr(settings, 'PIPELINE_STORAGE',
     'pipeline.storage.CompressStorage')
 
-PIPELINE_CSS_COMPRESSORS = getattr(settings, 'PIPELINE_CSS_COMPRESSORS', [
+PIPELINE_CSS_COMPRESSOR = getattr(settings, 'PIPELINE_CSS_COMPRESSOR',
     'pipeline.compressors.yui.YUICompressor'
-])
-PIPELINE_JS_COMPRESSORS = getattr(settings, 'PIPELINE_JS_COMPRESSORS', [
+)
+PIPELINE_JS_COMPRESSOR = getattr(settings, 'PIPELINE_JS_COMPRESSOR',
     'pipeline.compressors.yui.YUICompressor'
-])
+)
 PIPELINE_COMPILERS = getattr(settings, 'PIPELINE_COMPILERS', [])
 
 PIPELINE_CSS = getattr(settings, 'PIPELINE_CSS', {})
@@ -54,12 +54,6 @@ PIPELINE_SASS_ARGUMENTS = getattr(settings, 'PIPELINE_SASS_ARGUMENTS', '')
 
 PIPELINE_LESS_BINARY = getattr(settings, 'PIPELINE_LESS_BINARY', '/usr/local/bin/lessc')
 PIPELINE_LESS_ARGUMENTS = getattr(settings, 'PIPELINE_LESS_ARGUMENTS', '')
-
-if PIPELINE_CSS_COMPRESSORS is None:
-    PIPELINE_CSS_COMPRESSORS = []
-
-if PIPELINE_JS_COMPRESSORS is None:
-    PIPELINE_JS_COMPRESSORS = []
 
 if PIPELINE_COMPILERS is None:
     PIPELINE_COMPILERS = []

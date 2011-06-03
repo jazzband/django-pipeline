@@ -35,28 +35,26 @@ class Compressor(object):
     def __init__(self, verbose=False):
         self.verbose = verbose
 
-    def js_compressors(self):
-        return [to_class(compressor) for compressor in settings.PIPELINE_JS_COMPRESSORS]
-    js_compressors = property(js_compressors)
+    def js_compressor(self):
+        return to_class(settings.PIPELINE_JS_COMPRESSOR)
+    js_compressor = property(js_compressor)
 
-    def css_compressors(self):
-        return [to_class(compressor) for compressor in settings.PIPELINE_CSS_COMPRESSORS]
-    css_compressors = property(css_compressors)
+    def css_compressor(self):
+        return to_class(settings.PIPELINE_CSS_COMPRESSOR)
+    css_compressor = property(css_compressor)
 
     def compress_js(self, paths, templates=None):
         """Concatenate and compress JS files"""
         js = self.concatenate(paths)
         if templates:
             js = js + self.compile_templates(templates)
-        for compressor in self.js_compressors:
-            js = getattr(compressor(verbose=self.verbose), 'compress_js')(js)
+        js = getattr(self.js_compressor(verbose=self.verbose), 'compress_js')(js)
         return js
 
     def compress_css(self, paths, variant=None):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, variant)
-        for compressor in self.css_compressors:
-            css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
+        css = getattr(self.css_compressor(verbose=self.verbose), 'compress_css')(css)
         if not variant:
             return css
         elif variant == "datauri":

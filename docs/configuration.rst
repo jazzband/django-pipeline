@@ -161,22 +161,19 @@ Other settings
     This will output a file like ``/media/c/screen.r1213947531.css``,
     which will be re-generated and updated when you change your source files.
 
-``PIPELINE_CSS_COMPRESSORS``
+``PIPELINE_CSS_COMPRESSOR``
 ............................
 
-  A tuple of compressors to be applied to CSS files.
+  Compressor class to be applied to CSS files.
   
-  Defaults to ``('pipeline.compressors.yui.YUICompressor',)``.
+  Defaults to ``'pipeline.compressors.yui.YUICompressor'``.
 
-``PIPELINE_JS_COMPRESSORS``
+``PIPELINE_JS_COMPRESSOR``
 ...........................
 
-  A tuple of compressors to be applied to JavaScript files.
+  Compressor class to be applied to JavaScript files.
   
-  Defaults to ``('pipeline.compressors.yui.YUICompressor',)``
-
-Also ``PIPELINE_*_COMPRESSORS`` can be set to an empty tuple or ``None`` to not use any compressor.
-The files will however still be concatenated to one file.
+  Defaults to ``'pipeline.compressors.yui.YUICompressor'``
 
 .. note::
 
