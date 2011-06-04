@@ -150,8 +150,8 @@ of compressors.
 All you need to do is to create a class that inherits from ``pipeline.compressors.CompressorBase``
 and implements ``compress_css`` and/or a ``compress_js`` when needed.
 
-Finally, specify it in the tuple of compressors ``PIPELINE_CSS_COMPRESSOR`` or 
-``PIPELINE_JS_COMPRESSOR`` (see :doc:`configuration` for more information) in the settings.
+Finally, add it to ``PIPELINE_CSS_COMPRESSOR`` or 
+``PIPELINE_JS_COMPRESSOR`` settings (see :doc:`configuration` for more information).
 
 Example
 -------
@@ -167,3 +167,8 @@ A custom compressor for a imaginary compressor called jam ::
     def compress(self, css):
       return jam.compress(css)
   
+
+Add it to your settings ::
+
+  PIPELINE_CSS_COMPRESSOR = 'jam.compressors.JamCompressor'
+  PIPELINE_JS_COMPRESSOR = 'jam.compressors.JamCompressor'
