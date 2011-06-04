@@ -19,6 +19,7 @@ Table Of Contents
    compressors
    compilers
    versioning
+   templates
    farfutureexpires
    backwardsincompatiblechanges
 
