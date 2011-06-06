@@ -64,6 +64,8 @@ class Compressor(object):
 
     def compile_templates(self, paths):
         compiled = ""
+        if not paths:
+            return compiled
         namespace = settings.PIPELINE_TEMPLATE_NAMESPACE
         base_path = self.base_path(paths)
         for path in paths:
