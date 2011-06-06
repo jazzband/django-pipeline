@@ -1,7 +1,7 @@
 from django.contrib.staticfiles.finders import BaseStorageFinder
 
-from pipeline.storage import CompressStorage
+from pipeline.storage import PipelineStorage
 
 
-class CompressFinder(BaseStorageFinder):
-    storage = CompressStorage
+class PipelineFinder(BaseStorageFinder):
+    storage = PipelineStorage
