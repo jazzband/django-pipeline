@@ -14,6 +14,10 @@ EMBEDDABLE = r'[\A\/]embed\/'
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
 
+MHTML_START = "/*\r\nContent-Type: multipart/related; boundary=\"MHTML_MARK\"\r\n\r\n"
+MHTML_SEPARATOR = "--MHTML_MARK\r\n"
+MHTML_END = "\r\n--MHTML_MARK--\r\n*/\r\n"
+
 MIME_TYPES = {
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
@@ -43,7 +47,7 @@ class Compressor(object):
         return to_class(settings.PIPELINE_CSS_COMPRESSOR)
     css_compressor = property(css_compressor)
 
-    def compress_js(self, paths, templates=None):
+    def compress_js(self, paths, templates=None, asset_url=None):
         """Concatenate and compress JS files"""
         js = self.concatenate(paths)
         if templates:
@@ -51,7 +55,7 @@ class Compressor(object):
         js = getattr(self.js_compressor(verbose=self.verbose), 'compress_js')(js)
         return js
 
-    def compress_css(self, paths, variant=None):
+    def compress_css(self, paths, variant=None, asset_url=None):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, variant)
         css = getattr(self.css_compressor(verbose=self.verbose), 'compress_css')(css)
@@ -59,6 +63,8 @@ class Compressor(object):
             return css
         elif variant == "datauri":
             return self.with_data_uri(css)
+        elif variant == "mhtml":
+            return self.with_mhtml(css, asset_url)
         else:
             raise CompressorError("\"%s\" is not a valid variant" % variant)
 
@@ -157,6 +163,29 @@ class Compressor(object):
             data = self.encoded_content(path)
             return "url(\"data:%s;charset=utf-8;base64,%s\")" % (mime_type, data)
         return re.sub(URL_REPLACER, datauri, css)
+
+    def with_mhtml(self, css, asset_url):
+        paths = {}
+        def mhtml(match):
+            path = match.group(1)
+            if not path in paths: 
+                paths[path] = "%s-%s" % (match.start(), os.path.basename(path))
+            return "url(mhtml:%s!%s)" % (asset_url, paths[path])
+        css = re.sub(URL_REPLACER, mhtml, css)
+        mhtml = []
+        for path, location in paths.items():
+            mime_type = self.mime_type(path)
+            data = self.encoded_content(path)
+            mhtml.extend([
+                MHTML_SEPARATOR,
+                "Content-Location: %s\r\n" % location,
+                "Content-Type: %s\r\n" % mime_type,
+                "Content-Transfer-Encoding: base64\r\n\r\n",
+                data,
+                "\r\n"
+            ])
+        output = [MHTML_START, mhtml, MHTML_END, css]
+        return ''.join([part for parts in output for part in parts])
 
     def encoded_content(self, path):
         if path in self.__class__.asset_contents:

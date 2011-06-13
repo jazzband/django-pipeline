@@ -72,9 +72,9 @@ Group options
 
   **Optional**
   
-  Is the variant you want to apply to your CSS. This allow you to embed images and 
-  fonts in CSS with data-URI.
-  Allowed values are : ``None`` or ``datauri``.
+  Is the variant you want to apply to your CSS. This allow you to embed images
+  and fonts in CSS with data-URI or MHTML.
+  Allowed values are : ``None``, ``datauri`` or ``mhtml``.
   
   Defaults to ``None``.
 
