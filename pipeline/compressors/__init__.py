@@ -73,7 +73,7 @@ class Compressor(object):
         if not paths:
             return compiled
         namespace = settings.PIPELINE_TEMPLATE_NAMESPACE
-        base_path = self.base_path(paths)
+        base_path = os.path.commonprefix(paths)
         for path in paths:
             contents = self.read_file(path)
             contents = re.sub(r"\r?\n", "", contents)
@@ -94,26 +94,12 @@ class Compressor(object):
 
     def template_name(self, path, base):
         name = os.path.basename(path)
+        base = os.path.abspath(base)
         if base:
             name = re.sub(r"^%s\/(.*)%s$" % (
                 re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
             ), r"\1", path)
         return re.sub(r"[\/\\]", "_", name)
-
-    def base_path(self, paths):
-        if len(paths) <= 1:
-            return None
-        paths.sort()
-        first = paths[0].split('/')
-        last = paths[-1].split('/')
-        i = 0
-        while first[i] == last[i] and i <= len(first):
-            i += 1
-        base = '/'.join(first[0:i])
-        if not base:
-            return None
-        else:
-            return base
 
     def concatenate_and_rewrite(self, paths, variant=None):
         """Concatenate together files and rewrite urls"""
