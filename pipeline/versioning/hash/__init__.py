@@ -7,7 +7,8 @@ from pipeline.versioning import VersioningBase
 
 
 class HashVersioningBase(VersioningBase):
-    def __init__(self, hash_method):
+    def __init__(self, versioning, hash_method):
+        super(HashVersioningBase, self).__init__(versioning)
         self.hash_method = hash_method
 
     def need_update(self, output_file, paths, version):
@@ -50,10 +51,10 @@ class HashVersioningBase(VersioningBase):
 
 
 class MD5Versioning(HashVersioningBase):
-    def __init__(self):
-        super(MD5Versioning, self).__init__(md5)
+    def __init__(self, versioning):
+        super(MD5Versioning, self).__init__(versioning, md5)
 
 
 class SHA1Versioning(HashVersioningBase):
-    def __init__(self):
-        super(SHA1Versioning, self).__init__(sha1)
+    def __init__(self, versioning):
+        super(SHA1Versioning, self).__init__(versioning, sha1)
