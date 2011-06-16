@@ -20,6 +20,7 @@ Table Of Contents
    compilers
    versioning
    templates
+   storages
    farfutureexpires
    backwardsincompatiblechanges
 

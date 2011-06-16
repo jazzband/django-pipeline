@@ -1,3 +1,6 @@
+.. _ref-templates:
+
+====================
 Javascript Templates
 ====================
 
