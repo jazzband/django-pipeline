@@ -16,6 +16,11 @@ class PipelineStorage(FileSystemStorage):
             base_url = settings.PIPELINE_URL
         super(PipelineStorage, self).__init__(location, base_url, *args, **kwargs)
 
+    def get_available_name(self, name):
+        if self.exists(name):
+            self.delete(name)
+        return name
+
     def accessed_time(self, name):
         return datetime.fromtimestamp(os.path.getatime(self.path(name)))
 
