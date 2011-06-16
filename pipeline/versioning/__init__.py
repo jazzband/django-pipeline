@@ -30,21 +30,16 @@ class Versioning(object):
 
     def output_filename(self, filename, version):
         if settings.PIPELINE_VERSION and version is not None:
-            output_filename = filename.replace(settings.PIPELINE_VERSION_PLACEHOLDER,
+            return filename.replace(settings.PIPELINE_VERSION_PLACEHOLDER,
                 version)
         else:
-            output_filename = filename.replace(settings.PIPELINE_VERSION_PLACEHOLDER,
+            return filename.replace(settings.PIPELINE_VERSION_PLACEHOLDER,
                 settings.PIPELINE_VERSION_DEFAULT)
-        output_path = os.path.join(settings.PIPELINE_ROOT, output_filename)
-        return os.path.normpath(output_path)
-
-    def relative_path(self, filename):
-        return os.path.join(settings.PIPELINE_ROOT, filename)
 
     def need_update(self, output_file, paths):
         version = self.version(paths)
         output_file = self.output_filename(output_file, version)
-        if not storage.exists(self.relative_path(output_file)):
+        if not storage.exists(output_file):
             return True, version
         return getattr(self.versionner, 'need_update')(output_file, paths, version)
 

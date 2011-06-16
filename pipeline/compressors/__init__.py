@@ -94,9 +94,8 @@ class Compressor(object):
 
     def template_name(self, path, base):
         name = os.path.basename(path)
-        base = os.path.abspath(base)
         if base:
-            name = re.sub(r"^%s\/(.*)%s$" % (
+            name = re.sub(r"^%s\/?(.*)%s$" % (
                 re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
             ), r"\1", path)
         return re.sub(r"[\/\\]", "_", name)
@@ -154,7 +153,7 @@ class Compressor(object):
         paths = {}
         def mhtml(match):
             path = match.group(1)
-            if not path in paths: 
+            if not path in paths:
                 paths[path] = "%s-%s" % (match.start(), os.path.basename(path))
             return "url(mhtml:%s!%s)" % (asset_url, paths[path])
         css = re.sub(URL_REPLACER, mhtml, css)
@@ -239,5 +238,4 @@ class SubProcessCompressor(CompressorBase):
 
         if self.verbose:
             print error
-
         return compressed_content

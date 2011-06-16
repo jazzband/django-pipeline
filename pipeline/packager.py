@@ -2,6 +2,8 @@ import glob
 import os
 import urlparse
 
+from django.core.files.base import ContentFile
+
 from pipeline.conf import settings
 from pipeline.compilers import Compiler
 from pipeline.compressors import Compressor
@@ -54,7 +56,7 @@ class Packager(object):
                 self.versioning.cleanup(package['output'])
                 if self.verbose or self.force:
                     print "Version: %s" % version
-                    print "Saving: %s" % self.compressor.relative_path(output_filename)
+                    print "Saving: %s" % output_filename
                 paths = self.compile(package['paths'])
                 content = compress(paths,
                     asset_url=self.individual_url(output_filename), **kwargs)
@@ -72,9 +74,7 @@ class Packager(object):
         return self.compressor.compile_templates(package['templates'])
 
     def save_file(self, filename, content):
-        file = storage.open(filename, mode='wb+')
-        file.write(content)
-        file.close()
+        return storage.save(filename, ContentFile(content))
 
     def create_packages(self, config):
         packages = {}
@@ -89,7 +89,7 @@ class Packager(object):
             for path in config[name]['source_filenames']:
                 full_path = os.path.join(settings.PIPELINE_ROOT, path)
                 for path in glob.glob(full_path):
-                    path = os.path.normpath(path).replace(settings.PIPELINE_ROOT, '')
+                    path = os.path.relpath(path, settings.PIPELINE_ROOT)
                     if not path in paths:
                         paths.append(path)
             packages[name]['paths'] = [path for path in paths if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
