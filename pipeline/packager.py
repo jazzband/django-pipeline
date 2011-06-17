@@ -73,7 +73,7 @@ class Packager(object):
 
     def save_file(self, path, content):
         file = storage.open(path, 'wb')
-        file.write(content)
+        file.write(content.encode('utf-8'))
         file.close()
         return path
 

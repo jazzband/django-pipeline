@@ -29,7 +29,7 @@ class HashVersioningBase(VersioningBase):
     def read_file(self, path):
         """Read file content in binary mode"""
         file = storage.open(path, 'rb')
-        content = file.read()
+        content = file.read().decode('utf-8')
         file.close()
         return content
 

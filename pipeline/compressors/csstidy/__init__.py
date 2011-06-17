@@ -11,7 +11,7 @@ warnings.simplefilter('ignore', RuntimeWarning)
 class CSSTidyCompressor(CompressorBase):
     def compress_css(self, css):
         tmp_file = tempfile.NamedTemporaryFile(mode='w+b')
-        tmp_file.write(css)
+        tmp_file.write(css.encode('utf-8'))
         tmp_file.flush()
 
         output_file = tempfile.NamedTemporaryFile(mode='w+b')
@@ -23,7 +23,7 @@ class CSSTidyCompressor(CompressorBase):
 
         command_output = os.popen(command).read()
 
-        filtered_css = output_file.read()
+        filtered_css = output_file.read().decode('utf-8')
         output_file.close()
         tmp_file.close()
 

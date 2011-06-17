@@ -13,7 +13,7 @@ class LessCompiler(CompilerBase):
 
     def compile_file(self, content):
         tmp_file = tempfile.NamedTemporaryFile(mode='w+b')
-        tmp_file.write(content)
+        tmp_file.write(content.encode('utf-8'))
         tmp_file.flush()
 
         output_file = tempfile.NamedTemporaryFile(mode='w+b')
@@ -25,7 +25,7 @@ class LessCompiler(CompilerBase):
 
         command_output = os.popen(command).read()
 
-        compiled_content = output_file.read()
+        compiled_content = output_file.read().decode('utf-8')
         output_file.close()
         tmp_file.close()
 
