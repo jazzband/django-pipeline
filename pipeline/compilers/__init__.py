@@ -36,13 +36,13 @@ class Compiler(object):
 
     def read_file(self, path):
         file = storage.open(path, 'rb')
-        content = file.read().decode('utf-8')
+        content = file.read()
         file.close()
         return content
 
     def save_file(self, path, content):
         file = storage.open(path, 'wb')
-        file.write(content.encode('utf-8'))
+        file.write(content)
         file.close()
 
 
@@ -58,7 +58,7 @@ class CompilerBase(object):
 
     def save_file(self, path, content):
         file = storage.open(path, 'wb')
-        file.write(content.encode('utf-8'))
+        file.write(content)
         file.close()
         return path
 
@@ -71,10 +71,10 @@ class SubProcessCompiler(CompilerBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        pipe.stdin.write(content.encode('utf-8'))
+        pipe.stdin.write(content)
         pipe.stdin.close()
 
-        compressed_content = pipe.stdout.read().decode('utf-8')
+        compressed_content = pipe.stdout.read()
         pipe.stdout.close()
 
         error = pipe.stderr.read()

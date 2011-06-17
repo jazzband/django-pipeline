@@ -73,7 +73,7 @@ class Packager(object):
 
     def save_file(self, path, content):
         file = storage.open(path, 'wb')
-        file.write(content.encode('utf-8'))
+        file.write(content)
         file.close()
         return path
 
@@ -90,7 +90,7 @@ class Packager(object):
             for pattern in config[name]['source_filenames']:
                 for path in glob(pattern):
                     if not path in paths:
-                        paths.append(path)
+                        paths.append(str(path))
             packages[name]['paths'] = [path for path in paths if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
             packages[name]['templates'] = [path for path in paths if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
             packages[name]['output'] = config[name]['output_filename']
