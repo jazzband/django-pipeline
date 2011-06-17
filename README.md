@@ -5,7 +5,7 @@ Pipeline is an asset packaging library for Django, providing both CSS and JavaSc
 
 To install it :
 
-    pip install -e git://github.com/cyberdelia/django-pipeline.git#egg=pipeline
+    pip install django-pipeline
 
 
 For documentation, usage, and examples, see :
