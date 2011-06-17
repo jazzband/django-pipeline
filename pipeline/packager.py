@@ -1,12 +1,10 @@
-import glob
 import os
 import urlparse
-
-from django.core.files.base import ContentFile
 
 from pipeline.conf import settings
 from pipeline.compilers import Compiler
 from pipeline.compressors import Compressor
+from pipeline.glob import glob
 from pipeline.signals import css_compressed, js_compressed
 from pipeline.storage import storage
 from pipeline.versioning import Versioning
@@ -73,8 +71,11 @@ class Packager(object):
     def pack_templates(self, package):
         return self.compressor.compile_templates(package['templates'])
 
-    def save_file(self, filename, content):
-        return storage.save(filename, ContentFile(content))
+    def save_file(self, path, content):
+        file = storage.open(path, 'wb')
+        file.write(content)
+        file.close()
+        return path
 
     def create_packages(self, config):
         packages = {}
@@ -86,10 +87,8 @@ class Packager(object):
                 packages[name]['externals'] = config[name]['external_urls']
                 continue
             paths = []
-            for path in config[name]['source_filenames']:
-                full_path = os.path.join(settings.PIPELINE_ROOT, path)
-                for path in glob.glob(full_path):
-                    path = os.path.relpath(path, settings.PIPELINE_ROOT)
+            for pattern in config[name]['source_filenames']:
+                for path in glob(pattern):
                     if not path in paths:
                         paths.append(path)
             packages[name]['paths'] = [path for path in paths if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]

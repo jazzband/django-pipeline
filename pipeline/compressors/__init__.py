@@ -196,7 +196,7 @@ class Compressor(object):
 
     def read_file(self, path):
         """Read file content in binary mode"""
-        file = storage.open(path, mode='rb')
+        file = storage.open(path, 'rb')
         content = file.read()
         file.close()
         return content
