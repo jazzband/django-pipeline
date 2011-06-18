@@ -9,7 +9,8 @@ Configuration and list of available settings for Pipeline
 
 .. note::
   
-  Don't forget to read :doc:`backwardsincompatiblechanges`
+  If you are updating from django-compress or from previous versions of django-pipeline,
+  don't forget to read :doc:`backwardsincompatiblechanges`.
 
 Specifying files
 ================
@@ -158,8 +159,8 @@ Other settings
         },
     }
 
-    This will output a file like ``/media/c/screen.r1213947531.css``,
-    which will be re-generated and updated when you change your source files.
+  This will output a file like ``/media/c/screen.r1213947531.css``,
+  which will be re-generated and updated when you change your source files.
 
 ``PIPELINE_CSS_COMPRESSOR``
 ............................
