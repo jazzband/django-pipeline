@@ -21,7 +21,7 @@ class Versioning(object):
         filename = settings.PIPELINE_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.PIPELINE_VERSION_PLACEHOLDER)])
         regex = re.compile(r'^%s$' % self.output_filename(filename, r'([A-Za-z0-9]+)'))
         versions = []
-        for f in sorted(storage.listdir(path), reverse=True):
+        for f in sorted(storage.listdir(path)[1], reverse=True):
             version = regex.match(f)
             if version and version.groups():
                 versions.append(version.group(1))
