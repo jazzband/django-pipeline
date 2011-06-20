@@ -43,6 +43,9 @@ The templatetags will either output the source filenames or the compressed filen
 depending on the ``PIPELINE`` setting, if you do not specify the ``PIPELINE`` setting,
 the source files will be used in DEBUG-mode, and compressed files in non-DEBUG-mode.
 
+If you need to change the output of the HTML-tags generated from the templatetags,
+this can be done by overriding the templates ``pipeline/css.html`` and ``pipeline/js.html``.
+
 Example
 -------
 

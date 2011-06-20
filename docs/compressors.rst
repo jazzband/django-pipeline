@@ -4,12 +4,6 @@
 Compressors
 ===========
 
-Template tags
-=============
-
-If you need to change the output of the HTML-tags generated from the templatetags,
-this can be done by overriding the templates ``pipeline/css.html`` and ``pipeline/js.html``.
-
 
 YUI Compressor compressor
 =========================
