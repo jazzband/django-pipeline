@@ -10,7 +10,7 @@ from pipeline.utils import to_class
 
 MAX_IMAGE_SIZE = 32700
 
-EMBEDDABLE = r'[\A\/]embed\/'
+EMBEDDABLE = r'[/]?embed/'
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
 
@@ -93,11 +93,12 @@ class Compressor(object):
         ])
 
     def template_name(self, path, base):
-        name = os.path.basename(path)
-        if base:
-            name = re.sub(r"^%s\/?(.*)%s$" % (
-                re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
-            ), r"\1", path)
+        """Find out the name of a JS template"""
+        if not base:
+            path = os.path.basename(path)
+        name = re.sub(r"^%s\/?(.*)%s$" % (
+            re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
+        ), r"\1", path)
         return re.sub(r"[\/\\]", "_", name)
 
     def concatenate_and_rewrite(self, paths, variant=None):
@@ -121,6 +122,7 @@ class Compressor(object):
         return "(function() { %s }).call(this);" % content
 
     def construct_asset_path(self, asset_path, css_path, variant=None):
+        """Return a rewritten asset URL for a stylesheet"""
         public_path = self.absolute_path(asset_path, css_path)
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
@@ -129,11 +131,12 @@ class Compressor(object):
         return urlparse.urljoin(settings.PIPELINE_URL, asset_path[1:])
 
     def embeddable(self, path, variant):
+        """Is the asset embeddable ?"""
         name, ext = os.path.splitext(path)
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not re.match(path, EMBEDDABLE) and not os.path.exists(path):
+        if not (re.search(EMBEDDABLE, path) and storage.exists(path)):
             return False
         if not ext in EMBED_EXTS:
             return False
@@ -173,6 +176,7 @@ class Compressor(object):
         return ''.join([part for parts in output for part in parts])
 
     def encoded_content(self, path):
+        """Return the base64 encoded contents"""
         if path in self.__class__.asset_contents:
             return self.__class__.asset_contents[path]
         data = self.read_file(path)
@@ -180,10 +184,15 @@ class Compressor(object):
         return self.__class__.asset_contents[path]
 
     def mime_type(self, path):
+        """Get mime-type from filename"""
         name, ext = os.path.splitext(path)
         return MIME_TYPES[ext]
 
     def absolute_path(self, asset_path, css_path):
+        """
+        Return the absolute public path for an asset,
+        given the path of the stylesheet that contains it.
+        """
         if os.path.isabs(asset_path):
             path = os.path.join(settings.PIPELINE_ROOT, asset_path)
         else:
@@ -191,6 +200,7 @@ class Compressor(object):
         return os.path.normpath(path)
 
     def relative_path(self, absolute_path):
+        """Rewrite paths relative to the output stylesheet path"""
         compress_root = os.path.normpath(settings.PIPELINE_ROOT)
         return os.path.join('../', absolute_path.replace(compress_root, ''))
 
