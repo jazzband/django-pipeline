@@ -10,12 +10,12 @@ class Versioning(object):
     def __init__(self, verbose=False):
         self.verbose = verbose
 
-    def versionner(self):
+    def versioner(self):
         return to_class(settings.PIPELINE_VERSIONING)(self)
-    versionner = property(versionner)
+    versioner = property(versioner)
 
     def version(self, paths):
-        return getattr(self.versionner, 'version')(paths)
+        return getattr(self.versioner, 'version')(paths)
 
     def version_from_file(self, path, filename):
         filename = settings.PIPELINE_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.PIPELINE_VERSION_PLACEHOLDER)])
@@ -41,10 +41,10 @@ class Versioning(object):
         output_file = self.output_filename(output_file, version)
         if not storage.exists(output_file):
             return True, version
-        return getattr(self.versionner, 'need_update')(output_file, paths, version)
+        return getattr(self.versioner, 'need_update')(output_file, paths, version)
 
     def cleanup(self, filename):
-        if not settings.PIPELINE_VERSION and not settings.PIPELINE_VERSION_REMOVE_OLD:
+        if not (settings.PIPELINE_VERSION and settings.PIPELINE_VERSION_REMOVE_OLD):
             return  # Nothing to delete here
         path = os.path.dirname(filename)
         filename = settings.PIPELINE_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.PIPELINE_VERSION_PLACEHOLDER)])
