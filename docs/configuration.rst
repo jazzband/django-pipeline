@@ -208,6 +208,32 @@ Other settings
   Defaults to ``"_.template"``
 
 
+Embedding fonts and images
+==========================
+
+You can embed fonts and images directly in your compiled css, using Data-URI in 
+modern browser or MHTML in Internet Explorer 7 or below. 
+
+To do so, setup variant group options to the method you wish to use : ::
+
+  PIPELINE_CSS = {
+      'master': {
+          'source_filenames': (
+            'css/core.css',
+            'css/button/*.css',
+          ),
+          'output_filename': 'css/master.css',
+          'variant': 'datauri',
+      },
+  }
+
+Images and fonts are embedded following these rules :
+
+- If asset is under **32 kilobytes** to avoid rendering delay or not rendering
+  at all in Internet Explorer 8.
+- If asset path contains a directory named "**embed**".
+
+
 Rewriting CSS urls
 ==================
 
