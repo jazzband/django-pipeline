@@ -9,4 +9,5 @@ MANIFEST
 docs/_build/
 *.egg-info
 .coverage
-htmlcov/
+coverage/
+tests/static/js/dummy.js
