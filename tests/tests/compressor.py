@@ -1,5 +1,4 @@
 import base64
-import os
 
 from mock import patch
 
@@ -39,10 +38,10 @@ class CompressorTest(TestCase):
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):
-        encoded = self.compressor.encoded_content('images/arrow.png')
+        self.compressor.encoded_content('images/arrow.png')
         self.assertTrue(mock.called)
         mock.reset_mock()
-        encoded = self.compressor.encoded_content('images/arrow.png')
+        self.compressor.encoded_content('images/arrow.png')
         self.assertFalse(mock.called)
 
     def test_relative_path(self):

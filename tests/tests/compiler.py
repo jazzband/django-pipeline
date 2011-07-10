@@ -18,7 +18,7 @@ class CompilerTest(TestCase):
     def setUp(self):
         self.compiler = Compiler()
         self.old_compilers = settings.PIPELINE_COMPILERS
-        settings.PIPELINE_COMPILERS = ['tests.tests.compiler.DummyCompiler',]
+        settings.PIPELINE_COMPILERS = ['tests.tests.compiler.DummyCompiler']
 
     def test_output_path(self):
         output_path = self.compiler.output_path("js/helpers.coffee", "js")
