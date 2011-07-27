@@ -30,7 +30,7 @@ class CompressedCSSNode(template.Node):
         context = {}
         if not 'template' in package:
             package['template'] = "pipeline/css.html"
-        if not 'context' in package:
+        if 'context' in package:
             context = package['context']
         context.update({
             'url': self.packager.individual_url(path)

@@ -4,6 +4,8 @@ import re
 import subprocess
 import urlparse
 
+from django.utils.encoding import filepath_to_uri
+
 from pipeline.conf import settings
 from pipeline.storage import storage
 from pipeline.utils import to_class
@@ -128,7 +130,10 @@ class Compressor(object):
             return "__EMBED__%s" % public_path
         if not os.path.isabs(asset_path):
             asset_path = self.relative_path(public_path)
-        return urlparse.urljoin(settings.PIPELINE_URL, asset_path[1:])
+        return urlparse.urljoin(
+            settings.PIPELINE_URL,
+            filepath_to_uri(asset_path[1:])
+        )
 
     def embeddable(self, path, variant):
         """Is the asset embeddable ?"""
