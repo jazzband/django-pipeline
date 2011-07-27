@@ -24,6 +24,16 @@ Table Of Contents
    farfutureexpires
    backwardsincompatiblechanges
 
+Changelog
+=========
+
+1.1.7
+-----
+
+* Improved windows support. Thanks to Kyle MacFarlane.
+* Added Manifesto support.
+
+
 Indices and tables
 ==================
 
