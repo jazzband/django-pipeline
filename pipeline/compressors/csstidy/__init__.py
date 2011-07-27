@@ -1,33 +1,24 @@
 import os
-import warnings
 import tempfile
 
 from pipeline.conf import settings
-from pipeline.compressors import CompressorBase
-
-warnings.simplefilter('ignore', RuntimeWarning)
+from pipeline.compressors import SubProcessCompressor
 
 
-class CSSTidyCompressor(CompressorBase):
+class CSSTidyCompressor(SubProcessCompressor):
     def compress_css(self, css):
-        tmp_file = tempfile.NamedTemporaryFile(mode='w+b')
-        tmp_file.write(css)
-        tmp_file.flush()
+        out_file, out_filename = tempfile.mkstemp()
+        out_file = os.fdopen(out_file, 'rb')
 
-        output_file = tempfile.NamedTemporaryFile(mode='w+b')
-
-        command = '%s %s %s %s' % (
-            settings.PIPELINE_CSSTIDY_BINARY, tmp_file.name,
-            settings.PIPELINE_CSSTIDY_ARGUMENTS, output_file.name
+        command = '%s - %s %s' % (
+            settings.PIPELINE_CSSTIDY_BINARY,
+            settings.PIPELINE_CSSTIDY_ARGUMENTS,
+            out_filename
         )
+        self.execute_command(command, css)
 
-        command_output = os.popen(command).read()
-
-        filtered_css = output_file.read()
-        output_file.close()
-        tmp_file.close()
-
-        if self.verbose:
-            print command_output
+        filtered_css = out_file.read()
+        out_file.close()
+        os.remove(out_filename)
 
         return filtered_css
