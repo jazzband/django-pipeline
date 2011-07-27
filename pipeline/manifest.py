@@ -15,9 +15,13 @@ class PipelineManifest(Manifest):
     def collect_packages(self):
         packages = []
         for package_name in self.packager.packages['css']:
-            packages.append(self.packager.package_for('css', package_name))
+            package = self.packager.package_for('css', package_name)
+            if package['manifest']:
+                packages.append(package)
         for package_name in self.packager.packages['js']:
-            packages.append(self.packager.package_for('js', package_name))
+            package = self.packager.package_for('js', package_name)
+            if package['manifest']:
+                packages.append(package)
         return packages
 
     def cache(self):

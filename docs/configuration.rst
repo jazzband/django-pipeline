@@ -79,6 +79,16 @@ Group options
   
   Defaults to ``None``.
 
+
+``manifest``
+............
+
+  **Optional**
+
+  Indicate if you want this group to appear in your cache manifest.
+
+  Defaults to ``True``.
+
 ``extra_context``
 .................
 

@@ -95,12 +95,15 @@ class Packager(object):
             packages[name]['templates'] = [path for path in paths if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
             packages[name]['output'] = config[name]['output_filename']
             packages[name]['context'] = {}
+            packages[name]['manifest'] = True
             if 'extra_context' in config[name]:
                 packages[name]['context'] = config[name]['extra_context']
             if 'template_name' in config[name]:
                 packages[name]['template'] = config[name]['template_name']
             if 'variant' in config[name]:
                 packages[name]['variant'] = config[name]['variant']
+            if 'manifest' in config[name]:
+                packages[name]['manifest'] = config[name]['manifest']                
         return packages
 
 
