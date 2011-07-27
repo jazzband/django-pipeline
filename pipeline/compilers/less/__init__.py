@@ -2,33 +2,29 @@ import os
 import tempfile
 
 from pipeline.conf import settings
-from pipeline.compilers import CompilerBase
+from pipeline.compilers import SubProcessCompiler
 
 
-class LessCompiler(CompilerBase):
+class LessCompiler(SubProcessCompiler):
     output_extension = 'css'
 
     def match_file(self, filename):
         return filename.endswith('.less')
 
     def compile_file(self, content):
-        tmp_file = tempfile.NamedTemporaryFile(mode='w+b')
-        tmp_file.write(content)
-        tmp_file.flush()
+        in_file, in_filename = tempfile.mkstemp()
+        in_file = os.fdopen(in_file, 'w+b')
+        in_file.write(content)
+        in_file.flush()
 
-        output_file = tempfile.NamedTemporaryFile(mode='w+b')
-
-        command = '%s %s %s %s' % (
-            settings.PIPELINE_LESS_BINARY, tmp_file.name,
-            settings.PIPELINE_LESS_ARGUMENTS, output_file.name
+        command = '%s %s %s' % (
+            settings.PIPELINE_LESS_BINARY,
+            in_filename,
+            settings.PIPELINE_LESS_ARGUMENTS
         )
+        content = self.execute_command(command, content)
 
-        command_output = os.popen(command).read()
+        in_file.close()
+        os.remove(in_filename)
 
-        compiled_content = output_file.read()
-        output_file.close()
-        tmp_file.close()
-
-        if self.verbose:
-            print command_output
-        return compiled_content
+        return content
