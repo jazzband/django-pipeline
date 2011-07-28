@@ -6,7 +6,6 @@ PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.MEDIA_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.MEDIA_URL)
 
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
-PIPELINE_SOURCE = getattr(settings, 'PIPELINE_SOURCE', settings.STATIC_ROOT)
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
 PIPELINE_AUTO = getattr(settings, 'PIPELINE_AUTO', True)

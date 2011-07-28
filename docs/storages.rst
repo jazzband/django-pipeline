@@ -21,5 +21,17 @@ Using with staticfiles
 Pipeline is providing a Finder for `staticfiles app <https://docs.djangoproject.com/en/dev/howto/static-files/>`_,
 to use it configure ``STATICFILES_FINDERS`` like so : ::
 
-  STATICFILES_FINDERS = 'pipeline.finders.PipelineFinder'
+  STATICFILES_FINDERS = (
+    'pipeline.finders.PipelineFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+  )
 
+
+.. note::
+	``PipelineFinder`` should be the first finder in ``STATICFILES_FINDERS``.
+
+Pipeline is also providing a storage that play nicely with staticfiles app
+particularly for development : ::
+
+  PIPELINE_STORAGE = 'pipeline.storage.PipelineFinderStorage'

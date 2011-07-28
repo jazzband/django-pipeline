@@ -1,7 +1,10 @@
+import errno
 import os
 
 from datetime import datetime
 
+from django.contrib.staticfiles import finders
+from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import FileSystemStorage, get_storage_class
 from django.utils.functional import LazyObject
 
@@ -24,6 +27,46 @@ class PipelineStorage(FileSystemStorage):
 
     def modified_time(self, name):
         return datetime.fromtimestamp(os.path.getmtime(self.path(name)))
+
+    def _open(self, name, mode='rb'):
+        full_path = self.path(name)
+        directory = os.path.dirname(full_path)
+        if not os.path.exists(directory):
+            try:
+                os.makedirs(directory)
+            except OSError, e:
+                if e.errno != errno.EEXIST:
+                    raise
+        if not os.path.isdir(directory):
+            raise IOError("%s exists and is not a directory." % directory)
+        return super(PipelineStorage, self)._open(name, mode)
+
+
+class BaseFinderStorage(PipelineStorage):
+    finders = None
+
+    def __init__(self, finders=None, *args, **kwargs):
+        if finders is not None:
+            self.finders = finders
+        if self.finders is None:
+            raise ImproperlyConfigured("The storage %r doesn't have a finders class assigned." % self.__class__)
+        super(BaseFinderStorage, self).__init__(*args, **kwargs)
+
+    def path(self, name):
+        path = self.finders.find(name)
+        if not path:
+            path = super(BaseFinderStorage, self).path(name)
+        return path
+
+    def exists(self, name):
+        exists = self.finders.find(name) != None
+        if not exists:
+            exists = super(BaseFinderStorage, self).exists(name)
+        return exists
+
+
+class PipelineFinderStorage(BaseFinderStorage):
+    finders = finders
 
 
 class DefaultStorage(LazyObject):
