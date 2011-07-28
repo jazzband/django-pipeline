@@ -47,14 +47,18 @@ class Versioning(object):
         if not (settings.PIPELINE_VERSION and settings.PIPELINE_VERSION_REMOVE_OLD):
             return  # Nothing to delete here
         path = os.path.dirname(filename)
+        filename = os.path.basename(filename)
         filename = settings.PIPELINE_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.PIPELINE_VERSION_PLACEHOLDER)])
-        regex = re.compile(r'^%s$' % os.path.basename(self.output_filename(filename, r'([A-Za-z0-9]+)')))
-        if storage.exists(path):
+        regex = re.compile(r'^%s$' % self.output_filename(filename, r'([A-Za-z0-9]+)'))
+        try:
             for f in storage.listdir(path)[1]:
                 if regex.match(f):
                     if self.verbose:
                         print "Removing outdated file %s" % f
                     storage.delete(os.path.join(path, f))
+        except EnvironmentError:
+            # We can't use exists() first because some backends (S3) have no concept of directories.
+            pass
 
 
 class VersioningBase(object):
