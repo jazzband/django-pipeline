@@ -69,7 +69,7 @@ class CompressedJSNode(template.Node):
         context = {}
         if not 'template' in package:
             package['template'] = "pipeline/js.html"
-        if not 'context' in package:
+        if 'context' in package:
             context = package['context']
         context.update({
             'url': self.packager.individual_url(path)
@@ -85,7 +85,7 @@ class CompressedJSNode(template.Node):
 
     def render_inline(self, package, js):
         context = {}
-        if not 'context' in package:
+        if 'context' in package:
             context = package['context']
         context.update({
             'source': js
