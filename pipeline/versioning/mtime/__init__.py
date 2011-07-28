@@ -13,4 +13,8 @@ class MTimeVersioning(VersioningBase):
 
     def need_update(self, output_file, paths, version):
         output_filename = self.output_filename(output_file, version)
-        return (int(time.mktime(storage.modified_time(output_filename).timetuple())) < int(version)), version
+        try:
+            modified_time = storage.modified_time(output_filename)
+        except EnvironmentError:
+            return True, version
+        return (int(time.mktime(modified_time.timetuple())) < int(version)), version

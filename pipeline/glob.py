@@ -23,8 +23,7 @@ def iglob(pathname):
 
     """
     if not has_magic(pathname):
-        if storage.exists(pathname):
-            yield pathname
+        yield pathname
         return
     dirname, basename = os.path.split(pathname)
     if not dirname:
