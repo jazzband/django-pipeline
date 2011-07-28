@@ -10,10 +10,14 @@ register = template.Library()
 class CompressedCSSNode(template.Node):
     def __init__(self, name):
         self.name = name
-        self.packager = Packager()
 
     def render(self, context):
         package_name = template.Variable(self.name).resolve(context)
+        package = settings.PIPELINE_CSS.get(package_name, {})
+        if package:
+            package = {package_name: package}
+        self.packager = Packager(css_packages=package, js_packages={})
+
         try:
             package = self.packager.package_for('css', package_name)
         except PackageNotFound:
@@ -45,10 +49,14 @@ class CompressedCSSNode(template.Node):
 class CompressedJSNode(template.Node):
     def __init__(self, name):
         self.name = name
-        self.packager = Packager()
 
     def render(self, context):
         package_name = template.Variable(self.name).resolve(context)
+        package = settings.PIPELINE_JS.get(package_name, {})
+        if package:
+            package = {package_name: package}
+        self.packager = Packager(css_packages={}, js_packages=package)
+
         try:
             package = self.packager.package_for('js', package_name)
         except PackageNotFound:

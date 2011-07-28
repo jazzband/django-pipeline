@@ -11,15 +11,19 @@ from pipeline.versioning import Versioning
 
 
 class Packager(object):
-    def __init__(self, force=False, verbose=False):
+    def __init__(self, force=False, verbose=False, css_packages=None, js_packages=None):
         self.force = force
         self.verbose = verbose
         self.compressor = Compressor(verbose)
         self.versioning = Versioning(verbose)
         self.compiler = Compiler(verbose)
+        if css_packages is None:
+            css_packages = settings.PIPELINE_CSS
+        if js_packages is None:
+            js_packages = settings.PIPELINE_JS
         self.packages = {
-            'css': self.create_packages(settings.PIPELINE_CSS),
-            'js': self.create_packages(settings.PIPELINE_JS),
+            'css': self.create_packages(css_packages),
+            'js': self.create_packages(js_packages),
         }
 
     def package_for(self, kind, package_name):
