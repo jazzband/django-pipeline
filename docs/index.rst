@@ -27,6 +27,12 @@ Table Of Contents
 Changelog
 =========
 
+1.1.8
+-----
+
+* Faster templates tags
+* Storage speed up
+
 1.1.7
 -----
 
