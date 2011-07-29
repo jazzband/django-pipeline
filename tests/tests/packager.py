@@ -44,6 +44,7 @@ class PackagerTest(TestCase):
         self.assertEqual(packages, {
             'templates': {
                 'templates': ['templates/photo/list.jst'],
+                'manifest': True,
                 'paths': [],
                 'context': {},
                 'output': 'templates.r?.js'
@@ -75,6 +76,7 @@ class PackagerTest(TestCase):
             },
             'application': {
                 'context': {},
+                'manifest': True,
                 'output': 'application.r?.js',
                 'paths': ['js/application.js'],
                 'templates': []
