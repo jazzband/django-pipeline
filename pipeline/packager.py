@@ -49,8 +49,10 @@ class Packager(object):
             need_update, version = self.versioning.need_update(
                 package['output'], package['paths'])
             if need_update or self.force:
-                output_filename = self.versioning.output_filename(package['output'],
-                    self.versioning.version(package['paths']))
+                output_filename = self.versioning.output_filename(
+                    package['output'],
+                    version
+                )
                 self.versioning.cleanup(package['output'])
                 if self.verbose or self.force:
                     print "Version: %s" % version
