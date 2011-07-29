@@ -39,8 +39,6 @@ class Versioning(object):
     def need_update(self, output_file, paths):
         version = self.version(paths)
         output_file = self.output_filename(output_file, version)
-        if not storage.exists(output_file):
-            return True, version
         return getattr(self.versioner, 'need_update')(output_file, paths, version)
 
     def cleanup(self, filename):
