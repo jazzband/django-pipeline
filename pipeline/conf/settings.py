@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 
 
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.MEDIA_ROOT)
@@ -57,3 +58,7 @@ PIPELINE_LESS_ARGUMENTS = getattr(settings, 'PIPELINE_LESS_ARGUMENTS', '-x')
 
 if PIPELINE_COMPILERS is None:
     PIPELINE_COMPILERS = []
+
+if not PIPELINE_URL:
+    raise ImproperlyConfigured("You're using the pipeline app "
+            "without having set the required STATIC_URL setting.")

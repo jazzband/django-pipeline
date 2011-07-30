@@ -207,7 +207,7 @@ class Compressor(object):
     def relative_path(self, absolute_path):
         """Rewrite paths relative to the output stylesheet path"""
         compress_root = os.path.normpath(settings.PIPELINE_ROOT)
-        return os.path.join('../', absolute_path.replace(compress_root, ''))
+        return os.path.join(os.sep, absolute_path.replace(compress_root, ''))
 
     def read_file(self, path):
         """Read file content in binary mode"""

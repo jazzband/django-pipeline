@@ -109,7 +109,7 @@ class Packager(object):
             if 'variant' in config[name]:
                 packages[name]['variant'] = config[name]['variant']
             if 'manifest' in config[name]:
-                packages[name]['manifest'] = config[name]['manifest']                
+                packages[name]['manifest'] = config[name]['manifest']
         return packages
 
 

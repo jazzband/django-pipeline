@@ -82,10 +82,13 @@ class CompressorTest(TestCase):
         output = self.compressor.concatenate_and_rewrite([
             'css/urls.css',
         ])
-        self.assertEquals(""".relative-url {
+        self.assertMultiLineEqual(""".relative-url {
   background-image: url(http://localhost/static/images/sprite-buttons.png);
 }
 .absolute-url {
+  background-image: url(http://localhost/static/images/sprite-buttons.png);
+}
+.absolute-full-url {
   background-image: url(http://localhost/images/sprite-buttons.png);
 }
 .no-protocol-url {
