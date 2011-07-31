@@ -27,6 +27,11 @@ Table Of Contents
 Changelog
 =========
 
+1.1.8.1
+-------
+
+* Fix bug in asset absolute path rewriting.
+
 1.1.8
 -----
 
