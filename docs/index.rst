@@ -22,28 +22,7 @@ Table Of Contents
    templates
    storages
    farfutureexpires
-   backwardsincompatiblechanges
-
-Changelog
-=========
-
-1.1.8.1
--------
-
-* Fix bug in asset absolute path rewriting.
-
-1.1.8
------
-
-* Faster templates tags
-* Storage speed up
-
-1.1.7
------
-
-* Improved windows support. Thanks to Kyle MacFarlane.
-* Added Manifesto support.
-
+   changelog
 
 Indices and tables
 ==================

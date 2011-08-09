@@ -10,7 +10,7 @@ Configuration and list of available settings for Pipeline
 .. note::
   
   If you are updating from django-compress or from previous versions of django-pipeline,
-  don't forget to read :doc:`backwardsincompatiblechanges`.
+  don't forget to read :doc:`changelog`.
 
 Specifying files
 ================
