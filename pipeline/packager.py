@@ -49,26 +49,22 @@ class Packager(object):
         return self.compiler.compile(paths)
 
     def pack(self, package, compress, signal, **kwargs):
-        if settings.PIPELINE_AUTO or self.force:
-            need_update, version = self.versioning.need_update(
-                package['output'], package['paths'])
-            if need_update or self.force:
-                output_filename = self.versioning.output_filename(
-                    package['output'],
-                    version
-                )
-                self.versioning.cleanup(package['output'])
-                if self.verbose or self.force:
-                    print "Version: %s" % version
-                    print "Saving: %s" % output_filename
-                paths = self.compile(package['paths'])
-                content = compress(paths,
-                    asset_url=self.individual_url(output_filename), **kwargs)
-                self.save_file(output_filename, content)
-                signal.send(sender=self, package=package, version=version)
-        else:
-            filename_base, filename = os.path.split(package['output'])
-            version = self.versioning.version_from_file(filename_base, filename)
+        need_update, version = self.versioning.need_update(
+            package['output'], package['paths'])
+        if need_update or self.force:
+            output_filename = self.versioning.output_filename(
+                package['output'],
+                version
+            )
+            self.versioning.cleanup(package['output'])
+            if self.verbose or self.force:
+                print "Version: %s" % version
+                print "Saving: %s" % output_filename
+            paths = self.compile(package['paths'])
+            content = compress(paths,
+                asset_url=self.individual_url(output_filename), **kwargs)
+            self.save_file(output_filename, content)
+            signal.send(sender=self, package=package, version=version)
         return self.versioning.output_filename(package['output'], version)
 
     def pack_javascripts(self, package):
