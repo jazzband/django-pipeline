@@ -1,4 +1,5 @@
 import os
+import os.path
 import urlparse
 
 from pipeline.conf import settings
@@ -49,7 +50,7 @@ class Packager(object):
         return self.compiler.compile(paths)
 
     def pack(self, package, compress, signal, **kwargs):
-        if settings.PIPELINE_AUTO or self.force:
+        if settings.PIPELINE_AUTO or self.force or not os.path.exists(package['output']):
             need_update, version = self.versioning.need_update(
                 package['output'], package['paths'])
             if need_update or self.force:
