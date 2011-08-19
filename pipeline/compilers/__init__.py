@@ -25,7 +25,7 @@ class Compiler(object):
                         compiled_content = compiler.compile_file(content)
                         self.save_file(new_path, compiled_content)
                     except CompilerError:
-                        if not storage.exists(new_path):
+                        if not storage.exists(new_path) or not settings.PIPELINE:
                             raise
                     paths[index] = new_path
         return paths
