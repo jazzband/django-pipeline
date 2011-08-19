@@ -21,13 +21,17 @@ Management command
 You can update and force updates of the compressed file(s) with the management command “synccompress”.
 This makes it possible to keep the files updated manually.
 
-The command is (assuming you are in you project-folder that contains ``manage.py``). ::
+The command is (assuming you are in you project-folder that contains ``manage.py``) ::
 
     ./manage.py synccompress
 
 To force all files to be re-generated, use the argument ``--force`` :: 
   
     ./manage.py synccompress --force
+
+To re-generate only a specific group ::
+
+	./manage.py synccompress screen
 
 Templatetags
 ============
