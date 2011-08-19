@@ -1,10 +1,10 @@
 from optparse import make_option
 
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 
 
-class Command(NoArgsCommand):
-    option_list = NoArgsCommand.option_list + (
+class Command(BaseCommand):
+    option_list = BaseCommand.option_list + (
         make_option('--force',
             action='store_true',
             default=False,
@@ -12,9 +12,9 @@ class Command(NoArgsCommand):
         ),
     )
     help = 'Updates and compresses CSS and JS on-demand, without restarting Django'
-    args = ''
+    args = '<group>'
 
-    def handle_noargs(self, **options):
+    def handle(self, group=None, **options):
         from pipeline.packager import Packager
         packager = Packager(
             sync=True,
@@ -23,6 +23,8 @@ class Command(NoArgsCommand):
         )
 
         for package_name in packager.packages['css']:
+            if group and package_name != group:
+                continue
             package = packager.package_for('css', package_name)
             if packager.verbose or packager.force:
                 print
@@ -32,6 +34,8 @@ class Command(NoArgsCommand):
             packager.pack_stylesheets(package)
 
         for package_name in packager.packages['js']:
+            if group and package_name != group:
+                continue
             package = packager.package_for('js', package_name)
             if packager.verbose or packager.force:
                 print
