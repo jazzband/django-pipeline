@@ -11,9 +11,10 @@ from pipeline.versioning import Versioning
 
 
 class Packager(object):
-    def __init__(self, force=False, verbose=False, css_packages=None, js_packages=None):
+    def __init__(self, force=False, sync=False, verbose=False, css_packages=None, js_packages=None):
         self.force = force
         self.verbose = verbose
+        self.sync = sync
         self.compressor = Compressor(verbose)
         self.versioning = Versioning(verbose)
         self.compiler = Compiler(verbose)
@@ -49,7 +50,7 @@ class Packager(object):
         return self.compiler.compile(paths)
 
     def pack(self, package, compress, signal, **kwargs):
-        if settings.PIPELINE_AUTO or self.force:
+        if settings.PIPELINE_AUTO or self.force or self.sync:
             need_update, version = self.versioning.need_update(
                 package['output'], package['paths'])
             if need_update or self.force:

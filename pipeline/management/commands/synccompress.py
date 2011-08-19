@@ -17,6 +17,7 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         from pipeline.packager import Packager
         packager = Packager(
+            sync=True,
             force=options.get('force', False),
             verbose=int(options.get('verbosity', 1)) >= 2
         )
