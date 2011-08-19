@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.1.10
+------
+
+* Make ``synccompress`` command work as expect when ``PIPELINE_AUTO`` is set to ``False``
+* Add a way to compress a specific group with ``synccompress`` command.
+* Raise ``CompilerError`` when ``PIPELINE`` is set to ``False``
+
+
 1.1.9
 -----
 
