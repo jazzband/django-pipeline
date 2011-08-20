@@ -13,7 +13,7 @@ if not settings.configured:
         DATABASE_ENGINE='sqlite3',
         INSTALLED_APPS=[
             'pipeline',
-            'tests',
+            'tests'
         ],
         MEDIA_URL='/media/',
         MEDIA_ROOT=os.path.join(TEST_DIR, 'media/'),
@@ -31,8 +31,8 @@ from django.test.simple import run_tests
 def runtests(*test_args):
     if not test_args:
         test_args = ['tests']
-    parent_dir = os.path.join(TEST_DIR, "..")
-    sys.path.insert(0, os.path.join(TEST_DIR, ".."))
+    parent_dir = os.path.join(TEST_DIR, "../")
+    sys.path.insert(0, parent_dir)
     cover = coverage.coverage(branch=True, cover_pylib=False,
         include=[
             os.path.join(parent_dir, 'pipeline', '*.py')
