@@ -1,6 +1,8 @@
 import os
 import re
 
+from django.core.cache import cache
+
 from pipeline.conf import settings
 from pipeline.storage import storage
 from pipeline.utils import to_class
@@ -18,15 +20,18 @@ class Versioning(object):
         return getattr(self.versioner, 'version')(paths)
 
     def version_from_file(self, path, filename):
-        filename = settings.PIPELINE_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.PIPELINE_VERSION_PLACEHOLDER)])
-        regex = re.compile(r'^%s$' % self.output_filename(filename, r'([A-Za-z0-9]+)'))
-        versions = []
-        for f in sorted(storage.listdir(path)[1], reverse=True):
-            version = regex.match(f)
-            if version and version.groups():
-                versions.append(version.group(1))
-        versions.sort()
-        return versions[-1]
+        version = cache.get("pipeline:%s" % filename)
+        if not version:
+            filename = settings.PIPELINE_VERSION_PLACEHOLDER.join([re.escape(part)
+                for part in filename.split(settings.PIPELINE_VERSION_PLACEHOLDER)])
+            regex = re.compile(r'^%s$' % self.output_filename(filename, r'([A-Za-z0-9]+)'))
+            for f in storage.listdir(path)[1]:
+                match = regex.match(f)
+                if match and match.groups():
+                    version = match.group(1)
+                    break
+            cache.set("pipeline:%s" % filename, version)
+        return str(version)
 
     def output_filename(self, filename, version):
         if settings.PIPELINE_VERSION and version is not None:
@@ -46,7 +51,8 @@ class Versioning(object):
             return  # Nothing to delete here
         path = os.path.dirname(filename)
         filename = os.path.basename(filename)
-        filename = settings.PIPELINE_VERSION_PLACEHOLDER.join([re.escape(part) for part in filename.split(settings.PIPELINE_VERSION_PLACEHOLDER)])
+        filename = settings.PIPELINE_VERSION_PLACEHOLDER.join([re.escape(part)
+            for part in filename.split(settings.PIPELINE_VERSION_PLACEHOLDER)])
         regex = re.compile(r'^%s$' % self.output_filename(filename, r'([A-Za-z0-9]+)'))
         try:
             for f in storage.listdir(path)[1]:
