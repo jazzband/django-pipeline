@@ -9,7 +9,7 @@ A list of all signals send by pipeline.
 css_compressed
 --------------
 
-pipeline.signals.css_compressed
+**pipeline.signals.css_compressed**
 
 	Whenever a css package is compressed, this signal is sent after the compression.
 
@@ -27,7 +27,7 @@ pipeline.signals.css_compressed
 js_compressed
 --------------
 
-pipeline.signals.js_compressed
+**pipeline.signals.js_compressed**
 
 	Whenever a js package is compressed, this signal is sent after the compression.
 	
