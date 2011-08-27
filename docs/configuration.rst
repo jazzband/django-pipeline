@@ -137,8 +137,6 @@ Other settings
   Regulates whether or not to add a "version number" to the outputted files
   filename with for use with “far future Expires”.
   
-  For more information, see :doc:`farfutureexpires`.
-  
   When you specify ``PIPELINE_VERSION`` you will also need to add a placeholder
   (which by default is ``?``) for the version number in the ``output_filename`` setting.
 

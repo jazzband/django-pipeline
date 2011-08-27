@@ -21,7 +21,7 @@ Table Of Contents
    versioning
    templates
    storages
-   farfutureexpires
+   signals
    changelog
 
 Indices and tables
