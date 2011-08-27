@@ -1,12 +1,20 @@
 Changelog
 =========
 
+1.1.11
+------
+
+* Add documentation on pipeline signals, see :doc:`signals`.
+* Cache version calculations, speeding up template tags.
+* Not assuming anymore that version identifier are sortable
+  (beware if you have setup ``PIPELINE_VERSION_REMOVE_OLD`` to ``False``).
+
 1.1.10
 ------
 
-* Make ``synccompress`` command work as expect when ``PIPELINE_AUTO`` is set to ``False``
+* Make ``synccompress`` command work as expect when ``PIPELINE_AUTO`` is set to ``False``.
 * Add a way to compress a specific group with ``synccompress`` command.
-* Raise ``CompilerError`` when ``PIPELINE`` is set to ``False``
+* Raise ``CompilerError`` when ``PIPELINE`` is set to ``False``.
 
 
 1.1.9
@@ -23,8 +31,8 @@ Changelog
 1.1.8
 -----
 
-* Faster templates tags
-* Storage speed up
+* Faster templates tags.
+* Storage speed up.
 
 1.1.7
 -----
