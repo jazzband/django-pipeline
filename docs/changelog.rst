@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.12
+------
+
+* Add configurable cache timeout. Thanks to Matt Dennewitz.
+* Catch any exception coming from ``storage``.
+
 1.1.11
 ------
 
