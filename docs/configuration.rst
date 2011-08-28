@@ -215,6 +215,13 @@ Other settings
   
   Defaults to ``"_.template"``
 
+``PIPELINE_CACHE_TIMEOUT``
+..........................
+
+  Package version are cached to avoid unnecessary IO, the default is to cache
+  version for 2 years.
+
+  Defaults to ``63072000``
 
 Embedding fonts and images
 ==========================
