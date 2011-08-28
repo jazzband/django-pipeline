@@ -15,6 +15,8 @@ PIPELINE_VERSION_DEFAULT = getattr(settings, 'PIPELINE_VERSION_DEFAULT', '0')
 PIPELINE_VERSION_REMOVE_OLD = getattr(settings, 'PIPELINE_VERSION_REMOVE_OLD', True)
 PIPELINE_VERSIONING = getattr(settings, 'PIPELINE_VERSIONING', 'pipeline.versioning.mtime.MTimeVersioning')
 
+PIPELINE_CACHE_TIMEOUT = getattr(settings, 'PIPELINE_CACHE_TIMEOUT', 63072000)
+
 PIPELINE_STORAGE = getattr(settings, 'PIPELINE_STORAGE',
     'pipeline.storage.PipelineStorage')
 

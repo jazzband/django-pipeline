@@ -30,7 +30,7 @@ class Versioning(object):
                 if match and match.groups():
                     version = match.group(1)
                     break
-            cache.set("pipeline:%s" % filename, version)
+            cache.set("pipeline:%s" % filename, version, settings.PIPELINE_CACHE_TIMEOUT)
         return str(version)
 
     def output_filename(self, filename, version):
