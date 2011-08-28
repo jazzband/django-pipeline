@@ -15,6 +15,6 @@ class MTimeVersioning(VersioningBase):
         output_filename = self.output_filename(output_file, version)
         try:
             modified_time = storage.modified_time(output_filename)
-        except EnvironmentError:
+        except Exception:
             return True, version
         return (int(time.mktime(modified_time.timetuple())) < int(version)), version
