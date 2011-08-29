@@ -1,6 +1,8 @@
 import os
 import urlparse
 
+from django.core.files.base import ContentFile
+
 from pipeline.conf import settings
 from pipeline.compilers import Compiler
 from pipeline.compressors import Compressor
@@ -79,9 +81,7 @@ class Packager(object):
         return self.compressor.compile_templates(package['templates'])
 
     def save_file(self, path, content):
-        file = storage.open(path, 'wb')
-        file.write(content)
-        file.close()
+        storage.save(path, ContentFile(content))
         return path
 
     def create_packages(self, config):
