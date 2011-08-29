@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.13
+------
+
+* Use ``storage.save`` in ``Packager``, to play nicely with exotic storage.
+
 1.1.12
 ------
 
