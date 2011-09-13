@@ -58,7 +58,18 @@ class PackagerTest(TestCase):
         individual_url = packager.individual_url(filename)
         self.assertEqual(individual_url,
             "http://localhost/static/js/application.js")
-
+            
+    def test_periods_safe_individual_url(self):
+        """Check that the periods in file names do not get replaced by individual_url when 
+        PIPELINE_ROOT/STATIC_ROOT is not set, such as in development
+        """
+        settings.PIPELINE_ROOT = settings.STATIC_ROOT = settings.MEDIA_ROOT = ""
+        packager = Packager()
+        filename = os.path.join(settings.PIPELINE_ROOT, u'js/application.js')
+        individual_url = packager.individual_url(filename)
+        self.assertEqual(individual_url,
+            "http://localhost/static/js/application.js")
+            
     def test_external_urls(self):
         packager = Packager()
         packages = packager.create_packages({
