@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.14
+------
+
+* Ensure javascript templates code get compiled properly. 
+* Use os.path.relpath() instead of the more error-prone string.replace() to find the relative path. Thanks to Luke Yu-Po Chen.
+
 1.1.13
 ------
 
