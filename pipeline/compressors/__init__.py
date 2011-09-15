@@ -54,6 +54,7 @@ class Compressor(object):
         js = self.concatenate(paths)
         if templates:
             js = js + self.compile_templates(templates)
+        js = "(function() { %s }).call(this);" % js
         js = getattr(self.js_compressor(verbose=self.verbose), 'compress_js')(js)
         return js
 
@@ -88,10 +89,8 @@ class Compressor(object):
                 contents
             )
         return "\n".join([
-            "(function(){",
             "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
-            compiled,
-            "})();"
+            compiled
         ])
 
     def template_name(self, path, base):
@@ -120,8 +119,7 @@ class Compressor(object):
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
-        content = '\n'.join([self.read_file(path) for path in paths])
-        return "(function() { %s }).call(this);" % content
+        return '\n'.join([self.read_file(path) for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
