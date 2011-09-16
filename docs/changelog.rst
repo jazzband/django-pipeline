@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.15
+------
+
+* Allow synccompress to only update version cache.
+
 1.1.14.1
 --------
 
