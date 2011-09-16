@@ -13,10 +13,9 @@ from pipeline.versioning import Versioning
 
 
 class Packager(object):
-    def __init__(self, force=False, sync=False, verbose=False, css_packages=None, js_packages=None):
+    def __init__(self, force=False, verbose=False, css_packages=None, js_packages=None):
         self.force = force
         self.verbose = verbose
-        self.sync = sync
         self.compressor = Compressor(verbose)
         self.versioning = Versioning(verbose)
         self.compiler = Compiler(verbose)
@@ -43,16 +42,16 @@ class Packager(object):
         return urlparse.urljoin(settings.PIPELINE_URL,
             self.compressor.relative_path(filename)[1:])
 
-    def pack_stylesheets(self, package):
+    def pack_stylesheets(self, package, **kwargs):
         variant = package.get('variant', None)
         return self.pack(package, self.compressor.compress_css, css_compressed,
-            variant=variant)
+            variant=variant, **kwargs)
 
     def compile(self, paths):
         return self.compiler.compile(paths)
 
-    def pack(self, package, compress, signal, **kwargs):
-        if settings.PIPELINE_AUTO or self.force or self.sync:
+    def pack(self, package, compress, signal, sync=False, **kwargs):
+        if settings.PIPELINE_AUTO or self.force or sync:
             need_update, version = self.versioning.need_update(
                 package['output'], package['paths'])
             if need_update or self.force:
@@ -68,14 +67,14 @@ class Packager(object):
                 content = compress(paths,
                     asset_url=self.individual_url(output_filename), **kwargs)
                 self.save_file(output_filename, content)
-                signal.send(sender=self, package=package, version=version)
         else:
             filename_base, filename = os.path.split(package['output'])
             version = self.versioning.version_from_file(filename_base, filename)
+        signal.send(sender=self, package=package, version=version, **kwargs)
         return self.versioning.output_filename(package['output'], version)
 
-    def pack_javascripts(self, package):
-        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package['templates'])
+    def pack_javascripts(self, package, **kwargs):
+        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package['templates'], **kwargs)
 
     def pack_templates(self, package):
         return self.compressor.compile_templates(package['templates'])

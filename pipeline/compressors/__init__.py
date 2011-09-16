@@ -49,7 +49,7 @@ class Compressor(object):
         return to_class(settings.PIPELINE_CSS_COMPRESSOR)
     css_compressor = property(css_compressor)
 
-    def compress_js(self, paths, templates=None, asset_url=None):
+    def compress_js(self, paths, templates=None, asset_url=None, **kwargs):
         """Concatenate and compress JS files"""
         js = self.concatenate(paths)
         if templates:
@@ -58,7 +58,7 @@ class Compressor(object):
         js = getattr(self.js_compressor(verbose=self.verbose), 'compress_js')(js)
         return js
 
-    def compress_css(self, paths, variant=None, asset_url=None):
+    def compress_css(self, paths, variant=None, asset_url=None, **kwargs):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, variant)
         css = getattr(self.css_compressor(verbose=self.verbose), 'compress_css')(css)
