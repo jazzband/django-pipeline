@@ -32,7 +32,7 @@ class Command(BaseCommand):
             verbose=int(options.get('verbosity', 1)) >= 2
         )
 
-        sync = options.get('dry_run', True),
+        sync = options.get('dry_run', True)
         bust_cache = options.get('bust_cache', True)
 
         for package_name in packager.packages['css']:
