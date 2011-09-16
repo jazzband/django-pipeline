@@ -13,8 +13,7 @@ from pipeline.versioning import Versioning
 
 
 class Packager(object):
-    def __init__(self, force=False, verbose=False, css_packages=None, js_packages=None):
-        self.force = force
+    def __init__(self, verbose=False, css_packages=None, js_packages=None):
         self.verbose = verbose
         self.compressor = Compressor(verbose)
         self.versioning = Versioning(verbose)
@@ -50,17 +49,17 @@ class Packager(object):
     def compile(self, paths):
         return self.compiler.compile(paths)
 
-    def pack(self, package, compress, signal, sync=False, **kwargs):
-        if settings.PIPELINE_AUTO or self.force or sync:
+    def pack(self, package, compress, signal, sync=False, force=False, **kwargs):
+        if settings.PIPELINE_AUTO or (force and sync):
             need_update, version = self.versioning.need_update(
                 package['output'], package['paths'])
-            if need_update or self.force:
+            if need_update or force:
                 output_filename = self.versioning.output_filename(
                     package['output'],
                     version
                 )
                 self.versioning.cleanup(package['output'])
-                if self.verbose or self.force:
+                if self.verbose:
                     print "Version: %s" % version
                     print "Saving: %s" % output_filename
                 paths = self.compile(package['paths'])
@@ -69,7 +68,7 @@ class Packager(object):
                 self.save_file(output_filename, content)
         else:
             filename_base, filename = os.path.split(package['output'])
-            version = self.versioning.version_from_file(filename_base, filename)
+            version = self.versioning.version_from_file(filename_base, filename, force=force)
         signal.send(sender=self, package=package, version=version, **kwargs)
         return self.versioning.output_filename(package['output'], version)
 

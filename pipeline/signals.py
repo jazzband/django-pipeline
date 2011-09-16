@@ -12,8 +12,7 @@ js_compressed = Signal(providing_args=["package", "version"])
 
 @receiver(css_compressed)
 @receiver(js_compressed)
-def invalidate_cache(sender, package, version, bust_cache=False, **kwargs):
+def invalidate_cache(sender, package, version, **kwargs):
     filename_base, filename = os.path.split(package['output'])
-    if bust_cache:
-        cache.set("pipeline:%s" % filename, str(version),
+    cache.set("pipeline:%s" % filename, str(version),
             settings.PIPELINE_CACHE_TIMEOUT)

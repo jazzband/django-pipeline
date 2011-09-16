@@ -19,9 +19,9 @@ class Versioning(object):
     def version(self, paths):
         return getattr(self.versioner, 'version')(paths)
 
-    def version_from_file(self, path, filename):
+    def version_from_file(self, path, filename, force=False):
         version = cache.get("pipeline:%s" % filename)
-        if not version:
+        if (not version) or force:
             filename = settings.PIPELINE_VERSION_PLACEHOLDER.join([re.escape(part)
                 for part in filename.split(settings.PIPELINE_VERSION_PLACEHOLDER)])
             regex = re.compile(r'^%s$' % self.output_filename(filename, r'([A-Za-z0-9]+)'))
