@@ -23,20 +23,20 @@ class Command(BaseCommand):
         )
     )
     help = 'Updates and compresses CSS and JS on-demand'
-    args = '<group>'
+    args = '<groups>'
 
-    def handle(self, group=None, **options):
+    def handle(self, *args, **options):
         from pipeline.packager import Packager
         packager = Packager(
             force=options.get('force', False),
             verbose=int(options.get('verbosity', 1)) >= 2
         )
-
+        
         sync = options.get('dry_run', True)
         bust_cache = options.get('bust_cache', True)
 
         for package_name in packager.packages['css']:
-            if group and package_name != group:
+            if args and package_name not in args:
                 continue
             package = packager.package_for('css', package_name)
             if packager.verbose or packager.force:
@@ -47,7 +47,7 @@ class Command(BaseCommand):
             packager.pack_stylesheets(package, sync=sync, bust_cache=bust_cache)
 
         for package_name in packager.packages['js']:
-            if group and package_name != group:
+            if args and package_name not in args:
                 continue
             package = packager.package_for('js', package_name)
             if packager.verbose or packager.force:
