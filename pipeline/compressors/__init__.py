@@ -191,21 +191,21 @@ class Compressor(object):
         name, ext = os.path.splitext(path)
         return MIME_TYPES[ext]
 
-    def absolute_path(self, asset_path, css_path):
+    def absolute_path(self, path, start):
         """
         Return the absolute public path for an asset,
         given the path of the stylesheet that contains it.
         """
-        if os.path.isabs(asset_path):
-            path = os.path.join(settings.PIPELINE_ROOT, asset_path)
+        if os.path.isabs(path):
+            path = os.path.join(settings.PIPELINE_ROOT, path)
         else:
-            path = os.path.join(os.path.dirname(css_path), asset_path)
+            path = os.path.join(os.path.dirname(start), path)
         return os.path.normpath(path)
 
     def relative_path(self, absolute_path):
         """Rewrite paths relative to the output stylesheet path"""
-        compress_root = os.path.normpath(settings.PIPELINE_ROOT)
-        return os.path.join(os.sep, os.path.relpath(absolute_path, compress_root))
+        absolute_path = self.absolute_path(absolute_path, settings.PIPELINE_ROOT)
+        return os.path.join(os.sep, os.path.relpath(absolute_path, settings.PIPELINE_ROOT))
 
     def read_file(self, path):
         """Read file content in binary mode"""
