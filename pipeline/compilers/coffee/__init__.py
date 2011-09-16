@@ -10,6 +10,4 @@ class CoffeeScriptCompiler(SubProcessCompiler):
 
     def compile_file(self, content):
         command = "%s -sc %s" % (settings.PIPELINE_COFFEE_SCRIPT_BINARY, settings.PIPELINE_COFFEE_SCRIPT_ARGUMENTS)
-        if self.verbose:
-            command += '--verbose'
         return self.execute_command(command, content)
