@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.14.1
+--------
+
+* Fix bug when calculating relative_path.
+
 1.1.14
 ------
 
