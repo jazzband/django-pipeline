@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.17
+------
+
+* Don't use verbose where it's not supported or source of error.
+* Improve syncompress cache bsuting ability.
 
 1.1.16
 ------
