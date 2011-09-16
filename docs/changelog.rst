@@ -2,6 +2,11 @@ Changelog
 =========
 
 
+1.1.16
+------
+
+* Add a way to compress specific groups with ``synccompress`` command.
+
 1.1.15.2
 --------
 

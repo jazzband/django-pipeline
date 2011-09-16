@@ -33,6 +33,10 @@ To re-generate only a specific group ::
 
 	./manage.py synccompress screen
 
+To re-generate only specific groups ::
+
+	./manage.py synccompress screen print
+
 Templatetags
 ============
 
