@@ -79,10 +79,18 @@ class CompressorTest(TestCase):
         self.assertEquals(asset_path, "http://localhost/static/images/sprite.png")
 
     def test_url_rewrite(self):
+        self.maxDiff = None
         output = self.compressor.concatenate_and_rewrite([
             'css/urls.css',
         ])
-        self.assertMultiLineEqual(""".relative-url {
+        self.assertMultiLineEqual("""@font-face {
+  font-family: 'Pipeline';
+  src: url(http://localhost/static/fonts/pipeline.eot');
+  src: local('☺'), url(http://localhost/static/fonts/pipeline.woff') format('woff'), url(http://localhost/static/fonts/pipeline.ttf') format('truetype'), url(http://localhost/static/fonts/pipeline.svg#IyfZbseF') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.relative-url {
   background-image: url(http://localhost/static/images/sprite-buttons.png);
 }
 .absolute-url {

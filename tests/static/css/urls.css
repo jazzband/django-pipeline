@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Pipeline';
+  src: url('../fonts/pipeline.eot');
+  src: local('☺'), url('../fonts/pipeline.woff') format('woff'), url('../fonts/pipeline.ttf') format('truetype'), url('../fonts/pipeline.svg#IyfZbseF') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 .relative-url {
   background-image: url(../images/sprite-buttons.png);
 }

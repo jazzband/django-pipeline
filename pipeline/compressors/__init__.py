@@ -4,8 +4,6 @@ import re
 import subprocess
 import urlparse
 
-from django.utils.encoding import filepath_to_uri
-
 from pipeline.conf import settings
 from pipeline.storage import storage
 from pipeline.utils import to_class
@@ -13,7 +11,7 @@ from pipeline.utils import to_class
 MAX_IMAGE_SIZE = 32700
 
 EMBEDDABLE = r'[/]?embed/'
-URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+)[\'"]?\)'
+URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[#?]?[^\s)]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
 
 MHTML_START = "/*\r\nContent-Type: multipart/related; boundary=\"MHTML_MARK\"\r\n\r\n"
@@ -130,7 +128,7 @@ class Compressor(object):
             asset_path = self.relative_path(public_path)
         return urlparse.urljoin(
             settings.PIPELINE_URL,
-            filepath_to_uri(asset_path[1:])
+            asset_path[1:]
         )
 
     def embeddable(self, path, variant):
