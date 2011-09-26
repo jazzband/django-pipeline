@@ -11,7 +11,7 @@ from pipeline.utils import to_class
 MAX_IMAGE_SIZE = 32700
 
 EMBEDDABLE = r'[/]?embed/'
-URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[#?]?[^\s)]*)[\'"]?\)'
+URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
 
 MHTML_START = "/*\r\nContent-Type: multipart/related; boundary=\"MHTML_MARK\"\r\n\r\n"
@@ -126,10 +126,7 @@ class Compressor(object):
             return "__EMBED__%s" % public_path
         if not os.path.isabs(asset_path):
             asset_path = self.relative_path(public_path)
-        return urlparse.urljoin(
-            settings.PIPELINE_URL,
-            asset_path[1:]
-        )
+        return settings.PIPELINE_URL + asset_path[1:]
 
     def embeddable(self, path, variant):
         """Is the asset embeddable ?"""
