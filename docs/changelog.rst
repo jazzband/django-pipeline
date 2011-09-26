@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.18.1
+--------
+
+* Ensure we don't break for font-face hack and other esoteric CSS urls.
+
 1.1.18
 ------
 
