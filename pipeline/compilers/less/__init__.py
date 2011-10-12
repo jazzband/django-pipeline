@@ -17,10 +17,9 @@ class LessCompiler(SubProcessCompiler):
         in_file.write(content)
         in_file.flush()
 
-        command = '%s %s %s' % (
+        command = '%s %s' % (
             settings.PIPELINE_LESS_BINARY,
-            in_filename,
-            settings.PIPELINE_LESS_ARGUMENTS
+            in_filename
         )
         content = self.execute_command(command, content)
 
