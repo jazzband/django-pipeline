@@ -19,8 +19,8 @@ class LessCompiler(SubProcessCompiler):
 
         command = '%s %s %s' % (
             settings.PIPELINE_LESS_BINARY,
-            in_filename,
-            settings.PIPELINE_LESS_ARGUMENTS
+            settings.PIPELINE_LESS_ARGUMENTS,
+            in_filename
         )
         content = self.execute_command(command, content)
 
