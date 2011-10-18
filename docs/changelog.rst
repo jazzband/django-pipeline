@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.19
+------
+
+* Add python 2.5 support
+* Remove lessc default arguments
+
 1.1.18.1
 --------
 
