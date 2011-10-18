@@ -2,11 +2,10 @@ import base64
 import os
 import re
 import subprocess
-import urlparse
 
 from pipeline.conf import settings
 from pipeline.storage import storage
-from pipeline.utils import to_class
+from pipeline.utils import to_class, relpath
 
 MAX_IMAGE_SIZE = 32700
 
@@ -200,7 +199,7 @@ class Compressor(object):
     def relative_path(self, absolute_path):
         """Rewrite paths relative to the output stylesheet path"""
         absolute_path = self.absolute_path(absolute_path, settings.PIPELINE_ROOT)
-        return os.path.join(os.sep, os.path.relpath(absolute_path, settings.PIPELINE_ROOT))
+        return os.path.join(os.sep, relpath(absolute_path, settings.PIPELINE_ROOT))
 
     def read_file(self, path):
         """Read file content in binary mode"""
