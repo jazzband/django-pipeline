@@ -112,6 +112,6 @@ A custom compiler for a imaginary compiler called jam ::
     def match_file(self, filename):
       return path.endswith('.jam')
     
-    def compile_file(self, content):
+    def compile_file(self, content, path):
       return jam.compile(content)
 

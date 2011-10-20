@@ -22,7 +22,7 @@ class Compiler(object):
                     new_path = self.output_path(path, compiler.output_extension)
                     content = self.read_file(path)
                     try:
-                        compiled_content = compiler.compile_file(content)
+                        compiled_content = compiler.compile_file(content, storage.path(path))
                         self.save_file(new_path, compiled_content)
                     except CompilerError:
                         if not storage.exists(new_path) or not settings.PIPELINE:
@@ -53,7 +53,7 @@ class CompilerBase(object):
     def match_file(self, filename):
         raise NotImplementedError
 
-    def compile_file(self, content):
+    def compile_file(self, content, path):
         raise NotImplementedError
 
     def save_file(self, path, content):
@@ -68,11 +68,13 @@ class CompilerError(Exception):
 
 
 class SubProcessCompiler(CompilerBase):
-    def execute_command(self, command, content):
+    def execute_command(self, command, content=None):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        pipe.stdin.write(content)
-        pipe.stdin.close()
+
+        if content:
+            pipe.stdin.write(content)
+            pipe.stdin.close()
 
         compressed_content = pipe.stdout.read()
         pipe.stdout.close()

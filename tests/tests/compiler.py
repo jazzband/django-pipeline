@@ -10,7 +10,7 @@ class DummyCompiler(CompilerBase):
     def match_file(self, path):
         return path.endswith('.coffee')
 
-    def compile_file(self, content):
+    def compile_file(self, content, path):
         return content
 
 

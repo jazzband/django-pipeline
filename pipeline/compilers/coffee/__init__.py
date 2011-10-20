@@ -8,6 +8,9 @@ class CoffeeScriptCompiler(SubProcessCompiler):
     def match_file(self, path):
         return path.endswith('.coffee')
 
-    def compile_file(self, content):
-        command = "%s -sc %s" % (settings.PIPELINE_COFFEE_SCRIPT_BINARY, settings.PIPELINE_COFFEE_SCRIPT_ARGUMENTS)
+    def compile_file(self, content, path):
+        command = "%s -sc %s" % (
+            settings.PIPELINE_COFFEE_SCRIPT_BINARY,
+            settings.PIPELINE_COFFEE_SCRIPT_ARGUMENTS
+        )
         return self.execute_command(command, content)

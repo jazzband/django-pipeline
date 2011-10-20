@@ -8,8 +8,10 @@ class SASSCompiler(SubProcessCompiler):
     def match_file(self, filename):
         return filename.endswith('.scss')
 
-    def compile_file(self, content):
-        command = "%s --scss %s" % (settings.PIPELINE_SASS_BINARY, settings.PIPELINE_SASS_ARGUMENTS)
-        if self.verbose:
-            command += '--verbose'
-        return self.execute_command(command, content)
+    def compile_file(self, content, path):
+        command = "%s --scss %s %s" % (
+            settings.PIPELINE_SASS_BINARY,
+            settings.PIPELINE_SASS_ARGUMENTS,
+            path
+        )
+        return self.execute_command(command)
