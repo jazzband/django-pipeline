@@ -28,6 +28,11 @@ class PipelineStorage(FileSystemStorage):
     def modified_time(self, name):
         return datetime.fromtimestamp(os.path.getmtime(self.path(name)))
 
+    def get_available_name(self, name):
+        if self.exists(name):
+            self.delete(name)
+        return name
+
     def _open(self, name, mode='rb'):
         full_path = self.path(name)
         directory = os.path.dirname(full_path)

@@ -79,8 +79,7 @@ class Packager(object):
         return self.compressor.compile_templates(package['templates'])
 
     def save_file(self, path, content):
-        storage.save(path, ContentFile(content))
-        return path
+        return storage.save(path, ContentFile(content))
 
     def create_packages(self, config):
         packages = {}
