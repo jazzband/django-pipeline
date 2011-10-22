@@ -5,7 +5,7 @@ Changelog
 ------
 
 * Fix less and sass compilers.
-* Properly overwrite compild file if it already exists. 
+* Properly overwrite compiled file if it already exists. 
 
 1.1.19
 ------
