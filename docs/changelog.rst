@@ -1,11 +1,17 @@
 Changelog
 =========
 
+1.1.20
+------
+
+* Fix less and sass compilers.
+* Properly overwrite compild file if it already exists. 
+
 1.1.19
 ------
 
-* Add python 2.5 support
-* Remove lessc default arguments
+* Add python 2.5 support.
+* Remove lessc default arguments.
 
 1.1.18.1
 --------
