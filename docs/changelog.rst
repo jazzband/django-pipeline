@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.21
+------
+
+* Fix js template name generation when there is only one template. Thanks to Gerardo Curiel for the report. 
+
 1.1.20
 ------
 
