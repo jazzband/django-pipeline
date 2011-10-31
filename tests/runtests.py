@@ -16,9 +16,9 @@ if not settings.configured:
             'tests'
         ],
         MEDIA_URL='/media/',
-        MEDIA_ROOT=os.path.join(TEST_DIR, 'media/'),
+        MEDIA_ROOT=os.path.join(TEST_DIR, 'media'),
         STATIC_URL='/static/',
-        STATIC_ROOT=os.path.join(TEST_DIR, 'static/'),
+        STATIC_ROOT=os.path.join(TEST_DIR, 'static'),
         TEMPLATE_DIRS=(
             os.path.join(TEST_DIR, 'templates'),
         ),
