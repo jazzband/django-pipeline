@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.22
+------
+
+* Fix google closure compiler verbose mode. Thanks to cgreene.
+* Fix absolute_path generation. Thanks to cgreene and Chris Northwood. 
+
 1.1.21
 ------
 
