@@ -122,7 +122,7 @@ class Compressor(object):
 
     def construct_asset_path(self, asset_path, css_path, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
-        public_path = self.absolute_path(asset_path, css_path)
+        public_path = self.absolute_path(asset_path, os.path.dirname(css_path))
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
         if not os.path.isabs(asset_path):
@@ -195,7 +195,7 @@ class Compressor(object):
         if os.path.isabs(path):
             path = os.path.join(settings.PIPELINE_ROOT, path)
         else:
-            path = os.path.join(os.path.dirname(start), path)
+            path = os.path.join(start, path)
         return os.path.normpath(path)
 
     def relative_path(self, absolute_path):
