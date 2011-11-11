@@ -9,6 +9,7 @@ from pipeline.packager import Packager, PackageNotFound
 class PackagerTest(TestCase):
     def setUp(self):
         self.old_pipeline_url = settings.PIPELINE_URL
+        self.old_pipeline_root = settings.PIPELINE_ROOT
         settings.PIPELINE_URL = 'http://localhost/static/'
 
     def test_package_for(self):
@@ -96,3 +97,4 @@ class PackagerTest(TestCase):
 
     def tearDown(self):
         settings.PIPELINE_URL = self.old_pipeline_url
+        settings.PIPELINE_ROOT = self.old_pipeline_root
