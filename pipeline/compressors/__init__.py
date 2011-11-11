@@ -52,13 +52,20 @@ class Compressor(object):
         if templates:
             js = js + self.compile_templates(templates)
         js = "(function() { %s }).call(this);" % js
-        js = getattr(self.js_compressor(verbose=self.verbose), 'compress_js')(js)
+
+        compressor = self.js_compressor
+        if compressor:
+            js = getattr(compressor(verbose=self.verbose), 'compress_js')(js)
+
         return js
 
     def compress_css(self, paths, variant=None, asset_url=None, **kwargs):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, variant)
-        css = getattr(self.css_compressor(verbose=self.verbose), 'compress_css')(css)
+
+        compressor = self.css_compressor
+        if compressor:
+            css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
         if not variant:
             return css
         elif variant == "datauri":

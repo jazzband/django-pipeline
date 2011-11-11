@@ -174,6 +174,8 @@ Other settings
 ............................
 
   Compressor class to be applied to CSS files.
+
+  If empty or ``None``, CSS files won't be compressed.
   
   Defaults to ``'pipeline.compressors.yui.YUICompressor'``.
 
@@ -181,6 +183,8 @@ Other settings
 ...........................
 
   Compressor class to be applied to JavaScript files.
+
+  If empty or ``None``, JavaScript files won't be compressed.
   
   Defaults to ``'pipeline.compressors.yui.YUICompressor'``
 
