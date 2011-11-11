@@ -45,8 +45,10 @@ class Packager(object):
 
     def pack_stylesheets(self, package, **kwargs):
         variant = package.get('variant', None)
+        absolute_asset_paths = package.get('absolute_asset_paths', True)
         return self.pack(package, self.compressor.compress_css, css_compressed,
-            variant=variant, **kwargs)
+            variant=variant, absolute_asset_paths=absolute_asset_paths,
+            **kwargs)
 
     def compile(self, paths):
         return self.compiler.compile(paths)
@@ -104,6 +106,9 @@ class Packager(object):
             packages[name]['output'] = config[name]['output_filename']
             packages[name]['context'] = {}
             packages[name]['manifest'] = True
+            if 'absolute_asset_paths' in config[name]:
+                packages[name]['absolute_asset_paths'] = \
+                    config[name]['absolute_asset_paths']
             if 'extra_context' in config[name]:
                 packages[name]['context'] = config[name]['extra_context']
             if 'template_name' in config[name]:
