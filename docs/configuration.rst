@@ -100,6 +100,16 @@ Group options
   For CSS, if you do not specify ``extra_context``/``media``, the default media in
   the ``<link>`` output will be ``media="all"``.
 
+``absolute_asset_paths``
+........................
+
+  **Optional**
+
+  Indicates if relative paths in CSS files should be made absolute, based on
+  ``PIPELINE_URL``. This only applies to entries in ``PIPELINE_CSS``.
+
+  Defaults to ``True``.
+
 .. note::
 
   Note that all filenames are specified relative to ``PIPELINE_ROOT``, and thus the source
@@ -253,7 +263,8 @@ Rewriting CSS urls
 ==================
 
 If source CSS contain a relative URL (i.e. relative to current file),
-those URL will be converted to full relative path using ``PIPELINE_URL``.
+and ``absolute_asset_paths`` is set to ``True`` or left out in the package
+entry, the URL will be converted to full relative path using ``PIPELINE_URL``.
 This conversion is performed before any compressors are applied ::
 
   media/js/fancybox/
