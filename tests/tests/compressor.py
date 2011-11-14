@@ -88,6 +88,15 @@ class CompressorTest(TestCase):
             "css/plugins/gallery.css")
         self.assertEquals(asset_path, "http://localhost/static/images/sprite.png")
 
+        asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
+            "css/plugins/gallery.css",
+            absolute_asset_paths=False)
+        self.assertEquals(asset_path, "../../images/sprite.png")
+        asset_path = self.compressor.construct_asset_path("/images/sprite.png",
+            "css/plugins/gallery.css",
+            absolute_asset_paths=False)
+        self.assertEquals(asset_path, "/images/sprite.png")
+
     def test_url_rewrite(self):
         self.maxDiff = None
         output = self.compressor.concatenate_and_rewrite([
