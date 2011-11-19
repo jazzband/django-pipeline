@@ -27,6 +27,10 @@ To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSOR`` ::
   You will most likely change this to the location of yui-compressor on your system.
   
   Defaults to ``'/usr/local/bin/yuicompressor'``.
+  
+.. warning::
+  Don't point to ``yuicompressor.jar`` directly, we expect to find a executable script.
+    
 
 ``PIPELINE_YUI_CSS_ARGUMENTS``
 ------------------------------
@@ -63,6 +67,10 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
   You will most likely change this to the location of closure on your system.
   
   Default to ``'/usr/local/bin/closure'``
+
+.. warning::
+  Don't point to ``compiler.jar`` directly, we expect to find a executable script..
+
 
 ``PIPELINE_CLOSURE_ARGUMENTS``
 ------------------------------
