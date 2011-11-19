@@ -69,7 +69,7 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
   Default to ``'/usr/local/bin/closure'``
 
 .. warning::
-  Don't point to ``compiler.jar`` directly, we expect to find a executable script..
+  Don't point to ``compiler.jar`` directly, we expect to find a executable script.
 
 
 ``PIPELINE_CLOSURE_ARGUMENTS``
