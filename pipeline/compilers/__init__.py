@@ -68,9 +68,10 @@ class CompilerError(Exception):
 
 
 class SubProcessCompiler(CompilerBase):
-    def execute_command(self, command, content=None):
-        pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    def execute_command(self, command, content=None, cwd=None):
+        pipe = subprocess.Popen(command, shell=True, cwd=cwd,
+            stdout=subprocess.PIPE, stdin=subprocess.PIPE,
+            stderr=subprocess.PIPE)
 
         if content:
             pipe.stdin.write(content)

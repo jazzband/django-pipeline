@@ -1,3 +1,5 @@
+import os.path
+
 from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
 
@@ -14,4 +16,5 @@ class SASSCompiler(SubProcessCompiler):
             settings.PIPELINE_SASS_ARGUMENTS,
             path
         )
-        return self.execute_command(command)
+        cwd = os.path.dirname(path)
+        return self.execute_command(command, cwd=cwd)

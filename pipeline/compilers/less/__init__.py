@@ -1,3 +1,5 @@
+import os.path
+
 from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
 
@@ -14,5 +16,6 @@ class LessCompiler(SubProcessCompiler):
             settings.PIPELINE_LESS_ARGUMENTS,
             path
         )
-        content = self.execute_command(command)
+        cwd = os.path.dirname(path)
+        content = self.execute_command(command, cwd=cwd)
         return content
