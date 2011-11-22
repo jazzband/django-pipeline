@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.1.23
+------
+
+* Improve compressors documentation.
+* Allow to have no compressors. Thanks to Christian Hammond.
+* Fix less compiler to support @import. Thanks to TK Kocheran.
+
 1.1.22
 ------
 
@@ -10,7 +17,7 @@ Changelog
 1.1.21
 ------
 
-* Fix js template name generation when there is only one template. Thanks to Gerardo Curiel for the report. 
+* Fix js template name generation when there is only one template. Thanks to Gerrdo Curiel for the report. 
 
 1.1.20
 ------
