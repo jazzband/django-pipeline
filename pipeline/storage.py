@@ -8,6 +8,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import FileSystemStorage, get_storage_class
 from django.utils.functional import LazyObject
 
+from django.contrib.staticfiles.storage import CachedFilesMixin  # FIXME : This break if django < 1.4
+
 from pipeline.conf import settings
 
 
@@ -72,6 +74,17 @@ class BaseFinderStorage(PipelineStorage):
 
 class PipelineFinderStorage(BaseFinderStorage):
     finders = finders
+
+
+class CachedFinderStorage(BaseFinderStorage, CachedFilesMixin):
+    finders = finders
+
+    def post_process(self, paths, dry_run=False, **options):
+        processed_files = []
+        if dry_run:
+            return processed_files
+        # FIXME: Do some pipeline stuff
+        return super(CachedFinderStorage, self).post_process(processed_files, dry_run, **options)
 
 
 class DefaultStorage(LazyObject):
