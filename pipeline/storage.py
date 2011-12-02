@@ -1,55 +1,14 @@
-import errno
-import os
-
-from datetime import datetime
-
 from django.contrib.staticfiles import finders
+from django.contrib.staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
 from django.core.exceptions import ImproperlyConfigured
-from django.core.files.storage import FileSystemStorage, get_storage_class
+from django.core.files.storage import get_storage_class
 from django.utils.functional import LazyObject
 
-from django.contrib.staticfiles.storage import CachedFilesMixin  # FIXME : This break if django < 1.4
 
 from pipeline.conf import settings
 
 
-class PipelineStorage(FileSystemStorage):
-    def __init__(self, location=None, base_url=None, *args, **kwargs):
-        if location is None:
-            location = settings.PIPELINE_ROOT
-        if base_url is None:
-            base_url = settings.PIPELINE_URL
-        super(PipelineStorage, self).__init__(location, base_url, *args, **kwargs)
-
-    def accessed_time(self, name):
-        return datetime.fromtimestamp(os.path.getatime(self.path(name)))
-
-    def created_time(self, name):
-        return datetime.fromtimestamp(os.path.getctime(self.path(name)))
-
-    def modified_time(self, name):
-        return datetime.fromtimestamp(os.path.getmtime(self.path(name)))
-
-    def get_available_name(self, name):
-        if self.exists(name):
-            self.delete(name)
-        return name
-
-    def _open(self, name, mode='rb'):
-        full_path = self.path(name)
-        directory = os.path.dirname(full_path)
-        if not os.path.exists(directory):
-            try:
-                os.makedirs(directory)
-            except OSError, e:
-                if e.errno != errno.EEXIST:
-                    raise
-        if not os.path.isdir(directory):
-            raise IOError("%s exists and is not a directory." % directory)
-        return super(PipelineStorage, self)._open(name, mode)
-
-
-class BaseFinderStorage(PipelineStorage):
+class BaseFinderStorage(StaticFilesStorage):
     finders = None
 
     def __init__(self, finders=None, *args, **kwargs):
@@ -76,15 +35,27 @@ class PipelineFinderStorage(BaseFinderStorage):
     finders = finders
 
 
-class CachedFinderStorage(BaseFinderStorage, CachedFilesMixin):
-    finders = finders
-
+class PipelineStorage(CachedStaticFilesStorage):
     def post_process(self, paths, dry_run=False, **options):
-        processed_files = []
+        from pipeline.packager import Packager
         if dry_run:
-            return processed_files
-        # FIXME: Do some pipeline stuff
-        return super(CachedFinderStorage, self).post_process(processed_files, dry_run, **options)
+            return []
+        packager = Packager()
+        for package_name in packager.packages['css']:
+            package = packager.package_for('css', package_name)
+            output_file = packager.pack_stylesheets(package)
+            for path in package["paths"]:
+                paths.remove(path)
+            paths.append(output_file)
+        for package_name in packager.packages['js']:
+            package = packager.package_for('js', package_name)
+            output_file = packager.pack_javascripts(package)
+            for path in package["paths"]:
+                paths.remove(path)
+            for path in package["templates"]:
+                paths.remove(path)
+            paths.append(output_file)
+        return super(PipelineStorage, self).post_process(paths, dry_run, **options)
 
 
 class DefaultStorage(LazyObject):

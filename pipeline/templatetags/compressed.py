@@ -1,4 +1,5 @@
 from django import template
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.template.loader import render_to_string
 
 from pipeline.conf import settings
@@ -24,20 +25,19 @@ class CompressedCSSNode(template.Node):
             return ''  # fail silently, do not return anything if an invalid group is specified
 
         if settings.PIPELINE:
-            compressed_path = self.packager.pack_stylesheets(package)
-            return self.render_css(package, compressed_path)
+            return self.render_css(package)
         else:
             package['paths'] = self.packager.compile(package['paths'])
             return self.render_individual(package)
 
-    def render_css(self, package, path):
+    def render_css(self, package):
         context = {}
         if not 'template' in package:
             package['template'] = "pipeline/css.html"
         if 'context' in package:
             context = package['context']
         context.update({
-            'url': self.packager.individual_url(path)
+            'url': staticfiles_storage.url(package["output"])
         })
         return render_to_string(package['template'], context)
 
@@ -66,21 +66,20 @@ class CompressedJSNode(template.Node):
             return '\n'.join([self.render_external(package, url) for url in package['externals']])
 
         if settings.PIPELINE:
-            compressed_path = self.packager.pack_javascripts(package)
-            return self.render_js(package, compressed_path)
+            return self.render_js(package)
         else:
             package['paths'] = self.packager.compile(package['paths'])
             templates = self.packager.pack_templates(package)
             return self.render_individual(package, templates)
 
-    def render_js(self, package, path):
+    def render_js(self, package):
         context = {}
         if not 'template' in package:
             package['template'] = "pipeline/js.html"
         if 'context' in package:
             context = package['context']
         context.update({
-            'url': self.packager.individual_url(path)
+            'url': staticfiles_storage.url(package["output"])
         })
         return render_to_string(package['template'], context)
 

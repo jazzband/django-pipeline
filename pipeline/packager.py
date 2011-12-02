@@ -1,4 +1,3 @@
-import os
 import urlparse
 
 from django.core.files.base import ContentFile
@@ -9,14 +8,12 @@ from pipeline.compressors import Compressor
 from pipeline.glob import glob
 from pipeline.signals import css_compressed, js_compressed
 from pipeline.storage import storage
-from pipeline.versioning import Versioning
 
 
 class Packager(object):
     def __init__(self, verbose=False, css_packages=None, js_packages=None):
         self.verbose = verbose
         self.compressor = Compressor(verbose)
-        self.versioning = Versioning(verbose)
         self.compiler = Compiler(verbose)
         if css_packages is None:
             css_packages = settings.PIPELINE_CSS
@@ -53,28 +50,16 @@ class Packager(object):
     def compile(self, paths):
         return self.compiler.compile(paths)
 
-    def pack(self, package, compress, signal, sync=False, force=False, **kwargs):
-        if settings.PIPELINE_AUTO or (force and sync):
-            need_update, version = self.versioning.need_update(
-                package['output'], package['paths'])
-            if need_update or force:
-                output_filename = self.versioning.output_filename(
-                    package['output'],
-                    version
-                )
-                self.versioning.cleanup(package['output'])
-                if self.verbose:
-                    print "Version: %s" % version
-                    print "Saving: %s" % output_filename
-                paths = self.compile(package['paths'])
-                content = compress(paths,
-                    asset_url=self.individual_url(output_filename), **kwargs)
-                self.save_file(output_filename, content)
-        else:
-            filename_base, filename = os.path.split(package['output'])
-            version = self.versioning.version_from_file(filename_base, filename, force=force)
-        signal.send(sender=self, package=package, version=version, **kwargs)
-        return self.versioning.output_filename(package['output'], version)
+    def pack(self, package, compress, signal, **kwargs):
+        output_filename = package["output"]
+        if self.verbose:
+            print "Saving: %s" % output_filename
+        paths = self.compile(package['paths'])
+        content = compress(paths,
+            asset_url=self.individual_url(output_filename), **kwargs)
+        self.save_file(output_filename, content)
+        signal.send(sender=self, package=package, **kwargs)
+        return output_filename
 
     def pack_javascripts(self, package, **kwargs):
         if 'externals' in package:

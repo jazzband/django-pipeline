@@ -2,23 +2,12 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 
-PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.MEDIA_ROOT)
-PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.MEDIA_URL)
-
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
-PIPELINE_AUTO = getattr(settings, 'PIPELINE_AUTO', True)
-PIPELINE_VERSION = getattr(settings, 'PIPELINE_VERSION', False)
-PIPELINE_VERSION_PLACEHOLDER = getattr(settings, 'PIPELINE_VERSION_PLACEHOLDER', '?')
-PIPELINE_VERSION_DEFAULT = getattr(settings, 'PIPELINE_VERSION_DEFAULT', '0')
-PIPELINE_VERSION_REMOVE_OLD = getattr(settings, 'PIPELINE_VERSION_REMOVE_OLD', True)
-PIPELINE_VERSIONING = getattr(settings, 'PIPELINE_VERSIONING', 'pipeline.versioning.mtime.MTimeVersioning')
-
-PIPELINE_CACHE_TIMEOUT = getattr(settings, 'PIPELINE_CACHE_TIMEOUT', 63072000)
 
 PIPELINE_STORAGE = getattr(settings, 'PIPELINE_STORAGE',
-    'pipeline.storage.PipelineStorage')
+    'pipeline.storage.PipelineFinderStorage')
 
 PIPELINE_CSS_COMPRESSOR = getattr(settings, 'PIPELINE_CSS_COMPRESSOR',
     'pipeline.compressors.yui.YUICompressor'
