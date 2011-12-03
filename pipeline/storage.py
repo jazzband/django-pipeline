@@ -44,16 +44,10 @@ class PipelineStorage(CachedStaticFilesStorage):
         for package_name in packager.packages['css']:
             package = packager.package_for('css', package_name)
             output_file = packager.pack_stylesheets(package)
-            for path in package["paths"]:
-                paths.remove(path)
             paths.append(output_file)
         for package_name in packager.packages['js']:
             package = packager.package_for('js', package_name)
             output_file = packager.pack_javascripts(package)
-            for path in package["paths"]:
-                paths.remove(path)
-            for path in package["templates"]:
-                paths.remove(path)
             paths.append(output_file)
         return super(PipelineStorage, self).post_process(paths, dry_run, **options)
 
