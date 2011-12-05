@@ -3,6 +3,8 @@ import os
 import re
 import subprocess
 
+from itertools import takewhile
+
 from pipeline.conf import settings
 from pipeline.storage import storage
 from pipeline.utils import to_class, relpath
@@ -80,7 +82,7 @@ class Compressor(object):
         if not paths:
             return compiled
         namespace = settings.PIPELINE_TEMPLATE_NAMESPACE
-        base_path = os.path.commonprefix(paths)
+        base_path = self.base_path(paths)
         for path in paths:
             contents = self.read_file(path)
             contents = re.sub(r"\r?\n", "", contents)
@@ -96,6 +98,12 @@ class Compressor(object):
             "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
             compiled
         ])
+
+    def base_path(self, paths):
+        def names_equal(name):
+            return all(n==name[0] for n in name[1:])
+        directory_levels = zip(*[p.split(os.sep) for p in paths])
+        return os.sep.join(x[0] for x in takewhile(names_equal, directory_levels))
 
     def template_name(self, path, base):
         """Find out the name of a JS template"""
