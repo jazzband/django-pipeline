@@ -1,5 +1,5 @@
 import os
-import os
+
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 DATABASES = {
@@ -8,6 +8,8 @@ DATABASES = {
         'TEST_NAME': ':memory:'
     }
 }
+
+SITE_ID = 1
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
@@ -29,3 +31,4 @@ STATIC_ROOT = local_path('assets')
 TEMPLATE_DIRS = (
     local_path('templates'),
 )
+
