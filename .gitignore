@@ -10,6 +10,7 @@ docs/_build/
 *.egg-info
 .coverage
 coverage/
+tests/static/
 tests/assets/js/dummy.js
 .tox/
 .DS_Store
