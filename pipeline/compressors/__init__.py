@@ -142,7 +142,8 @@ class Compressor(object):
             return "__EMBED__%s" % public_path
         if not os.path.isabs(asset_path):
             asset_path = self.relative_path(public_path)
-        return settings.PIPELINE_URL + asset_path[1:]
+        asset_url = asset_path.replace(os.sep, '/')
+        return settings.PIPELINE_URL + asset_url[1:]
 
     def embeddable(self, path, variant):
         """Is the asset embeddable ?"""

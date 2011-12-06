@@ -38,8 +38,10 @@ class Packager(object):
             )
 
     def individual_url(self, filename):
+        relative_path = self.compressor.relative_path(filename)[1:]
+        relative_url = relative_path.replace(os.sep, '/')
         return urlparse.urljoin(settings.PIPELINE_URL,
-            self.compressor.relative_path(filename)[1:])
+            relative_url)
 
     def pack_stylesheets(self, package, **kwargs):
         variant = package.get('variant', None)
