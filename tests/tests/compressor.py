@@ -50,6 +50,12 @@ class CompressorTest(TestCase):
         relative_path = self.compressor.relative_path('/var/www/static/images/sprite.png')
         self.assertEquals(relative_path, '/images/sprite.png')
 
+    def test_base_path(self):
+        base_path = self.compressor.base_path([
+            'js/templates/form.jst', 'js/templates/field.jst'
+        ])
+        self.assertEquals(base_path, 'js/templates')
+
     def test_absolute_path(self):
         absolute_path = self.compressor.absolute_path('../../images/sprite.png',
             'css/plugins/')
