@@ -286,6 +286,10 @@ In resulting CSS it will be rewritten to ::
 External urls
 =============
 
+.. warning::
+
+    This feature is currently deprecated and will be remove in next major version of pipeline.
+
 While Pipeline does a great job of minimizing the amount of http requests
 on your site (hence increasing performance) there are sometimes cases when you
 want to include external files as well. Let's take an example::
