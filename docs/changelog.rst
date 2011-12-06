@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.1.24
+------
+
+* Add deprecation warning on external urls
+* Fix windows paths support.
+* Don't try to pack externals package. Thanks to Cristian Andreica for the report.
+
+
 1.1.23
 ------
 
