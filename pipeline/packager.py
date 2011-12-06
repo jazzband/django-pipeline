@@ -73,6 +73,8 @@ class Packager(object):
         return self.versioning.output_filename(package['output'], version)
 
     def pack_javascripts(self, package, **kwargs):
+        if 'externals' in package:
+            return
         return self.pack(package, self.compressor.compress_js, js_compressed, templates=package['templates'], **kwargs)
 
     def pack_templates(self, package):
