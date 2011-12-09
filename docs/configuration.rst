@@ -126,60 +126,6 @@ Other settings
 
   Defaults to ``not DEBUG`` (compressed files will only be used when ``DEBUG`` is ``False``).
 
-``PIPELINE_AUTO``
-.................
-
-  Auto-generate CSS and JavaScript files whenever needed, when the template tags
-  are invoked.
-  
-  This setting will make sure that the outputted files always are up to date
-  (assuming that you are using the provided templatetags to output the links to
-  your files).
-  
-  If you disable this, you can use the management command to keep your files
-  manually updated.
-  
-  Defaults to ``True``.
-
-``PIPELINE_VERSION``
-....................
-
-  Regulates whether or not to add a "version number" to the outputted files
-  filename with for use with “far future Expires”.
-  
-  When you specify ``PIPELINE_VERSION`` you will also need to add a placeholder
-  (which by default is ``?``) for the version number in the ``output_filename`` setting.
-
-``PIPELINE_VERSION_REMOVE_OLD``
-...............................
-
-  When ``True``, old compressed files will be removed when new versions are generated.
-  All files with a matching name e.g. ``output_filename`` where ``?`` can be replaced
-  by digits will be removed.
-  
-  If you for some reason have files named in the same way, you should consider moving
-  them or putting the compressed files in their own directory. 
-  
-  Defaults to ``True``.
-
-  Example::
-
-    PIPELINE = True
-    PIPELINE_VERSION = True
-    PIPELINE_CSS = {
-        'screen': {
-            'source_filenames': (
-                'css/screen/style.css', 'css/screen/paginator.css',
-                'css/screen/agenda.css', 'css/screen/weather.css',
-                'css/screen/gallery.css',
-            ),
-            'output_filename': 'c/screen.r?.css',
-        },
-    }
-
-  This will output a file like ``/media/c/screen.r1213947531.css``,
-  which will be re-generated and updated when you change your source files.
-
 ``PIPELINE_CSS_COMPRESSOR``
 ............................
 
@@ -229,13 +175,6 @@ Other settings
   
   Defaults to ``"_.template"``
 
-``PIPELINE_CACHE_TIMEOUT``
-..........................
-
-  Package version are cached to avoid unnecessary IO, the default is to cache
-  version for 2 years.
-
-  Defaults to ``63072000``
 
 Embedding fonts and images
 ==========================
@@ -292,56 +231,3 @@ In resulting CSS it will be rewritten to ::
   background-image:url(/js/fancybox/fancybox-y.png);
 
 (Assuming ``PIPELINE_URL`` is '' or '/', with non-empty ``PIPELINE_URL`` result will be another).
-
-
-External urls
-=============
-
-.. warning::
-
-    This feature is currently deprecated and will be remove in next major version of pipeline.
-
-While Pipeline does a great job of minimizing the amount of http requests
-on your site (hence increasing performance) there are sometimes cases when you
-want to include external files as well. Let's take an example::
-
-  PIPELINE_JS = {
-      'jquery': {
-          'external_urls': (
-              'http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js',
-              'http://ajax.googleapis.com/ajax/libs/jqueryui/1.5.2/jquery-ui.min.js'
-          ),
-      },
-      'all': {
-          'source_filenames': ('js/blog.js', 'js/comments.js'),
-          'output_filename': 'js/all.js',
-      },
-  }
-
-In template::
-
-    {% load compressed %}
-    {% compressed_js 'jquery' %}
-    {% compressed_js 'all' %}
-
-Output in when ``settings.PIPELINE = False``::
-
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" charset="utf-8"></script>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.5.2/jquery-ui.min.js" charset="utf-8"></script>
-  <script type="text/javascript" src="/media/js/blog.js" charset="utf-8"></script>
-  <script type="text/javascript" src="/media/js/comments.js" charset="utf-8"></script>
-
-Output in when ``settings.PIPELINE = True``::
-
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" charset="utf-8"></script>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.5.2/jquery-ui.min.js" charset="utf-8"></script>
-  <script type="text/javascript" src="/media/js/all.js" charset="utf-8"></script>
-
-Now why is this good you ask? The more script sources the more impact on performance
-according to http://developer.yahoo.com/performance/rules.html#num_http 
-which is true but if you are low bandwidth or superbig you may want to offload
-some horsepower to google which leads us as hinted in the example above to the next topic.
-
-.. note::
-  
-  External urls is currently only available for javascript.
