@@ -6,15 +6,6 @@ Usage
 
 Describes how to use Pipeline when it is installed and configured.
 
-Automated generation
-====================
-
-If ``PIPELINE`` and ``PIPELINE_AUTO`` is enabled (``True``), the source files
-will be automatically updated, and re-generated if needed when invoked from the
-templatetags.
-The last modified time of the files will be compared, and if any of the
-source-files is newer than the output-file, the file will be re-generated.
-
 Management command
 ==================
 
