@@ -31,4 +31,3 @@ STATIC_ROOT = local_path('assets')
 TEMPLATE_DIRS = (
     local_path('templates'),
 )
-

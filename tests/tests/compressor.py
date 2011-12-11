@@ -94,6 +94,7 @@ class CompressorTest(TestCase):
             "css/plugins/gallery.css")
         self.assertEquals(asset_path, "http://localhost/static/images/sprite.png")
 
+    def test_construct_asset_path_relative(self):
         asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
             "css/plugins/gallery.css",
             absolute_asset_paths=False)
