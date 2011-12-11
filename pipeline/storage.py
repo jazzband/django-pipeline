@@ -1,5 +1,9 @@
-from django.contrib.staticfiles import finders
-from django.contrib.staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
+try:
+    from django.contrib.staticfiles import finders
+    from django.contrib.staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
+except ImportError:
+    from staticfiles import finders
+    from staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class
 from django.utils.functional import LazyObject
