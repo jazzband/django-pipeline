@@ -33,8 +33,3 @@ For their main and mobile website :
 
 * http://www.croisedanslemetro.com
 * http://m.croisedanslemetro.com
-
-Squibcakes
-----------
-
-For their main website : http://squibcakes.com
