@@ -1,7 +1,8 @@
 try:
-    from django.contrib.staticfiles.storage import staticfiles_storage
-except ImportError:
     from staticfiles.storage import staticfiles_storage
+except ImportError:
+    from django.contrib.staticfiles.storage import staticfiles_storage
+    
 from django import template
 from django.template.loader import render_to_string
 
@@ -28,19 +29,19 @@ class CompressedCSSNode(template.Node):
             return ''  # fail silently, do not return anything if an invalid group is specified
 
         if settings.PIPELINE:
-            return self.render_css(package)
+            return self.render_css(package, package["output"])
         else:
             package['paths'] = self.packager.compile(package['paths'])
             return self.render_individual(package)
 
-    def render_css(self, package):
+    def render_css(self, package, path):
         context = {}
         if not 'template' in package:
             package['template'] = "pipeline/css.html"
         if 'context' in package:
             context = package['context']
         context.update({
-            'url': staticfiles_storage.url(package["output"])
+            'url': staticfiles_storage.url(path)
         })
         return render_to_string(package['template'], context)
 
@@ -69,20 +70,20 @@ class CompressedJSNode(template.Node):
             return '\n'.join([self.render_external(package, url) for url in package['externals']])
 
         if settings.PIPELINE:
-            return self.render_js(package)
+            return self.render_js(package, package["output"])
         else:
             package['paths'] = self.packager.compile(package['paths'])
             templates = self.packager.pack_templates(package)
             return self.render_individual(package, templates)
 
-    def render_js(self, package):
+    def render_js(self, package, path):
         context = {}
         if not 'template' in package:
             package['template'] = "pipeline/js.html"
         if 'context' in package:
             context = package['context']
         context.update({
-            'url': staticfiles_storage.url(package["output"])
+            'url': staticfiles_storage.url(path)
         })
         return render_to_string(package['template'], context)
 
