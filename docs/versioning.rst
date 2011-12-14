@@ -4,6 +4,10 @@
 Versioning
 ==========
 
+.. warning::
+
+    This feature is currently deprecated and will be remove in next major version of pipeline.
+
 There are several ways for generating version strings. Basically, three types are available.
 These are: 
 
