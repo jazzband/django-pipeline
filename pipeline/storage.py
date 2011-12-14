@@ -1,13 +1,12 @@
 try:
-    from django.contrib.staticfiles import finders
-    from django.contrib.staticfiles.storage import CachedFilesMixin, StaticFilesStorage
-except ImportError:
     from staticfiles import finders
-    from staticfiles.storage import CachedFilesMixin, StaticFilesStorage
+    from staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
+except ImportError:
+    from django.contrib.staticfiles import finders
+    from django.contrib.staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class
 from django.utils.functional import LazyObject
-
 
 from pipeline.conf import settings
 
@@ -39,11 +38,12 @@ class PipelineFinderStorage(BaseFinderStorage):
     finders = finders
 
 
-class PipelineStorage(StaticFilesStorage):
+class PipelineStorage(PipelineFinderStorage):
     def post_process(self, paths, dry_run=False, **options):
         from pipeline.packager import Packager
         if dry_run:
             return []
+        
         packager = Packager()
         for package_name in packager.packages['css']:
             package = packager.package_for('css', package_name)
@@ -56,7 +56,7 @@ class PipelineStorage(StaticFilesStorage):
         return super(PipelineStorage, self).post_process(paths, dry_run, **options)
 
 
-class PipelineCachedStorage(CachedFilesMixin, PipelineStorage):
+class PipelineCachedStorage(PipelineStorage, CachedStaticFilesStorage):
     pass
 
 
