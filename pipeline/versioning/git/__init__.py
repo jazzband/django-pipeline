@@ -1,5 +1,6 @@
 from pipeline.conf import settings
 from pipeline.versioning import VersioningBase, VersioningError
+from pipeline.storage import storage
 
 from django.utils.hashcompat import sha_constructor
 
@@ -30,12 +31,17 @@ class GitRevVersioning(GitVersioningBase):
     Version as hash of revision of all files in sources_files list.
     """
     def version(self, paths):
-        repo = git.Repo(paths[0])
+        path = storage.path(paths[0])
+        repo = git.Repo(path)
         kwargs = {'max_count': 1}
         commit_revs = []
         for f in paths:
-            commit = [i for i in repo.iter_commits(paths=f, **kwargs)][0]
-            commit_revs.append(commit.name_rev)
+            f = storage.path(f)
+            revs = [i for i in repo.iter_commits(paths=f, **kwargs)]
+            if len(revs) == 0:
+                commit_revs.append('-')
+            else:
+                commit_revs.append(revs[0].name_rev)
         return self.hexdigest(', '.join(commit_revs))[0:16]
 
 
@@ -44,6 +50,6 @@ class GitHeadRevVersioning(GitVersioningBase):
     Version as hash of latest revision in HEAD. Assumes all sources_files in same git repo.
     """
     def version(self, paths):
-        f = paths[0]
+        f = storage.path(paths[0])
         repo = git.Repo(f)
         return self.hexdigest(repo.head.commit.name_rev)[0:16]
