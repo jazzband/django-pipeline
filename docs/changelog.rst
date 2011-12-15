@@ -1,6 +1,14 @@
 Changelog
 =========
 
+
+1.1.25
+------
+
+* Add stylus compiler. Thanks to David Charbonnier.
+* Fix git versioning. Thanks to David Charbonnier again.
+* Allow to disable asset normalization. Thansk to Christian Hammond.
+
 1.1.24
 ------
 
