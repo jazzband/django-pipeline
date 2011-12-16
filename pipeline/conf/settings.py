@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 
 
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
