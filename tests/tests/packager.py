@@ -70,29 +70,5 @@ class PackagerTest(TestCase):
         self.assertEqual(individual_url,
             "http://localhost/static/js/application.js")
 
-    def test_external_urls(self):
-        packager = Packager()
-        packages = packager.create_packages({
-            'jquery': {
-                'external_urls': ('//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js',)
-            },
-            'application': {
-                'source_filenames': ('js/application.js',),
-                'output_filename': 'application.r?.js'
-            }
-        })
-        self.assertEqual(packages, {
-            'jquery': {
-                'externals': ('//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js',)
-            },
-            'application': {
-                'context': {},
-                'manifest': True,
-                'output': 'application.r?.js',
-                'paths': ['js/application.js'],
-                'templates': []
-            }
-        })
-
     def tearDown(self):
         settings.PIPELINE_URL = self.old_pipeline_url

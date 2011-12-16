@@ -66,9 +66,6 @@ class CompressedJSNode(template.Node):
         except PackageNotFound:
             return ''  # fail silently, do not return anything if an invalid group is specified
 
-        if 'externals' in package:
-            return '\n'.join([self.render_external(package, url) for url in package['externals']])
-
         if settings.PIPELINE:
             return self.render_js(package, package["output"])
         else:

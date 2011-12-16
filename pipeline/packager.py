@@ -78,9 +78,6 @@ class Packager(object):
             return packages
         for name in config:
             packages[name] = {}
-            if 'external_urls' in config[name]:
-                packages[name]['externals'] = config[name]['external_urls']
-                continue
             paths = []
             for pattern in config[name]['source_filenames']:
                 for path in glob(pattern):
