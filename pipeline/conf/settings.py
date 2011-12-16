@@ -4,7 +4,6 @@ from django.core.exceptions import ImproperlyConfigured
 
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
-PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
 
 PIPELINE_STORAGE = getattr(settings, 'PIPELINE_STORAGE',
     'pipeline.storage.PipelineFinderStorage')
@@ -51,7 +50,3 @@ PIPELINE_LESS_ARGUMENTS = getattr(settings, 'PIPELINE_LESS_ARGUMENTS', '')
 
 if PIPELINE_COMPILERS is None:
     PIPELINE_COMPILERS = []
-
-if not PIPELINE_URL:
-    raise ImproperlyConfigured("You're using the pipeline app "
-            "without having set the required STATIC_URL setting.")

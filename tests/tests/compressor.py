@@ -13,9 +13,7 @@ from pipeline.compressors.yui import YUICompressor
 class CompressorTest(TestCase):
     def setUp(self):
         self.compressor = Compressor()
-        self.old_pipeline_url = settings.PIPELINE_URL
         self.old_pipeline_root = settings.PIPELINE_ROOT
-        settings.PIPELINE_URL = 'http://localhost/static/'
 
     def test_js_compressor_class(self):
         self.assertEquals(self.compressor.js_compressor, YUICompressor)
@@ -131,5 +129,4 @@ class CompressorTest(TestCase):
 }""", output)
 
     def tearDown(self):
-        settings.PIPELINE_URL = self.old_pipeline_url
         settings.PIPELINE_ROOT = self.old_pipeline_root

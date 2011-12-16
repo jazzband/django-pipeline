@@ -7,10 +7,6 @@ from pipeline.packager import Packager, PackageNotFound
 
 
 class PackagerTest(TestCase):
-    def setUp(self):
-        self.old_pipeline_url = settings.PIPELINE_URL
-        settings.PIPELINE_URL = 'http://localhost/static/'
-
     def test_package_for(self):
         packager = Packager()
         packager.packages['js'] = packager.create_packages({
@@ -69,6 +65,3 @@ class PackagerTest(TestCase):
         individual_url = packager.individual_url(filename)
         self.assertEqual(individual_url,
             "http://localhost/static/js/application.js")
-
-    def tearDown(self):
-        settings.PIPELINE_URL = self.old_pipeline_url
