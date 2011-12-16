@@ -202,28 +202,4 @@ Rewriting CSS urls
 ==================
 
 If source CSS contain a relative URL (i.e. relative to current file),
-and ``absolute_asset_paths`` is set to ``True`` or left out in the package
-entry, the URL will be converted to full relative path using ``PIPELINE_URL``.
-This conversion is performed before any compressors are applied ::
-
-  media/js/fancybox/
-    fancybox.png
-    fancybox-x.png
-    fancybox-y.png
-    jquery.fancybox-1.3.4.css
-    jquery.fancybox-1.3.4.js
-
-jquery.fancybox-1.3.4.css contains ::
-
-  background-image: url('fancybox.png');
-  background-image: url('fancybox-x.png');
-  background-image: url('fancybox-y.png');
-
-
-In resulting CSS it will be rewritten to ::
-
-  background-image:url(/js/fancybox/fancybox.png);
-  background-image:url(/js/fancybox/fancybox-x.png);
-  background-image:url(/js/fancybox/fancybox-y.png);
-
-(Assuming ``PIPELINE_URL`` is '' or '/', with non-empty ``PIPELINE_URL`` result will be another).
+those URL will be converted to full relative path.
