@@ -29,24 +29,21 @@ class CompressedCSSNode(template.Node):
             return ''  # fail silently, do not return anything if an invalid group is specified
 
         if settings.PIPELINE:
-            return self.render_css(package, package["output"])
+            return self.render_css(package, package.output)
         else:
-            package['paths'] = self.packager.compile(package['paths'])
-            return self.render_individual(package)
+            paths = self.packager.compile(package.paths)
+            return self.render_individual(package, paths)
 
     def render_css(self, package, path):
-        context = {}
-        if not 'template' in package:
-            package['template'] = "pipeline/css.html"
-        if 'context' in package:
-            context = package['context']
+        template_name = package.template_name or "pipeline/css.html"
+        context = package.extra_context
         context.update({
             'url': staticfiles_storage.url(path)
         })
-        return render_to_string(package['template'], context)
+        return render_to_string(template_name, context)
 
-    def render_individual(self, package):
-        tags = [self.render_css(package, path) for path in package['paths']]
+    def render_individual(self, package, paths):
+        tags = [self.render_css(package, path) for path in paths]
         return '\n'.join(tags)
 
 
@@ -67,41 +64,29 @@ class CompressedJSNode(template.Node):
             return ''  # fail silently, do not return anything if an invalid group is specified
 
         if settings.PIPELINE:
-            return self.render_js(package, package["output"])
+            return self.render_js(package, package.output)
         else:
-            package['paths'] = self.packager.compile(package['paths'])
+            paths = self.packager.compile(package.paths)
             templates = self.packager.pack_templates(package)
-            return self.render_individual(package, templates)
+            return self.render_individual(package, paths, templates)
 
     def render_js(self, package, path):
-        context = {}
-        if not 'template' in package:
-            package['template'] = "pipeline/js.html"
-        if 'context' in package:
-            context = package['context']
+        template_name = package.template_name or "pipeline/js.html"
+        context = package.extra_context
         context.update({
             'url': staticfiles_storage.url(path)
         })
-        return render_to_string(package['template'], context)
-
-    def render_external(self, package, url):
-        if not 'template' in package:
-            package['template'] = "pipeline/js.html"
-        return render_to_string(package['template'], {
-            'url': url
-        })
+        return render_to_string(template_name, context)
 
     def render_inline(self, package, js):
-        context = {}
-        if 'context' in package:
-            context = package['context']
+        context = package.extra_context
         context.update({
             'source': js
         })
         return render_to_string("pipeline/inline_js.html", context)
 
-    def render_individual(self, package, templates=None):
-        tags = [self.render_js(package, js) for js in package['paths']]
+    def render_individual(self, package, paths, templates=None):
+        tags = [self.render_js(package, js) for js in paths]
         if templates:
             tags.append(self.render_inline(package, templates))
         return '\n'.join(tags)

@@ -10,6 +10,53 @@ from pipeline.signals import css_compressed, js_compressed
 from pipeline.storage import storage
 
 
+class Package(object):
+    def __init__(self, config):
+        self.config = config
+        self._sources = []
+
+    @property
+    def sources(self):
+        if not self._sources:
+            paths = []
+            for pattern in self.config.get('source_filenames', []):
+                for path in glob(pattern):
+                    if not path in paths:
+                        paths.append(str(path))
+            self._sources = paths
+        return self._sources
+ 
+    @property
+    def paths(self):
+        return [path for path in self.sources
+            if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+
+    @property
+    def templates(self):
+        return [path for path in self.sources
+            if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+
+    @property
+    def output(self):
+        return self.config.get('output_filename')
+
+    @property
+    def extra_context(self):
+        return self.config.get('extra_context', {})
+
+    @property
+    def template_name(self):
+        return self.config.get('template_name')
+
+    @property
+    def variant(self):
+        return self.config.get('variant')
+
+    @property
+    def manifest(self):
+        return self.config.get('manifest', True)
+
+
 class Packager(object):
     def __init__(self, verbose=False, css_packages=None, js_packages=None):
         self.verbose = verbose
@@ -26,7 +73,7 @@ class Packager(object):
 
     def package_for(self, kind, package_name):
         try:
-            return self.packages[kind][package_name].copy()
+            return self.packages[kind][package_name]
         except KeyError:
             raise PackageNotFound(
                 "No corresponding package for %s package name : %s" % (
@@ -51,10 +98,10 @@ class Packager(object):
         return self.compiler.compile(paths)
 
     def pack(self, package, compress, signal, **kwargs):
-        output_filename = package["output"]
+        output_filename = package.output
         if self.verbose:
             print "Saving: %s" % output_filename
-        paths = self.compile(package['paths'])
+        paths = self.compile(package.paths)
         content = compress(paths,
             asset_url=self.individual_url(output_filename), **kwargs)
         self.save_file(output_filename, content)
@@ -62,12 +109,10 @@ class Packager(object):
         return output_filename
 
     def pack_javascripts(self, package, **kwargs):
-        if 'externals' in package:
-            return
-        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package['templates'], **kwargs)
+        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package.templates, **kwargs)
 
     def pack_templates(self, package):
-        return self.compressor.compile_templates(package['templates'])
+        return self.compressor.compile_templates(package.templates)
 
     def save_file(self, path, content):
         return storage.save(path, ContentFile(content))
@@ -77,28 +122,7 @@ class Packager(object):
         if not config:
             return packages
         for name in config:
-            packages[name] = {}
-            paths = []
-            for pattern in config[name]['source_filenames']:
-                for path in glob(pattern):
-                    if not path in paths:
-                        paths.append(str(path))
-            packages[name]['paths'] = [path for path in paths if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
-            packages[name]['templates'] = [path for path in paths if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
-            packages[name]['output'] = config[name]['output_filename']
-            packages[name]['context'] = {}
-            packages[name]['manifest'] = True
-            if 'absolute_asset_paths' in config[name]:
-                packages[name]['absolute_asset_paths'] = \
-                    config[name]['absolute_asset_paths']
-            if 'extra_context' in config[name]:
-                packages[name]['context'] = config[name]['extra_context']
-            if 'template_name' in config[name]:
-                packages[name]['template'] = config[name]['template_name']
-            if 'variant' in config[name]:
-                packages[name]['variant'] = config[name]['variant']
-            if 'manifest' in config[name]:
-                packages[name]['manifest'] = config[name]['manifest']
+            packages[name] = Package(config[name])
         return packages
 
 

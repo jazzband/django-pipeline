@@ -28,7 +28,6 @@ The basic syntax for specifying CSS/JavaScript groups files is ::
               'media': 'screen,projection',
           },
       },
-      # other CSS groups goes here
   }
 
   PIPELINE_JS = {
@@ -73,14 +72,14 @@ Group options
   
   Defaults to ``None``.
 
-``manifest``
-............
+``template_name``
+.................
 
   **Optional**
-
-  Indicate if you want this group to appear in your cache manifest.
-
-  Defaults to ``True``.
+  
+  Name of the template used to render ``<script>`` for js package or ``<link>`` for css package.
+  
+  Defaults to ``None``.
 
 ``extra_context``
 .................
@@ -107,6 +106,16 @@ Group options
 
   Note that all filenames are specified relative to ``PIPELINE_ROOT``, and thus the source
   files needs to be in your ``PIPELINE_ROOT``.
+
+``manifest``
+............
+
+  **Optional**
+
+  Indicate if you want this group to appear in your cache manifest.
+
+  Defaults to ``True``.
+
 
 Other settings
 --------------
