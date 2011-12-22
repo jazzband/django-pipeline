@@ -87,10 +87,10 @@ class CompressorTest(TestCase):
     def test_construct_asset_path(self):
         asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
             "css/plugins/gallery.css")
-        self.assertEquals(asset_path, "http://localhost/static/images/sprite.png")
+        self.assertEquals(asset_path, "images/sprite.png")
         asset_path = self.compressor.construct_asset_path("/images/sprite.png",
             "css/plugins/gallery.css")
-        self.assertEquals(asset_path, "http://localhost/static/images/sprite.png")
+        self.assertEquals(asset_path, "images/sprite.png")
 
     def test_construct_asset_path_relative(self):
         asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
@@ -109,17 +109,17 @@ class CompressorTest(TestCase):
         ])
         self.assertMultiLineEqual("""@font-face {
   font-family: 'Pipeline';
-  src: url(http://localhost/static/fonts/pipeline.eot);
-  src: url(http://localhost/static/fonts/pipeline.eot?#iefix) format('embedded-opentype');
-  src: local('☺'), url(http://localhost/static/fonts/pipeline.woff) format('woff'), url(http://localhost/static/fonts/pipeline.ttf) format('truetype'), url(http://localhost/static/fonts/pipeline.svg#IyfZbseF) format('svg');
+  src: url(fonts/pipeline.eot);
+  src: url(fonts/pipeline.eot?#iefix) format('embedded-opentype');
+  src: local('☺'), url(fonts/pipeline.woff) format('woff'), url(fonts/pipeline.ttf) format('truetype'), url(fonts/pipeline.svg#IyfZbseF) format('svg');
   font-weight: normal;
   font-style: normal;
 }
 .relative-url {
-  background-image: url(http://localhost/static/images/sprite-buttons.png);
+  background-image: url(images/sprite-buttons.png);
 }
 .absolute-url {
-  background-image: url(http://localhost/static/images/sprite-buttons.png);
+  background-image: url(images/sprite-buttons.png);
 }
 .absolute-full-url {
   background-image: url(http://localhost/images/sprite-buttons.png);

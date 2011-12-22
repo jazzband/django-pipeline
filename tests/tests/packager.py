@@ -14,7 +14,7 @@ class PackagerTest(TestCase):
                 'source_filenames': (
                     'js/application.js',
                 ),
-                'output_filename': 'application.r?.js'
+                'output_filename': 'application.js'
             }
         })
         try:
@@ -34,26 +34,17 @@ class PackagerTest(TestCase):
                 'source_filenames': (
                     'templates/photo/list.jst',
                 ),
-                'output_filename': 'templates.r?.js',
+                'output_filename': 'templates.js',
             }
         })
-        self.assertEqual(packages, {
-            'templates': {
-                'templates': ['templates/photo/list.jst'],
-                'manifest': True,
-                'paths': [],
-                'context': {},
-                'output': 'templates.r?.js'
-            }
-        })
+        self.assertEqual(packages['templates'].templates, ['templates/photo/list.jst'])
 
     def test_individual_url(self):
         """Check that individual URL is correctly generated"""
         packager = Packager()
         filename = os.path.join(settings.PIPELINE_ROOT, u'js/application.js')
         individual_url = packager.individual_url(filename)
-        self.assertEqual(individual_url,
-            "http://localhost/static/js/application.js")
+        self.assertEqual(individual_url, "/static/js/application.js")
 
     def test_periods_safe_individual_url(self):
         """Check that the periods in file names do not get replaced by individual_url when
@@ -63,5 +54,4 @@ class PackagerTest(TestCase):
         packager = Packager()
         filename = os.path.join(settings.PIPELINE_ROOT, u'js/application.js')
         individual_url = packager.individual_url(filename)
-        self.assertEqual(individual_url,
-            "http://localhost/static/js/application.js")
+        self.assertEqual(individual_url, "/static/js/application.js")

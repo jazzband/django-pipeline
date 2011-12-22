@@ -1,3 +1,4 @@
+import os
 import urlparse
 
 from django.core.files.base import ContentFile
@@ -56,6 +57,10 @@ class Package(object):
     def manifest(self):
         return self.config.get('manifest', True)
 
+    @property
+    def absolute_paths(self):
+        return self.config.get('absolute_asset_paths', True)
+
 
 class Packager(object):
     def __init__(self, verbose=False, css_packages=None, js_packages=None):
@@ -88,8 +93,8 @@ class Packager(object):
             relative_url)
 
     def pack_stylesheets(self, package, **kwargs):
-        variant = package.get('variant', None)
-        absolute_asset_paths = package.get('absolute_asset_paths', True)
+        variant = package.variant
+        absolute_asset_paths = package.absolute_paths
         return self.pack(package, self.compressor.compress_css, css_compressed,
             variant=variant, absolute_asset_paths=absolute_asset_paths,
             **kwargs)

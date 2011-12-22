@@ -12,7 +12,7 @@ class StorageTest(TestCase):
                     'css/first.css',
                 ),
                 'manifest': False,
-                'output_filename': 'testing.r?.css',
+                'output_filename': 'testing.css',
             }   
         }
         self.storage = PipelineStorage()
@@ -28,7 +28,9 @@ class StorageTest(TestCase):
         ])
         self.assertEqual(processed_files, [
             'css/first.css',
-            'images/arrow.png'
+            'images/arrow.png',
+            'testing.css',
+            'scripts.css'
         ])
 
     def tearDown(self):

@@ -13,7 +13,7 @@ SITE_ID = 1
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sites',
-    'django.contrib.staticfiles',
+    'staticfiles',
     'django.contrib.auth',
     'django.contrib.admin',
     'pipeline',
@@ -31,8 +31,8 @@ STATICFILES_DIRS = (
     local_path('assets/'),
 )
 STATICFILES_FINDERS = (
-    'pipeline.finders.PipelineFinder',
-    'django.contrib.staticfiles.finders.FileSystemFinder'
+    'staticfiles.finders.FileSystemFinder',
+    'staticfiles.finders.AppDirectoriesFinder'
 )
 
 PIPELINE_ROOT = local_path('assets/')
