@@ -12,6 +12,11 @@ from pipeline.conf import settings
 
 
 class PipelineStorage(StaticFilesStorage):
+    def get_available_name(self, name):
+        if self.exists(name):
+            self.delete(name)
+        return name
+
     def post_process(self, paths, dry_run=False, **options):
         from pipeline.packager import Packager
         if dry_run:
