@@ -17,14 +17,13 @@ syntax to select multiples files.
 The basic syntax for specifying CSS/JavaScript groups files is ::
 
   PIPELINE_CSS = {
-      'group_one': {
+      'colors': {
           'source_filenames': (
-            'css/style.css',
-            'css/foo.css',
-            'css/button/*.css',
-            'css/bar.css'
+            'css/core.css',
+            'css/colors/*.css',
+            'css/layers.css'
           ),
-          'output_filename': 'css/one_compressed.css',
+          'output_filename': 'css/colors.css',
           'extra_context': {
               'media': 'screen,projection',
           },
@@ -33,15 +32,14 @@ The basic syntax for specifying CSS/JavaScript groups files is ::
   }
 
   PIPELINE_JS = {
-      'all': {
+      'stats': {
           'source_filenames': (
-            'js/jquery-1.2.3.js',
-            'js/jquery-preload.js',
-            'js/jquery.pngFix.js',
-            'js/my_script.js',
-            'js/my_other_script.js'
+            'js/jquery.js',
+            'js/d3.js',
+            'js/collections/*.js',
+            'js/application.js',
           ),
-          'output_filename': 'js/all_compressed.js',
+          'output_filename': 'js/stats.js',
       }
   }
 
@@ -74,7 +72,6 @@ Group options
   Allowed values are : ``None``, ``datauri`` or ``mhtml``.
   
   Defaults to ``None``.
-
 
 ``manifest``
 ............
