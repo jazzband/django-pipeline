@@ -26,7 +26,7 @@ class Package(object):
                         paths.append(str(path))
             self._sources = paths
         return self._sources
- 
+
     @property
     def paths(self):
         return [path for path in self.sources
@@ -38,7 +38,7 @@ class Package(object):
             if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
 
     @property
-    def output(self):
+    def output_filename(self):
         return self.config.get('output_filename')
 
     @property
@@ -59,7 +59,7 @@ class Package(object):
 
     @property
     def absolute_paths(self):
-        return self.config.get('absolute_asset_paths', True)
+        return self.config.get('absolute_paths', True)
 
 
 class Packager(object):
@@ -93,17 +93,15 @@ class Packager(object):
             relative_url)
 
     def pack_stylesheets(self, package, **kwargs):
-        variant = package.variant
-        absolute_asset_paths = package.absolute_paths
         return self.pack(package, self.compressor.compress_css, css_compressed,
-            variant=variant, absolute_asset_paths=absolute_asset_paths,
+            variant=package.variant, absolute_paths=package.absolute_paths,
             **kwargs)
 
     def compile(self, paths):
         return self.compiler.compile(paths)
 
     def pack(self, package, compress, signal, **kwargs):
-        output_filename = package.output
+        output_filename = package.output_filename
         if self.verbose:
             print "Saving: %s" % output_filename
         paths = self.compile(package.paths)

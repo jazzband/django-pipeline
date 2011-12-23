@@ -62,10 +62,10 @@ class Compressor(object):
         return js
 
     def compress_css(self, paths, variant=None, asset_url=None,
-                     absolute_asset_paths=True, **kwargs):
+                     absolute_paths=True, **kwargs):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, variant,
-                                           absolute_asset_paths)
+                                           absolute_paths)
         compressor = self.css_compressor
         if compressor:
             css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
@@ -117,8 +117,7 @@ class Compressor(object):
         ), r"\1", path)
         return re.sub(r"[\/\\]", "_", name)
 
-    def concatenate_and_rewrite(self, paths, variant=None,
-                                absolute_asset_paths=True):
+    def concatenate_and_rewrite(self, paths, variant=None, absolute_paths=True):
         """Concatenate together files and rewrite urls"""
         stylesheets = []
         for path in paths:
@@ -126,8 +125,8 @@ class Compressor(object):
                 asset_path = match.group(1)
                 if asset_path.startswith("http") or asset_path.startswith("//"):
                     return "url(%s)" % asset_path
-                asset_url = self.construct_asset_path(asset_path, path, variant,
-                                                      absolute_asset_paths)
+                asset_url = self.construct_asset_path(asset_path, path,
+                    variant, absolute_paths)
                 return "url(%s)" % asset_url
             content = self.read_file(path)
             content = re.sub(URL_DETECTOR, reconstruct, content)
@@ -138,13 +137,12 @@ class Compressor(object):
         """Concatenate together a list of files"""
         return '\n'.join([self.read_file(path) for path in paths])
 
-    def construct_asset_path(self, asset_path, css_path, variant=None,
-                             absolute_asset_paths=True):
+    def construct_asset_path(self, asset_path, css_path, variant=None, absolute_paths=True):
         """Return a rewritten asset URL for a stylesheet"""
         public_path = self.absolute_path(asset_path, os.path.dirname(css_path))
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
-        if not absolute_asset_paths:
+        if not absolute_paths:
             return asset_path
         if not os.path.isabs(asset_path):
             asset_path = self.relative_path(public_path)

@@ -92,7 +92,7 @@ Group options
   For CSS, if you do not specify ``extra_context``/``media``, the default media in
   the ``<link>`` output will be ``media="all"``.
 
-``absolute_asset_paths``
+``absolute_paths``
 ........................
 
   **Optional**

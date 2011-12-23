@@ -29,7 +29,7 @@ class CompressedCSSNode(template.Node):
             return ''  # fail silently, do not return anything if an invalid group is specified
 
         if settings.PIPELINE:
-            return self.render_css(package, package.output)
+            return self.render_css(package, package.output_filename)
         else:
             paths = self.packager.compile(package.paths)
             return self.render_individual(package, paths)
@@ -64,7 +64,7 @@ class CompressedJSNode(template.Node):
             return ''  # fail silently, do not return anything if an invalid group is specified
 
         if settings.PIPELINE:
-            return self.render_js(package, package.output)
+            return self.render_js(package, package.output_filename)
         else:
             paths = self.packager.compile(package.paths)
             templates = self.packager.pack_templates(package)

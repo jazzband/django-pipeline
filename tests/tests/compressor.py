@@ -95,11 +95,11 @@ class CompressorTest(TestCase):
     def test_construct_asset_path_relative(self):
         asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
             "css/plugins/gallery.css",
-            absolute_asset_paths=False)
+            absolute_paths=False)
         self.assertEquals(asset_path, "../../images/sprite.png")
         asset_path = self.compressor.construct_asset_path("/images/sprite.png",
             "css/plugins/gallery.css",
-            absolute_asset_paths=False)
+            absolute_paths=False)
         self.assertEquals(asset_path, "/images/sprite.png")
 
     def test_url_rewrite(self):
