@@ -9,6 +9,7 @@ from pipeline.compressors import Compressor
 from pipeline.glob import glob
 from pipeline.signals import css_compressed, js_compressed
 from pipeline.storage import storage
+from pipeline.utils import filepath_to_uri
 from pipeline.versioning import Versioning
 
 
@@ -39,9 +40,8 @@ class Packager(object):
 
     def individual_url(self, filename):
         relative_path = self.compressor.relative_path(filename)[1:]
-        relative_url = relative_path.replace(os.sep, '/')
         return urlparse.urljoin(settings.PIPELINE_URL,
-            relative_url)
+            filepath_to_uri(relative_path))
 
     def pack_stylesheets(self, package, **kwargs):
         variant = package.get('variant', None)

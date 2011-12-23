@@ -7,7 +7,7 @@ from itertools import takewhile
 
 from pipeline.conf import settings
 from pipeline.storage import storage
-from pipeline.utils import to_class, relpath
+from pipeline.utils import filepath_to_uri, to_class, relpath
 
 MAX_IMAGE_SIZE = 32700
 
@@ -112,13 +112,12 @@ class Compressor(object):
             path = os.path.basename(path)
         if path == base:
             base = os.path.dirname(path)
-        name = re.sub(r"^%s\/?(.*)%s$" % (
+        name = re.sub(r"^%s[\/\\]?(.*)%s$" % (
             re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
         ), r"\1", path)
         return re.sub(r"[\/\\]", "_", name)
 
-    def concatenate_and_rewrite(self, paths, variant=None,
-                                absolute_asset_paths=True):
+    def concatenate_and_rewrite(self, paths, variant=None, absolute_asset_paths=True):
         """Concatenate together files and rewrite urls"""
         stylesheets = []
         for path in paths:
@@ -126,8 +125,8 @@ class Compressor(object):
                 asset_path = match.group(1)
                 if asset_path.startswith("http") or asset_path.startswith("//"):
                     return "url(%s)" % asset_path
-                asset_url = self.construct_asset_path(asset_path, path, variant,
-                                                      absolute_asset_paths)
+                asset_url = self.construct_asset_path(asset_path, path,
+                    variant, absolute_asset_paths)
                 return "url(%s)" % asset_url
             content = self.read_file(path)
             content = re.sub(URL_DETECTOR, reconstruct, content)
@@ -138,8 +137,7 @@ class Compressor(object):
         """Concatenate together a list of files"""
         return '\n'.join([self.read_file(path) for path in paths])
 
-    def construct_asset_path(self, asset_path, css_path, variant=None,
-                             absolute_asset_paths=True):
+    def construct_asset_path(self, asset_path, css_path, variant=None, absolute_asset_paths=True):
         """Return a rewritten asset URL for a stylesheet"""
         public_path = self.absolute_path(asset_path, os.path.dirname(css_path))
         if self.embeddable(public_path, variant):
@@ -148,7 +146,7 @@ class Compressor(object):
             return asset_path
         if not os.path.isabs(asset_path):
             asset_path = self.relative_path(public_path)
-        asset_url = asset_path.replace(os.sep, '/')
+        asset_url = filepath_to_uri(asset_path)
         return settings.PIPELINE_URL + asset_url[1:]
 
     def embeddable(self, path, variant):
