@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1.26
+------
+
+* Fix unicode issue. Thanks to Adam Charnock.
 
 1.1.25
 ------
