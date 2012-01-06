@@ -87,10 +87,7 @@ class Packager(object):
             )
 
     def individual_url(self, filename):
-        relative_path = self.compressor.relative_path(filename)[1:]
-        relative_url = relative_path.replace(os.sep, '/')
-        return urlparse.urljoin(settings.PIPELINE_URL,
-            relative_url)
+        return storage.url(filename)
 
     def pack_stylesheets(self, package, **kwargs):
         return self.pack(package, self.compressor.compress_css, css_compressed,
