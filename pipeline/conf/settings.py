@@ -2,9 +2,6 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 
-PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.MEDIA_ROOT)
-PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.MEDIA_URL)
-
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
