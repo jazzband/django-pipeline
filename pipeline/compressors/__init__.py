@@ -19,6 +19,9 @@ MHTML_START = "/*\r\nContent-Type: multipart/related; boundary=\"MHTML_MARK\"\r\
 MHTML_SEPARATOR = "--MHTML_MARK\r\n"
 MHTML_END = "\r\n--MHTML_MARK--\r\n*/\r\n"
 
+DEFAULT_TEMPLATE_FUNC = "template"
+TEMPLATE_FUNC = """var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};"""
+
 MIME_TYPES = {
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
@@ -95,8 +98,10 @@ class Compressor(object):
                 settings.PIPELINE_TEMPLATE_FUNC,
                 contents
             )
+        compiler = TEMPLATE_FUNC if settings.PIPELINE_TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC else ""
         return "\n".join([
             "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
+            compiler,
             compiled
         ])
 

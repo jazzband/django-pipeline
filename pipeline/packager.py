@@ -1,6 +1,3 @@
-import os
-import urlparse
-
 from django.core.files.base import ContentFile
 
 from pipeline.conf import settings

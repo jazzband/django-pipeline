@@ -36,7 +36,6 @@ STATICFILES_FINDERS = (
 )
 
 PIPELINE_ROOT = local_path('assets/')
-PIPELINE_TEMPLATE_EXT = ".jst"
 
 TEMPLATE_DIRS = (
     local_path('templates'),

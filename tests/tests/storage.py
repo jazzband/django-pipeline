@@ -13,8 +13,10 @@ class StorageTest(TestCase):
                 ),
                 'manifest': False,
                 'output_filename': 'testing.css',
-            }   
+            }
         }
+        settings.PIPELINE_JS_COMPRESSOR = None
+        settings.PIPELINE_CSS_COMPRESSOR = None
         self.storage = PipelineStorage()
 
     def test_post_process_dry_run(self):

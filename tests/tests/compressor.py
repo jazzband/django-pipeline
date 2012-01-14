@@ -6,7 +6,7 @@ from mock import patch
 from django.test import TestCase
 
 from pipeline.conf import settings
-from pipeline.compressors import Compressor
+from pipeline.compressors import Compressor, TEMPLATE_FUNC
 from pipeline.compressors.yui import YUICompressor
 
 
@@ -26,14 +26,14 @@ class CompressorTest(TestCase):
             'css/first.css',
             'css/second.css'
         ])
-        self.assertEquals(""".concat {\n  display: none;\n}\n.concatenate {\n  display: block;\n}""", css)
+        self.assertEquals(""".concat {\n  display: none;\n}\n\n.concatenate {\n  display: block;\n}\n""", css)
 
     def test_concatenate(self):
         js = self.compressor.concatenate([
             'js/first.js',
             'js/second.js'
         ])
-        self.assertEquals("""function concat() {\n  console.log(arguments);\n}\nfunction cat() {\n  console.log("hello world");\n}""", js)
+        self.assertEquals("""function concat() {\n  console.log(arguments);\n}\n\nfunction cat() {\n  console.log("hello world");\n}\n""", js)
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):
@@ -71,12 +71,12 @@ class CompressorTest(TestCase):
 
     def test_compile_templates(self):
         templates = self.compressor.compile_templates(['templates/photo/list.jst'])
-        self.assertEquals(templates, """window.JST = window.JST || {};\nwindow.JST['list'] = _.template('<div class="photo"> <img src="<%= src %>" /> <div class="caption">  <%= caption %> </div></div>');\n""")
+        self.assertEquals(templates, """window.JST = window.JST || {};\n%s\nwindow.JST['list'] = template('<div class="photo"> <img src="<%%= src %%>" /> <div class="caption">  <%%= caption %%> </div></div>');\n""" % TEMPLATE_FUNC)
         templates = self.compressor.compile_templates([
             'templates/video/detail.jst',
             'templates/photo/detail.jst'
         ])
-        self.assertEqual(templates, """window.JST = window.JST || {};\nwindow.JST['video_detail'] = _.template('<div class="video"> <video src="<%= src %>" /> <div class="caption">  <%= description %> </div></div>');\nwindow.JST[\'photo_detail\'] = _.template(\'<div class="photo"> <img src="<%= src %>" /> <div class="caption">  <%= caption %> by <%= author %> </div></div>\');\n""")
+        self.assertEqual(templates, """window.JST = window.JST || {};\n%s\nwindow.JST['video_detail'] = template('<div class="video"> <video src="<%%= src %%>" /> <div class="caption">  <%%= description %%> </div></div>');\nwindow.JST[\'photo_detail\'] = template(\'<div class="photo"> <img src="<%%= src %%>" /> <div class="caption">  <%%= caption %%> by <%%= author %%> </div></div>\');\n""" % TEMPLATE_FUNC)
 
     def test_embeddable(self):
         self.assertFalse(self.compressor.embeddable('images/sprite.png', None))

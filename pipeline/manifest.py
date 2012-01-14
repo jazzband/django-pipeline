@@ -1,5 +1,3 @@
-import os
-
 try:
     from staticfiles.finders import DefaultStorageFinder
 except ImportError:
