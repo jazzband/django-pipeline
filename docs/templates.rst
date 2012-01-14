@@ -37,11 +37,9 @@ Configuration
 Template function
 .................
 
-By default, it use `underscore <http://documentcloud.github.com/underscore/>`_
-template function, but without providing it. You can specify your own template
-function via ``PIPELINE_TEMPLATE_FUNC`` ::
+By default, Pipeline uses a variant of `Micro Templating <http://ejohn.org/blog/javascript-micro-templating/>`_ to compile the templates, but you can choose your preferred JavaScript templating engine by changing ``PIPELINE_TEMPLATE_FUNC`` ::
 
-  PIPELINE_TEMPLATE_FUNC = 'new Template'
+  PIPELINE_TEMPLATE_FUNC = 'template'
 
 Template namespace
 ..................
