@@ -14,3 +14,4 @@ tests/static/
 tests/assets/js/dummy.js
 .tox/
 .DS_Store
+.idea
