@@ -3,7 +3,11 @@ import os
 
 from datetime import datetime
 
-from django.contrib.staticfiles import finders
+try:
+    from django.contrib.staticfiles import finders
+except ImportError:
+    from staticfiles import finders
+
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import FileSystemStorage, get_storage_class
 from django.utils.functional import LazyObject
