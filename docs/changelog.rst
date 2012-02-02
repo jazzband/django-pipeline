@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.27
+------
+
+* Improve windows support.
+* Add support for Django 1.2. Thanks to Balazs Kossovics.
+
 1.1.26
 ------
 
