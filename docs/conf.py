@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'django-pipeline'
-copyright = u'2011, Timothée Peignier'
+copyright = u'2011-2012, Timothée Peignier'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

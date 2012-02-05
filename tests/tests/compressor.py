@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 import base64
+import sys
 
 from mock import patch
 
 from django.test import TestCase
+try:
+    from django.utils import unittest
+except ImportError:
+    import unittest2 as unittest
 
 from pipeline.conf import settings
 from pipeline.compressors import Compressor, TEMPLATE_FUNC
@@ -68,6 +73,9 @@ class CompressorTest(TestCase):
         self.assertEquals(name, 'photo_detail')
         name = self.compressor.template_name('templates/photo_edit.jst', '')
         self.assertEquals(name, 'photo_edit')
+        name = self.compressor.template_name('templates\photo\detail.jst',
+            'templates\\')
+        self.assertEquals(name, 'photo_detail')
 
     def test_compile_templates(self):
         templates = self.compressor.compile_templates(['templates/photo/list.jst'])
@@ -92,6 +100,12 @@ class CompressorTest(TestCase):
             "css/plugins/gallery.css")
         self.assertEquals(asset_path, "images/sprite.png")
 
+    @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
+    def test_construct_asset_path_windows(self):
+        asset_path = self.compressor.construct_asset_path("\image\sprite.png",
+            "css\plugins\gallery.css")
+        self.assertEquals(asset_path, "http://localhost/static/images/sprite.png")
+
     def test_construct_asset_path_relative(self):
         asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
             "css/plugins/gallery.css",
@@ -103,11 +117,10 @@ class CompressorTest(TestCase):
         self.assertEquals(asset_path, "/images/sprite.png")
 
     def test_url_rewrite(self):
-        self.maxDiff = None
         output = self.compressor.concatenate_and_rewrite([
             'css/urls.css',
         ])
-        self.assertMultiLineEqual("""@font-face {
+        self.assertEquals("""@font-face {
   font-family: 'Pipeline';
   src: url(fonts/pipeline.eot);
   src: url(fonts/pipeline.eot?#iefix) format('embedded-opentype');
