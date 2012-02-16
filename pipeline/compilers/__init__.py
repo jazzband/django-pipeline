@@ -30,6 +30,15 @@ class Compiler(object):
                     paths[index] = new_path
         return paths
 
+    def get_uncompiled_css_rel(self, path):
+        for compiler in self.compilers:
+            compiler = compiler(self.verbose)
+
+            if compiler.match_file(path):
+                return compiler.uncompiled_css_rel
+
+        return CompilerBase.uncompiled_css_rel
+
     def output_path(self, path, extension):
         path = os.path.splitext(path)
         return '.'.join((path[0], extension))
@@ -47,6 +56,8 @@ class Compiler(object):
 
 
 class CompilerBase(object):
+    uncompiled_css_rel = 'stylesheet'
+
     def __init__(self, verbose):
         self.verbose = verbose
 

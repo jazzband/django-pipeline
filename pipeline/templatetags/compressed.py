@@ -36,8 +36,15 @@ class CompressedCSSNode(template.Node):
             package['template'] = "pipeline/css.html"
         if 'context' in package:
             context = package['context']
+
+        if settings.PIPELINE_AUTO:
+            rel = 'stylesheet'
+        else:
+            rel = self.packager.compiler.get_uncompiled_css_rel(path)
+
         context.update({
-            'url': self.packager.individual_url(path)
+            'url': self.packager.individual_url(path),
+            'rel': rel,
         })
         return render_to_string(package['template'], context)
 
