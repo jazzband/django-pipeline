@@ -36,9 +36,14 @@ class CompressedCSSNode(template.Node):
             package['template'] = "pipeline/css.html"
         if 'context' in package:
             context = package['context']
+        url = self.packager.individual_url(path)
         context.update({
-            'url': self.packager.individual_url(path)
+            'url': url
         })
+        if url.endswith('.less'):
+            context.update({
+                'rel': 'stylesheet/less'
+            })
         return render_to_string(package['template'], context)
 
     def render_individual(self, package):
