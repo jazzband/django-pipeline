@@ -18,7 +18,6 @@ Table Of Contents
    usage
    compressors
    compilers
-   versioning
    templates
    storages
    signals

@@ -19,6 +19,9 @@ MHTML_START = "/*\r\nContent-Type: multipart/related; boundary=\"MHTML_MARK\"\r\
 MHTML_SEPARATOR = "--MHTML_MARK\r\n"
 MHTML_END = "\r\n--MHTML_MARK--\r\n*/\r\n"
 
+DEFAULT_TEMPLATE_FUNC = "template"
+TEMPLATE_FUNC = """var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};"""
+
 MIME_TYPES = {
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
@@ -62,10 +65,10 @@ class Compressor(object):
         return js
 
     def compress_css(self, paths, variant=None, asset_url=None,
-                     absolute_asset_paths=True, **kwargs):
+                     absolute_paths=True, **kwargs):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, variant,
-                                           absolute_asset_paths)
+                                           absolute_paths)
         compressor = self.css_compressor
         if compressor:
             css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
@@ -95,8 +98,10 @@ class Compressor(object):
                 settings.PIPELINE_TEMPLATE_FUNC,
                 contents
             )
+        compiler = TEMPLATE_FUNC if settings.PIPELINE_TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC else ""
         return "\n".join([
             "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
+            compiler,
             compiled
         ])
 
@@ -117,7 +122,7 @@ class Compressor(object):
         ), r"\1", path)
         return re.sub(r"[\/\\]", "_", name)
 
-    def concatenate_and_rewrite(self, paths, variant=None, absolute_asset_paths=True):
+    def concatenate_and_rewrite(self, paths, variant=None, absolute_paths=True):
         """Concatenate together files and rewrite urls"""
         stylesheets = []
         for path in paths:
@@ -126,7 +131,7 @@ class Compressor(object):
                 if asset_path.startswith("http") or asset_path.startswith("//"):
                     return "url(%s)" % asset_path
                 asset_url = self.construct_asset_path(asset_path, path,
-                    variant, absolute_asset_paths)
+                    variant, absolute_paths)
                 return "url(%s)" % asset_url
             content = self.read_file(path)
             content = re.sub(URL_DETECTOR, reconstruct, content)
@@ -137,17 +142,16 @@ class Compressor(object):
         """Concatenate together a list of files"""
         return '\n'.join([self.read_file(path) for path in paths])
 
-    def construct_asset_path(self, asset_path, css_path, variant=None, absolute_asset_paths=True):
+    def construct_asset_path(self, asset_path, css_path, variant=None, absolute_paths=True):
         """Return a rewritten asset URL for a stylesheet"""
         public_path = self.absolute_path(asset_path, os.path.dirname(css_path))
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
-        if not absolute_asset_paths:
+        if not absolute_paths:
             return asset_path
         if not os.path.isabs(asset_path):
             asset_path = self.relative_path(public_path)
-        asset_url = filepath_to_uri(asset_path)
-        return settings.PIPELINE_URL + asset_url[1:]
+        return asset_path[1:]
 
     def embeddable(self, path, variant):
         """Is the asset embeddable ?"""

@@ -6,37 +6,6 @@ Usage
 
 Describes how to use Pipeline when it is installed and configured.
 
-Automated generation
-====================
-
-If ``PIPELINE`` and ``PIPELINE_AUTO`` is enabled (``True``), the source files
-will be automatically updated, and re-generated if needed when invoked from the
-templatetags.
-The last modified time of the files will be compared, and if any of the
-source-files is newer than the output-file, the file will be re-generated.
-
-Management command
-==================
-
-You can update and force updates of the compressed file(s) with the management command “synccompress”.
-This makes it possible to keep the files updated manually.
-
-The command is (assuming you are in you project-folder that contains ``manage.py``) ::
-
-    ./manage.py synccompress
-
-To force all files to be re-generated, use the argument ``--force`` :: 
-  
-    ./manage.py synccompress --force
-
-To re-generate only a specific group ::
-
-	./manage.py synccompress screen
-
-To re-generate only specific groups ::
-
-	./manage.py synccompress screen print
-
 Templatetags
 ============
 
@@ -61,9 +30,20 @@ If you have specified the CSS-groups “screen” and “print” and a JavaScri
 with the name “scripts”, you would use the following code to output them all ::
 
    {% load compressed %}
-   {% compressed_css 'screen' %}
-   {% compressed_css 'print' %}
-   {% compressed_js 'scripts' %}
+   {% compressed_css 'colors' %}
+   {% compressed_js 'stats' %}
+
+
+Collect static
+==============
+
+Pipeline integrates with staticfiles, you just need to setup ``STATICFILES_STORAGE`` to ::
+
+    STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+    
+Then when you run ``collectstatic`` command, your CSS and your javascripts will be compressed in the same time ::
+
+    $ python oslo/manage.py collectstatic
 
 
 Middleware

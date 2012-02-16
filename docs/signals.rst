@@ -20,9 +20,7 @@ css_compressed
 		
 		:package:
 			The package actually compressed.
-		
-		:version:
-			The version identifier if the newly compressed file.
+
 
 js_compressed
 --------------
@@ -38,6 +36,3 @@ js_compressed
 		
 		:package:
 			The package actually compressed.
-		
-		:version:
-			The version identifier if the newly compressed file. 

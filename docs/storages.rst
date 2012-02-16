@@ -7,8 +7,8 @@ Storages
 Using with a custom storage
 ===========================
 
-Pipeline use `Django Storage <https://docs.djangoproject.com/en/dev/ref/files/storage/>`_
-to read, save and delete files, by default it use an improved ``FileSystemStorage``.
+Pipeline use `Django Storage <https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#storages>`_
+to read, save and delete files, by default it use an improved ``StaticFilesStorage``.
 
 You can provide your own via ``PIPELINE_STORAGE`` : ::
 
@@ -18,18 +18,14 @@ You can provide your own via ``PIPELINE_STORAGE`` : ::
 Using with staticfiles
 ======================
 
-Pipeline is providing a Finder for `staticfiles app <https://docs.djangoproject.com/en/dev/howto/static-files/>`_,
-to use it configure ``STATICFILES_FINDERS`` like so : ::
+Pipeline is providing a storage for `staticfiles app <https://docs.djangoproject.com/en/dev/howto/static-files/>`_,
+to use it configure ``STATICFILES_STORAGE`` like so ::
 
-  STATICFILES_FINDERS = (
-    'pipeline.finders.PipelineFinder',
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
-  )
+  STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+  
+And if you want versioning use ::
 
-
-.. note::
-	``PipelineFinder`` should be the first finder in ``STATICFILES_FINDERS``.
+  STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 Pipeline is also providing a storage that play nicely with staticfiles app
 particularly for development : ::

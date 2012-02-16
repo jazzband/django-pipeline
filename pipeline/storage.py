@@ -1,54 +1,46 @@
-import errno
-import os
-
-from datetime import datetime
-
 try:
-    from django.contrib.staticfiles import finders
-except ImportError:
     from staticfiles import finders
+    from staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
+except ImportError:
+    from django.contrib.staticfiles import finders
+    from django.contrib.staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
 
 from django.core.exceptions import ImproperlyConfigured
-from django.core.files.storage import FileSystemStorage, get_storage_class
+from django.core.files.storage import get_storage_class
 from django.utils.functional import LazyObject
 
 from pipeline.conf import settings
 
 
-class PipelineStorage(FileSystemStorage):
-    def __init__(self, location=None, base_url=None, *args, **kwargs):
-        if location is None:
-            location = settings.PIPELINE_ROOT
-        if base_url is None:
-            base_url = settings.PIPELINE_URL
-        super(PipelineStorage, self).__init__(location, base_url, *args, **kwargs)
-
-    def accessed_time(self, name):
-        return datetime.fromtimestamp(os.path.getatime(self.path(name)))
-
-    def created_time(self, name):
-        return datetime.fromtimestamp(os.path.getctime(self.path(name)))
-
-    def modified_time(self, name):
-        return datetime.fromtimestamp(os.path.getmtime(self.path(name)))
-
+class PipelineStorage(StaticFilesStorage):
     def get_available_name(self, name):
         if self.exists(name):
             self.delete(name)
         return name
 
-    def _open(self, name, mode='rb'):
-        full_path = self.path(name)
-        directory = os.path.dirname(full_path)
-        if not os.path.exists(directory):
-            try:
-                os.makedirs(directory)
-            except OSError, e:
-                if e.errno != errno.EEXIST:
-                    raise
-        if not os.path.isdir(directory):
-            raise IOError("%s exists and is not a directory." % directory)
-        return super(PipelineStorage, self)._open(name, mode)
+    def post_process(self, paths, dry_run=False, **options):
+        from pipeline.packager import Packager
+        if dry_run:
+            return []
+
+        packager = Packager()
+        for package_name in packager.packages['css']:
+            package = packager.package_for('css', package_name)
+            output_file = packager.pack_stylesheets(package)
+            paths.append(output_file)
+        for package_name in packager.packages['js']:
+            package = packager.package_for('js', package_name)
+            output_file = packager.pack_javascripts(package)
+            paths.append(output_file)
+
+        super_class = super(PipelineStorage, self)
+        if hasattr(super_class, 'post_process'):
+            return super_class.post_process(paths, dry_run, **options)
+        return paths
+
+
+class PipelineCachedStorage(PipelineStorage, CachedStaticFilesStorage):
+    pass
 
 
 class BaseFinderStorage(PipelineStorage):
