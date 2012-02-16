@@ -10,3 +10,4 @@ Changelog
  * Dropped ``PIPELINE_AUTO`` settings in favor of simple ``PIPELINE``.
  * Renamed ``absolute_asset_paths`` to ``absolute_paths`` for brevity.
  * Made packages lazy to avoid doing unnecessary I/O. 
+ * Dropped ``external_urls`` support for now.
