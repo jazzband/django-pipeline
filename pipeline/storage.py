@@ -27,11 +27,11 @@ class PipelineStorage(StaticFilesStorage):
         for package_name in packager.packages['css']:
             package = packager.package_for('css', package_name)
             output_file = packager.pack_stylesheets(package)
-            paths.append(output_file)
+            paths[output_file] = (self, output_file)
         for package_name in packager.packages['js']:
             package = packager.package_for('js', package_name)
             output_file = packager.pack_javascripts(package)
-            paths.append(output_file)
+            paths[output_file] = (self, output_file)
 
         super_class = super(PipelineStorage, self)
         if hasattr(super_class, 'post_process'):
