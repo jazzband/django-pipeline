@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.utils.datastructures import SortedDict
 
 from pipeline.conf import settings
 from pipeline.storage import PipelineStorage
@@ -24,11 +25,11 @@ class StorageTest(TestCase):
         self.assertEqual(processed_files, [])
 
     def test_post_process(self):
-        processed_files = self.storage.post_process([
-            'css/first.css',
-            'images/arrow.png'
-        ])
-        self.assertEqual(processed_files, [
+        processed_files = self.storage.post_process(SortedDict({
+            'css/first.css': (self.storage, 'css/first.css'),
+            'images/arrow.png': (self.storage, 'images/arrow.png')
+        }))
+        self.assertEqual(processed_files.keys(), [
             'css/first.css',
             'images/arrow.png',
             'testing.css',

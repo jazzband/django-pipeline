@@ -1,24 +1,18 @@
 # -*- coding: utf-8 -*-
 import base64
-import sys
 
 from mock import patch
 
 from django.test import TestCase
-try:
-    from django.utils import unittest
-except ImportError:
-    import unittest2 as unittest
 
-from pipeline.conf import settings
 from pipeline.compressors import Compressor, TEMPLATE_FUNC
 from pipeline.compressors.yui import YUICompressor
+from pipeline.storage import storage
 
 
 class CompressorTest(TestCase):
     def setUp(self):
         self.compressor = Compressor()
-        self.old_pipeline_root = settings.PIPELINE_ROOT
 
     def test_js_compressor_class(self):
         self.assertEquals(self.compressor.js_compressor, YUICompressor)
@@ -49,8 +43,7 @@ class CompressorTest(TestCase):
         self.assertFalse(mock.called)
 
     def test_relative_path(self):
-        settings.PIPELINE_ROOT = '/var/www/static/'
-        relative_path = self.compressor.relative_path('/var/www/static/images/sprite.png')
+        relative_path = self.compressor.relative_path("%s/images/sprite.png" % storage.location)
         self.assertEquals(relative_path, '/images/sprite.png')
 
     def test_base_path(self):
@@ -100,12 +93,6 @@ class CompressorTest(TestCase):
             "css/plugins/gallery.css")
         self.assertEquals(asset_path, "images/sprite.png")
 
-    @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
-    def test_construct_asset_path_windows(self):
-        asset_path = self.compressor.construct_asset_path("\image\sprite.png",
-            "css\plugins\gallery.css")
-        self.assertEquals(asset_path, "http://localhost/static/images/sprite.png")
-
     def test_construct_asset_path_relative(self):
         asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
             "css/plugins/gallery.css",
@@ -140,6 +127,3 @@ class CompressorTest(TestCase):
 .no-protocol-url {
   background-image: url(//images/sprite-buttons.png);
 }""", output)
-
-    def tearDown(self):
-        settings.PIPELINE_ROOT = self.old_pipeline_root

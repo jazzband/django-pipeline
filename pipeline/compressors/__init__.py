@@ -217,15 +217,15 @@ class Compressor(object):
         given the path of the stylesheet that contains it.
         """
         if os.path.isabs(path):
-            path = os.path.join(settings.PIPELINE_ROOT, path)
+            path = os.path.join(storage.location, path)
         else:
             path = os.path.join(start, path)
         return os.path.normpath(path)
 
     def relative_path(self, absolute_path):
         """Rewrite paths relative to the output stylesheet path"""
-        absolute_path = self.absolute_path(absolute_path, settings.PIPELINE_ROOT)
-        return os.path.join(os.sep, relpath(absolute_path, settings.PIPELINE_ROOT))
+        absolute_path = self.absolute_path(absolute_path, storage.location)
+        return os.path.join(os.sep, relpath(absolute_path, storage.location))
 
     def read_file(self, path):
         """Read file content in binary mode"""
