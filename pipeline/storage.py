@@ -38,7 +38,11 @@ class PipelineStorage(StaticFilesStorage):
         super_class = super(PipelineStorage, self)
         if hasattr(super_class, 'post_process'):
             return super_class.post_process(paths, dry_run, **options)
-        return paths
+
+        return [
+            (path, path, True)
+            for path in paths
+        ]
 
 
 class PipelineCachedStorage(PipelineStorage, CachedStaticFilesStorage):

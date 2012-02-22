@@ -29,11 +29,11 @@ class StorageTest(TestCase):
             'css/first.css': (self.storage, 'css/first.css'),
             'images/arrow.png': (self.storage, 'images/arrow.png')
         }))
-        self.assertEqual(processed_files.keys(), [
-            'css/first.css',
-            'images/arrow.png',
-            'testing.css',
-            'scripts.css'
+        self.assertEqual(processed_files, [
+            ('css/first.css', 'css/first.css', True),
+            ('images/arrow.png', 'images/arrow.png', True),
+            ('testing.css', 'testing.css', True),
+            ('scripts.css', 'scripts.css', True)
         ])
 
     def tearDown(self):
