@@ -1,3 +1,5 @@
+import os
+
 try:
     from staticfiles import finders
     from staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
@@ -65,6 +67,20 @@ class BaseFinderStorage(PipelineStorage):
             exists = super(BaseFinderStorage, self).exists(name)
         return exists
 
+    def listdir(self, path):
+        for finder in finders.get_finders():
+            for storage in finder.storages.values():
+                try:
+                    return storage.listdir(path)
+                except OSError:
+                    pass
+
+    def _save(self, name, content):
+        for finder in finders.get_finders():
+            for path, storage in finder.list([]):
+                if os.path.dirname(name) in path:
+                    return storage._save(name, content)
+
 
 class PipelineFinderStorage(BaseFinderStorage):
     finders = finders
@@ -75,4 +91,4 @@ class DefaultStorage(LazyObject):
         self._wrapped = get_storage_class(settings.PIPELINE_STORAGE)()
 
 
-storage = DefaultStorage()
+default_storage = DefaultStorage()

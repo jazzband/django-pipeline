@@ -6,8 +6,8 @@ import subprocess
 from itertools import takewhile
 
 from pipeline.conf import settings
-from pipeline.storage import storage
-from pipeline.utils import filepath_to_uri, to_class, relpath
+from pipeline.storage import default_storage
+from pipeline.utils import to_class, relpath
 
 MAX_IMAGE_SIZE = 32700
 
@@ -159,7 +159,7 @@ class Compressor(object):
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not (re.search(EMBEDDABLE, path) and storage.exists(path)):
+        if not (re.search(EMBEDDABLE, path) and default_storage.exists(path)):
             return False
         if not ext in EMBED_EXTS:
             return False
@@ -217,19 +217,19 @@ class Compressor(object):
         given the path of the stylesheet that contains it.
         """
         if os.path.isabs(path):
-            path = os.path.join(storage.location, path)
+            path = os.path.join(default_storage.location, path)
         else:
             path = os.path.join(start, path)
         return os.path.normpath(path)
 
     def relative_path(self, absolute_path):
         """Rewrite paths relative to the output stylesheet path"""
-        absolute_path = self.absolute_path(absolute_path, storage.location)
-        return os.path.join(os.sep, relpath(absolute_path, storage.location))
+        absolute_path = self.absolute_path(absolute_path, default_storage.location)
+        return os.path.join(os.sep, relpath(absolute_path, default_storage.location))
 
     def read_file(self, path):
         """Read file content in binary mode"""
-        file = storage.open(path, 'rb')
+        file = default_storage.open(path, 'rb')
         content = file.read()
         file.close()
         return content

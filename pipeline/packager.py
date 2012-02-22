@@ -6,7 +6,7 @@ from pipeline.compilers import Compiler
 from pipeline.compressors import Compressor
 from pipeline.glob import glob
 from pipeline.signals import css_compressed, js_compressed
-from pipeline.storage import storage
+from pipeline.storage import default_storage
 
 
 class Package(object):
@@ -85,7 +85,7 @@ class Packager(object):
             )
 
     def individual_url(self, filename):
-        return storage.url(filename)
+        return default_storage.url(filename)
 
     def pack_stylesheets(self, package, **kwargs):
         return self.pack(package, self.compressor.compress_css, css_compressed,
@@ -113,7 +113,7 @@ class Packager(object):
         return self.compressor.compile_templates(package.templates)
 
     def save_file(self, path, content):
-        return storage.save(path, ContentFile(smart_str(content)))
+        return default_storage.save(path, ContentFile(smart_str(content)))
 
     def create_packages(self, config):
         packages = {}

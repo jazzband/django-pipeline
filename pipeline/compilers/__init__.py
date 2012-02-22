@@ -1,8 +1,11 @@
 import os
 import subprocess
 
+from django.core.files.base import ContentFile
+from django.utils.encoding import smart_str
+
 from pipeline.conf import settings
-from pipeline.storage import storage
+from pipeline.storage import default_storage
 from pipeline.utils import to_class
 
 
@@ -22,10 +25,10 @@ class Compiler(object):
                     new_path = self.output_path(path, compiler.output_extension)
                     content = self.read_file(path)
                     try:
-                        compiled_content = compiler.compile_file(content, storage.path(path))
+                        compiled_content = compiler.compile_file(content, default_storage.path(path))
                         self.save_file(new_path, compiled_content)
                     except CompilerError:
-                        if not storage.exists(new_path) or not settings.PIPELINE:
+                        if not default_storage.exists(new_path) or not settings.PIPELINE:
                             raise
                     paths[index] = new_path
         return paths
@@ -35,15 +38,13 @@ class Compiler(object):
         return '.'.join((path[0], extension))
 
     def read_file(self, path):
-        file = storage.open(path, 'rb')
+        file = default_storage.open(path, 'rb')
         content = file.read()
         file.close()
         return content
 
     def save_file(self, path, content):
-        file = storage.open(path, 'wb')
-        file.write(content)
-        file.close()
+        return default_storage.save(path, ContentFile(smart_str(content)))
 
 
 class CompilerBase(object):
@@ -57,10 +58,7 @@ class CompilerBase(object):
         raise NotImplementedError
 
     def save_file(self, path, content):
-        file = storage.open(path, 'wb')
-        file.write(content)
-        file.close()
-        return path
+        return default_storage.save(path, ContentFile(smart_str(content)))
 
 
 class CompilerError(Exception):

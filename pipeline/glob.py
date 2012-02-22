@@ -2,7 +2,7 @@ import os
 import re
 import fnmatch
 
-from pipeline.storage import storage
+from pipeline.storage import default_storage
 
 __all__ = ["glob", "iglob"]
 
@@ -49,7 +49,7 @@ def iglob(pathname):
 
 def glob1(dirname, pattern):
     try:
-        directories, files = storage.listdir(dirname)
+        directories, files = default_storage.listdir(dirname)
         names = directories + files
     except NotImplementedError:
         return []
@@ -59,7 +59,7 @@ def glob1(dirname, pattern):
 
 
 def glob0(dirname, basename):
-    if storage.exists(os.path.join(dirname, basename)):
+    if default_storage.exists(os.path.join(dirname, basename)):
         return [basename]
     return []
 
