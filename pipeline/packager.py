@@ -61,10 +61,11 @@ class Package(object):
 
 
 class Packager(object):
-    def __init__(self, verbose=False, css_packages=None, js_packages=None):
+    def __init__(self, storage=default_storage, verbose=False, css_packages=None, js_packages=None):
+        self.storage = storage
         self.verbose = verbose
-        self.compressor = Compressor(verbose)
-        self.compiler = Compiler(verbose)
+        self.compressor = Compressor(storage=storage, verbose=verbose)
+        self.compiler = Compiler(storage=storage, verbose=verbose)
         if css_packages is None:
             css_packages = settings.PIPELINE_CSS
         if js_packages is None:
@@ -85,7 +86,7 @@ class Packager(object):
             )
 
     def individual_url(self, filename):
-        return default_storage.url(filename)
+        return self.storage.url(filename)
 
     def pack_stylesheets(self, package, **kwargs):
         return self.pack(package, self.compressor.compress_css, css_compressed,
@@ -113,7 +114,7 @@ class Packager(object):
         return self.compressor.compile_templates(package.templates)
 
     def save_file(self, path, content):
-        return default_storage.save(path, ContentFile(smart_str(content)))
+        return self.storage.save(path, ContentFile(smart_str(content)))
 
     def create_packages(self, config):
         packages = {}

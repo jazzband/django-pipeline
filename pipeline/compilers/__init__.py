@@ -10,7 +10,8 @@ from pipeline.utils import to_class
 
 
 class Compiler(object):
-    def __init__(self, verbose=False):
+    def __init__(self, storage=default_storage, verbose=False):
+        self.storage = storage
         self.verbose = verbose
 
     def compilers(self):
@@ -25,10 +26,10 @@ class Compiler(object):
                     new_path = self.output_path(path, compiler.output_extension)
                     content = self.read_file(path)
                     try:
-                        compiled_content = compiler.compile_file(content, default_storage.path(path))
+                        compiled_content = compiler.compile_file(content, self.storage.path(path))
                         self.save_file(new_path, compiled_content)
                     except CompilerError:
-                        if not default_storage.exists(new_path) or not settings.PIPELINE:
+                        if not self.storage.exists(new_path) or not settings.PIPELINE:
                             raise
                     paths[index] = new_path
         return paths
@@ -38,13 +39,13 @@ class Compiler(object):
         return '.'.join((path[0], extension))
 
     def read_file(self, path):
-        file = default_storage.open(path, 'rb')
+        file = self.storage.open(path, 'rb')
         content = file.read()
         file.close()
         return content
 
     def save_file(self, path, content):
-        return default_storage.save(path, ContentFile(smart_str(content)))
+        return self.storage.save(path, ContentFile(smart_str(content)))
 
 
 class CompilerBase(object):
@@ -56,9 +57,6 @@ class CompilerBase(object):
 
     def compile_file(self, content, path):
         raise NotImplementedError
-
-    def save_file(self, path, content):
-        return default_storage.save(path, ContentFile(smart_str(content)))
 
 
 class CompilerError(Exception):

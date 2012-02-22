@@ -25,7 +25,7 @@ class PipelineStorage(StaticFilesStorage):
         if dry_run:
             return []
 
-        packager = Packager()
+        packager = Packager(storage=self)
         for package_name in packager.packages['css']:
             package = packager.package_for('css', package_name)
             output_file = packager.pack_stylesheets(package)

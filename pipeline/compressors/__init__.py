@@ -6,8 +6,8 @@ import subprocess
 from itertools import takewhile
 
 from pipeline.conf import settings
-from pipeline.storage import default_storage
 from pipeline.utils import to_class, relpath
+from pipeline.storage import default_storage
 
 MAX_IMAGE_SIZE = 32700
 
@@ -40,7 +40,8 @@ FONT_EXTS = ['.ttf', '.otf', '.woff']
 class Compressor(object):
     asset_contents = {}
 
-    def __init__(self, verbose=False):
+    def __init__(self, storage=default_storage, verbose=False):
+        self.storage = storage
         self.verbose = verbose
 
     def js_compressor(self):
@@ -159,7 +160,7 @@ class Compressor(object):
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not (re.search(EMBEDDABLE, path) and default_storage.exists(path)):
+        if not (re.search(EMBEDDABLE, path) and self.storage.exists(path)):
             return False
         if not ext in EMBED_EXTS:
             return False
