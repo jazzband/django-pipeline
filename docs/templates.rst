@@ -5,9 +5,9 @@ Javascript Templates
 ====================
 
 Pipeline allows you to use javascript templates along with your javascript views.
-To use your javascript templates, just add them to your ``COMPRESS_JS`` group ::
+To use your javascript templates, just add them to your ``PIPELINE_JS`` group ::
 
-  COMPRESS_JS = {
+  PIPELINE_JS = {
     'application': {
       'source_filenames': (
         'js/application.js',
