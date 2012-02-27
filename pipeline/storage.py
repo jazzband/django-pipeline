@@ -49,7 +49,7 @@ class PipelineStorage(PipelineMixin, StaticFilesStorage):
     pass
 
 
-class PipelineCachedStorage(CachedFilesMixin, PipelineStorage):
+class PipelineCachedStorage(PipelineMixin, CachedFilesMixin, StaticFilesStorage):
     pass
 
 
