@@ -101,8 +101,7 @@ class Packager(object):
         if self.verbose:
             print "Saving: %s" % output_filename
         paths = self.compile(package.paths)
-        content = compress(paths,
-            asset_url=self.individual_url(output_filename), **kwargs)
+        content = compress(paths, **kwargs)
         self.save_file(output_filename, content)
         signal.send(sender=self, package=package, **kwargs)
         return output_filename

@@ -67,8 +67,8 @@ Group options
   **Optional**
   
   Is the variant you want to apply to your CSS. This allow you to embed images
-  and fonts in CSS with data-URI or MHTML.
-  Allowed values are : ``None``, ``datauri`` or ``mhtml``.
+  and fonts in CSS with data-URI.
+  Allowed values are : ``None`` and ``datauri``.
   
   Defaults to ``None``.
 
@@ -182,7 +182,7 @@ Embedding fonts and images
 ==========================
 
 You can embed fonts and images directly in your compiled css, using Data-URI in 
-modern browser or MHTML in Internet Explorer 7 or below. 
+modern browser. 
 
 To do so, setup variant group options to the method you wish to use : ::
 
