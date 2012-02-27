@@ -2,10 +2,10 @@ import os
 
 try:
     from staticfiles import finders
-    from staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
+    from staticfiles.storage import CachedFilesMixin, StaticFilesStorage
 except ImportError:
     from django.contrib.staticfiles import finders
-    from django.contrib.staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
+    from django.contrib.staticfiles.storage import CachedFilesMixin, StaticFilesStorage
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class
@@ -14,17 +14,12 @@ from django.utils.functional import LazyObject
 from pipeline.conf import settings
 
 
-class PipelineStorage(StaticFilesStorage):
-    def get_available_name(self, name):
-        if self.exists(name):
-            self.delete(name)
-        return name
-
+class PipelineMixin(object):
     def post_process(self, paths, dry_run=False, **options):
-        from pipeline.packager import Packager
         if dry_run:
             return []
 
+        from pipeline.packager import Packager
         packager = Packager(storage=self)
         for package_name in packager.packages['css']:
             package = packager.package_for('css', package_name)
@@ -35,7 +30,7 @@ class PipelineStorage(StaticFilesStorage):
             output_file = packager.pack_javascripts(package)
             paths[output_file] = (self, output_file)
 
-        super_class = super(PipelineStorage, self)
+        super_class = super(PipelineMixin, self)
         if hasattr(super_class, 'post_process'):
             return super_class.post_process(paths, dry_run, **options)
 
@@ -44,20 +39,18 @@ class PipelineStorage(StaticFilesStorage):
             for path in paths
         ]
 
+    def get_available_name(self, name):
+        if self.exists(name):
+            self.delete(name)
+        return name
 
-class PipelineCachedStorage(PipelineStorage, CachedStaticFilesStorage):
-    def post_process(self, paths, dry_run=False, **options):
-        from pipeline.packager import Packager
-        
-        packager = Packager(storage=self)
-        if dry_run:
-            for asset_type in ['css', 'js']:
-                for package_name in packager.packages[asset_type]:
-                    package = packager.package_for('js', package_name)
-                    paths[package.output_filename] = (self, package.output_filename)
-            self.cache.delete_many([self.cache_key(path) for path in paths])
-            return []
-        return super(PipelineCachedStorage, self).post_process(paths, dry_run, **options)
+
+class PipelineStorage(PipelineMixin, StaticFilesStorage):
+    pass
+
+
+class PipelineCachedStorage(CachedFilesMixin, PipelineStorage):
+    pass
 
 
 class BaseFinderStorage(PipelineStorage):
