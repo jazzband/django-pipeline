@@ -1,7 +1,7 @@
 try:
     from staticfiles.finders import DefaultStorageFinder
 except ImportError:
-    from django.contrib.staticfiles.storage import DefaultStorageFinder
+    from django.contrib.staticfiles.storage import DefaultStorageFinder # noqa
 
 from django.conf import settings
 

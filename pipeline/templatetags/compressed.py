@@ -1,7 +1,7 @@
 try:
     from staticfiles.storage import staticfiles_storage
 except ImportError:
-    from django.contrib.staticfiles.storage import staticfiles_storage
+    from django.contrib.staticfiles.storage import staticfiles_storage # noqa
 
 from django import template
 from django.template.loader import render_to_string
