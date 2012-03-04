@@ -7,7 +7,6 @@ from django.test import TestCase
 
 from pipeline.compressors import Compressor, TEMPLATE_FUNC
 from pipeline.compressors.yui import YUICompressor
-from pipeline.storage import default_storage as storage
 
 
 class CompressorTest(TestCase):
