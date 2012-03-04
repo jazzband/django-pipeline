@@ -5,8 +5,13 @@ import subprocess
 
 from itertools import takewhile
 
+try:
+    from staticfiles import finders
+except ImportError:
+    from django.contrib.staticfiles import finders # noqa
+
 from pipeline.conf import settings
-from pipeline.utils import to_class, relpath
+from pipeline.utils import to_class
 from pipeline.storage import default_storage
 
 MAX_IMAGE_SIZE = 32700
@@ -61,10 +66,9 @@ class Compressor(object):
 
         return js
 
-    def compress_css(self, paths, variant=None, absolute_paths=True, **kwargs):
+    def compress_css(self, paths, output_filename, variant=None, **kwargs):
         """Concatenate and compress CSS files"""
-        css = self.concatenate_and_rewrite(paths, variant,
-                                           absolute_paths)
+        css = self.concatenate_and_rewrite(paths, output_filename, variant)
         compressor = self.css_compressor
         if compressor:
             css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
@@ -116,7 +120,7 @@ class Compressor(object):
         ), r"\1", path)
         return re.sub(r"[\/\\]", "_", name)
 
-    def concatenate_and_rewrite(self, paths, variant=None, absolute_paths=True):
+    def concatenate_and_rewrite(self, paths, output_filename, variant=None):
         """Concatenate together files and rewrite urls"""
         stylesheets = []
         for path in paths:
@@ -125,7 +129,7 @@ class Compressor(object):
                 if asset_path.startswith("http") or asset_path.startswith("//"):
                     return "url(%s)" % asset_path
                 asset_url = self.construct_asset_path(asset_path, path,
-                    variant, absolute_paths)
+                    output_filename, variant)
                 return "url(%s)" % asset_url
             content = self.read_file(path)
             content = re.sub(URL_DETECTOR, reconstruct, content)
@@ -136,16 +140,14 @@ class Compressor(object):
         """Concatenate together a list of files"""
         return '\n'.join([self.read_file(path) for path in paths])
 
-    def construct_asset_path(self, asset_path, css_path, variant=None, absolute_paths=True):
+    def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
         public_path = self.absolute_path(asset_path, os.path.dirname(css_path))
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
-        if not absolute_paths:
-            return asset_path
         if not os.path.isabs(asset_path):
-            asset_path = self.relative_path(public_path)
-        return asset_path[1:]
+            asset_path = self.relative_path(public_path, output_filename)
+        return asset_path
 
     def embeddable(self, path, variant):
         """Is the asset embeddable ?"""
@@ -193,10 +195,11 @@ class Compressor(object):
             path = os.path.join(start, path)
         return os.path.normpath(path)
 
-    def relative_path(self, absolute_path):
+    def relative_path(self, absolute_path, output_filename):
         """Rewrite paths relative to the output stylesheet path"""
-        absolute_path = self.absolute_path(absolute_path, default_storage.location)
-        return os.path.join(os.sep, relpath(absolute_path, default_storage.location))
+        absolute_path = os.path.join(settings.PIPELINE_ROOT, absolute_path)
+        output_path = os.path.join(settings.PIPELINE_ROOT, os.path.dirname(output_filename))
+        return os.path.relpath(absolute_path, output_path)
 
     def read_file(self, path):
         """Read file content in binary mode"""

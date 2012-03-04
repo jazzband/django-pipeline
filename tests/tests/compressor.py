@@ -24,7 +24,7 @@ class CompressorTest(TestCase):
         css = self.compressor.concatenate_and_rewrite([
             'css/first.css',
             'css/second.css'
-        ])
+        ], 'css/screen.css')
         self.assertEquals(""".concat {\n  display: none;\n}\n\n.concatenate {\n  display: block;\n}\n""", css)
 
     def test_concatenate(self):
@@ -43,8 +43,8 @@ class CompressorTest(TestCase):
         self.assertFalse(mock.called)
 
     def test_relative_path(self):
-        relative_path = self.compressor.relative_path("%s/images/sprite.png" % storage.location)
-        self.assertEquals(relative_path, '/images/sprite.png')
+        relative_path = self.compressor.relative_path("images/sprite.png", 'css/screen.css')
+        self.assertEquals(relative_path, '../images/sprite.png')
 
     def test_base_path(self):
         base_path = self.compressor.base_path([
@@ -87,39 +87,29 @@ class CompressorTest(TestCase):
 
     def test_construct_asset_path(self):
         asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
-            "css/plugins/gallery.css")
-        self.assertEquals(asset_path, "images/sprite.png")
+            "css/plugins/gallery.css", "css/gallery.css")
+        self.assertEquals(asset_path, "../images/sprite.png")
         asset_path = self.compressor.construct_asset_path("/images/sprite.png",
-            "css/plugins/gallery.css")
-        self.assertEquals(asset_path, "images/sprite.png")
-
-    def test_construct_asset_path_relative(self):
-        asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
-            "css/plugins/gallery.css",
-            absolute_paths=False)
-        self.assertEquals(asset_path, "../../images/sprite.png")
-        asset_path = self.compressor.construct_asset_path("/images/sprite.png",
-            "css/plugins/gallery.css",
-            absolute_paths=False)
+            "css/plugins/gallery.css", "css/gallery.css")
         self.assertEquals(asset_path, "/images/sprite.png")
 
     def test_url_rewrite(self):
         output = self.compressor.concatenate_and_rewrite([
             'css/urls.css',
-        ])
+        ], 'css/screen.css')
         self.assertEquals("""@font-face {
   font-family: 'Pipeline';
-  src: url(fonts/pipeline.eot);
-  src: url(fonts/pipeline.eot?#iefix) format('embedded-opentype');
-  src: local('☺'), url(fonts/pipeline.woff) format('woff'), url(fonts/pipeline.ttf) format('truetype'), url(fonts/pipeline.svg#IyfZbseF) format('svg');
+  src: url(../fonts/pipeline.eot);
+  src: url(../fonts/pipeline.eot?#iefix) format('embedded-opentype');
+  src: local('☺'), url(../fonts/pipeline.woff) format('woff'), url(../fonts/pipeline.ttf) format('truetype'), url(../fonts/pipeline.svg#IyfZbseF) format('svg');
   font-weight: normal;
   font-style: normal;
 }
 .relative-url {
-  background-image: url(images/sprite-buttons.png);
+  background-image: url(../images/sprite-buttons.png);
 }
 .absolute-url {
-  background-image: url(images/sprite-buttons.png);
+  background-image: url(/images/sprite-buttons.png);
 }
 .absolute-full-url {
   background-image: url(http://localhost/images/sprite-buttons.png);

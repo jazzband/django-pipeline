@@ -92,21 +92,6 @@ Group options
   For CSS, if you do not specify ``extra_context``/``media``, the default media in
   the ``<link>`` output will be ``media="all"``.
 
-``absolute_paths``
-........................
-
-  **Optional**
-
-  Indicates if relative paths in CSS files should be made absolute, based on
-  ``PIPELINE_URL``. This only applies to entries in ``PIPELINE_CSS``.
-
-  Defaults to ``True``.
-
-.. note::
-
-  Note that all filenames are specified relative to ``PIPELINE_ROOT``, and thus the source
-  files needs to be in your ``PIPELINE_ROOT``.
-
 ``manifest``
 ............
 

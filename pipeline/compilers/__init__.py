@@ -1,6 +1,11 @@
 import os
 import subprocess
 
+try:
+    from staticfiles import finders
+except ImportError:
+    from django.contrib.staticfiles import finders # noqa
+
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
 
@@ -26,7 +31,7 @@ class Compiler(object):
                     new_path = self.output_path(path, compiler.output_extension)
                     content = self.read_file(path)
                     try:
-                        compiled_content = compiler.compile_file(content, self.storage.path(path))
+                        compiled_content = compiler.compile_file(content, finders.find(path))
                         self.save_file(new_path, compiled_content)
                     except CompilerError:
                         if not self.storage.exists(new_path) or not settings.PIPELINE:

@@ -55,10 +55,6 @@ class Package(object):
     def manifest(self):
         return self.config.get('manifest', True)
 
-    @property
-    def absolute_paths(self):
-        return self.config.get('absolute_paths', True)
-
 
 class Packager(object):
     def __init__(self, storage=default_storage, verbose=False, css_packages=None, js_packages=None):
@@ -90,8 +86,8 @@ class Packager(object):
 
     def pack_stylesheets(self, package, **kwargs):
         return self.pack(package, self.compressor.compress_css, css_compressed,
-            variant=package.variant, absolute_paths=package.absolute_paths,
-            **kwargs)
+            output_filename=package.output_filename,
+            variant=package.variant, **kwargs)
 
     def compile(self, paths):
         return self.compiler.compile(paths)
