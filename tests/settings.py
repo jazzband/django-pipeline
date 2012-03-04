@@ -35,6 +35,8 @@ STATICFILES_FINDERS = (
     'staticfiles.finders.AppDirectoriesFinder'
 )
 
+SECRET_KEY = "django-pipeline"
+
 TEMPLATE_DIRS = (
     local_path('templates'),
 )
