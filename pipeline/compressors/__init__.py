@@ -11,7 +11,7 @@ except ImportError:
     from django.contrib.staticfiles import finders # noqa
 
 from pipeline.conf import settings
-from pipeline.utils import to_class
+from pipeline.utils import to_class, relpath
 from pipeline.storage import default_storage
 
 MAX_IMAGE_SIZE = 32700
@@ -199,7 +199,7 @@ class Compressor(object):
         """Rewrite paths relative to the output stylesheet path"""
         absolute_path = os.path.join(settings.PIPELINE_ROOT, absolute_path)
         output_path = os.path.join(settings.PIPELINE_ROOT, os.path.dirname(output_filename))
-        return os.path.relpath(absolute_path, output_path)
+        return relpath(absolute_path, output_path)
 
     def read_file(self, path):
         """Read file content in binary mode"""
