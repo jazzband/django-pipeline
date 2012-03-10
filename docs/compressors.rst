@@ -142,6 +142,18 @@ To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
 
   Default to ``'--template=highest'``
 
+cssmin compressor
+=================
+
+The cssmin compressor uses the `cssmin <http://pypi.python.org/pypi/cssmin/>`_
+Python library to compress stylesheets. To use it, specify this
+``PIPELINE_CSS_COMPRESSOR`` ::
+
+  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CssminCompressor'
+
+Install the cssmin library with your favorite Python package manager. E.g. ::
+
+  pip install cssmin
 
 Write your own compressor class
 ===============================
@@ -166,7 +178,7 @@ A custom compressor for a imaginary compressor called jam ::
     def compress_js(self, js):
       return jam.compress(js)
     
-    def compress(self, css):
+    def compress_css(self, css):
       return jam.compress(css)
   
 
