@@ -166,7 +166,7 @@ A custom compressor for a imaginary compressor called jam ::
     def compress_js(self, js):
       return jam.compress(js)
     
-    def compress(self, css):
+    def compress_css(self, css):
       return jam.compress(css)
   
 
