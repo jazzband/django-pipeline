@@ -29,7 +29,3 @@ or just made Pipeline more awesome.
  * Sander Smits <jsmits@imac.lan>
  * Steven Cummings <estebistec@gmail.com>
  * Timothée Peignier <timothee.peignier@tryphon.org>
-
-The python version of jsmin (http://www.crockford.com/javascript/jsmin.html) 
-is included in Pipeline. It was translated from to Python by Baruch 
-Evan, from the original jsmin implementation by Douglas Crockford.
