@@ -1,7 +1,11 @@
 from pipeline.compressors import CompressorBase
-from pipeline.compressors.jsmin.jsmin import jsmin
 
 
 class JSMinCompressor(CompressorBase):
+    """
+    JS compressor based on the Python library jsmin
+    (http://pypi.python.org/pypi/jsmin/).
+    """
     def compress_js(self, js):
+        from jsmin import jsmin
         return jsmin(js)

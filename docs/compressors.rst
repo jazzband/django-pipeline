@@ -117,6 +117,11 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
   PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
 
+Install the jsmin library with your favorite Python package manager ::
+
+  pip install jsmin
+
+
 CSSTidy compressor
 ==================
 
