@@ -4,29 +4,30 @@ Andreas Pelme <andreas@pelme.se> in 2008.
 These people have provided bug fixes, new features, improved the documentation 
 or just made Pipeline more awesome.
 
+ * Adam Charnock <adam@omniwiki.co.uk>
  * Alexander Artemenko <svetlyak40wt>
- * Andreas Cederström <andreas@klydd.se>
  * Alexander Pugachev <alexander.pugachev@gmail.com>
- * Sander Smits <jhmsmits@gmail.com>
- * Remco Wendt <remco@maykinmedia.nl>
- * Patrick Altman <paltman@gmail.com>
+ * Andreas Cederström <andreas@klydd.se>
+ * Ara Anjargolian <ara818@gmail.com>
+ * Balazs Kossovics <balazs.kossovics@e-loue.com>
  * Ben Vinegar <ben@benv.ca>
  * Bryan Chow <bryan@fullfactor.com>
- * David Cramer <dcramer@gmail.com>
- * Denis V Seleznyov <code@xy2.ru>
- * Max Klymyshyn <klymyshyn@gmail.com>
- * Peter Baumgartner <pete@lincolnloop.com>
- * Sam Thomson <sammthomson@gmail.com>
- * Sander Smits <jsmits@imac.lan>
- * Ara Anjargolian <ara818@gmail.com>
- * Kyle MacFarlane <kyle@deletethetrees.com>
- * Matt Dennewitz <mattdennewitz@gmail.com>
- * Luke Yu-Po Chen <nuemail@gmail.com>
  * Casey Greene <csgreene@princeton.edu>
  * Christian Hammond <chipx86@chipx86.com>
  * David Charbonnier <d.charbonnier@oxys.net>
- * Adam Charnock <adam@omniwiki.co.uk>
- * Balazs Kossovics <balazs.kossovics@e-loue.com>
+ * David Cramer <dcramer@gmail.com>
+ * Denis V Seleznyov <code@xy2.ru>
+ * Kyle MacFarlane <kyle@deletethetrees.com>
+ * Luke Yu-Po Chen <nuemail@gmail.com>
+ * Matt Dennewitz <mattdennewitz@gmail.com>
+ * Max Klymyshyn <klymyshyn@gmail.com>
+ * Patrick Altman <paltman@gmail.com>
+ * Peter Baumgartner <pete@lincolnloop.com>
+ * Remco Wendt <remco@maykinmedia.nl>
+ * Sam Thomson <sammthomson@gmail.com>
+ * Sander Smits <jhmsmits@gmail.com>
+ * Sander Smits <jsmits@imac.lan>
+ * Steven Cummings <estebistec@gmail.com>
  * Timothée Peignier <timothee.peignier@tryphon.org>
 
 The python version of jsmin (http://www.crockford.com/javascript/jsmin.html) 
