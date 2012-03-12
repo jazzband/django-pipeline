@@ -1,3 +1,4 @@
+import mimetypes
 import os
 import sys
 import urllib
@@ -20,6 +21,13 @@ def filepath_to_uri(path):
     if path is None:
         return path
     return urllib.quote(smart_str(path).replace("\\", "/"), safe="/~!*()'#?")
+
+
+def guess_type(path, default=None):
+    mimetype, _ = mimetypes.guess_type(path)
+    if not mimetype:
+        return default
+    return mimetype
 
 
 def _relpath_nt(path, start=os.path.curdir):
