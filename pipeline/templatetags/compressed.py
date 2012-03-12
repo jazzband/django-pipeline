@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 
 from pipeline.conf import settings
 from pipeline.packager import Packager, PackageNotFound
+from pipeline.utils import guess_type
 
 register = template.Library()
 
@@ -38,6 +39,7 @@ class CompressedCSSNode(template.Node):
         template_name = package.template_name or "pipeline/css.html"
         context = package.extra_context
         context.update({
+            'type': guess_type(path, 'text/css'),
             'url': staticfiles_storage.url(path)
         })
         return render_to_string(template_name, context)
@@ -74,6 +76,7 @@ class CompressedJSNode(template.Node):
         template_name = package.template_name or "pipeline/js.html"
         context = package.extra_context
         context.update({
+            'type': guess_type(path, 'text/javascript'),
             'url': staticfiles_storage.url(path)
         })
         return render_to_string(template_name, context)
