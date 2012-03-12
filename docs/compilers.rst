@@ -140,7 +140,7 @@ A custom compiler for a imaginary compiler called jam ::
     output_extension = 'js'
     
     def match_file(self, filename):
-      return path.endswith('.jam')
+      return filename.endswith('.jam')
     
     def compile_file(self, content, path):
       return jam.compile(content)
