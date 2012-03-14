@@ -194,3 +194,14 @@ Rewriting CSS urls
 
 If source CSS contain a relative URL (i.e. relative to current file),
 those URL will be converted to full relative path.
+
+
+Wrapped javascript output
+=========================
+
+All javascript output is wrapped in an anonymous function : ::
+
+  (function(){ ... })();
+
+This safety wrapper, make it difficult to pollute the global namespace by accident and improve performance.
+
