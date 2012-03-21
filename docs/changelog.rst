@@ -11,5 +11,5 @@ Changelog
  * Renamed ``absolute_asset_paths`` to ``absolute_paths`` for brevity.
  * Made packages lazy to avoid doing unnecessary I/O. 
  * Dropped ``external_urls`` support for now.
- * Add cssmin compressor.
+ * Add cssmin compressor. Thanks to Steven Cummings.
  * Jsmin is not more bundle with pipeline.
