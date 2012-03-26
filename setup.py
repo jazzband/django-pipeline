@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-pipeline',
-    version='1.2c2',
+    version='1.2.0',
     description='Pipeline is an asset packaging library for Django.',
     long_description="""Pipeline is an asset packaging library for Django, providing
 both CSS and JavaScript concatenation and compression, built-in JavaScript
