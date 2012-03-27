@@ -92,6 +92,46 @@ class CompressedJSNode(template.Node):
         return '\n'.join(tags)
 
 
+class ModernizrJSNode(CompressedJSNode):
+    def render_js(self, package, path):
+        context = {}
+        if not 'template' in package:
+            package['template'] = "pipeline/modernizr.html"
+        if 'context' in package:
+            context = package['context']
+        context.update({
+            'url': self.packager.individual_url(path)
+        })
+        if settings.PIPELINE:
+            context.update({
+                'name': self.name.strip('\'\"')
+            })
+        else:
+            context.update({
+                'name': "%s-%s" % (self.name.strip('\'\"'), package["paths"].index(path))
+            })
+        return render_to_string(package['template'], context)
+
+    def render_external(self, package, url):
+        if not 'template' in package:
+            package['template'] = "pipeline/modernizr.html"
+        return render_to_string(package['template'], {
+            'url': url
+        })
+
+    def render_individual(self, package, templates=None):
+        return ','.join(self.render_js(package, js) for js in package['paths'])
+
+
+def modernizr_js(parser, token):
+    try:
+        tag_name, name = token.split_contents()
+    except:
+        raise template.TemplateSyntaxError, '%r requires exactly one argument: the name of a group in the PIPELINE_JS setting' % token.split_contents()[0]
+    return ModernizrJSNode(name)
+modernizr_js = register.tag(modernizr_js)
+
+
 def compressed_css(parser, token):
     try:
         tag_name, name = token.split_contents()
