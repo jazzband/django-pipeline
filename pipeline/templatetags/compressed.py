@@ -94,11 +94,8 @@ class CompressedJSNode(template.Node):
 
 class ModernizrJSNode(CompressedJSNode):
     def render_js(self, package, path):
-        context = {}
-        if not 'template' in package:
-            package['template'] = "pipeline/modernizr.html"
-        if 'context' in package:
-            context = package['context']
+        template_name = "pipeline/modernizr.html"
+        context = package.extra_context
         context.update({
             'url': self.packager.individual_url(path)
         })
@@ -108,19 +105,12 @@ class ModernizrJSNode(CompressedJSNode):
             })
         else:
             context.update({
-                'name': "%s-%s" % (self.name.strip('\'\"'), package["paths"].index(path))
+                'name': "%s-%s" % (self.name.strip('\'\"'), package.paths.index(path))
             })
-        return render_to_string(package['template'], context)
+        return render_to_string(template_name, context)
 
-    def render_external(self, package, url):
-        if not 'template' in package:
-            package['template'] = "pipeline/modernizr.html"
-        return render_to_string(package['template'], {
-            'url': url
-        })
-
-    def render_individual(self, package, templates=None):
-        return ','.join(self.render_js(package, js) for js in package['paths'])
+    def render_individual(self, package, paths, templates=None):
+        return ','.join(self.render_js(package, js) for js in paths)
 
 
 def modernizr_js(parser, token):
