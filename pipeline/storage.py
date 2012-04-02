@@ -72,7 +72,7 @@ class BaseFinderStorage(PipelineStorage):
     def exists(self, name):
         exists = self.finders.find(name) != None
         if not exists:
-            exists = super(BaseFinderStorage, self).exists(name)
+            return super(BaseFinderStorage, self).exists(name)
         return exists
 
     def listdir(self, path):
@@ -83,11 +83,27 @@ class BaseFinderStorage(PipelineStorage):
                 except OSError:
                     pass
 
-    def _save(self, name, content):
+    def find_storage(self, name):
         for finder in finders.get_finders():
             for path, storage in finder.list([]):
                 if os.path.dirname(name) in path:
-                    return storage._save(name, content)
+                    return storage
+        return None
+
+    def _open(self, name, mode="rb"):
+        storage = self.find_storage(name)
+        if storage:
+            return storage._open(name, mode)
+        return super(BaseFinderStorage, self)._open(name, mode)
+
+    def _save(self, name, content):
+        storage = self.find_storage(name)
+        if storage:
+            # Ensure we overwrite file, since we have no control on external storage
+            if storage.exists(name):
+                storage.delete(name)
+            return storage._save(name, content)
+        return super(BaseFinderStorage, self)._save(name, content)
 
 
 class PipelineFinderStorage(BaseFinderStorage):
