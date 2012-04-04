@@ -1,6 +1,14 @@
 Changelog
 =========
 
+
+1.2.1
+-----
+
+ * Fixing a bug in ``FinderStorage`` when using prefix in staticfiles. Thanks to Christian Hammond for the report and testing.
+ * Make ``PIPELINE_ROOT`` defaults more sane. Thanks to Konstantinos Pachnis for the report.
+
+
 1.2.0
 -----
 
