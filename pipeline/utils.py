@@ -6,6 +6,8 @@ import urllib
 from django.utils import importlib
 from django.utils.encoding import smart_str
 
+from pipeline.conf import settings
+
 
 def to_class(class_str):
     if not class_str:
@@ -24,7 +26,9 @@ def filepath_to_uri(path):
 
 
 def guess_type(path, default=None):
-    mimetype, _ = mimetypes.guess_type(path)
+    for type, ext in settings.PIPELINE_MIMETYPES:
+        mimetypes.add_type(type, ext, strict=False)
+    mimetype, _ = mimetypes.guess_type(path, strict=False)
     if not mimetype:
         return default
     return mimetype

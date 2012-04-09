@@ -48,5 +48,10 @@ PIPELINE_STYLUS_ARGUMENTS = getattr(settings, 'PIPELINE_STYLUS_ARGUMENTS', '')
 PIPELINE_LESS_BINARY = getattr(settings, 'PIPELINE_LESS_BINARY', '/usr/local/bin/lessc')
 PIPELINE_LESS_ARGUMENTS = getattr(settings, 'PIPELINE_LESS_ARGUMENTS', '')
 
+PIPELINE_MIMETYPES = getattr(settings, 'PIPELINE_MIMETYPES', (
+    ('text/coffeescript', '.coffee'),
+    ('text/less', '.less'),
+))
+
 if PIPELINE_COMPILERS is None:
     PIPELINE_COMPILERS = []
