@@ -40,6 +40,8 @@ class CompressedCSSNode(template.Node):
         context.update({
             'url': staticfiles_storage.url(path)
         })
+        if staticfiles_storage.url(path).endswith('.less'):
+            context.update({'rel' : 'less'})
         return render_to_string(template_name, context)
 
     def render_individual(self, package, paths):
