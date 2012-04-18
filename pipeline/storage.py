@@ -86,7 +86,7 @@ class BaseFinderStorage(PipelineStorage):
     def find_storage(self, name):
         for finder in finders.get_finders():
             for path, storage in finder.list([]):
-                if os.path.dirname(name) in path:
+                if path.startswith(os.path.dirname(name)):
                     return storage
         return None
 
