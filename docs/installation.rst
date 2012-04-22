@@ -15,6 +15,11 @@ Installation
            'pipeline',
        )
 
+3. Use a pipeline storage for ``STATICFILES_STORAGE`` ::
+
+        STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+
 .. note::
   You need to use ``Django>=1.4`` or ``django-staticfiles>=1.2.1`` to be able to use this version of pipeline. 
 
