@@ -205,3 +205,4 @@ All javascript output is wrapped in an anonymous function : ::
 
 This safety wrapper, make it difficult to pollute the global namespace by accident and improve performance.
 
+You can override this behavior by setting ``PIPELINE_DISABLE_WRAPPER`` to ``True``.

@@ -58,7 +58,9 @@ class Compressor(object):
         js = self.concatenate(paths)
         if templates:
             js = js + self.compile_templates(templates)
-        js = "(function() { %s }).call(this);" % js
+
+        if not settings.PIPELINE_DISABLE_WRAPPER:
+            js = "(function() { %s }).call(this);" % js
 
         compressor = self.js_compressor
         if compressor:
