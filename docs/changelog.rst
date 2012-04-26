@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+1.2.2.1
+-------
+
+* License clarification. Thanks to Dmitry Nezhevenko for the report.
+
+
 1.2.2
 -----
 
