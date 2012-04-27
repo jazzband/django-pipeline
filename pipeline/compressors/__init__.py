@@ -5,6 +5,8 @@ import subprocess
 
 from itertools import takewhile
 
+from django.utils.encoding import force_unicode
+
 try:
     from staticfiles import finders
 except ImportError:
@@ -134,7 +136,7 @@ class Compressor(object):
                     output_filename, variant)
                 return "url(%s)" % asset_url
             content = self.read_file(path)
-            content = re.sub(URL_DETECTOR, reconstruct, content)
+            content = re.sub(URL_DETECTOR, reconstruct, force_unicode(content))
             stylesheets.append(content)
         return '\n'.join(stylesheets)
 
