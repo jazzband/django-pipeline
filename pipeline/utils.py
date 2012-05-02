@@ -27,8 +27,8 @@ def filepath_to_uri(path):
 
 def guess_type(path, default=None):
     for type, ext in settings.PIPELINE_MIMETYPES:
-        mimetypes.add_type(type, ext, strict=False)
-    mimetype, _ = mimetypes.guess_type(path, strict=False)
+        mimetypes.add_type(type, ext)
+    mimetype, _ = mimetypes.guess_type(path)
     if not mimetype:
         return default
     return mimetype

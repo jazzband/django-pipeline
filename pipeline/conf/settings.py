@@ -53,6 +53,7 @@ PIPELINE_LESS_ARGUMENTS = getattr(settings, 'PIPELINE_LESS_ARGUMENTS', '')
 PIPELINE_MIMETYPES = getattr(settings, 'PIPELINE_MIMETYPES', (
     ('text/coffeescript', '.coffee'),
     ('text/less', '.less'),
+    ('text/javascript', '.js')
 ))
 
 if PIPELINE_COMPILERS is None:
