@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+1.2.3
+-----
+
+* Fix javascript mime type bug. Thanks to Chase Seibert for the report.
+
+
 1.2.2.1
 -------
 
