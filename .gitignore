@@ -16,3 +16,5 @@ tests/assets/js/dummy.js
 .DS_Store
 .idea
 .venv
+.project
+.pydevproject
