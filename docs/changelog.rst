@@ -2,6 +2,14 @@ Changelog
 =========
 
 
+1.2.4
+-----
+
+* Fix encoding problem.
+* Improve storage documentation
+* Add mention of the IRC channel #django-pipeline in documentation
+
+
 1.2.3
 -----
 
