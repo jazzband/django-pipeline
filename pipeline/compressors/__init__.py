@@ -5,7 +5,7 @@ import subprocess
 
 from itertools import takewhile
 
-from django.utils.encoding import force_unicode
+from django.utils.encoding import smart_str
 
 try:
     from staticfiles import finders
@@ -136,7 +136,7 @@ class Compressor(object):
                     output_filename, variant)
                 return "url(%s)" % asset_url
             content = self.read_file(path)
-            content = re.sub(URL_DETECTOR, reconstruct, force_unicode(content))
+            content = re.sub(URL_DETECTOR, reconstruct, smart_str(content))
             stylesheets.append(content)
         return '\n'.join(stylesheets)
 
@@ -233,7 +233,7 @@ class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        pipe.stdin.write(content)
+        pipe.stdin.write(smart_str(content))
         pipe.stdin.close()
 
         compressed_content = pipe.stdout.read()
