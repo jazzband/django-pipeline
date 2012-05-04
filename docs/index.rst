@@ -7,6 +7,9 @@ template support, and optional data-URI image and font embedding.
 
 You can report bugs and discuss features on the `issues page <https://github.com/cyberdelia/django-pipeline/issues>`_.
 
+You can discuss features or ask questions on the IRC channel on freenode : `#django-pipeline <irc://irc.freenode.net/django-pipeline>`_
+
+
 Table Of Contents
 =================
 
