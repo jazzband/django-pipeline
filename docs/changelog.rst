@@ -2,6 +2,13 @@ Changelog
 =========
 
 
+1.2.5
+-----
+
+* Fix import error for cssmin and jsmin compressors. Thanks to Berker Peksag for the report.
+* Fix error with default template function. Thanks to David Charbonnier for the patch and report. 
+
+
 1.2.4
 -----
 
