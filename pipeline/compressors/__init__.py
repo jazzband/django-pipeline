@@ -91,7 +91,7 @@ class Compressor(object):
         base_path = self.base_path(paths)
         for path in paths:
             contents = self.read_file(path)
-            contents = re.sub(r"\r?\n", "", contents)
+            contents = re.sub(r"\r?\n", "\\\\n", contents)
             contents = re.sub(r"'", "\\'", contents)
             name = self.template_name(path, base_path)
             compiled += "%s['%s'] = %s('%s');\n" % (
