@@ -29,6 +29,7 @@ STATIC_ROOT = local_path('static/')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     local_path('assets/'),
+    local_path('assets2/'),
 )
 STATICFILES_FINDERS = (
     'staticfiles.finders.FileSystemFinder',

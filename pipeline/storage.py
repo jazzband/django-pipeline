@@ -1,5 +1,3 @@
-import os
-
 try:
     from staticfiles import finders
     from staticfiles.storage import CachedFilesMixin, StaticFilesStorage
@@ -86,7 +84,7 @@ class BaseFinderStorage(PipelineStorage):
     def find_storage(self, name):
         for finder in finders.get_finders():
             for path, storage in finder.list([]):
-                if path.startswith(os.path.dirname(name)):
+                if path == name:
                     return storage
         return None
 
