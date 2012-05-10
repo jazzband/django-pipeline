@@ -2,6 +2,13 @@ Changelog
 =========
 
 
+1.2.6
+-----
+
+* New lines in templates are now escaper rather than deleted. Thanks to Trey Smith for the report and the patch.
+* Improve how we find where to write compiled file. Thanks to sirex for the patch.
+
+
 1.2.5
 -----
 
