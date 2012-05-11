@@ -9,7 +9,7 @@ Installation
        pip install django-pipeline
     
 
-2. Add 'compress' to your ``INSTALLED_APPS`` ::
+2. Add 'pipeline' to your ``INSTALLED_APPS`` ::
 
        INSTALLED_APPS = (
            'pipeline',

@@ -51,7 +51,7 @@ Group options
   **Required**
   
   Is a tuple with the source files to be compressed.
-  The files are concatenated in the order it is specified in the tuple.
+  The files are concatenated in the order specified in the tuple.
   
 
 ``output_filename``
@@ -147,7 +147,7 @@ Other settings
 ``PIPELINE_TEMPLATE_EXT``
 .........................
 
-  The extension for which Pipeline will consider the file as a Javascript templates.
+  The extension for which Pipeline will consider the file as a Javascript template.
   To use a different extension, like ``.mustache``, set this settings to ``.mustache``.
 
   Defaults to ``".jst"``
@@ -157,7 +157,7 @@ Other settings
 
   JavaScript function that compiles your JavaScript templates.
   Pipeline doesn't bundle a javascript template library, but the default
-  settings is to use the
+  setting is to use the
   `underscore <http://documentcloud.github.com/underscore/>`_ template function.
   
   Defaults to ``"_.template"``
@@ -167,7 +167,7 @@ Embedding fonts and images
 ==========================
 
 You can embed fonts and images directly in your compiled css, using Data-URI in 
-modern browser. 
+modern browsers. 
 
 To do so, setup variant group options to the method you wish to use : ::
 
@@ -192,8 +192,8 @@ Images and fonts are embedded following these rules :
 Rewriting CSS urls
 ==================
 
-If source CSS contain a relative URL (i.e. relative to current file),
-those URL will be converted to full relative path.
+If the source CSS contains relative URLs (i.e. relative to current file),
+those URLs will be converted to full relative path.
 
 
 Wrapped javascript output

@@ -8,7 +8,7 @@ Compilers
 Coffee Script compiler
 ======================
 
-The Coffee Script compiler use `Coffee Script <http://jashkenas.github.com/coffee-script/>`_
+The Coffee Script compiler uses `Coffee Script <http://jashkenas.github.com/coffee-script/>`_
 to compile your javascripts.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
@@ -35,7 +35,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 LESS compiler
 =============
 
-The LESS compiler use `LESS <http://lesscss.org/>`_
+The LESS compiler uses `LESS <http://lesscss.org/>`_
 to compile your stylesheets.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
@@ -62,7 +62,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 SASS compiler
 =============
 
-The SASS compiler use `SASS <http://sass-lang.com/>`_
+The SASS compiler uses `SASS <http://sass-lang.com/>`_
 to compile your stylesheets.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
@@ -91,7 +91,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 Stylus compiler
 ===============
 
-The Stylus compiler use `Stylus <http://learnboost.github.com/stylus/>`
+The Stylus compiler uses `Stylus <http://learnboost.github.com/stylus/>`
 to compile your stylesheets.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
@@ -121,10 +121,10 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 Write your own compiler class
 =============================
 
-To write your own compiler class, for example want to implement other types
+You can write your own compiler class, for example if you want to implement other types
 of compilers.
 
-All you need to do is to create a class that inherits from ``pipeline.compilers.CompilerBase``
+To do so, you just have to create a class that inherits from ``pipeline.compilers.CompilerBase``
 and implements ``match_file`` and ``compile_file`` when needed.
 
 Finally, specify it in the tuple of compilers ``PIPELINE_COMPILERS`` in the settings.
@@ -132,7 +132,7 @@ Finally, specify it in the tuple of compilers ``PIPELINE_COMPILERS`` in the sett
 Example
 -------
 
-A custom compiler for a imaginary compiler called jam ::
+A custom compiler for an imaginary compiler called jam ::
 
   from pipeline.compilers import CompilerBase
   
