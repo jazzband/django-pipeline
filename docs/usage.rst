@@ -52,7 +52,7 @@ Middleware
 To enable HTML compression add ``pipeline.middleware.MinifyHTMLMiddleware``, 
 to your ``MIDDLEWARE_CLASSES`` settings.
 
-Ensure that it comes after any middleware which modify your HTML, like ``GZipMiddleware`` ::
+Ensure that it comes after any middleware which modifies your HTML, like ``GZipMiddleware`` ::
 
    MIDDLEWARE_CLASSES = (
       'django.middleware.gzip.GZipMiddleware',
