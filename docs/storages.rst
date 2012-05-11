@@ -7,7 +7,7 @@ Storages
 Using with a custom storage
 ===========================
 
-Pipeline use `Django Storage <https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#storages>`_
+Pipeline uses `Django Storage <https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#storages>`_
 to read, save and delete files, by default it use an improved ``StaticFilesStorage``.
 
 You can provide your own via ``PIPELINE_STORAGE`` : ::

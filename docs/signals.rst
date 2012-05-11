@@ -4,7 +4,7 @@
 Signals
 =======
 
-A list of all signals send by pipeline.
+List of all signals sent by pipeline.
 
 css_compressed
 --------------
