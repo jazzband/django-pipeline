@@ -2,11 +2,8 @@
 from setuptools import setup, find_packages
 
 
-with open('README.rst') as f:
-    readme = f.read()
-
-with open('LICENSE') as f:
-    license = f.read()
+readme = open('README.rst').read()
+license = open('LICENSE').read()
 
 setup(
     name='django-pipeline',
