@@ -90,22 +90,18 @@ class BaseFinderStorage(PipelineStorage):
                     return storage
                 if os.path.splitext(path)[0] == os.path.splitext(name)[0]:
                     return storage
-        return None
+        raise ValueError("The file '%s' could not be found with %r." % (name, self))
 
     def _open(self, name, mode="rb"):
         storage = self.find_storage(name)
-        if storage:
-            return storage._open(name, mode)
-        return super(BaseFinderStorage, self)._open(name, mode)
+        return storage._open(name, mode)
 
     def _save(self, name, content):
         storage = self.find_storage(name)
-        if storage:
-            # Ensure we overwrite file, since we have no control on external storage
-            if storage.exists(name):
-                storage.delete(name)
-            return storage._save(name, content)
-        return super(BaseFinderStorage, self)._save(name, content)
+        # Ensure we overwrite file, since we have no control on external storage
+        if storage.exists(name):
+            storage.delete(name)
+        return storage._save(name, content)
 
 
 class PipelineFinderStorage(BaseFinderStorage):
