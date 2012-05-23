@@ -30,8 +30,6 @@ class Compiler(object):
                 if compiler.match_file(path):
                     new_path = self.output_path(path, compiler.output_extension)
                     paths[index] = new_path
-                    if not self.is_outdated(path, new_path):
-                        continue  # No need to re-compile this file
                     try:
                         content = self.read_file(path)
                         compiled_content = compiler.compile_file(content, finders.find(path))
