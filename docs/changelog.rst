@@ -2,6 +2,15 @@ Changelog
 =========
 
 
+1.2.7
+-----
+
+* Many documentation improvements. Thanks to Alexis Svinartchouk.
+* Improve python packaging.
+* Don't write silently to STATIC_ROOT when we shouldn't.
+* Accept new .sass extension in SASSCompiler. Thanks to Jonas Geiregat for the report.
+
+
 1.2.6
 -----
 
