@@ -1,5 +1,6 @@
 import base64
 import os
+import posixpath
 import re
 import subprocess
 
@@ -13,8 +14,8 @@ except ImportError:
     from django.contrib.staticfiles import finders # noqa
 
 from pipeline.conf import settings
-from pipeline.utils import to_class, relpath
 from pipeline.storage import default_storage
+from pipeline.utils import to_class, relpath
 
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
@@ -144,16 +145,16 @@ class Compressor(object):
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
-        public_path = self.absolute_path(asset_path, os.path.dirname(css_path))
+        public_path = self.absolute_path(asset_path, posixpath.dirname(css_path))
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
-        if not os.path.isabs(asset_path):
+        if not posixpath.isabs(asset_path):
             asset_path = self.relative_path(public_path, output_filename)
         return asset_path
 
     def embeddable(self, path, variant):
         """Is the asset embeddable ?"""
-        name, ext = os.path.splitext(path)
+        name, ext = posixpath.splitext(path)
         font = ext in FONT_EXTS
         if not variant:
             return False
@@ -191,16 +192,16 @@ class Compressor(object):
         Return the absolute public path for an asset,
         given the path of the stylesheet that contains it.
         """
-        if os.path.isabs(path):
-            path = os.path.join(default_storage.location, path)
+        if posixpath.isabs(path):
+            path = posixpath.join(default_storage.location, path)
         else:
-            path = os.path.join(start, path)
-        return os.path.normpath(path)
+            path = posixpath.join(start, path)
+        return posixpath.normpath(path)
 
     def relative_path(self, absolute_path, output_filename):
         """Rewrite paths relative to the output stylesheet path"""
-        absolute_path = os.path.join(settings.PIPELINE_ROOT, absolute_path)
-        output_path = os.path.join(settings.PIPELINE_ROOT, os.path.dirname(output_filename))
+        absolute_path = posixpath.join(settings.PIPELINE_ROOT, absolute_path)
+        output_path = posixpath.join(settings.PIPELINE_ROOT, posixpath.dirname(output_filename))
         return relpath(absolute_path, output_path)
 
     def read_file(self, path):
