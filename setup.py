@@ -7,7 +7,7 @@ license = open('LICENSE').read()
 
 setup(
     name='django-pipeline',
-    version='1.2.7',
+    version='1.2.8',
     description='Pipeline is an asset packaging library for Django.',
     long_description=readme,
     author='Timothée Peignier',

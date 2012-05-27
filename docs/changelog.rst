@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+1.2.8
+-----
+
+* Fix bugs in our glob implementation.
+
+
 1.2.7
 -----
 
