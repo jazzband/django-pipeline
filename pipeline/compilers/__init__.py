@@ -52,7 +52,7 @@ class Compiler(object):
     def is_outdated(self, path, new_path):
         try:
             return self.storage.modified_time(path) > self.storage.modified_time(new_path)
-        except OSError:
+        except (OSError, NotImplementedError):
             return True
 
     def save_file(self, path, content):
