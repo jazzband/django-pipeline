@@ -31,7 +31,10 @@ class Compiler(object):
                     new_path = self.output_path(path, compiler.output_extension)
                     paths[index] = new_path
                     try:
-                        if settings.PIPELINE_COMPILE_INPLACE and isinstance(compiler, InplaceCompiler):
+                        if (settings.PIPELINE_COMPILE_INPLACE and
+                            isinstance(compiler, InplaceCompiler) and
+                            self.storage.exists(new_path)):
+
                             compiler.compile_inplace_file(
                                 self.storage.path(path),
                                 self.storage.path(new_path)
