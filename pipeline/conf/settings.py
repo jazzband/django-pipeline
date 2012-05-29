@@ -56,5 +56,7 @@ PIPELINE_MIMETYPES = getattr(settings, 'PIPELINE_MIMETYPES', (
     ('text/javascript', '.js')
 ))
 
+PIPELINE_COMPILE_INPLACE = getattr(settings, 'PIPELINE_COMPILE_INPLACE', False)
+
 if PIPELINE_COMPILERS is None:
     PIPELINE_COMPILERS = []

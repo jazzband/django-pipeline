@@ -31,9 +31,15 @@ class Compiler(object):
                     new_path = self.output_path(path, compiler.output_extension)
                     paths[index] = new_path
                     try:
-                        content = self.read_file(path)
-                        compiled_content = compiler.compile_file(content, finders.find(path))
-                        self.save_file(new_path, compiled_content)
+                        if settings.PIPELINE_COMPILE_INPLACE and isinstance(compiler, InplaceCompiler):
+                            compiler.compile_inplace_file(
+                                self.storage.path(path),
+                                self.storage.path(new_path)
+                            )
+                        else:
+                            content = self.read_file(path)
+                            compiled_content = compiler.compile_file(content, finders.find(path))
+                            self.save_file(new_path, compiled_content)
                     except CompilerError:
                         if not self.storage.exists(new_path) or not settings.PIPELINE:
                             raise
@@ -67,6 +73,11 @@ class CompilerBase(object):
         raise NotImplementedError
 
     def compile_file(self, content, path):
+        raise NotImplementedError
+
+
+class InplaceCompiler(CompilerBase):
+    def compile_inplace_file(self, input_path, output_path):
         raise NotImplementedError
 
 
