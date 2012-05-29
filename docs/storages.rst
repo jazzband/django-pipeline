@@ -30,7 +30,7 @@ And if you want versioning use ::
 Pipeline is also providing a storage that play nicely with staticfiles app
 particularly for development : ::
 
-  PIPELINE_STORAGE = 'pipeline.storage.PipelineFinderStorage'
+  STATICFILES_STORAGE = 'pipeline.storage.PipelineFinderStorage'
 
 
 Using with other storages
