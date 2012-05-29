@@ -30,6 +30,10 @@ class Compiler(object):
                 if compiler.match_file(path):
                     new_path = self.output_path(path, compiler.output_extension)
                     paths[index] = new_path
+                    if settings.DEBUG and not self.is_outdated(path, new_path):
+                        # In local development mode, recompiling files with
+                        # no changes just slows down development
+                        continue
                     try:
                         content = self.read_file(path)
                         compiled_content = compiler.compile_file(content, finders.find(path))
