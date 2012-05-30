@@ -15,6 +15,8 @@ from pipeline.conf import settings
 
 
 class PipelineMixin(object):
+    packing = True
+
     def post_process(self, paths, dry_run=False, **options):
         if dry_run:
             return []
@@ -23,11 +25,15 @@ class PipelineMixin(object):
         packager = Packager(storage=self)
         for package_name in packager.packages['css']:
             package = packager.package_for('css', package_name)
-            output_file = packager.pack_stylesheets(package)
+            output_file = package.output_filename
+            if self.packing:
+                packager.pack_stylesheets(package)
             paths[output_file] = (self, output_file)
         for package_name in packager.packages['js']:
             package = packager.package_for('js', package_name)
-            output_file = packager.pack_javascripts(package)
+            output_file = package.output_filename
+            if self.packing:
+                packager.pack_javascripts(package)
             paths[output_file] = (self, output_file)
 
         super_class = super(PipelineMixin, self)
@@ -45,11 +51,23 @@ class PipelineMixin(object):
         return name
 
 
+class NonPackagingMixin(object):
+    packing = False
+
+
 class PipelineStorage(PipelineMixin, StaticFilesStorage):
     pass
 
 
+class NonPackagingPipelineStorage(NonPackagingMixin, PipelineStorage):
+    pass
+
+
 class PipelineCachedStorage(PipelineMixin, CachedFilesMixin, StaticFilesStorage):
+    pass
+
+
+class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
     pass
 
 
