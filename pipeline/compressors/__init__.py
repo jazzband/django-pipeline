@@ -5,6 +5,8 @@ import subprocess
 
 from itertools import takewhile
 
+from django.utils.encoding import smart_str
+
 try:
     from staticfiles import finders
 except ImportError:
@@ -21,7 +23,7 @@ URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
 
 DEFAULT_TEMPLATE_FUNC = "template"
-TEMPLATE_FUNC = """var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};"""
+TEMPLATE_FUNC = r"""var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};"""
 
 MIME_TYPES = {
     '.png': 'image/png',
@@ -58,7 +60,9 @@ class Compressor(object):
         js = self.concatenate(paths)
         if templates:
             js = js + self.compile_templates(templates)
-        js = "(function() { %s }).call(this);" % js
+
+        if not settings.PIPELINE_DISABLE_WRAPPER:
+            js = "(function() { %s }).call(this);" % js
 
         compressor = self.js_compressor
         if compressor:
@@ -87,7 +91,7 @@ class Compressor(object):
         base_path = self.base_path(paths)
         for path in paths:
             contents = self.read_file(path)
-            contents = re.sub(r"\r?\n", "", contents)
+            contents = re.sub(r"\r?\n", "\\\\n", contents)
             contents = re.sub(r"'", "\\'", contents)
             name = self.template_name(path, base_path)
             compiled += "%s['%s'] = %s('%s');\n" % (
@@ -132,7 +136,7 @@ class Compressor(object):
                     output_filename, variant)
                 return "url(%s)" % asset_url
             content = self.read_file(path)
-            content = re.sub(URL_DETECTOR, reconstruct, content)
+            content = re.sub(URL_DETECTOR, reconstruct, smart_str(content))
             stylesheets.append(content)
         return '\n'.join(stylesheets)
 
@@ -229,7 +233,7 @@ class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        pipe.stdin.write(content)
+        pipe.stdin.write(smart_str(content))
         pipe.stdin.close()
 
         compressed_content = pipe.stdout.read()

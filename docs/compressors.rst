@@ -8,7 +8,7 @@ Compressors
 YUI Compressor compressor
 =========================
 
-The YUI compressor use `yui-compressor <http://developer.yahoo.com/yui/compressor/>`_
+The YUI compressor uses `yui-compressor <http://developer.yahoo.com/yui/compressor/>`_
 for compressing javascript and stylesheets. 
 
 To use it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
@@ -50,7 +50,7 @@ To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 Closure Compiler compressor
 ===========================
 
-The Closure compressor use `Google Closure Compiler <http://code.google.com/closure/compiler/>`_
+The Closure compressor uses `Google Closure Compiler <http://code.google.com/closure/compiler/>`_
 to compress javascripts.
 
 To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
@@ -83,7 +83,7 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 UglifyJS compressor
 ===================
 
-The UglifyJS compressor use `UglifyJS <https://github.com/mishoo/UglifyJS/>`_ to
+The UglifyJS compressor uses `UglifyJS <https://github.com/mishoo/UglifyJS/>`_ to
 compress javascripts.
 
 To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
@@ -110,7 +110,7 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 JSMin compressor
 ================
 
-The jsmin compressor use Douglas Crockford jsmin tool to
+The jsmin compressor uses Douglas Crockford jsmin tool to
 compress javascripts.
 
 To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
@@ -125,7 +125,7 @@ Install the jsmin library with your favorite Python package manager ::
 CSSTidy compressor
 ==================
 
-The CSStidy compressor use `CSStidy <http://csstidy.sourceforge.net/>`_ to compress
+The CSStidy compressor uses `CSStidy <http://csstidy.sourceforge.net/>`_ to compress
 stylesheets.
 
 To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
@@ -163,10 +163,10 @@ Install the cssmin library with your favorite Python package manager. E.g. ::
 Write your own compressor class
 ===============================
 
-To write your own compressor class, for example want to implement other types
+You can write your own compressor class, for example if you want to implement other types
 of compressors.
 
-All you need to do is to create a class that inherits from ``pipeline.compressors.CompressorBase``
+To do so, you just have to create a class that inherits from ``pipeline.compressors.CompressorBase``
 and implements ``compress_css`` and/or a ``compress_js`` when needed.
 
 Finally, add it to ``PIPELINE_CSS_COMPRESSOR`` or 
@@ -175,7 +175,7 @@ Finally, add it to ``PIPELINE_CSS_COMPRESSOR`` or
 Example
 -------
 
-A custom compressor for a imaginary compressor called jam ::
+A custom compressor for an imaginary compressor called jam ::
 
   from pipeline.compressors import CompressorBase
   

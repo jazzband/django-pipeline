@@ -11,6 +11,7 @@ class StorageTest(TestCase):
             'testing': {
                 'source_filenames': (
                     'css/first.css',
+                    'css/third.css',
                 ),
                 'manifest': False,
                 'output_filename': 'testing.css',

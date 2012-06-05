@@ -1,9 +1,12 @@
+import mimetypes
 import os
 import sys
 import urllib
 
 from django.utils import importlib
 from django.utils.encoding import smart_str
+
+from pipeline.conf import settings
 
 
 def to_class(class_str):
@@ -20,6 +23,15 @@ def filepath_to_uri(path):
     if path is None:
         return path
     return urllib.quote(smart_str(path).replace("\\", "/"), safe="/~!*()'#?")
+
+
+def guess_type(path, default=None):
+    for type, ext in settings.PIPELINE_MIMETYPES:
+        mimetypes.add_type(type, ext)
+    mimetype, _ = mimetypes.guess_type(path)
+    if not mimetype:
+        return default
+    return mimetype
 
 
 def _relpath_nt(path, start=os.path.curdir):

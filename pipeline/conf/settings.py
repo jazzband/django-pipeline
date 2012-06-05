@@ -2,7 +2,7 @@ from django.conf import settings
 
 
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
-PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_URL)
+PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
 
 PIPELINE_STORAGE = getattr(settings, 'PIPELINE_STORAGE',
@@ -22,6 +22,8 @@ PIPELINE_JS = getattr(settings, 'PIPELINE_JS', {})
 PIPELINE_TEMPLATE_NAMESPACE = getattr(settings, 'PIPELINE_TEMPLATE_NAMESPACE', "window.JST")
 PIPELINE_TEMPLATE_EXT = getattr(settings, 'PIPELINE_TEMPLATE_EXT', ".jst")
 PIPELINE_TEMPLATE_FUNC = getattr(settings, 'PIPELINE_TEMPLATE_FUNC', "template")
+
+PIPELINE_DISABLE_WRAPPER = getattr(settings, 'PIPELINE_DISABLE_WRAPPER', False)
 
 PIPELINE_CSSTIDY_BINARY = getattr(settings, 'PIPELINE_CSSTIDY_BINARY', '/usr/local/bin/csstidy')
 PIPELINE_CSSTIDY_ARGUMENTS = getattr(settings, 'PIPELINE_CSSTIDY_ARGUMENTS', '--template=highest')
@@ -47,6 +49,12 @@ PIPELINE_STYLUS_ARGUMENTS = getattr(settings, 'PIPELINE_STYLUS_ARGUMENTS', '')
 
 PIPELINE_LESS_BINARY = getattr(settings, 'PIPELINE_LESS_BINARY', '/usr/local/bin/lessc')
 PIPELINE_LESS_ARGUMENTS = getattr(settings, 'PIPELINE_LESS_ARGUMENTS', '')
+
+PIPELINE_MIMETYPES = getattr(settings, 'PIPELINE_MIMETYPES', (
+    ('text/coffeescript', '.coffee'),
+    ('text/less', '.less'),
+    ('text/javascript', '.js')
+))
 
 if PIPELINE_COMPILERS is None:
     PIPELINE_COMPILERS = []

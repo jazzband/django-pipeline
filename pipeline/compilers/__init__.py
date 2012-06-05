@@ -23,20 +23,22 @@ class Compiler(object):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
     compilers = property(compilers)
 
-    def compile(self, paths):
+    def compile(self, paths, force=False):
         for index, path in enumerate(paths):
             for compiler in self.compilers:
                 compiler = compiler(self.verbose)
                 if compiler.match_file(path):
                     new_path = self.output_path(path, compiler.output_extension)
-                    content = self.read_file(path)
+                    paths[index] = new_path
+                    if not force and not self.is_outdated(path, new_path):
+                        continue
                     try:
+                        content = self.read_file(path)
                         compiled_content = compiler.compile_file(content, finders.find(path))
                         self.save_file(new_path, compiled_content)
                     except CompilerError:
                         if not self.storage.exists(new_path) or not settings.PIPELINE:
                             raise
-                    paths[index] = new_path
         return paths
 
     def output_path(self, path, extension):
@@ -48,6 +50,12 @@ class Compiler(object):
         content = file.read()
         file.close()
         return content
+
+    def is_outdated(self, path, new_path):
+        try:
+            return self.storage.modified_time(path) > self.storage.modified_time(new_path)
+        except (OSError, NotImplementedError):
+            return True
 
     def save_file(self, path, content):
         return self.storage.save(path, ContentFile(smart_str(content)))

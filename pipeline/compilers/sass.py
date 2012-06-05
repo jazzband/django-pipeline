@@ -8,7 +8,7 @@ class SASSCompiler(SubProcessCompiler):
     output_extension = 'css'
 
     def match_file(self, filename):
-        return filename.endswith('.scss')
+        return filename.endswith(('.scss', '.sass'))
 
     def compile_file(self, content, path):
         command = "%s --scss %s %s" % (

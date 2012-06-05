@@ -71,12 +71,12 @@ class CompressorTest(TestCase):
 
     def test_compile_templates(self):
         templates = self.compressor.compile_templates(['templates/photo/list.jst'])
-        self.assertEquals(templates, """window.JST = window.JST || {};\n%s\nwindow.JST['list'] = template('<div class="photo"> <img src="<%%= src %%>" /> <div class="caption">  <%%= caption %%> </div></div>');\n""" % TEMPLATE_FUNC)
+        self.assertEquals(templates, """window.JST = window.JST || {};\n%s\nwindow.JST[\'list\'] = template(\'<div class="photo">\\n <img src="<%%= src %%>" />\\n <div class="caption">\\n  <%%= caption %%>\\n </div>\\n</div>\');\n""" % TEMPLATE_FUNC)
         templates = self.compressor.compile_templates([
             'templates/video/detail.jst',
             'templates/photo/detail.jst'
         ])
-        self.assertEqual(templates, """window.JST = window.JST || {};\n%s\nwindow.JST['video_detail'] = template('<div class="video"> <video src="<%%= src %%>" /> <div class="caption">  <%%= description %%> </div></div>');\nwindow.JST[\'photo_detail\'] = template(\'<div class="photo"> <img src="<%%= src %%>" /> <div class="caption">  <%%= caption %%> by <%%= author %%> </div></div>\');\n""" % TEMPLATE_FUNC)
+        self.assertEqual(templates, """window.JST = window.JST || {};\n%s\nwindow.JST[\'video_detail\'] = template(\'<div class="video">\\n <video src="<%%= src %%>" />\\n <div class="caption">\\n  <%%= description %%>\\n </div>\\n</div>\');\nwindow.JST[\'photo_detail\'] = template(\'<div class="photo">\\n <img src="<%%= src %%>" />\\n <div class="caption">\\n  <%%= caption %%> by <%%= author %%>\\n </div>\\n</div>\');\n""" % TEMPLATE_FUNC)
 
     def test_embeddable(self):
         self.assertFalse(self.compressor.embeddable('images/sprite.png', None))
