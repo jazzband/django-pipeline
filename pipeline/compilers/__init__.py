@@ -6,9 +6,6 @@ try:
 except ImportError:
     from django.contrib.staticfiles import finders # noqa
 
-from django.core.files.base import ContentFile
-from django.utils.encoding import smart_str
-
 from pipeline.conf import settings
 from pipeline.storage import default_storage
 from pipeline.utils import to_class
@@ -24,20 +21,19 @@ class Compiler(object):
     compilers = property(compilers)
 
     def compile(self, paths, force=False):
-        for index, path in enumerate(paths):
+        for index, input_path in enumerate(paths):
             for compiler in self.compilers:
                 compiler = compiler(self.verbose)
-                if compiler.match_file(path):
-                    new_path = self.output_path(path, compiler.output_extension)
-                    paths[index] = new_path
-                    if not force and not self.is_outdated(path, new_path):
-                        continue
+                if compiler.match_file(input_path):
+                    output_path = self.output_path(input_path, compiler.output_extension)
+                    paths[index] = output_path
                     try:
-                        content = self.read_file(path)
-                        compiled_content = compiler.compile_file(content, finders.find(path))
-                        self.save_file(new_path, compiled_content)
+                        infile = finders.find(input_path)
+                        outfile = finders.find(output_path)
+                        outdated = self.is_outdated(input_path, output_path)
+                        compiler.compile_file(infile, outfile, outdated=outdated, force=force)
                     except CompilerError:
-                        if not self.storage.exists(new_path) or not settings.PIPELINE:
+                        if not self.storage.exists(output_path) or not settings.PIPELINE:
                             raise
         return paths
 
@@ -45,20 +41,11 @@ class Compiler(object):
         path = os.path.splitext(path)
         return '.'.join((path[0], extension))
 
-    def read_file(self, path):
-        file = self.storage.open(path, 'rb')
-        content = file.read()
-        file.close()
-        return content
-
-    def is_outdated(self, path, new_path):
+    def is_outdated(self, infile, outfile):
         try:
-            return self.storage.modified_time(path) > self.storage.modified_time(new_path)
+            return self.storage.modified_time(infile) > self.storage.modified_time(outfile)
         except (OSError, NotImplementedError):
             return True
-
-    def save_file(self, path, content):
-        return self.storage.save(path, ContentFile(smart_str(content)))
 
 
 class CompilerBase(object):
@@ -68,7 +55,7 @@ class CompilerBase(object):
     def match_file(self, filename):
         raise NotImplementedError
 
-    def compile_file(self, content, path):
+    def compile_file(self, infile, outfile, outdated=False, force=False):
         raise NotImplementedError
 
 

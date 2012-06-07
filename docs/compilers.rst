@@ -142,6 +142,8 @@ A custom compiler for an imaginary compiler called jam ::
     def match_file(self, filename):
       return filename.endswith('.jam')
     
-    def compile_file(self, content, path):
-      return jam.compile(content)
+    def compile_file(self, infile, outfile, outdated=False, force=False):
+      if not outdated and not force:
+        return  # No need to recompiled file
+      return jam.compile(infile, outfile)
 
