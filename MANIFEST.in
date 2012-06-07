@@ -1,5 +1,2 @@
 recursive-include pipeline/templates *.html
-include docs/*
-include AUTHORS
-include LICENSE
-include README.rst
+include AUTHORS LICENSE README.rst HISTORY.rst

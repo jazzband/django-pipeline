@@ -23,13 +23,15 @@ class Compiler(object):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
     compilers = property(compilers)
 
-    def compile(self, paths):
+    def compile(self, paths, force=False):
         for index, path in enumerate(paths):
             for compiler in self.compilers:
                 compiler = compiler(self.verbose)
                 if compiler.match_file(path):
                     new_path = self.output_path(path, compiler.output_extension)
                     paths[index] = new_path
+                    if not force and not self.is_outdated(path, new_path):
+                        continue
                     try:
                         if (settings.PIPELINE_COMPILE_INPLACE and
                             isinstance(compiler, InplaceCompiler) and

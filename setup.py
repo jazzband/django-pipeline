@@ -2,18 +2,16 @@
 from setuptools import setup, find_packages
 
 
-readme = open('README.rst').read()
-license = open('LICENSE').read()
-
 setup(
     name='django-pipeline',
-    version='1.2.8',
+    version='1.2.9',
     description='Pipeline is an asset packaging library for Django.',
-    long_description=readme,
+    long_description=open('README.rst').read() + '\n\n' +
+        open('HISTORY.rst').read(),
     author='Timothée Peignier',
     author_email='timothee.peignier@tryphon.org',
     url='https://github.com/cyberdelia/django-pipeline',
-    license=license,
+    license=open('LICENSE').read(),
     packages=find_packages(),
     zip_safe=False,
     include_package_data=True,
