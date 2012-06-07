@@ -31,7 +31,8 @@ class Compiler(object):
                     new_path = self.output_path(path, compiler.output_extension)
                     paths[index] = new_path
                     if not force and not self.is_outdated(path, new_path):
-                        continue
+                        if not path in settings.PIPELINE_ALWAYS_RECOMPILE:
+                            continue
                     try:
                         if (settings.PIPELINE_COMPILE_INPLACE and
                             isinstance(compiler, InplaceCompiler) and
