@@ -52,7 +52,9 @@ PIPELINE_LESS_ARGUMENTS = getattr(settings, 'PIPELINE_LESS_ARGUMENTS', '')
 PIPELINE_MIMETYPES = getattr(settings, 'PIPELINE_MIMETYPES', (
     ('text/coffeescript', '.coffee'),
     ('text/less', '.less'),
-    ('text/javascript', '.js')
+    ('text/javascript', '.js'),
+    ('text/x-sass', '.sass'),
+    ('text/x-scss', '.scss')
 ))
 
 PIPELINE_EMBED_MAX_IMAGE_SIZE = getattr(settings, 'PIPELINE_EMBED_MAX_IMAGE_SIZE', 32700)
