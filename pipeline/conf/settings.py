@@ -14,6 +14,7 @@ PIPELINE_JS_COMPRESSOR = getattr(settings, 'PIPELINE_JS_COMPRESSOR',
     'pipeline.compressors.yui.YUICompressor'
 )
 PIPELINE_COMPILERS = getattr(settings, 'PIPELINE_COMPILERS', [])
+PIPELINE_PRECOMPILERS = getattr(settings, 'PIPELINE_PRECOMPILERS', [])
 
 PIPELINE_CSS = getattr(settings, 'PIPELINE_CSS', {})
 PIPELINE_JS = getattr(settings, 'PIPELINE_JS', {})

@@ -16,16 +16,25 @@ class Compiler(object):
         self.storage = storage
         self.verbose = verbose
 
+    @property
     def compilers(self):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
-    compilers = property(compilers)
+
+    @property
+    def precompilers(self):
+        return [to_class(precompiler) for precompiler in settings.PIPELINE_PRECOMPILERS]
 
     def compile(self, paths, force=False):
+        paths = self.compile_paths(paths, self.precompilers, force=force)
+        paths = self.compile_paths(paths, self.compilers, force=force)
+        return paths
+
+    def compile_paths(self, paths, compilers, force=False):
         for index, input_path in enumerate(paths):
-            for compiler in self.compilers:
+            for compiler in compilers:
                 compiler = compiler(self.verbose)
                 if compiler.match_file(input_path):
-                    output_path = self.output_path(input_path, compiler.output_extension)
+                    output_path = compiler.output_path(input_path)
                     paths[index] = output_path
                     try:
                         infile = finders.find(input_path)
@@ -35,11 +44,8 @@ class Compiler(object):
                     except CompilerError:
                         if not self.storage.exists(output_path) or not settings.PIPELINE:
                             raise
+                    input_path = output_path
         return paths
-
-    def output_path(self, path, extension):
-        path = os.path.splitext(path)
-        return '.'.join((path[0], extension))
 
     def is_outdated(self, infile, outfile):
         try:
@@ -57,6 +63,10 @@ class CompilerBase(object):
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         raise NotImplementedError
+
+    def output_path(self, path):
+        path = os.path.splitext(path)
+        return '.'.join((path[0], self.output_extension))
 
 
 class CompilerError(Exception):
