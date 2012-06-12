@@ -13,11 +13,6 @@ Are you using pipeline and not being in this list? Drop us a line.
 
 For their internal tools: http://www.20minutes.fr
 
-Pitchfork
----------
-
-For their main website: http://pitchfork.com
-
 The Molly Project
 -----------------
 
