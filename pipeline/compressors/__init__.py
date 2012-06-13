@@ -16,7 +16,6 @@ from pipeline.conf import settings
 from pipeline.utils import to_class, relpath
 from pipeline.storage import default_storage
 
-EMBEDDABLE = r'[/]?embed/'
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
 
@@ -158,8 +157,7 @@ class Compressor(object):
         
         if not variant:
             return False
-        if not ((settings.PIPELINE_EMBED_ALL_IMAGES or re.search(EMBEDDABLE, path)) and \
-            self.storage.exists(path)):
+        if not (re.search(settings.PIPELINE_EMBED_PATH, path) and self.storage.exists(path)):
             return False
         if not ext in EMBED_EXTS:
             return False

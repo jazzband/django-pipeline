@@ -195,15 +195,15 @@ You can override these rules using the following settings:
 
   Setting that controls the maximum image size (in bytes) to embed in CSS using Data-URIs.
   Internet Explorer 8 has issues with assets under 32 kilobytes.
+  
   Defaults to ``32700``
   
-``PIPELINE_EMBED_ALL_IMAGES``
+``PIPELINE_EMBED_PATH``
 ..........................
 
-  Setting that controls whether or not an asset needs to be in a directory named "**embed**" in
-  order to be embedded. 
+  Setting the directory that an asset needs to be in so that it is embedded
   
-  Defaults to ``False``
+  Defaults to ``r'[/]?embed/'``
 
 
 Rewriting CSS urls
