@@ -16,9 +16,6 @@ from pipeline.conf import settings
 from pipeline.utils import to_class, relpath
 from pipeline.storage import default_storage
 
-MAX_IMAGE_SIZE = 32700
-
-EMBEDDABLE = r'[/]?embed/'
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
 
@@ -157,13 +154,14 @@ class Compressor(object):
         """Is the asset embeddable ?"""
         name, ext = os.path.splitext(path)
         font = ext in FONT_EXTS
+        
         if not variant:
             return False
-        if not (re.search(EMBEDDABLE, path) and self.storage.exists(path)):
+        if not (re.search(settings.PIPELINE_EMBED_PATH, path) and self.storage.exists(path)):
             return False
         if not ext in EMBED_EXTS:
             return False
-        if not (font or len(self.encoded_content(path)) < MAX_IMAGE_SIZE):
+        if not (font or len(self.encoded_content(path)) < settings.PIPELINE_EMBED_MAX_IMAGE_SIZE):
             return False
         return True
 
