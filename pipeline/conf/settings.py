@@ -1,6 +1,5 @@
 from django.conf import settings
 
-
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
@@ -55,6 +54,9 @@ PIPELINE_MIMETYPES = getattr(settings, 'PIPELINE_MIMETYPES', (
     ('text/less', '.less'),
     ('text/javascript', '.js')
 ))
+
+PIPELINE_EMBED_MAX_IMAGE_SIZE = getattr(settings, 'PIPELINE_EMBED_MAX_IMAGE_SIZE', 32700)
+PIPELINE_EMBED_ALL_IMAGES = getattr(settings, 'PIPELINE_EMBED_ALL_IMAGES', False)
 
 if PIPELINE_COMPILERS is None:
     PIPELINE_COMPILERS = []
