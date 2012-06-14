@@ -3,6 +3,18 @@
 History
 =======
 
+1.2.10
+------
+
+* Use ``/usr/bin/env`` by default to find compiler executable. Thanks to Michael Weibel. 
+* Allow to change embed settings : max size and directory. Thanks to Pierre Drescher. 
+* Some documentation improvements. Thanks to Florent Messa.
+
+1.2.9
+-----
+
+* Don't compile non-outdated files.
+* Add non-packing storage.
 
 1.2.8
 -----
