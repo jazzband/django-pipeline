@@ -3,6 +3,14 @@
 History
 =======
 
+
+1.2.11
+------
+
+* Add a small contribution guide
+* Add mimetype settings for sass and scss
+* Change compiler interface to let compiler determine if file is outdated
+
 1.2.10
 ------
 
