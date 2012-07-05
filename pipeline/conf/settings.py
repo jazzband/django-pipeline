@@ -49,6 +49,9 @@ PIPELINE_STYLUS_ARGUMENTS = getattr(settings, 'PIPELINE_STYLUS_ARGUMENTS', '')
 PIPELINE_LESS_BINARY = getattr(settings, 'PIPELINE_LESS_BINARY', '/usr/bin/env lessc')
 PIPELINE_LESS_ARGUMENTS = getattr(settings, 'PIPELINE_LESS_ARGUMENTS', '')
 
+PIPELINE_JADE_BINARY = getattr(settings, 'PIPELINE_JADE_BINARY', '/usr/bin/env jade')
+PIPELINE_JADE_ARGUMENTS = getattr(settings, 'PIPELINE_JADE_ARGUMENTS', '')
+
 PIPELINE_MIMETYPES = getattr(settings, 'PIPELINE_MIMETYPES', (
     ('text/coffeescript', '.coffee'),
     ('text/less', '.less'),
