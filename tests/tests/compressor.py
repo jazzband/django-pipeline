@@ -59,16 +59,6 @@ class CompressorTest(TestCase):
             'css/plugins/')
         self.assertEquals(absolute_path, '/images/sprite.png')
 
-    def test_template_name(self):
-        name = self.compressor.template_name('templates/photo/detail.jst',
-            'templates/')
-        self.assertEquals(name, 'photo_detail')
-        name = self.compressor.template_name('templates/photo_edit.jst', '')
-        self.assertEquals(name, 'photo_edit')
-        name = self.compressor.template_name('templates\photo\detail.jst',
-            'templates\\')
-        self.assertEquals(name, 'photo_detail')
-
     def test_compile_templates(self):
         templates = self.compressor.compile_templates(['templates/photo/list.jst'])
         self.assertEquals(templates, """window.JST = window.JST || {};\n%s\nwindow.JST[\'list\'] = template(\'<div class="photo">\\n <img src="<%%= src %%>" />\\n <div class="caption">\\n  <%%= caption %%>\\n </div>\\n</div>\');\n""" % TEMPLATE_FUNC)

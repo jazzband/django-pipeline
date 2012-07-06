@@ -1,5 +1,6 @@
 import mimetypes
 import os
+import re
 import sys
 import urllib
 
@@ -77,6 +78,18 @@ def _relpath_posix(path, start=os.path.curdir):
     if not rel_list:
         return os.path.curdir
     return os.path.join(*rel_list)
+
+
+def template_name(path, base):
+    """Find out the name of a JS template"""
+    if not base:
+        path = os.path.basename(path)
+    if path == base:
+        base = os.path.dirname(path)
+    name = re.sub(r"^%s[\/\\]?(.*)%s$" % (
+        re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
+    ), r"\1", path)
+    return re.sub(r"[\/\\]", "_", name)
 
 
 if os.path is sys.modules.get('ntpath'):

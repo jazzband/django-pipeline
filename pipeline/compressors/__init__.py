@@ -13,7 +13,7 @@ except ImportError:
     from django.contrib.staticfiles import finders # noqa
 
 from pipeline.conf import settings
-from pipeline.utils import to_class, relpath
+from pipeline.utils import to_class, relpath, template_name
 from pipeline.storage import default_storage
 
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
@@ -90,7 +90,7 @@ class Compressor(object):
             contents = self.read_file(path)
             contents = re.sub(r"\r?\n", "\\\\n", contents)
             contents = re.sub(r"'", "\\'", contents)
-            name = self.template_name(path, base_path)
+            name = template_name(path, base_path)
             compiled += "%s['%s'] = %s('%s');\n" % (
                 namespace,
                 name,
@@ -109,17 +109,6 @@ class Compressor(object):
             return all(n == name[0] for n in name[1:])
         directory_levels = zip(*[p.split(os.sep) for p in paths])
         return os.sep.join(x[0] for x in takewhile(names_equal, directory_levels))
-
-    def template_name(self, path, base):
-        """Find out the name of a JS template"""
-        if not base:
-            path = os.path.basename(path)
-        if path == base:
-            base = os.path.dirname(path)
-        name = re.sub(r"^%s[\/\\]?(.*)%s$" % (
-            re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
-        ), r"\1", path)
-        return re.sub(r"[\/\\]", "_", name)
 
     def concatenate_and_rewrite(self, paths, output_filename, variant=None):
         """Concatenate together files and rewrite urls"""
