@@ -1,6 +1,7 @@
 from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
-from os.path import splitext, basename
+from pipeline.utils import template_name
+from os.path import splitext
 
 
 class JadeCompiler(SubProcessCompiler):
@@ -16,8 +17,13 @@ class JadeCompiler(SubProcessCompiler):
             path = splitext(infile)
             outfile = '.'.join((path[0], 'js'))
 
-        js_before = '(function(){ window.JADE = window.JADE || {};\n'
-        js_after = '\nwindow.JADE["%s"] = anonymous;})();' % basename(splitext(infile)[0])
+        js_before = '(function(){ %(namespace)s = %(namespace)s || {};\n' % {
+            'namespace': settings.PIPELINE_TEMPLATE_NAMESPACE
+        }
+        js_after = '\n%s["%s"] = anonymous;})();' % (
+            settings.PIPELINE_TEMPLATE_NAMESPACE,
+            template_name(infile),
+        )
 
         command = "echo '%s' > %s ; %s -c %s < %s >> %s ; echo '%s' >> %s" % (
             js_before,

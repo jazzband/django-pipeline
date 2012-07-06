@@ -97,7 +97,9 @@ Jade
 ....
 
 `Jade <http://jade-lang.com/>`_ can compiles the templates to javascript for use client-side.
-It does not use the PIPELINE_TEMPLATE_FUNC, PIPELINE_TEMPLATE_NAMESPACE nor PIPELINE_TEMPLATE_EXT settings for now.
+It does not use the PIPELINE_TEMPLATE_FUNC nor PIPELINE_TEMPLATE_EXT settings. Just have your
+templates ending with the ``.jade`` extension.
+
 To use Pipeline with Jade templates, add this to your ``PIPELINE_COMPILERS`` ::
 
   PIPELINE_COMPILERS = (
@@ -117,7 +119,11 @@ Add jade's `runtime.js <https://github.com/visionmedia/jade/blob/master/runtime.
     }
   }
 
-Use the template's filename on the JADE object to call the template in javascript. Here is an example using jquery ::
+Customize ``PIPELINE_TEMPLATE_NAMESPACE`` ::
+
+  PIPELINE_TEMPLATE_NAMESPACE = 'window.JADE'
+
+Use the template's filename on the JADE object to call the template from your javascript. Here is an example using jquery ::
 
   var content_html = JADE['my-template']({'awsome_template_variable': 'Here we are, born to be kings, ...'});
   $('#content').html( content_html );
@@ -131,7 +137,7 @@ You can change this to the location of jade on your system.
 Defaults to ``'/usr/bin/env jade'``.
 
 `` PIPELINE_JADE_ARGUMENTS``
--------------------------
+----------------------------
 
 Additional arguments to use when jade is called.
 You can disable the template's debug mode for smaller templates ::
