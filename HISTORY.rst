@@ -4,6 +4,11 @@ History
 =======
 
 
+1.2.12
+------
+
+* Fix IO error when creating new compiled file. Thanks to Melvin Laplanche.
+
 1.2.11
 ------
 
