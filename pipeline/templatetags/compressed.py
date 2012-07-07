@@ -5,6 +5,7 @@ except ImportError:
 
 from django import template
 from django.template.loader import render_to_string
+from pipeline.compressors import Compressor
 
 from pipeline.conf import settings
 from pipeline.packager import Packager, PackageNotFound
@@ -95,6 +96,38 @@ class CompressedJSNode(template.Node):
         return '\n'.join(tags)
 
 
+class CompressedJSBlock(template.Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        output = self.nodelist.render(context)
+
+        if settings.PIPELINE:
+            output = Compressor().compress_js_block(output)
+
+        context.update({
+                'source': output
+                })
+        return render_to_string("pipeline/inline_js.html", context)
+
+
+class CompressedCSSBlock(template.Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        output = self.nodelist.render(context)
+
+        if settings.PIPELINE:
+            output = Compressor().compress_css_block(output)
+
+        context.update({
+                'source': output
+                })
+        return render_to_string("pipeline/inline_css.html", context)
+
+
 def compressed_css(parser, token):
     try:
         tag_name, name = token.split_contents()
@@ -111,3 +144,17 @@ def compressed_js(parser, token):
         raise template.TemplateSyntaxError, '%r requires exactly one argument: the name of a group in the PIPELINE_JS setting' % token.split_contents()[0]
     return CompressedJSNode(name)
 compressed_js = register.tag(compressed_js)
+
+
+def compressed_js_block(parser, token):
+    nodelist = parser.parse(('end_compressed_js_block',))
+    parser.delete_first_token()
+    return CompressedJSBlock(nodelist)
+compressed_js_block = register.tag(compressed_js_block)
+
+
+def compressed_css_block(parser, token):
+    nodelist = parser.parse(('end_compressed_css_block',))
+    parser.delete_first_token()
+    return CompressedCSSBlock(nodelist)
+compressed_css_block = register.tag(compressed_css_block)
