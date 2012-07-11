@@ -9,7 +9,7 @@ YUI Compressor compressor
 =========================
 
 The YUI compressor uses `yui-compressor <http://developer.yahoo.com/yui/compressor/>`_
-for compressing javascript and stylesheets. 
+for compressing javascript and stylesheets.
 
 To use it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
 
@@ -25,12 +25,12 @@ To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
   Command line to execute for the YUI program.
   You will most likely change this to the location of yui-compressor on your system.
-  
+
   Defaults to ``'/usr/local/bin/yuicompressor'``.
-  
+
 .. warning::
   Don't point to ``yuicompressor.jar`` directly, we expect to find a executable script.
-    
+
 
 ``PIPELINE_YUI_CSS_ARGUMENTS``
 ------------------------------
@@ -43,7 +43,7 @@ To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 -----------------------------
 
   Additional arguments to use when compressing JavaScript.
-  
+
   Defaults to ``''``.
 
 
@@ -65,7 +65,7 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
   Command line to execute for the Closure Compiler program.
   You will most likely change this to the location of closure on your system.
-  
+
   Default to ``'/usr/local/bin/closure'``
 
 .. warning::
@@ -76,7 +76,7 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 ------------------------------
 
   Additional arguments to use when closure is called.
-  
+
   Default to ``''``
 
 
@@ -96,14 +96,14 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
   Command line to execute for the Closure Compiler program.
   You will most likely change this to the location of closure on your system.
-  
+
   Defaults to ``'/usr/local/bin/uglifyjs'``.
 
 ``PIPELINE_UGLIFYJS_ARGUMENTS``
 -------------------------------
 
   Additional arguments to use when uglifyjs is called.
-  
+
   Default to ``''``
 
 
@@ -122,6 +122,21 @@ Install the jsmin library with your favorite Python package manager ::
   pip install jsmin
 
 
+SlimIt compressor
+=================
+
+The slimit compressor uses `SlimIt <http://slimit.org/>`_ to
+compress javascripts.
+
+To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
+
+  PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.slimit.SlimItCompressor'
+
+Install the slimit library with your favorite Python package manager ::
+
+  pip install slimit
+
+
 CSSTidy compressor
 ==================
 
@@ -137,7 +152,7 @@ To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
 
   Command line to execute for csstidy program.
   You will most likely change this to the location of csstidy on your system.
-  
+
   Defaults to ``'/usr/local/bin/csstidy'``
 
 ``PIPELINE_CSSTIDY_ARGUMENTS``
@@ -169,7 +184,7 @@ of compressors.
 To do so, you just have to create a class that inherits from ``pipeline.compressors.CompressorBase``
 and implements ``compress_css`` and/or a ``compress_js`` when needed.
 
-Finally, add it to ``PIPELINE_CSS_COMPRESSOR`` or 
+Finally, add it to ``PIPELINE_CSS_COMPRESSOR`` or
 ``PIPELINE_JS_COMPRESSOR`` settings (see :doc:`configuration` for more information).
 
 Example
@@ -178,14 +193,14 @@ Example
 A custom compressor for an imaginary compressor called jam ::
 
   from pipeline.compressors import CompressorBase
-  
+
   class JamCompressor(CompressorBase):
     def compress_js(self, js):
       return jam.compress(js)
-    
+
     def compress_css(self, css):
       return jam.compress(css)
-  
+
 
 Add it to your settings ::
 
