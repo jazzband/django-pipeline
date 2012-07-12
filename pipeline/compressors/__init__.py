@@ -5,7 +5,7 @@ import subprocess
 
 from itertools import takewhile
 
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_str, force_unicode
 
 try:
     from staticfiles import finders
@@ -133,7 +133,8 @@ class Compressor(object):
                     output_filename, variant)
                 return "url(%s)" % asset_url
             content = self.read_file(path)
-            content = re.sub(URL_DETECTOR, reconstruct, smart_str(content))
+            # content needs to be unicode to avoid explosions with non-ascii chars
+            content = re.sub(URL_DETECTOR, reconstruct, force_unicode(content))
             stylesheets.append(content)
         return '\n'.join(stylesheets)
 
