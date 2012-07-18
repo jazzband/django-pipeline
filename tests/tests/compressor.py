@@ -96,7 +96,7 @@ class CompressorTest(TestCase):
         output = self.compressor.concatenate_and_rewrite([
             'css/urls.css',
         ], 'css/screen.css')
-        self.assertEquals("""@font-face {
+        self.assertEquals(u"""@font-face {
   font-family: 'Pipeline';
   src: url(../fonts/pipeline.eot);
   src: url(../fonts/pipeline.eot?#iefix) format('embedded-opentype');
