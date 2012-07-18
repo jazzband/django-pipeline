@@ -32,7 +32,7 @@ class Compiler(object):
                         outfile = finders.find(output_path)
                         if outfile is None:
                             outfile = self.output_path(infile, compiler.output_extension)
-                            outdated = False
+                            outdated = True
                         else:
                             outdated = self.is_outdated(input_path, output_path)
 
