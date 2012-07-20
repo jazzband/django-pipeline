@@ -155,7 +155,6 @@ class Compressor(object):
         """Is the asset embeddable ?"""
         name, ext = os.path.splitext(path)
         font = ext in FONT_EXTS
-        
         if not variant:
             return False
         if not (re.search(settings.PIPELINE_EMBED_PATH, path) and self.storage.exists(path)):
