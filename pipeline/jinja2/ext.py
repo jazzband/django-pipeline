@@ -29,7 +29,7 @@ from pipeline.packager import Packager, PackageNotFound
 from pipeline.utils import guess_type
 
 
-class Jinja2Compress(object):
+class Jinja2Compressed(object):
 
     def __init__(self, ftype):
         """ Constructor, sets up object.
@@ -194,7 +194,7 @@ def compressed_css(package_name):
     {{ compressed_css('a_group') }}
     """
 
-    compress = Jinja2Compress('css')
+    compress = Jinja2Compressed('css')
     return compress.html(package_name)
 
 
@@ -203,5 +203,5 @@ def compressed_js(package_name):
     {{ compressed_js('a_group') }}
     """
 
-    compress = Jinja2Compress('js')
+    compress = Jinja2Compressed('js')
     return compress.html(package_name)
