@@ -12,7 +12,7 @@ Example:
     {{ compressed_js('group_name') }}
 
 Note: There is quite a bit of code duplication here from whats in the django
-tempalte tags so it would benefit from a refactor.
+template tags so it would benefit from a refactor.
 """
 
 import inspect
@@ -32,6 +32,11 @@ from pipeline.utils import guess_type
 class Jinja2Compress(object):
 
     def __init__(self, ftype):
+        """ Constructor, sets up object.
+
+        @arg1: str: file type (css/js)
+        """
+
         from django.template.loaders import app_directories  # has to be here
         if ftype not in ['css', 'js']:
             raise Exception('Package type must be css or js, supplied '
@@ -75,9 +80,6 @@ class Jinja2Compress(object):
         """ Get the js or css package.
 
         @arg1: str: name of the package to get
-        @arg2: str: package file type (js or css)
-
-        return: tuple: package and packager objects
         """
 
         package = {
@@ -102,7 +104,6 @@ class Jinja2Compress(object):
         """ Render the HTML tag.
 
         @arg1: str: path to file
-        @arg2: str: the file type (css/js)
 
         return str: the HTML output
         """
@@ -131,6 +132,13 @@ class Jinja2Compress(object):
         return tpl.render(**context)
 
     def html(self, name):
+        """ Render the HTML Snippet
+
+        @arg1: str: package name
+
+        return: str: HTML snippet
+        """
+
         self.get_package(name)
         if self.package:
             if self.settings.PIPELINE:
@@ -146,10 +154,24 @@ class Jinja2Compress(object):
             return ''  # don't return anything if no package found
 
     def render_individual_css(self, paths):
+        """ Render individual CSS files, for when PIPELINE = False
+
+        @arg1: list: paths to css files
+
+        return: str: rendered individual css tags
+        """
+
         tags = [self.render(path) for path in paths]
         return '\n'.join(tags)
 
     def render_individual_js(self, paths, templates=None):
+        """ Render individual JS files, for when PIPELINE = False
+
+        @arg1: list: paths to js files
+
+        return: str: rendered individual script tags
+        """
+
         tags = [self.render(path) for path in paths]
         if templates:
             tags.append(self.render_inline_js(self.package, templates))
@@ -168,10 +190,18 @@ class Jinja2Compress(object):
 
 
 def compressed_css(package_name):
+    """ Compress css Jinja2 function,
+    {{ compressed_css('a_group') }}
+    """
+
     compress = Jinja2Compress('css')
     return compress.html(package_name)
 
 
 def compressed_js(package_name):
+    """ Compress js Jinja2 function,
+    {{ compressed_js('a_group') }}
+    """
+
     compress = Jinja2Compress('js')
     return compress.html(package_name)
