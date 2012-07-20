@@ -28,150 +28,150 @@ from pipeline.conf import settings as pipeline_settings
 from pipeline.packager import Packager, PackageNotFound
 from pipeline.utils import guess_type
 
-_settings = None
 
+class Jinja2Compress(object):
 
-def get_settings():
-    """ Because extra Jinja2 functions have to be declared
-    at creation time the new functions have to be declared before
-    django settings evaluation so when pipeline tries to import django
-    settings it will get the default globals rather than user defined settings.
-    This function attempts to fudge back in user defined settings into
-    pipeline settings as django.conf.settings is lazy loaded and pipeline
-    settings are not.
+    def __init__(self, ftype):
+        from django.template.loaders import app_directories  # has to be here
+        if ftype not in ['css', 'js']:
+            raise Exception('Package type must be css or js, supplied '
+                            '%s' % ftype)
+        self.ftype = ftype
+        self.loader = FileSystemLoader((app_directories.app_template_dirs +
+            django_settings.TEMPLATE_DIRS))
+        self.get_pipeline_settings()
 
-    Pleae don't hurt me :(
+    def get_pipeline_settings(self):
+        """ Because extra Jinja2 functions have to be declared
+        at creation time the new functions have to be declared before
+        django settings evaluation so when pipeline tries to import django
+        settings it will get the default globals rather than user defined
+        settings. This function attempts to fudge back in user defined
+        settings into pipeline settings as django.conf.settings is lazy
+        loaded and pipeline settings are not.
 
-    I guess a better more robust solution would be to make pipeline settings
-    lazy loaded also."""
+        Pleae don't hurt me :(
 
-    members = inspect.getmembers(pipeline_settings)
-    for setting, val in members:
-        if setting.startswith('PIPELINE'):
-            if hasattr(django_settings, setting):
-                val = getattr(django_settings, setting)
+        I guess a better more robust solution would be to make pipeline
+        settings lazy loaded also."""
+
+        members = inspect.getmembers(pipeline_settings)
+        for setting, val in members:
+            if setting.startswith('PIPELINE'):
+                if hasattr(django_settings, setting):
+                    val = getattr(django_settings, setting)
+                else:
+                    if type(getattr(pipeline_settings, setting)) == str:
+                        val = "'%s'" % val
+                val = val if val else "''"
+                expr = "pipeline_settings.%s = %s" % (
+                        setting, val)
+                exec expr
+            pipeline_settings.PIPELINE = getattr(django_settings,
+                    'PIPELINE', not django_settings.DEBUG)
+        self.settings = pipeline_settings
+
+    def get_package(self, name):
+        """ Get the js or css package.
+
+        @arg1: str: name of the package to get
+        @arg2: str: package file type (js or css)
+
+        return: tuple: package and packager objects
+        """
+
+        package = {
+            'js':   self.settings.PIPELINE_JS.get(name, {}),
+            'css':  self.settings.PIPELINE_CSS.get(name, {}),
+        }[self.ftype]
+
+        if package:
+            package = {name: package}
+
+        self.packager = {
+            'js':   Packager(css_packages={}, js_packages=package),
+            'css':  Packager(css_packages=package, js_packages={}),
+        }[self.ftype]
+
+        try:
+            self.package = self.packager.package_for(self.ftype, name)
+        except PackageNotFound:
+            self.package = None
+
+    def render(self, path):
+        """ Render the HTML tag.
+
+        @arg1: str: path to file
+        @arg2: str: the file type (css/js)
+
+        return str: the HTML output
+        """
+
+        if not self.package.template_name:
+            template_name = {
+                'js':   'pipeline/js.jinja',
+                'css':  'pipeline/css.jinja',
+            }[self.ftype]
+        else:
+            template_name = self.package.template_name
+
+        mimetype = {
+            'js':   'text/javascript',
+            'css':  'text/css',
+        }[self.ftype]
+
+        context = self.package.extra_context
+        context.update({
+            'type': guess_type(path, mimetype),
+            'url': staticfiles_storage.url(path)
+        })
+
+        env = Environment(loader=self.loader)
+        tpl = env.get_template(template_name)
+        return tpl.render(**context)
+
+    def html(self, name):
+        self.get_package(name)
+        if self.package:
+            if self.settings.PIPELINE:
+                return self.render(self.package.output_filename)
             else:
-                if type(getattr(pipeline_settings, setting)) == str:
-                    val = "'%s'" % val
-            val = val if val else "''"
-            expr = "pipeline_settings.%s = %s" % (
-                    setting, val)
-            exec expr
-        pipeline_settings.PIPELINE = getattr(django_settings,
-                'PIPELINE', not django_settings.DEBUG)
-    _settings = pipeline_settings
-    return _settings
+                paths = self.packager.compile(self.package.paths)
+                templates = self.packager.pack_templates(self.package)
+                return {
+                    'css': self.render_individual_css(paths),
+                    'js': self.render_individual_js(paths, templates)
+                }[self.ftype]
+        else:
+            return ''  # don't return anything if no package found
 
+    def render_individual_css(self, paths):
+        tags = [self.render(path) for path in paths]
+        return '\n'.join(tags)
 
-def get_css_package(package_name):
-    """ Get the package from pipeline settings."""
+    def render_individual_js(self, paths, templates=None):
+        tags = [self.render(path) for path in paths]
+        if templates:
+            tags.append(self.render_inline_js(self.package, templates))
+        return '\n'.join(tags)
 
-    settings = get_settings() if not _settings else _settings  # Get settings
-    package = settings.PIPELINE_CSS.get(package_name, {})
-    if package:
-        package = {package_name: package}
-    packager = Packager(css_packages=package, js_packages={})
-    try:
-        package = packager.package_for('css', package_name)
-    except PackageNotFound:
-        return None
-    return (package, packager)
-
-
-def get_js_package(package_name):
-    """ Get the package from pipeline settings."""
-
-    settings = get_settings() if not _settings else _settings  # Get settings
-    package = settings.PIPELINE_JS.get(package_name, {})
-    if package:
-        package = {package_name: package}
-    packager = Packager(css_packages={}, js_packages=package)
-    try:
-        package = packager.package_for('js', package_name)
-    except PackageNotFound:
-        return None
-    return (package, packager)
-
-
-# TODO: render_css and render_js are very similar - refactor together?
-def render_css(package, path):
-    from django.template.loaders import app_directories
-    loader = FileSystemLoader(
-            app_directories.app_template_dirs + django_settings.TEMPLATE_DIRS)
-    template_name = package.template_name or "pipeline/css.jinja"
-    context = package.extra_context
-    context.update({
-        'type': guess_type(path, 'text/css'),
-        'url': staticfiles_storage.url(path)
-    })
-    env = Environment(loader=loader)
-    tpl = env.get_template(template_name)
-    return tpl.render(**context)
-
-
-def render_individual_css(package, paths):
-    tags = [render_css(package, path) for path in paths]
-    return '\n'.join(tags)
-
-
-def render_js(package, path):
-    from django.template.loaders import app_directories
-    loader = FileSystemLoader(
-            app_directories.app_template_dirs + django_settings.TEMPLATE_DIRS)
-    template_name = package.template_name or "pipeline/js.jinja"
-    context = package.extra_context
-    context.update({
-        'type': guess_type(path, 'text/javascript'),
-        'url': staticfiles_storage.url(path)
-    })
-    env = Environment(loader=loader)
-    tpl = env.get_template(template_name)
-    return tpl.render(**context)
-
-
-def render_inline(package, js):
-    from django.template.loaders import app_directories
-    loader = FileSystemLoader(
-            app_directories.app_template_dirs + django_settings.TEMPLATE_DIRS)
-    template_name = package.template_name or "pipeline/inline_js.jinja"
-    context = package.extra_context
-    context.update({
-        'source': js
-    })
-    env = Environment(loader=loader)
-    tpl = env.get_template(template_name)
-    return tpl.render(**context)
-
-
-def render_individual_js(package, paths, templates=None):
-    tags = [render_js(package, path) for path in paths]
-    if templates:
-        tags.append(render_inline(package, templates))
-    return '\n'.join(tags)
+    def render_inline_js(self, js):
+        template_name = (self.package.template_name or
+                "pipeline/inline_js.jinja")
+        context = self.package.extra_context
+        context.update({
+            'source': js
+        })
+        env = Environment(loader=self.loader)
+        tpl = env.get_template(template_name)
+        return tpl.render(**context)
 
 
 def compressed_css(package_name):
-    settings = get_settings() if not _settings else _settings  # Get settings
-    package, packager = get_css_package(package_name)
-    if package:
-        if settings.PIPELINE:
-            return render_css(package, package.output_filename)
-        else:
-            paths = packager.compile(package.paths)
-            return render_individual_css(package, paths)
-    else:
-        return ''
+    compress = Jinja2Compress('css')
+    return compress.html(package_name)
 
 
 def compressed_js(package_name):
-    settings = get_settings() if not _settings else _settings  # Get settings
-    package, packager = get_js_package(package_name)
-    if package:
-        if settings.PIPELINE:
-            return render_js(package, package.output_filename)
-        else:
-            paths = packager.compile(package.paths)
-            templates = packager.pack_templates(package)
-            return render_individual_js(package, paths, templates)
-    else:
-        return ''
+    compress = Jinja2Compress('js')
+    return compress.html(package_name)
