@@ -4,6 +4,13 @@ History
 =======
 
 
+1.2.13
+------
+
+* Fix unicode bug in compressor. Thanks to Victor Shnayder.
+* Fix outdated detection bug. Thanks to Victor Shnayder and Erwan Ameil.
+* Add slimit compressor. Thanks to Brant Young.
+
 1.2.12
 ------
 
