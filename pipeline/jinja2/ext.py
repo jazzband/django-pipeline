@@ -177,7 +177,7 @@ class Jinja2Compressed(object):
             tags.append(self.render_inline_js(self.package, templates))
         return '\n'.join(tags)
 
-    def render_inline_js(self, js):
+    def render_inline_js(self, package, js):
         template_name = (self.package.template_name or
                 "pipeline/inline_js.jinja")
         context = self.package.extra_context
