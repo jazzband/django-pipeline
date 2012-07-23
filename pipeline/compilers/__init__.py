@@ -102,6 +102,15 @@ class SubProcessCompiler(CompilerBase):
 
 
 class TemplateCompiler(SubProcessCompiler):
+    output_extension = 'js'
+    js_embed_wrap = '''
+%(namespace)s = %(namespace)s || {};
+%(namespace)s['%(name)s'] = %(js_compile_fn)s('%(content)s');
+'''
+
+    def match_file(self, path):
+        return path.endswith(self.input_extension)
+
     def compile_file(self, infile, outfile, infile_relative_path,
                      outdated=False, force=False):
         if not outdated and not force:
@@ -116,19 +125,17 @@ class TemplateCompiler(SubProcessCompiler):
         raise NotImplementedError
 
     def concatenate_to_js(self, infile, outfile, infile_relative_path):
-        if not self.js_wrap_concatenated:
-            raise NotImplementedError
-
-        contents = read_file(in_relative_path)
+        contents = read_file(infile_relative_path)
         contents = re.sub(r"\n", "\\\\n", contents)
         contents = re.sub(r"'", "\\'", contents)
 
-        name = template_name(in_relative_path, '')
+        name = template_name(infile_relative_path, '', self.input_extension)
 
-        contents = js_wrap_concatenated % {
+        contents = self.js_embed_wrap % {
             'namespace': settings.PIPELINE_TEMPLATE_NAMESPACE,
             'name': name,
             'content': contents,
+            'js_compile_fn': self.js_compile_function,
         }
 
         write_file(outfile, contents)

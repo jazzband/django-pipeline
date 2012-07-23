@@ -12,10 +12,10 @@ class UtilTest(TestCase):
 
     def test_template_name(self):
         name = template_name('templates/photo/detail.jst',
-            'templates/')
+            'templates/', '.jst')
         self.assertEquals(name, 'photo_detail')
-        name = template_name('templates/photo_edit.jst', '')
+        name = template_name('templates/photo_edit.jst', '', '.jst')
         self.assertEquals(name, 'photo_edit')
         name = template_name('templates\photo\detail.jst',
-            'templates\\')
+            'templates\\', '.jst')
         self.assertEquals(name, 'photo_detail')

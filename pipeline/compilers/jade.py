@@ -4,14 +4,13 @@ from pipeline.utils import template_name
 
 
 class JadeCompiler(TemplateCompiler):
-    output_extension = 'js'
-    js_wrap_concatenated = '''
+    input_extension = '.jade'
+    js_compile_function = 'jade.compile'
+    js_embed_wrap = '''
 %(namespace)s = %(namespace)s || {};
-%(namespace)s['%(name)s'] = jade.compile('%(content)s', {compileDebug: false});
+%(namespace)s['%(name)s'] = %(js_compile_fn)s('%(content)s', {compileDebug: false});
 '''
-
-    def match_file(self, path):
-        return path.endswith('.jade')
+    js_template_adder = ''
 
     def compile_to_js(self, infile, outfile, in_relative_path):
         js_before = '(function(){ %(namespace)s = %(namespace)s || {};\n' % {
@@ -19,7 +18,7 @@ class JadeCompiler(TemplateCompiler):
         }
         js_after = '\n%s["%s"] = anonymous;})();' % (
             settings.PIPELINE_TEMPLATE_NAMESPACE,
-            template_name(in_relative_path, ''),
+            template_name(in_relative_path, '', self.input_extension),
         )
 
         command = "echo '%s' > %s ; %s -c %s < %s >> %s ; echo '%s' >> %s" % (

@@ -81,14 +81,14 @@ def _relpath_posix(path, start=os.path.curdir):
     return os.path.join(*rel_list)
 
 
-def template_name(path, base):
+def template_name(path, base, extension):
     """Find out the name of a JS template"""
     if not base:
         path = os.path.basename(path)
     if path == base:
         base = os.path.dirname(path)
     name = re.sub(r"^%s[\/\\]?(.*)%s$" % (
-        re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
+        re.escape(base), re.escape(extension)
     ), r"\1", path)
     return re.sub(r"[\/\\]", "_", name)
 

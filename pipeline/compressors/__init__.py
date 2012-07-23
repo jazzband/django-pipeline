@@ -15,6 +15,7 @@ except ImportError:
 from pipeline.conf import settings
 from pipeline.utils import to_class, relpath, template_name, read_file
 from pipeline.storage import default_storage
+from pipeline.compilers import TemplateCompiler
 
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
@@ -54,7 +55,8 @@ class Compressor(object):
 
     def compress_js(self, paths, templates=None, **kwargs):
         """Concatenate and compress JS files"""
-        js = self.concatenate(paths)
+        js = self.get_template_helper()
+        js = js + self.concatenate(paths)
         if templates:
             js = js + self.compile_templates(templates)
 
@@ -80,6 +82,16 @@ class Compressor(object):
         else:
             raise CompressorError("\"%s\" is not a valid variant" % variant)
 
+    def get_template_helper(self):
+        template_helper = "%(namespace)s = %(namespace)s || {};" % {
+            'namespace': settings.PIPELINE_TEMPLATE_NAMESPACE,
+        }
+        compilers = [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
+        for compiler in compilers:
+            if isinstance(compiler, TemplateCompiler):
+                template_helper += compiler.js_template_adder
+        return template_helper
+
     def compile_templates(self, paths):
         compiled = ""
         if not paths:
@@ -90,7 +102,7 @@ class Compressor(object):
             contents = read_file(path)
             contents = re.sub(r"\r?\n", "\\\\n", contents)
             contents = re.sub(r"'", "\\'", contents)
-            name = template_name(path, base_path)
+            name = template_name(path, base_path, settings.PIPELINE_TEMPLATE_EXT)
             compiled += "%s['%s'] = %s('%s');\n" % (
                 namespace,
                 name,
