@@ -5,3 +5,4 @@ from glob import *
 from packager import *
 from storage import *
 from utils import *
+from jinja2 import *
