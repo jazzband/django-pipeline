@@ -37,10 +37,10 @@ Jinja2
 ======
 
 Pipeline also includes Jinja2 support and is used almost identically to the Django
-Template tags implimentaion.
+Template tags implementation.
 
 **Note:** You have to expose the Jinja2 functions provided by pipeline to the Jinja2
-environment yourself, Pipeline will not do this for you. There are several implimentations
+environment yourself, Pipeline will not do this for you. There are several implementations
 of Jinja2 for Django, for example:
 
  * https://github.com/niwibe/django-jinja
@@ -49,7 +49,7 @@ of Jinja2 for Django, for example:
  * https://github.com/lukesneeringer/django-jinja/
  * https://github.com/mvantellingen/django-cofingo
 
-See the vender documentaion for examples on how to expose functions to the Jinja2 environment
+See the vendor documentation for examples on how to expose functions to the Jinja2 environment
 and pick a solution that best suites your use case.
 
 For more information on Jinja2 see the documentation at http://jinja.pocoo.org/docs/.
@@ -82,7 +82,7 @@ To use in the templates: ::
 Templates
 ---------
 
-Unlike the Django template tag implimentation the Jinja2 implimentation uses different templates, so if you
+Unlike the Django template tag implementation the Jinja2 implementation uses different templates, so if you
 wish to override them please override ``pipeline/css.jinja`` and ``pipeline/js.jinja``.
 
 Collect static
