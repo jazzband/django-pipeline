@@ -1,5 +1,6 @@
 import os
 import subprocess
+import re
 
 try:
     from staticfiles import finders
@@ -8,7 +9,7 @@ except ImportError:
 
 from pipeline.conf import settings
 from pipeline.storage import default_storage
-from pipeline.utils import to_class
+from pipeline.utils import to_class, template_name, read_file, write_file
 
 
 class Compiler(object):
@@ -36,6 +37,12 @@ class Compiler(object):
                         else:
                             outdated = self.is_outdated(input_path, output_path)
                         compiler.compile_file(infile, outfile, outdated=outdated, force=force)
+                        if isinstance(compiler, TemplateCompiler):
+                            compiler.compile_file(infile, outfile, input_path,
+                                                  outdated=outdated, force=force)
+                        else:
+                            compiler.compile_file(infile, outfile, outdated=outdated,
+                                                  force=force)
                     except CompilerError:
                         if not self.storage.exists(output_path) or not settings.PIPELINE:
                             raise
@@ -92,3 +99,36 @@ class SubProcessCompiler(CompilerBase):
             print error
 
         return compressed_content
+
+
+class TemplateCompiler(SubProcessCompiler):
+    def compile_file(self, infile, outfile, infile_relative_path,
+                     outdated=False, force=False):
+        if not outdated and not force:
+            return  # File doesn't need to be recompiled
+
+        if settings.PIPELINE_TEMPLATE_COMPILE:
+            return self.compile_to_js(infile, outfile, infile_relative_path)
+        else:
+            return self.concatenate_to_js(infile, outfile, infile_relative_path)
+
+    def compile_to_js(self, infile, outfile, infile_relative_path):
+        raise NotImplementedError
+
+    def concatenate_to_js(self, infile, outfile, infile_relative_path):
+        if not self.js_wrap_concatenated:
+            raise NotImplementedError
+
+        contents = read_file(in_relative_path)
+        contents = re.sub(r"\n", "\\\\n", contents)
+        contents = re.sub(r"'", "\\'", contents)
+
+        name = template_name(in_relative_path, '')
+
+        contents = js_wrap_concatenated % {
+            'namespace': settings.PIPELINE_TEMPLATE_NAMESPACE,
+            'name': name,
+            'content': contents,
+        }
+
+        write_file(outfile, contents)
