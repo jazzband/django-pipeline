@@ -8,6 +8,7 @@ from django.utils import importlib
 from django.utils.encoding import smart_str
 
 from pipeline.conf import settings
+from pipeline.storage import default_storage
 
 
 def to_class(class_str):
@@ -90,6 +91,21 @@ def template_name(path, base):
         re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
     ), r"\1", path)
     return re.sub(r"[\/\\]", "_", name)
+
+
+def read_file(path):
+    """Read file content in binary mode"""
+    file = default_storage.open(path, 'rb')
+    content = file.read()
+    file.close()
+    return content
+
+
+def write_file(path, content):
+    """Write the content string to a file located at path"""
+    file = open(path, 'w')
+    file.write(content)
+    file.close()
 
 
 if os.path is sys.modules.get('ntpath'):

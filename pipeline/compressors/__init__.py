@@ -13,7 +13,7 @@ except ImportError:
     from django.contrib.staticfiles import finders # noqa
 
 from pipeline.conf import settings
-from pipeline.utils import to_class, relpath, template_name
+from pipeline.utils import to_class, relpath, template_name, read_file
 from pipeline.storage import default_storage
 
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
@@ -87,7 +87,7 @@ class Compressor(object):
         namespace = settings.PIPELINE_TEMPLATE_NAMESPACE
         base_path = self.base_path(paths)
         for path in paths:
-            contents = self.read_file(path)
+            contents = read_file(path)
             contents = re.sub(r"\r?\n", "\\\\n", contents)
             contents = re.sub(r"'", "\\'", contents)
             name = template_name(path, base_path)
@@ -121,7 +121,7 @@ class Compressor(object):
                 asset_url = self.construct_asset_path(asset_path, path,
                     output_filename, variant)
                 return "url(%s)" % asset_url
-            content = self.read_file(path)
+            content = read_file(path)
             # content needs to be unicode to avoid explosions with non-ascii chars
             content = re.sub(URL_DETECTOR, reconstruct, force_unicode(content))
             stylesheets.append(content)
@@ -129,7 +129,7 @@ class Compressor(object):
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
-        return '\n'.join([self.read_file(path) for path in paths])
+        return '\n'.join([read_file(path) for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
@@ -167,7 +167,7 @@ class Compressor(object):
         """Return the base64 encoded contents"""
         if path in self.__class__.asset_contents:
             return self.__class__.asset_contents[path]
-        data = self.read_file(path)
+        data = read_file(path)
         self.__class__.asset_contents[path] = base64.b64encode(data)
         return self.__class__.asset_contents[path]
 
@@ -192,13 +192,6 @@ class Compressor(object):
         absolute_path = os.path.join(settings.PIPELINE_ROOT, absolute_path)
         output_path = os.path.join(settings.PIPELINE_ROOT, os.path.dirname(output_filename))
         return relpath(absolute_path, output_path)
-
-    def read_file(self, path):
-        """Read file content in binary mode"""
-        file = default_storage.open(path, 'rb')
-        content = file.read()
-        file.close()
-        return content
 
 
 class CompressorBase(object):
