@@ -33,6 +33,57 @@ with the name “scripts”, you would use the following code to output them all
    {% compressed_css 'colors' %}
    {% compressed_js 'stats' %}
 
+Jinja2
+======
+
+Pipeline also includes Jinja2 support and is used almost identically to the Django
+Template tags implimentaion.
+
+**Note:** You have to expose the Jinja2 functions provided by pipeline to the Jinja2
+environment yourself, Pipeline will not do this for you. There are several implimentations
+of Jinja2 for Django, for example:
+
+ * https://github.com/niwibe/django-jinja
+ * https://github.com/coffin/coffin
+ * https://github.com/syrusakbary/djinja
+ * https://github.com/lukesneeringer/django-jinja/
+ * https://github.com/mvantellingen/django-cofingo
+
+See the vender documentaion for examples on how to expose functions to the Jinja2 environment
+and pick a solution that best suites your use case.
+
+For more information on Jinja2 see the documentation at http://jinja.pocoo.org/docs/.
+
+Functions
+---------
+
+The functions to expose to the Jinja2 environment are: ::
+
+    pipeline.jinja2.ext.compressed_css
+    pipeline.jinja3.ext.compressed_js
+
+Example
+-------
+
+In this example we will use https://github.com/niwibe/django-jinja. This library allows you specify
+new functions (Globals) on your settings file, for example: ::
+
+    from pipeline.jinja2.ext import compressed_css, compressed_js
+    JINJA2_GLOBALS = {
+        'compressed_css': compressed_css,
+        'compressed_js': compressed_js,
+    }
+
+To use in the templates: ::
+
+    {{ compressed_css('group_name') }}
+    {{ compressed_js('group_name') }}
+
+Templates
+---------
+
+Unlike the Django template tag implimentation the Jinja2 implimentation uses different templates, so if you
+wish to override them please override ``pipeline/css.jinja`` and ``pipeline/js.jinja``.
 
 Collect static
 ==============
@@ -40,7 +91,7 @@ Collect static
 Pipeline integrates with staticfiles, you just need to setup ``STATICFILES_STORAGE`` to ::
 
     STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
-    
+
 Then when you run ``collectstatic`` command, your CSS and your javascripts will be compressed in the same time ::
 
     $ python oslo/manage.py collectstatic
@@ -49,7 +100,7 @@ Then when you run ``collectstatic`` command, your CSS and your javascripts will 
 Middleware
 ==========
 
-To enable HTML compression add ``pipeline.middleware.MinifyHTMLMiddleware``, 
+To enable HTML compression add ``pipeline.middleware.MinifyHTMLMiddleware``,
 to your ``MIDDLEWARE_CLASSES`` settings.
 
 Ensure that it comes after any middleware which modifies your HTML, like ``GZipMiddleware`` ::

@@ -1,7 +1,7 @@
 Pipeline is a fork of django-compress which was originally created by
 Andreas Pelme <andreas@pelme.se> in 2008.
 
-These people have provided bug fixes, new features, improved the documentation 
+These people have provided bug fixes, new features, improved the documentation
 or just made Pipeline more awesome.
 
  * Adam Charnock <adam@omniwiki.co.uk>
@@ -37,4 +37,4 @@ or just made Pipeline more awesome.
  * Timothée Peignier <timothee.peignier@tryphon.org>
  * Trey Smith <trey.smith@nasa.gov>
  * Brant Young <brant.young@gmail.com>
-
+ * Chris Reeves <hello@chris.reeves.io>
