@@ -3,7 +3,7 @@ Jinja 2 Template Functions
 
 Warning: This is experimental.
 
-Takes the basis of whats in pipeline.templattags.compressed and applies to
+Takes the basis of whats in pipeline.templatetags.compressed and applies to
 jinja2 templates in the form of a global function. You need to expose this
 functions to the jinja2 environment yourself.
 
@@ -55,7 +55,7 @@ class Jinja2Compressed(object):
         settings into pipeline settings as django.conf.settings is lazy
         loaded and pipeline settings are not.
 
-        Pleae don't hurt me :(
+        No harm intended :)
 
         I guess a better more robust solution would be to make pipeline
         settings lazy loaded also."""
