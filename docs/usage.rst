@@ -79,6 +79,25 @@ To use in the templates: ::
     {{ compressed_css('group_name') }}
     {{ compressed_js('group_name') }}
 
+Manually Add to Jinja2 Environment
+----------------------------------
+
+If you are manually creating your Jinja2 environment in views you can easily add these functions to your
+environment, here is an example view: ::
+
+    from django.http import HttpResponse
+    from Jinja2 import Environment, PackageLoader
+    from pipeline.jinja2.ext import compressed_css
+    from pipeline.jinja2.ext import compressed_js
+
+    def a_jinja2_view(request):
+        loader = PackageLoader('yourapplication', 'templates')
+        environment = Environment(loader=loader)
+        environment.globals['compressed_css'] = compressed_css
+        environment.globals['compressed_js'] = compressed_js
+        tpl = environment.get_template('a_jinja2_template.html')
+        return HttpResponse(tpl.render())
+
 Templates
 ---------
 
