@@ -36,7 +36,6 @@ class Compiler(object):
                             outdated = True
                         else:
                             outdated = self.is_outdated(input_path, output_path)
-                        compiler.compile_file(infile, outfile, outdated=outdated, force=force)
                         if isinstance(compiler, TemplateCompiler):
                             compiler.compile_file(infile, outfile, input_path,
                                                   outdated=outdated, force=force)
