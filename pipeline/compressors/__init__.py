@@ -67,6 +67,20 @@ class Compressor(object):
 
         return js
 
+    def compress_js_block(self, block, **kwargs):
+        """compress JS block"""
+        if not settings.PIPELINE_DISABLE_WRAPPER:
+            content = "(function() { %s }).call(this);" % block
+        else:
+            content = block
+
+        compressor = self.js_compressor
+        if compressor:
+            content = getattr(compressor(verbose=self.verbose),
+                              'compress_js')(content)
+
+        return content
+
     def compress_css(self, paths, output_filename, variant=None, **kwargs):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, output_filename, variant)
@@ -79,6 +93,15 @@ class Compressor(object):
             return self.with_data_uri(css)
         else:
             raise CompressorError("\"%s\" is not a valid variant" % variant)
+
+    def compress_css_block(self, block, **kwargs):
+        """compress CSS block"""
+        compressor = self.css_compressor
+        if compressor:
+            content = getattr(compressor(verbose=self.verbose),
+                              'compress_css')(block)
+
+        return content
 
     def compile_templates(self, paths):
         compiled = ""
@@ -155,7 +178,7 @@ class Compressor(object):
         """Is the asset embeddable ?"""
         name, ext = os.path.splitext(path)
         font = ext in FONT_EXTS
-        
+
         if not variant:
             return False
         if not (re.search(settings.PIPELINE_EMBED_PATH, path) and self.storage.exists(path)):
