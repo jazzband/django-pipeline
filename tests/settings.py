@@ -63,3 +63,12 @@ PIPELINE_JS = {
         'output_filename': 'scripts.css'
     }
 }
+
+NOSE_ARGS = [
+    '--include=^(can|it|ensure|must|should|specs?|examples?)',
+    '--with-spec',
+    '--spec-color',
+    '-s',
+    '--cover-erase',
+    '--cover-package=pipeline']
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
