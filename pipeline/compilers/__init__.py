@@ -6,6 +6,9 @@ try:
 except ImportError:
     from django.contrib.staticfiles import finders # noqa
 
+from django.core.files.base import ContentFile
+from django.utils.encoding import smart_str
+
 from pipeline.conf import settings
 from pipeline.storage import default_storage
 from pipeline.utils import to_class
@@ -23,7 +26,7 @@ class Compiler(object):
     def compile(self, paths, force=False):
         for index, input_path in enumerate(paths):
             for compiler in self.compilers:
-                compiler = compiler(self.verbose)
+                compiler = compiler(verbose=self.verbose, storage=self.storage)
                 if compiler.match_file(input_path):
                     output_path = self.output_path(input_path, compiler.output_extension)
                     paths[index] = output_path
@@ -53,14 +56,24 @@ class Compiler(object):
 
 
 class CompilerBase(object):
-    def __init__(self, verbose):
+    def __init__(self, verbose, storage):
         self.verbose = verbose
+        self.storage = storage
 
     def match_file(self, filename):
         raise NotImplementedError
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         raise NotImplementedError
+
+    def save_file(self, path, content):
+        return self.storage.save(path, ContentFile(smart_str(content)))
+
+    def read_file(self, path):
+        file = self.storage.open(path, 'rb')
+        content = file.read()
+        file.close()
+        return content
 
 
 class CompilerError(Exception):
