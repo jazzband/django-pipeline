@@ -4,6 +4,12 @@ History
 =======
 
 
+1.2.14
+------
+
+* Jinja2 support, thanks to Christopher Reeves.
+* Add read/save_file method to CompilerBase.
+
 1.2.13
 ------
 
