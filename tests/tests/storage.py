@@ -10,7 +10,7 @@ class StorageTest(TestCase):
         settings.PIPELINE_CSS = {
             'testing': {
                 'source_filenames': (
-                    'css/first.css',
+                    'pipeline/css/first.css',
                     'css/third.css',
                 ),
                 'manifest': False,

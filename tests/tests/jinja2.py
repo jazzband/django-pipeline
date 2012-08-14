@@ -33,7 +33,7 @@ class Jinja2Test(TestCase):
             tpl = self.environment.get_template('css.jinja')
             tpl.render()
         except:
-            self.fail('Failed to load individual JS')
+            self.fail('Failed to load individual CSS')
 
     def test_template_css_function_compressed(self):
         settings.PIPELINE = True
@@ -41,7 +41,7 @@ class Jinja2Test(TestCase):
             tpl = self.environment.get_template('css.jinja')
             tpl.render()
         except:
-            self.fail('Failed to load compressed JS')
+            self.fail('Failed to load compressed CSS')
 
     def test_template_js_function_individual(self):
         settings.PIPELINE = False
@@ -49,7 +49,7 @@ class Jinja2Test(TestCase):
             tpl = self.environment.get_template('js.jinja')
             tpl.render()
         except:
-            self.fail('Failed to load individual CSS')
+            self.fail('Failed to load individual JS')
 
     def test_template_js_function_compressed(self):
         settings.PIPELINE = True
@@ -57,4 +57,4 @@ class Jinja2Test(TestCase):
             tpl = self.environment.get_template('js.jinja')
             tpl.render()
         except:
-            self.fail('Failed to load compressed CSS')
+            self.fail('Failed to load compressed JS')
