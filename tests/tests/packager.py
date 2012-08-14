@@ -9,7 +9,7 @@ class PackagerTest(TestCase):
         packager.packages['js'] = packager.create_packages({
             'application': {
                 'source_filenames': (
-                    'js/application.js',
+                    'pipeline/js/application.js',
                 ),
                 'output_filename': 'application.js'
             }
@@ -29,9 +29,9 @@ class PackagerTest(TestCase):
         packages = packager.create_packages({
             'templates': {
                 'source_filenames': (
-                    'templates/photo/list.jst',
+                    'pipeline/templates/photo/list.jst',
                 ),
                 'output_filename': 'templates.js',
             }
         })
-        self.assertEqual(packages['templates'].templates, ['templates/photo/list.jst'])
+        self.assertEqual(packages['templates'].templates, ['pipeline/templates/photo/list.jst'])

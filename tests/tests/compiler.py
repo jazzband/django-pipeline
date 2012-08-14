@@ -30,10 +30,10 @@ class CompilerTest(TestCase):
 
     def test_compile(self):
         paths = self.compiler.compile([
-            'js/dummy.coffee',
-            'js/application.js',
+            'pipeline/js/dummy.coffee',
+            'pipeline/js/application.js',
         ])
-        self.assertEquals(['js/dummy.js', 'js/application.js'], paths)
+        self.assertEquals(['pipeline/js/dummy.js', 'pipeline/js/application.js'], paths)
 
     def tearDown(self):
         settings.PIPELINE_COMPILERS = self.old_compilers
