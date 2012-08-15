@@ -13,7 +13,7 @@ To use your javascript templates, just add them to your ``PIPELINE_JS`` group ::
         'js/application.js',
         'js/templates/**/*.jst',
       ),
-      'output_filename': 'js/application.r?.js'
+      'output_filename': 'js/application.js'
     }
   }
 
