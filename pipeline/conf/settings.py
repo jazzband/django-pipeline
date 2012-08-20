@@ -21,6 +21,7 @@ PIPELINE_JS = getattr(settings, 'PIPELINE_JS', {})
 PIPELINE_TEMPLATE_NAMESPACE = getattr(settings, 'PIPELINE_TEMPLATE_NAMESPACE', "window.JST")
 PIPELINE_TEMPLATE_EXT = getattr(settings, 'PIPELINE_TEMPLATE_EXT', ".jst")
 PIPELINE_TEMPLATE_FUNC = getattr(settings, 'PIPELINE_TEMPLATE_FUNC', "template")
+PIPELINE_TEMPLATE_COMPILE = getattr(settings, 'PIPELINE_TEMPLATE_COMPILE', False)
 
 PIPELINE_DISABLE_WRAPPER = getattr(settings, 'PIPELINE_DISABLE_WRAPPER', False)
 
@@ -48,6 +49,12 @@ PIPELINE_STYLUS_ARGUMENTS = getattr(settings, 'PIPELINE_STYLUS_ARGUMENTS', '')
 
 PIPELINE_LESS_BINARY = getattr(settings, 'PIPELINE_LESS_BINARY', '/usr/bin/env lessc')
 PIPELINE_LESS_ARGUMENTS = getattr(settings, 'PIPELINE_LESS_ARGUMENTS', '')
+
+PIPELINE_JADE_BINARY = getattr(settings, 'PIPELINE_JADE_BINARY', '/usr/bin/env jade')
+PIPELINE_JADE_ARGUMENTS = getattr(settings, 'PIPELINE_JADE_ARGUMENTS', '')
+
+PIPELINE_HANDLEBARS_BINARY = getattr(settings, 'PIPELINE_HANDLEBARS_BINARY', '/usr/bin/env handlebars')
+PIPELINE_HANDLEBARS_ARGUMENTS = getattr(settings, 'PIPELINE_HANDLEBARS_ARGUMENTS', '')
 
 PIPELINE_MIMETYPES = getattr(settings, 'PIPELINE_MIMETYPES', (
     ('text/coffeescript', '.coffee'),

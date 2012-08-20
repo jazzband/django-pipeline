@@ -106,7 +106,8 @@ class Packager(object):
         return self.pack(package, self.compressor.compress_js, js_compressed, templates=package.templates, **kwargs)
 
     def pack_templates(self, package):
-        return self.compressor.compile_templates(package.templates)
+        return self.compressor.get_template_helper() + \
+                self.compressor.compile_templates(package.templates)
 
     def save_file(self, path, content):
         return self.storage.save(path, ContentFile(smart_str(content)))

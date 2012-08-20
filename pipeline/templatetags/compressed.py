@@ -91,7 +91,7 @@ class CompressedJSNode(template.Node):
     def render_individual(self, package, paths, templates=None):
         tags = [self.render_js(package, js) for js in paths]
         if templates:
-            tags.append(self.render_inline(package, templates))
+            tags.insert(0, self.render_inline(package, templates))
         return '\n'.join(tags)
 
 
