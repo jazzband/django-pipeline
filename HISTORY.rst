@@ -4,6 +4,12 @@ History
 =======
 
 
+1.2.15
+------
+
+* Ensure asset url are build with ``posixpath``.
+* Deal with storage prefix properly.
+
 1.2.14
 ------
 
