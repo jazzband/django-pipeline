@@ -31,8 +31,12 @@ class Compiler(object):
                     output_path = self.output_path(input_path, compiler.output_extension)
                     paths[index] = output_path
                     try:
-                        infile = finders.find(input_path)
-                        outfile = finders.find(output_path)
+                        if settings.PIPELINE_ROOT_COMPILE:
+                            infile = os.path.join(settings.PIPELINE_ROOT, input_path)
+                            outfile = None
+                        else:
+                            infile = finders.find(input_path)
+                            outfile = finders.find(output_path)
                         if outfile is None:
                             outfile = self.output_path(infile, compiler.output_extension)
                             outdated = True
@@ -42,6 +46,7 @@ class Compiler(object):
                     except CompilerError:
                         if not self.storage.exists(output_path) or not settings.PIPELINE:
                             raise
+
         return paths
 
     def output_path(self, path, extension):
