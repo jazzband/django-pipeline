@@ -39,4 +39,6 @@ class PipelineManifest(Manifest):
                 for path in self.packager.compile(package.paths):
                     yield str(self.packager.individual_url(path))
         for path in self.finder.list(ignore_patterns):
+            if type(path) in (list, tuple): 
+                path = path[0]
             yield str(self.packager.individual_url(path))
