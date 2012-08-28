@@ -4,6 +4,8 @@ PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
 
+PIPELINE_ROOT_COMPILE = getattr(settings, 'PIPELINE_ROOT_COMPILE', False)
+
 PIPELINE_STORAGE = getattr(settings, 'PIPELINE_STORAGE',
     'pipeline.storage.PipelineFinderStorage')
 
