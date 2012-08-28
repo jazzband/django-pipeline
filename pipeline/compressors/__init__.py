@@ -191,7 +191,7 @@ class Compressor(object):
         given the path of the stylesheet that contains it.
         """
         if posixpath.isabs(path):
-            path = posixpath.join(default_storage.location, path)
+            path = posixpath.join(self.storage.location, path)
         else:
             path = posixpath.join(start, path)
         return posixpath.normpath(path)
@@ -204,7 +204,7 @@ class Compressor(object):
 
     def read_bytes(self, path):
         """Read file content in binary mode"""
-        file = default_storage.open(path)
+        file = self.storage.open(path)
         content = file.read()
         file.close()
         return content
