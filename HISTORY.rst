@@ -3,6 +3,11 @@
 History
 =======
 
+1.2.16
+------
+
+* Fix manifesto module. Thanks to Zenobius Jiricek.
+* Ensure coffee-script compiler don't try to overwrite file. Thanks to Teo Klestrup Röijezon.
 
 1.2.15
 ------
