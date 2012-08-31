@@ -45,15 +45,15 @@ class Compressor(object):
         self.storage = storage
         self.verbose = verbose
 
-    def js_compressor(self):
-        return to_class(settings.PIPELINE_JS_COMPRESSOR)
-    js_compressor = property(js_compressor)
+    def resolve_js_compressor(self, compressor=None):
+        return to_class(compressor if compressor else settings.PIPELINE_JS_COMPRESSOR)
+    js_compressor = property(resolve_js_compressor)
 
-    def css_compressor(self):
-        return to_class(settings.PIPELINE_CSS_COMPRESSOR)
-    css_compressor = property(css_compressor)
+    def resolve_css_compressor(self, compressor=None):
+        return to_class(compressor if compressor else settings.PIPELINE_CSS_COMPRESSOR)
+    css_compressor = property(resolve_css_compressor)
 
-    def compress_js(self, paths, templates=None, **kwargs):
+    def compress_js(self, paths, templates=None, compressor=None, **kwargs):
         """Concatenate and compress JS files"""
         js = self.concatenate(paths)
         if templates:
@@ -62,16 +62,17 @@ class Compressor(object):
         if not settings.PIPELINE_DISABLE_WRAPPER:
             js = "(function() { %s }).call(this);" % js
 
-        compressor = self.js_compressor
+        compressor = self.resolve_js_compressor(compressor=compressor)
+        
         if compressor:
             js = getattr(compressor(verbose=self.verbose), 'compress_js')(js)
 
         return js
 
-    def compress_css(self, paths, output_filename, variant=None, **kwargs):
+    def compress_css(self, paths, output_filename, compressor=None, variant=None, **kwargs):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, output_filename, variant)
-        compressor = self.css_compressor
+        compressor = self.resolve_css_compressor(compressor=compressor)
         if compressor:
             css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
         if not variant:
