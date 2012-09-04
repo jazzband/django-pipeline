@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from pipeline.conf import settings
 from pipeline.compilers import Compiler, CompilerBase
-
+from paths import _
 
 class DummyCompiler(CompilerBase):
     output_extension = 'js'
@@ -30,10 +30,10 @@ class CompilerTest(TestCase):
 
     def test_compile(self):
         paths = self.compiler.compile([
-            'pipeline/js/dummy.coffee',
-            'pipeline/js/application.js',
+            _('pipeline/js/dummy.coffee'),
+            _('pipeline/js/application.js'),
         ])
-        self.assertEquals(['pipeline/js/dummy.js', 'pipeline/js/application.js'], paths)
+        self.assertEquals([_('pipeline/js/dummy.js'), _('pipeline/js/application.js')], paths)
 
     def tearDown(self):
         settings.PIPELINE_COMPILERS = self.old_compilers
