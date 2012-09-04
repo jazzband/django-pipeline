@@ -145,7 +145,7 @@ class Compressor(object):
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
-        public_path = self.absolute_path(asset_path, posixpath.dirname(css_path))
+        public_path = self.absolute_path(asset_path, os.path.dirname(css_path).replace('\\','/'))
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
         if not posixpath.isabs(asset_path):
