@@ -2,6 +2,8 @@ from django.test import TestCase
 
 from pipeline.packager import Packager, PackageNotFound
 
+from paths import _
+
 
 class PackagerTest(TestCase):
     def test_package_for(self):
@@ -9,7 +11,7 @@ class PackagerTest(TestCase):
         packager.packages['js'] = packager.create_packages({
             'application': {
                 'source_filenames': (
-                    'pipeline/js/application.js',
+                    _('pipeline/js/application.js'),
                 ),
                 'output_filename': 'application.js'
             }
@@ -29,9 +31,9 @@ class PackagerTest(TestCase):
         packages = packager.create_packages({
             'templates': {
                 'source_filenames': (
-                    'pipeline/templates/photo/list.jst',
+                    _('pipeline/templates/photo/list.jst'),
                 ),
                 'output_filename': 'templates.js',
             }
         })
-        self.assertEqual(packages['templates'].templates, ['pipeline/templates/photo/list.jst'])
+        self.assertEqual(packages['templates'].templates, [_('pipeline/templates/photo/list.jst')])
