@@ -154,11 +154,11 @@ class Compressor(object):
 
     def embeddable(self, path, variant):
         """Is the asset embeddable ?"""
-        name, ext = posixpath.splitext(path)
+        name, ext = os.path.splitext(path)
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not (re.search(settings.PIPELINE_EMBED_PATH, path) and self.storage.exists(path)):
+        if not (re.search(settings.PIPELINE_EMBED_PATH, path.replace('\\','/')) and self.storage.exists(path)):
             return False
         if not ext in EMBED_EXTS:
             return False
