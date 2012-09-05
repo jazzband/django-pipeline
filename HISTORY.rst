@@ -3,6 +3,11 @@
 History
 =======
 
+1.2.17
+------
+
+* Fully tested windows compatibility. Thanks to Idan Zalzberg.
+
 1.2.16
 ------
 
