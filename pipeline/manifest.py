@@ -18,7 +18,16 @@ class PipelineManifest(Manifest):
         self.packager = Packager()
         self.packages = self.collect_packages()
         self.finders = get_finders()
-        self.package_files = list()
+        self.package_files = self.get_package_files()
+
+    def get_package_files(self):
+        files = list()
+        for package in self.packages:
+            files.append(package.output_filename)
+            for path in self.packager.compile(package.paths):
+                files.append(path)
+
+        return files     
 
     def collect_packages(self):
         packages = []
@@ -37,12 +46,10 @@ class PipelineManifest(Manifest):
         
         if PIPELINE:
             for package in self.packages:
-                self.package_files.append(package.output_filename)
                 yield str(self.packager.individual_url(package.output_filename))
         else:
             for package in self.packages:
                 for path in self.packager.compile(package.paths):
-                    self.package_files.append(path)
                     yield str(self.packager.individual_url(path))
 
         for finder in self.finders:
@@ -55,5 +62,4 @@ class PipelineManifest(Manifest):
 
                 # Dont add any doubles
                 if prefixed_path not in self.package_files:
-                    self.package_files.append(prefixed_path)
                     yield str(self.packager.individual_url(prefixed_path))
