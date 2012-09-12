@@ -4,6 +4,7 @@ except ImportError:
     from django.contrib.staticfiles.finders import DefaultStorageFinder # noqa
 
 from django.conf import settings
+from pipeline.conf.settings import (PIPELINE)
 
 from manifesto import Manifest
 
@@ -31,12 +32,13 @@ class PipelineManifest(Manifest):
     def cache(self):
         ignore_patterns = getattr(settings, "STATICFILES_IGNORE_PATTERNS", None)
         
-        if settings.PIPELINE:
+        if PIPELINE:
             for package in self.packages:
                 yield str(self.packager.individual_url(package.output_filename))
         else:
             for package in self.packages:
                 for path in self.packager.compile(package.paths):
                     yield str(self.packager.individual_url(path))
+
         for path, _ in self.finder.list(ignore_patterns):
             yield str(self.packager.individual_url(path))
