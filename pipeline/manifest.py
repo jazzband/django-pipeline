@@ -3,7 +3,7 @@ try:
 except ImportError:
     from django.contrib.staticfiles.finders import DefaultStorageFinder # noqa
 
-from django.conf import settings
+from pipeline.conf import settings
 
 from manifesto import Manifest
 
