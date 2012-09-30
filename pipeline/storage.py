@@ -88,7 +88,7 @@ class BaseFinderStorage(PipelineStorage):
         return path
 
     def exists(self, name):
-        exists = self.finders.find(name) != None
+        exists = self.finders.find(name) is not None
         if not exists:
             return super(BaseFinderStorage, self).exists(name)
         return exists

@@ -30,7 +30,7 @@ class PipelineManifest(Manifest):
 
     def cache(self):
         ignore_patterns = getattr(settings, "STATICFILES_IGNORE_PATTERNS", None)
-        
+
         if settings.PIPELINE:
             for package in self.packages:
                 yield str(self.packager.individual_url(package.output_filename))
