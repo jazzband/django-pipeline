@@ -1,7 +1,9 @@
+import os
+
 try:
-    from staticfiles.finders import DefaultStorageFinder
+    from staticfiles.finders import get_finders
 except ImportError:
-    from django.contrib.staticfiles.finders import DefaultStorageFinder # noqa
+    from django.contrib.staticfiles.finders import get_finders  # noqa
 
 from pipeline.conf import settings
 
@@ -14,7 +16,8 @@ class PipelineManifest(Manifest):
     def __init__(self):
         self.packager = Packager()
         self.packages = self.collect_packages()
-        self.finder = DefaultStorageFinder()
+        self.finders = get_finders()
+        self.package_files = []
 
     def collect_packages(self):
         packages = []
@@ -33,10 +36,23 @@ class PipelineManifest(Manifest):
 
         if settings.PIPELINE:
             for package in self.packages:
+                self.package_files.append(package.output_filename)
                 yield str(self.packager.individual_url(package.output_filename))
         else:
             for package in self.packages:
                 for path in self.packager.compile(package.paths):
+                    self.package_files.append(path)
                     yield str(self.packager.individual_url(path))
-        for path, _ in self.finder.list(ignore_patterns):
-            yield str(self.packager.individual_url(path))
+
+        for finder in self.finders:
+            for path, storage in finder.list(ignore_patterns):
+                # Prefix the relative path if the source storage contains it
+                if getattr(storage, 'prefix', None):
+                    prefixed_path = os.path.join(storage.prefix, path)
+                else:
+                    prefixed_path = path
+
+                # Dont add any doubles
+                if prefixed_path not in self.package_files:
+                    self.package_files.append(prefixed_path)
+                    yield str(self.packager.individual_url(prefixed_path))
