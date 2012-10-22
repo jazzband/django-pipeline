@@ -158,18 +158,29 @@ To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
 
   Default to ``'--template=highest'``
 
-cssmin compressor
+CSSMin compressor
 =================
 
-The cssmin compressor uses the `cssmin <http://pypi.python.org/pypi/cssmin/>`_
-Python library to compress stylesheets. To use it, specify this
-``PIPELINE_CSS_COMPRESSOR`` ::
+The cssmin compressor uses the `cssmin <https://github.com/jbleuzen/node-cssmin>`_
+command to compress stylesheets. To use it, add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
 
-  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CssminCompressor'
+  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
 
-Install the cssmin library with your favorite Python package manager. E.g. ::
+``PIPELINE_CSSMIN_BINARY``
+---------------------------
 
-  pip install cssmin
+  Command line to execute for cssmin program.
+  You will most likely change this to the location of cssmin on your system.
+
+  Defaults to ``'/usr/bin/env cssmin'``
+
+``PIPELINE_CSSMIN_ARGUMENTS``
+------------------------------
+
+  Additional arguments to use when cssmin is called.
+
+  Default to ``''``
+
 
 Write your own compressor class
 ===============================
