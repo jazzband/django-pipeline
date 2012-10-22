@@ -3,6 +3,11 @@
 History
 =======
 
+1.2.19
+------
+
+* **BACKWARD INCOMPATIBLE** : Replace python cssmin compressor to run the command (works for python or node implementation)
+
 1.2.18
 ------
 
