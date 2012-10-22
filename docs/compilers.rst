@@ -23,13 +23,13 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
   Command line to execute for coffee program.
   You will most likely change this to the location of coffee on your system.
 
-  Defaults to ``'/usr/local/bin/coffee'``.
+  Defaults to ``'/usr/bin/env coffee'``.
 
 ``PIPELINE_COFFEE_SCRIPT_ARGUMENTS``
 ------------------------------------
-  
+
   Additional arguments to use when coffee is called.
-  
+
   Defaults to ``''``.
 
 LESS compiler
@@ -50,7 +50,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
   Command line to execute for lessc program.
   You will most likely change this to the location of lessc on your system.
 
-  Defaults to ``'/usr/local/bin/lessc'``.
+  Defaults to ``'/usr/bin/env lessc'``.
 
 ``PIPELINE_LESS_ARGUMENTS``
 ---------------------------
@@ -74,15 +74,15 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
 ``PIPELINE_SASS_BINARY``
 ------------------------
-  
+
   Command line to execute for sass program.
   You will most likely change this to the location of sass on your system.
 
-  Defaults to ``'/usr/local/bin/sass'``.
+  Defaults to ``'/usr/bin/env sass'``.
 
 ``PIPELINE_SASS_ARGUMENTS``
 ---------------------------
-  
+
   Additional arguments to use when sass is called.
 
   Defaults to ``''``.
@@ -106,14 +106,14 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
   Command line to execute for stylus program.
   You will most likely change this to the location of stylus on your system.
- 
-  Defaults to ``'/usr/local/bin/stylus'``.
+
+  Defaults to ``'/usr/bin/env stylus'``.
 
 ``PIPELINE_STYLUS_ARGUMENTS``
 -----------------------------
 
   Additional arguments to use when stylus is called.
-  
+
   Defaults to ``''``.
 
 
@@ -135,13 +135,13 @@ Example
 A custom compiler for an imaginary compiler called jam ::
 
   from pipeline.compilers import CompilerBase
-  
+
   class JamCompiler(CompilerBase):
     output_extension = 'js'
-    
+
     def match_file(self, filename):
       return filename.endswith('.jam')
-    
+
     def compile_file(self, infile, outfile, outdated=False, force=False):
       if not outdated and not force:
         return  # No need to recompiled file

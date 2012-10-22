@@ -5,10 +5,10 @@ Compressors
 ===========
 
 
-YUI Compressor compressor
+YUI compressor
 =========================
 
-The YUI compressor uses `yui-compressor <http://developer.yahoo.com/yui/compressor/>`_
+The YUI compressor uses `yuglify <http://github.com/yui/yuglify>`_
 for compressing javascript and stylesheets.
 
 To use it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
@@ -26,11 +26,7 @@ To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSOR`` ::
   Command line to execute for the YUI program.
   You will most likely change this to the location of yui-compressor on your system.
 
-  Defaults to ``'/usr/local/bin/yuicompressor'``.
-
-.. warning::
-  Don't point to ``yuicompressor.jar`` directly, we expect to find a executable script.
-
+  Defaults to ``'/usr/bin/env yuglify'``.
 
 ``PIPELINE_YUI_CSS_ARGUMENTS``
 ------------------------------
@@ -66,7 +62,7 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
   Command line to execute for the Closure Compiler program.
   You will most likely change this to the location of closure on your system.
 
-  Default to ``'/usr/local/bin/closure'``
+  Default to ``'/usr/bin/env closure'``
 
 .. warning::
   Don't point to ``compiler.jar`` directly, we expect to find a executable script.
@@ -97,7 +93,7 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
   Command line to execute for the Closure Compiler program.
   You will most likely change this to the location of closure on your system.
 
-  Defaults to ``'/usr/local/bin/uglifyjs'``.
+  Defaults to ``'/usr/bin/env uglifyjs'``.
 
 ``PIPELINE_UGLIFYJS_ARGUMENTS``
 -------------------------------
@@ -153,7 +149,7 @@ To us it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
   Command line to execute for csstidy program.
   You will most likely change this to the location of csstidy on your system.
 
-  Defaults to ``'/usr/local/bin/csstidy'``
+  Defaults to ``'/usr/bin/env csstidy'``
 
 ``PIPELINE_CSSTIDY_ARGUMENTS``
 ------------------------------
