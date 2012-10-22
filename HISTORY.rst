@@ -3,6 +3,11 @@
 History
 =======
 
+1.1.20
+------
+
+* Ensure yui-compressor can still use YUICompressor.
+
 1.2.19
 ------
 
