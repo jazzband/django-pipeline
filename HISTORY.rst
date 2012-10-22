@@ -3,6 +3,12 @@
 History
 =======
 
+1.2.18
+------
+
+* **BACKWARD INCOMPATIBLE** : Replace yui-compressor by yuglify, check your configuration.
+* Use finders in manifest. Thanks to Sjoerd Arendsen.
+
 1.2.17
 ------
 
@@ -48,8 +54,8 @@ History
 1.2.10
 ------
 
-* Use ``/usr/bin/env`` by default to find compiler executable. Thanks to Michael Weibel. 
-* Allow to change embed settings : max size and directory. Thanks to Pierre Drescher. 
+* Use ``/usr/bin/env`` by default to find compiler executable. Thanks to Michael Weibel.
+* Allow to change embed settings : max size and directory. Thanks to Pierre Drescher.
 * Some documentation improvements. Thanks to Florent Messa.
 
 1.2.9
@@ -84,7 +90,7 @@ History
 -----
 
 * Fix import error for cssmin and jsmin compressors. Thanks to Berker Peksag for the report.
-* Fix error with default template function. Thanks to David Charbonnier for the patch and report. 
+* Fix error with default template function. Thanks to David Charbonnier for the patch and report.
 
 
 1.2.4
@@ -132,7 +138,7 @@ History
 * Added a default js template language.
 * Dropped ``PIPELINE_AUTO`` settings in favor of simple ``PIPELINE``.
 * Renamed ``absolute_asset_paths`` to ``absolute_paths`` for brevity.
-* Made packages lazy to avoid doing unnecessary I/O. 
+* Made packages lazy to avoid doing unnecessary I/O.
 * Dropped ``external_urls`` support for now.
 * Add cssmin compressor. Thanks to Steven Cummings.
 * Jsmin is no more bundle with pipeline.
