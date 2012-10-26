@@ -3,7 +3,8 @@ from django.utils.datastructures import SortedDict
 
 from pipeline.conf import settings
 from pipeline.storage import PipelineStorage
-from paths import _
+
+from tests.utils import _
 
 
 class StorageTest(TestCase):

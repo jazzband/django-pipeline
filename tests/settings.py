@@ -13,7 +13,7 @@ SITE_ID = 1
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sites',
-    'staticfiles',
+    'django.contrib.staticfiles',
     'django.contrib.auth',
     'django.contrib.admin',
     'pipeline',
@@ -32,8 +32,8 @@ STATICFILES_DIRS = (
     local_path('assets2/'),
 )
 STATICFILES_FINDERS = (
-    'staticfiles.finders.FileSystemFinder',
-    'staticfiles.finders.AppDirectoriesFinder'
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
 )
 
 SECRET_KEY = "django-pipeline"

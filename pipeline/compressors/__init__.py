@@ -6,12 +6,9 @@ import subprocess
 
 from itertools import takewhile
 
-from django.utils.encoding import smart_str, force_unicode
+from django.utils.encoding import smart_bytes, force_text
 
-try:
-    from staticfiles import finders
-except ImportError:
-    from django.contrib.staticfiles import finders # noqa
+from django.contrib.staticfiles import finders
 
 from pipeline.conf import settings
 from pipeline.storage import default_storage
@@ -89,8 +86,8 @@ class Compressor(object):
         base_path = self.base_path(paths)
         for path in paths:
             contents = self.read_file(path)
-            contents = re.sub(r"\r?\n", "\\\\n", contents)
-            contents = re.sub(r"'", "\\'", contents)
+            contents = re.sub("\r?\n", "\\\\n", contents)
+            contents = re.sub("'", "\\'", contents)
             name = self.template_name(path, base_path)
             compiled += "%s['%s'] = %s('%s');\n" % (
                 namespace,
@@ -135,7 +132,7 @@ class Compressor(object):
                 return "url(%s)" % asset_url
             content = self.read_file(path)
             # content needs to be unicode to avoid explosions with non-ascii chars
-            content = re.sub(URL_DETECTOR, reconstruct, force_unicode(content))
+            content = re.sub(URL_DETECTOR, reconstruct, force_text(content))
             stylesheets.append(content)
         return '\n'.join(stylesheets)
 
@@ -232,7 +229,7 @@ class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        pipe.stdin.write(smart_str(content))
+        pipe.stdin.write(smart_bytes(content))
         pipe.stdin.close()
 
         compressed_content = pipe.stdout.read()
@@ -247,5 +244,5 @@ class SubProcessCompressor(CompressorBase):
             raise CompressorError(error)
 
         if self.verbose:
-            print error
+            print(error)
         return compressed_content

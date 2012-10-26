@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from pipeline.packager import Packager, PackageNotFound
 
-from paths import _
+from tests.utils import _
 
 
 class PackagerTest(TestCase):

@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 import base64
 
-from mock import patch
+try:
+    from mock import patch
+except:
+    from unittest.mock import patch
 
 from django.test import TestCase
 
 from pipeline.compressors import Compressor, TEMPLATE_FUNC
 from pipeline.compressors.yui import YUICompressor
 
-from paths import _
+from tests.utils import _
 
 
 class CompressorTest(TestCase):

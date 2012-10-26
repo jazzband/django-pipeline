@@ -1,9 +1,6 @@
 import inspect
 
-try:
-    from staticfiles.storage import staticfiles_storage
-except ImportError:
-    from django.contrib.staticfiles.storage import staticfiles_storage  # noqa
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django.conf import settings as django_settings
 from jinja2 import Environment, FileSystemLoader
@@ -48,7 +45,7 @@ class Jinja2Compressed(object):
                 val = val if val else "''"
                 expr = "pipeline_settings.%s = %s" % (
                         setting, val)
-                exec expr
+                exec(expr)
             pipeline_settings.PIPELINE = getattr(django_settings,
                     'PIPELINE', not django_settings.DEBUG)
         self.settings = pipeline_settings
