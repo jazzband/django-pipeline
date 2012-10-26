@@ -5,7 +5,7 @@ import base64
 
 try:
     from mock import patch
-except:
+except ImportError:
     from unittest.mock import patch  # noqa
 
 from django.test import TestCase
