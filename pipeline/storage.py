@@ -1,7 +1,9 @@
+from __future__ import unicode_literals
+
 import os
 
 from django.contrib.staticfiles import finders
-from django.contrib.staticfiles.storage import CachedFilesMixin, StaticFilesStorage
+from django.contrib.staticfiles.storage import CachedFilesMixin, StaticFilesStorage # noqa
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class

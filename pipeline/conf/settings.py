@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.conf import settings
 
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)

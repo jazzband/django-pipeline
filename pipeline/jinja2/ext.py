@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import inspect
 
 from django.contrib.staticfiles.storage import staticfiles_storage

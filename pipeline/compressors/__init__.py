@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import base64
 import os
 import posixpath
@@ -7,8 +9,6 @@ import subprocess
 from itertools import takewhile
 
 from django.utils.encoding import smart_bytes, force_text
-
-from django.contrib.staticfiles import finders
 
 from pipeline.conf import settings
 from pipeline.storage import default_storage
@@ -86,8 +86,8 @@ class Compressor(object):
         base_path = self.base_path(paths)
         for path in paths:
             contents = self.read_file(path)
-            contents = re.sub("\r?\n", "\\\\n", contents)
-            contents = re.sub("'", "\\'", contents)
+            contents = re.sub(b"\r?\n", b"\\\\n", contents)
+            contents = re.sub(b"'", b"\\'", contents)
             name = self.template_name(path, base_path)
             compiled += "%s['%s'] = %s('%s');\n" % (
                 namespace,
@@ -138,7 +138,7 @@ class Compressor(object):
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
-        return '\n'.join([self.read_file(path) for path in paths])
+        return b"\n".join([self.read_file(path) for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
@@ -203,7 +203,7 @@ class Compressor(object):
 
     def read_file(self, path):
         """Read file content in binary mode"""
-        file = default_storage.open(path, 'rb')
+        file = default_storage.open(path)
         content = file.read()
         file.close()
         return content

@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import base64
 
 try:
     from mock import patch
 except:
-    from unittest.mock import patch
+    from unittest.mock import patch  # noqa
 
 from django.test import TestCase
 
@@ -37,7 +39,7 @@ class CompressorTest(TestCase):
             _('pipeline/js/first.js'),
             _('pipeline/js/second.js')
         ])
-        self.assertEquals("""function concat() {\n  console.log(arguments);\n}\n\nfunction cat() {\n  console.log("hello world");\n}\n""", js)
+        self.assertEquals(b"""function concat() {\n  console.log(arguments);\n}\n\nfunction cat() {\n  console.log("hello world");\n}\n""", js)
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):
@@ -102,7 +104,7 @@ class CompressorTest(TestCase):
         output = self.compressor.concatenate_and_rewrite([
             _('pipeline/css/urls.css'),
         ], 'css/screen.css')
-        self.assertEquals(u"""@font-face {
+        self.assertEquals("""@font-face {
   font-family: 'Pipeline';
   src: url(../pipeline/fonts/pipeline.eot);
   src: url(../pipeline/fonts/pipeline.eot?#iefix) format('embedded-opentype');
