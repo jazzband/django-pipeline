@@ -85,9 +85,9 @@ class Compressor(object):
         namespace = settings.PIPELINE_TEMPLATE_NAMESPACE
         base_path = self.base_path(paths)
         for path in paths:
-            contents = self.read_file(path)
-            contents = re.sub(b"\r?\n", b"\\\\n", contents)
-            contents = re.sub(b"'", b"\\'", contents)
+            contents = self.read_text(path)
+            contents = re.sub("\r?\n", "\\\\n", contents)
+            contents = re.sub("'", "\\'", contents)
             name = self.template_name(path, base_path)
             compiled += "%s['%s'] = %s('%s');\n" % (
                 namespace,
@@ -130,15 +130,15 @@ class Compressor(object):
                 asset_url = self.construct_asset_path(asset_path, path,
                     output_filename, variant)
                 return "url(%s)" % asset_url
-            content = self.read_file(path)
+            content = self.read_text(path)
             # content needs to be unicode to avoid explosions with non-ascii chars
-            content = re.sub(URL_DETECTOR, reconstruct, force_text(content))
+            content = re.sub(URL_DETECTOR, reconstruct, content)
             stylesheets.append(content)
         return '\n'.join(stylesheets)
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
-        return b"\n".join([self.read_file(path) for path in paths])
+        return "\n".join([self.read_text(path) for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
@@ -175,7 +175,7 @@ class Compressor(object):
         """Return the base64 encoded contents"""
         if path in self.__class__.asset_contents:
             return self.__class__.asset_contents[path]
-        data = self.read_file(path)
+        data = self.read_bytes(path)
         self.__class__.asset_contents[path] = base64.b64encode(data)
         return self.__class__.asset_contents[path]
 
@@ -201,12 +201,16 @@ class Compressor(object):
         output_path = posixpath.join(settings.PIPELINE_ROOT, posixpath.dirname(output_filename))
         return relpath(absolute_path, output_path)
 
-    def read_file(self, path):
+    def read_bytes(self, path):
         """Read file content in binary mode"""
         file = default_storage.open(path)
         content = file.read()
         file.close()
         return content
+
+    def read_text(self, path):
+        content = self.read_bytes(path)
+        return force_text(content)
 
 
 class CompressorBase(object):

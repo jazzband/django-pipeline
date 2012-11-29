@@ -39,7 +39,7 @@ class CompressorTest(TestCase):
             _('pipeline/js/first.js'),
             _('pipeline/js/second.js')
         ])
-        self.assertEquals(b"""function concat() {\n  console.log(arguments);\n}\n\nfunction cat() {\n  console.log("hello world");\n}\n""", js)
+        self.assertEquals("""function concat() {\n  console.log(arguments);\n}\n\nfunction cat() {\n  console.log("hello world");\n}\n""", js)
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):
