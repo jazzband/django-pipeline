@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from django.contrib.staticfiles.storage import staticfiles_storage # noqa
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django import template
 from django.template.loader import render_to_string

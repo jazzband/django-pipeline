@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-from django.utils import six
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django.conf import settings
@@ -16,7 +15,7 @@ class Jinja2Compressed(object):
             raise PackageNotFound("Package type must be css or js, supplied %s" % package_type)
         self.package_type = package_type
         self.loader = FileSystemLoader((app_directories.app_template_dirs +
-            settings.TEMPLATE_DIRS))
+                                        settings.TEMPLATE_DIRS))
 
     def get_package(self, name):
         """Get the js or css package."""
@@ -93,7 +92,7 @@ class Jinja2Compressed(object):
 
     def render_inline_js(self, package, js):
         template_name = (self.package.template_name or
-                "pipeline/inline_js.jinja")
+                         "pipeline/inline_js.jinja")
         context = self.package.extra_context
         context.update({
             'source': js

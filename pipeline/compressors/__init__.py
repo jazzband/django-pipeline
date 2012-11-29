@@ -128,7 +128,7 @@ class Compressor(object):
                 if asset_path.startswith("http") or asset_path.startswith("//"):
                     return "url(%s)" % asset_path
                 asset_url = self.construct_asset_path(asset_path, path,
-                    output_filename, variant)
+                                                      output_filename, variant)
                 return "url(%s)" % asset_url
             content = self.read_text(path)
             # content needs to be unicode to avoid explosions with non-ascii chars
@@ -232,7 +232,7 @@ class CompressorError(Exception):
 class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+                                stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         pipe.stdin.write(smart_bytes(content))
         pipe.stdin.close()
 
