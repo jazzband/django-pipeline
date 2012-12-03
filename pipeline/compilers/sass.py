@@ -1,16 +1,20 @@
 from os.path import dirname
 
 from pipeline.conf import settings
-from pipeline.compilers import SubProcessCompiler
+from pipeline.compilers.common_css import CssCompiler, BaseFileTree
 
 
-class SASSCompiler(SubProcessCompiler):
-    output_extension = 'css'
+class SASSFileTree(BaseFileTree):
+    extensions = ('.scss', '.sass')
 
-    def match_file(self, filename):
-        return filename.endswith(('.scss', '.sass'))
+
+class SASSCompiler(CssCompiler):
+    tree_object = SASSFileTree
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
+        if not (outdated or force):
+            return
+
         command = "%s %s --update %s:%s" % (
             settings.PIPELINE_SASS_BINARY,
             settings.PIPELINE_SASS_ARGUMENTS,

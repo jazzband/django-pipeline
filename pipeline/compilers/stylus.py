@@ -1,16 +1,20 @@
 from os.path import dirname
 
 from pipeline.conf import settings
-from pipeline.compilers import SubProcessCompiler
+from pipeline.compilers.common_css import CssCompiler, BaseFileTree
 
 
-class StylusCompiler(SubProcessCompiler):
-    output_extension = 'css'
+class StylusFileTree(BaseFileTree):
+    extensions = ('.styl',)
 
-    def match_file(self, filename):
-        return filename.endswith('.styl')
+
+class StylusCompiler(CssCompiler):
+    tree_object = StylusFileTree
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
+        if not (outdated or force):
+            return
+
         command = "%s %s < %s > %s" % (
             settings.PIPELINE_STYLUS_BINARY,
             settings.PIPELINE_STYLUS_ARGUMENTS,
