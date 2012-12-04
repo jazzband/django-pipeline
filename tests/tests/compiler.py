@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from pipeline.conf import settings
 from pipeline.compilers import Compiler, CompilerBase
-from pipeline.storage import PipelineStorage, PipelineFinderStorage
+from pipeline.storage import PipelineFinderStorage
 
 from pipeline.compilers.common_css import get_by_name
 from pipeline.compilers.less import LessFileTree, LessCompiler
@@ -45,10 +45,14 @@ class CompilerTest(TestCase):
             _('pipeline/js/dummy.coffee'),
             _('pipeline/js/application.js'),
         ])
-        self.assertEquals([_('pipeline/js/dummy.js'), _('pipeline/js/application.js')], paths)
+        self.assertEquals(
+            [_('pipeline/js/dummy.js'), _('pipeline/js/application.js')],
+            paths
+        )
 
     def tearDown(self):
         settings.PIPELINE_COMPILERS = self.old_compilers
+
 
 class FileTreeTestBase(object):
     def setUp(self):
@@ -66,20 +70,36 @@ class FileTreeTestBase(object):
 
         self.assertEquals(files, self.flatlist)
 
+
 class LessFileTreeTest(FileTreeTestBase, TestCase):
     infile = 'pipeline/less/a.less'
-    flatlist = ['pipeline/less/a.less', 'pipeline/less/b.less', 'pipeline/less/c.less']
+    flatlist = [
+        'pipeline/less/a.less',
+        'pipeline/less/b.less',
+        'pipeline/less/c.less'
+    ]
     actual_class = LessFileTree
+
 
 class StylusFileTreeTest(FileTreeTestBase, TestCase):
     infile = 'pipeline/stylus/a.styl'
-    flatlist = ['pipeline/stylus/a.styl', 'pipeline/stylus/b.styl', 'pipeline/stylus/c.styl']
+    flatlist = [
+        'pipeline/stylus/a.styl',
+        'pipeline/stylus/b.styl',
+        'pipeline/stylus/c.styl'
+    ]
     actual_class = StylusFileTree
+
 
 class SASSFileTreeTest(FileTreeTestBase, TestCase):
     infile = 'pipeline/sass/a.scss'
-    flatlist = ['pipeline/sass/a.scss', 'pipeline/sass/b.sass', 'pipeline/sass/c.sass']
+    flatlist = [
+        'pipeline/sass/a.scss',
+        'pipeline/sass/b.sass',
+        'pipeline/sass/c.sass'
+    ]
     actual_class = SASSFileTree
+
 
 class CssCompilerTestBase(object):
     actual_class = None
@@ -94,7 +114,6 @@ class CssCompilerTestBase(object):
         open(self.storage.path(self.root_file) + '-tmp', 'w').close()
 
     def test_is_outdated(self):
-        real_root_file = self.storage.path(self.root_file)
         real_update_file = self.storage.path(self.update_file)
         real_tmp_file = self.storage.path(self.tmp_name)
 
