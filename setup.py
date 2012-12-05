@@ -11,7 +11,7 @@ setup(
     author='Timothée Peignier',
     author_email='timothee.peignier@tryphon.org',
     url='https://github.com/cyberdelia/django-pipeline',
-    license=open('LICENSE').read(),
+    license='MIT',
     packages=find_packages(),
     zip_safe=False,
     include_package_data=True,
