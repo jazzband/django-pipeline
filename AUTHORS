@@ -1,7 +1,7 @@
 Pipeline is a fork of django-compress which was originally created by
 Andreas Pelme <andreas@pelme.se> in 2008.
 
-These people have provided bug fixes, new features, improved the documentation 
+These people have provided bug fixes, new features, improved the documentation
 or just made Pipeline more awesome.
 
  * Adam Charnock <adam@omniwiki.co.uk>
@@ -12,23 +12,32 @@ or just made Pipeline more awesome.
  * Ara Anjargolian <ara818@gmail.com>
  * Balazs Kossovics <balazs.kossovics@e-loue.com>
  * Ben Vinegar <ben@benv.ca>
+ * Brant Young <brant.young@gmail.com>
  * Bryan Chow <bryan@fullfactor.com>
  * Casey Greene <csgreene@princeton.edu>
+ * Chris Reeves <hello@chris.reeves.io>
  * Christian Hammond <chipx86@chipx86.com>
  * David Charbonnier <d.charbonnier@oxys.net>
  * David Cramer <dcramer@gmail.com>
  * Denis V Seleznyov <code@xy2.ru>
+ * Florent Messa <florent.messa@gmail.com>
+ * Idan Zalzberg <idanzalz@gmail.com>
  * Kyle MacFarlane <kyle@deletethetrees.com>
  * Luke Yu-Po Chen <nuemail@gmail.com>
  * Matt Dennewitz <mattdennewitz@gmail.com>
  * Max Klymyshyn <klymyshyn@gmail.com>
+ * Melvin Laplanche <melvin.laplanche+dev@gmail.com>
+ * Michael Weibel <michael.weibel@gmail.com>
  * Patrick Altman <paltman@gmail.com>
  * Peter Baumgartner <pete@lincolnloop.com>
+ * Pierre Drescher <pierre.drescher@gmail.com>
  * Remco Wendt <remco@maykinmedia.nl>
  * Sam Thomson <sammthomson@gmail.com>
  * Sander Smits <jhmsmits@gmail.com>
- * Sander Smits <jsmits@imac.lan>
  * Sirex <sirexas@gmail.com>
  * Steven Cummings <estebistec@gmail.com>
+ * Teo Klestrup Röijezon <teo@nullable.se>
  * Timothée Peignier <timothee.peignier@tryphon.org>
  * Trey Smith <trey.smith@nasa.gov>
+ * Victor Shnayder <victor@mitx.mit.edu>
+ * Zenobius Jiricek <zenobius.jiricek@gmail.com>

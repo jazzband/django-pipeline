@@ -3,8 +3,8 @@ from pipeline.compressors import SubProcessCompressor
 
 
 class YUICompressor(SubProcessCompressor):
-    def compress_common(self, content, type_, arguments):
-        command = '%s --type=%s %s' % (settings.PIPELINE_YUI_BINARY, type_, arguments)
+    def compress_common(self, content, compress_type, arguments):
+        command = '%s --type=%s %s' % (settings.PIPELINE_YUI_BINARY, compress_type, arguments)
         return self.execute_command(command, content)
 
     def compress_js(self, js):

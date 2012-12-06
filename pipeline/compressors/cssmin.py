@@ -1,13 +1,8 @@
-from __future__ import absolute_import
+from pipeline.conf import settings
+from pipeline.compressors import SubProcessCompressor
 
-from pipeline.compressors import CompressorBase
 
-
-class CssminCompressor(CompressorBase):
-    """
-    CSS compressor based on the Python library cssmin
-    (http://pypi.python.org/pypi/cssmin/).
-    """
+class CSSMinCompressor(SubProcessCompressor):
     def compress_css(self, css):
-        from cssmin import cssmin
-        return cssmin(css)
+        command = "%s %s" % (settings.PIPELINE_CSSMIN_BINARY, settings.PIPELINE_CSSMIN_ARGUMENTS)
+        return self.execute_command(command, css)

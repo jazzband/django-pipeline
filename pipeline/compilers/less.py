@@ -1,4 +1,4 @@
-import os.path
+from os.path import dirname
 
 from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
@@ -10,12 +10,11 @@ class LessCompiler(SubProcessCompiler):
     def match_file(self, filename):
         return filename.endswith('.less')
 
-    def compile_file(self, content, path):
-        command = '%s %s %s' % (
+    def compile_file(self, infile, outfile, outdated=False, force=False):
+        command = "%s %s %s %s" % (
             settings.PIPELINE_LESS_BINARY,
             settings.PIPELINE_LESS_ARGUMENTS,
-            path
+            infile,
+            outfile
         )
-        cwd = os.path.dirname(path)
-        content = self.execute_command(command, cwd=cwd)
-        return content
+        return self.execute_command(command, cwd=dirname(infile))

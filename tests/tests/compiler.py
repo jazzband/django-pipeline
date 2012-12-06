@@ -3,6 +3,8 @@ from django.test import TestCase
 from pipeline.conf import settings
 from pipeline.compilers import Compiler, CompilerBase
 
+from paths import _
+
 
 class DummyCompiler(CompilerBase):
     output_extension = 'js'
@@ -10,8 +12,8 @@ class DummyCompiler(CompilerBase):
     def match_file(self, path):
         return path.endswith('.coffee')
 
-    def compile_file(self, content, path):
-        return content
+    def compile_file(self, infile, outfile, outdated=False, force=False):
+        return
 
 
 class CompilerTest(TestCase):
@@ -30,10 +32,10 @@ class CompilerTest(TestCase):
 
     def test_compile(self):
         paths = self.compiler.compile([
-            'js/dummy.coffee',
-            'js/application.js',
+            _('pipeline/js/dummy.coffee'),
+            _('pipeline/js/application.js'),
         ])
-        self.assertEquals(['js/dummy.js', 'js/application.js'], paths)
+        self.assertEquals([_('pipeline/js/dummy.js'), _('pipeline/js/application.js')], paths)
 
     def tearDown(self):
         settings.PIPELINE_COMPILERS = self.old_compilers

@@ -88,7 +88,7 @@ class BaseFinderStorage(PipelineStorage):
         return path
 
     def exists(self, name):
-        exists = self.finders.find(name) != None
+        exists = self.finders.find(name) is not None
         if not exists:
             return super(BaseFinderStorage, self).exists(name)
         return exists
@@ -101,21 +101,31 @@ class BaseFinderStorage(PipelineStorage):
                 except OSError:
                     pass
 
+    def match_location(self, name, path, prefix=None):
+        if prefix:
+            prefix = "%s%s" % (prefix, os.sep)
+            name = name[len(prefix):]
+        if path == name:
+            return name
+        if os.path.splitext(path)[0] == os.path.splitext(name)[0]:
+            return name
+        return None
+
     def find_storage(self, name):
         for finder in finders.get_finders():
             for path, storage in finder.list([]):
-                if path == name:
-                    return storage
-                if os.path.splitext(path)[0] == os.path.splitext(name)[0]:
-                    return storage
+                prefix = getattr(storage, 'prefix', None)
+                matched_path = self.match_location(name, path, prefix)
+                if matched_path:
+                    return matched_path, storage
         raise ValueError("The file '%s' could not be found with %r." % (name, self))
 
     def _open(self, name, mode="rb"):
-        storage = self.find_storage(name)
+        name, storage = self.find_storage(name)
         return storage._open(name, mode)
 
     def _save(self, name, content):
-        storage = self.find_storage(name)
+        name, storage = self.find_storage(name)
         # Ensure we overwrite file, since we have no control on external storage
         if storage.exists(name):
             storage.delete(name)

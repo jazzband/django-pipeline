@@ -1,11 +1,12 @@
 import base64
 import os
+import posixpath
 import re
 import subprocess
 
 from itertools import takewhile
 
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_str, force_unicode
 
 try:
     from staticfiles import finders
@@ -13,12 +14,9 @@ except ImportError:
     from django.contrib.staticfiles import finders # noqa
 
 from pipeline.conf import settings
-from pipeline.utils import to_class, relpath
 from pipeline.storage import default_storage
+from pipeline.utils import to_class, relpath
 
-MAX_IMAGE_SIZE = 32700
-
-EMBEDDABLE = r'[/]?embed/'
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
 
@@ -136,7 +134,8 @@ class Compressor(object):
                     output_filename, variant)
                 return "url(%s)" % asset_url
             content = self.read_file(path)
-            content = re.sub(URL_DETECTOR, reconstruct, smart_str(content))
+            # content needs to be unicode to avoid explosions with non-ascii chars
+            content = re.sub(URL_DETECTOR, reconstruct, force_unicode(content))
             stylesheets.append(content)
         return '\n'.join(stylesheets)
 
@@ -146,10 +145,10 @@ class Compressor(object):
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
-        public_path = self.absolute_path(asset_path, os.path.dirname(css_path))
+        public_path = self.absolute_path(asset_path, os.path.dirname(css_path).replace('\\', '/'))
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
-        if not os.path.isabs(asset_path):
+        if not posixpath.isabs(asset_path):
             asset_path = self.relative_path(public_path, output_filename)
         return asset_path
 
@@ -159,11 +158,11 @@ class Compressor(object):
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not (re.search(EMBEDDABLE, path) and self.storage.exists(path)):
+        if not (re.search(settings.PIPELINE_EMBED_PATH, path.replace('\\', '/')) and self.storage.exists(path)):
             return False
         if not ext in EMBED_EXTS:
             return False
-        if not (font or len(self.encoded_content(path)) < MAX_IMAGE_SIZE):
+        if not (font or len(self.encoded_content(path)) < settings.PIPELINE_EMBED_MAX_IMAGE_SIZE):
             return False
         return True
 
@@ -193,16 +192,16 @@ class Compressor(object):
         Return the absolute public path for an asset,
         given the path of the stylesheet that contains it.
         """
-        if os.path.isabs(path):
-            path = os.path.join(default_storage.location, path)
+        if posixpath.isabs(path):
+            path = posixpath.join(default_storage.location, path)
         else:
-            path = os.path.join(start, path)
-        return os.path.normpath(path)
+            path = posixpath.join(start, path)
+        return posixpath.normpath(path)
 
     def relative_path(self, absolute_path, output_filename):
         """Rewrite paths relative to the output stylesheet path"""
-        absolute_path = os.path.join(settings.PIPELINE_ROOT, absolute_path)
-        output_path = os.path.join(settings.PIPELINE_ROOT, os.path.dirname(output_filename))
+        absolute_path = posixpath.join(settings.PIPELINE_ROOT, absolute_path)
+        output_path = posixpath.join(settings.PIPELINE_ROOT, posixpath.dirname(output_filename))
         return relpath(absolute_path, output_path)
 
     def read_file(self, path):

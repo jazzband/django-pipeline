@@ -188,6 +188,26 @@ Images and fonts are embedded following these rules :
   at all in Internet Explorer 8.
 - If asset path contains a directory named "**embed**".
 
+Overriding embedding settings
+-----------------------------
+
+You can override these rules using the following settings:
+
+``PIPELINE_EMBED_MAX_IMAGE_SIZE``
+.................................
+
+  Setting that controls the maximum image size (in bytes) to embed in CSS using Data-URIs.
+  Internet Explorer 8 has issues with assets under 32 kilobytes.
+  
+  Defaults to ``32700``
+  
+``PIPELINE_EMBED_PATH``
+.......................
+
+  Setting the directory that an asset needs to be in so that it is embedded
+  
+  Defaults to ``r'[/]?embed/'``
+
 
 Rewriting CSS urls
 ==================

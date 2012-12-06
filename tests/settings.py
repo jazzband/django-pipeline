@@ -28,7 +28,7 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 STATIC_ROOT = local_path('static/')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    local_path('assets/'),
+    ('pipeline', local_path('assets/')),
     local_path('assets2/'),
 )
 STATICFILES_FINDERS = (
@@ -45,9 +45,9 @@ TEMPLATE_DIRS = (
 PIPELINE_CSS = {
     'screen': {
         'source_filenames': (
-            'css/first.css',
-            'css/second.css',
-            'css/urls.css',
+            'pipeline/css/first.css',
+            'pipeline/css/second.css',
+            'pipeline/css/urls.css',
         ),
         'output_filename': 'screen.css'
     }
@@ -55,10 +55,10 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'scripts': {
         'source_filenames': (
-            'js/first.js',
-            'js/second.js',
-            'js/application.js',
-            'templates/**/*.jst'
+            'pipeline/js/first.js',
+            'pipeline/js/second.js',
+            'pipeline/js/application.js',
+            'pipeline/templates/**/*.jst'
         ),
         'output_filename': 'scripts.css'
     }

@@ -3,6 +3,7 @@ from django.utils.datastructures import SortedDict
 
 from pipeline.conf import settings
 from pipeline.storage import PipelineStorage
+from paths import _
 
 
 class StorageTest(TestCase):
@@ -10,8 +11,8 @@ class StorageTest(TestCase):
         settings.PIPELINE_CSS = {
             'testing': {
                 'source_filenames': (
-                    'css/first.css',
-                    'css/third.css',
+                    _('pipeline/css/first.css'),
+                    _('css/third.css'),
                 ),
                 'manifest': False,
                 'output_filename': 'testing.css',

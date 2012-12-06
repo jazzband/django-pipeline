@@ -8,9 +8,12 @@ from django.test import TestCase
 from pipeline.compressors import Compressor, TEMPLATE_FUNC
 from pipeline.compressors.yui import YUICompressor
 
+from paths import _
+
 
 class CompressorTest(TestCase):
     def setUp(self):
+        self.maxDiff = None
         self.compressor = Compressor()
 
     def test_js_compressor_class(self):
@@ -21,24 +24,24 @@ class CompressorTest(TestCase):
 
     def test_concatenate_and_rewrite(self):
         css = self.compressor.concatenate_and_rewrite([
-            'css/first.css',
-            'css/second.css'
+            _('pipeline/css/first.css'),
+            _('pipeline/css/second.css')
         ], 'css/screen.css')
         self.assertEquals(""".concat {\n  display: none;\n}\n\n.concatenate {\n  display: block;\n}\n""", css)
 
     def test_concatenate(self):
         js = self.compressor.concatenate([
-            'js/first.js',
-            'js/second.js'
+            _('pipeline/js/first.js'),
+            _('pipeline/js/second.js')
         ])
         self.assertEquals("""function concat() {\n  console.log(arguments);\n}\n\nfunction cat() {\n  console.log("hello world");\n}\n""", js)
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):
-        self.compressor.encoded_content('images/arrow.png')
+        self.compressor.encoded_content(_('pipeline/images/arrow.png'))
         self.assertTrue(mock.called)
         mock.reset_mock()
-        self.compressor.encoded_content('images/arrow.png')
+        self.compressor.encoded_content(_('pipeline/images/arrow.png'))
         self.assertFalse(mock.called)
 
     def test_relative_path(self):
@@ -47,9 +50,9 @@ class CompressorTest(TestCase):
 
     def test_base_path(self):
         base_path = self.compressor.base_path([
-            'js/templates/form.jst', 'js/templates/field.jst'
+            _('js/templates/form.jst'), _('js/templates/field.jst')
         ])
-        self.assertEquals(base_path, 'js/templates')
+        self.assertEquals(base_path, _('js/templates'))
 
     def test_absolute_path(self):
         absolute_path = self.compressor.absolute_path('../../images/sprite.png',
@@ -70,19 +73,19 @@ class CompressorTest(TestCase):
         self.assertEquals(name, 'photo_detail')
 
     def test_compile_templates(self):
-        templates = self.compressor.compile_templates(['templates/photo/list.jst'])
+        templates = self.compressor.compile_templates([_('pipeline/templates/photo/list.jst')])
         self.assertEquals(templates, """window.JST = window.JST || {};\n%s\nwindow.JST[\'list\'] = template(\'<div class="photo">\\n <img src="<%%= src %%>" />\\n <div class="caption">\\n  <%%= caption %%>\\n </div>\\n</div>\');\n""" % TEMPLATE_FUNC)
         templates = self.compressor.compile_templates([
-            'templates/video/detail.jst',
-            'templates/photo/detail.jst'
+            _('pipeline/templates/video/detail.jst'),
+            _('pipeline/templates/photo/detail.jst')
         ])
         self.assertEqual(templates, """window.JST = window.JST || {};\n%s\nwindow.JST[\'video_detail\'] = template(\'<div class="video">\\n <video src="<%%= src %%>" />\\n <div class="caption">\\n  <%%= description %%>\\n </div>\\n</div>\');\nwindow.JST[\'photo_detail\'] = template(\'<div class="photo">\\n <img src="<%%= src %%>" />\\n <div class="caption">\\n  <%%= caption %%> by <%%= author %%>\\n </div>\\n</div>\');\n""" % TEMPLATE_FUNC)
 
     def test_embeddable(self):
-        self.assertFalse(self.compressor.embeddable('images/sprite.png', None))
-        self.assertFalse(self.compressor.embeddable('images/arrow.png', 'datauri'))
-        self.assertTrue(self.compressor.embeddable('images/embed/arrow.png', 'datauri'))
-        self.assertFalse(self.compressor.embeddable('images/arrow.dat', 'datauri'))
+        self.assertFalse(self.compressor.embeddable(_('pipeline/images/sprite.png'), None))
+        self.assertFalse(self.compressor.embeddable(_('pipeline/images/arrow.png'), 'datauri'))
+        self.assertTrue(self.compressor.embeddable(_('pipeline/images/embed/arrow.png'), 'datauri'))
+        self.assertFalse(self.compressor.embeddable(_('pipeline/images/arrow.dat'), 'datauri'))
 
     def test_construct_asset_path(self):
         asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
@@ -94,18 +97,18 @@ class CompressorTest(TestCase):
 
     def test_url_rewrite(self):
         output = self.compressor.concatenate_and_rewrite([
-            'css/urls.css',
+            _('pipeline/css/urls.css'),
         ], 'css/screen.css')
-        self.assertEquals("""@font-face {
+        self.assertEquals(u"""@font-face {
   font-family: 'Pipeline';
-  src: url(../fonts/pipeline.eot);
-  src: url(../fonts/pipeline.eot?#iefix) format('embedded-opentype');
-  src: local('☺'), url(../fonts/pipeline.woff) format('woff'), url(../fonts/pipeline.ttf) format('truetype'), url(../fonts/pipeline.svg#IyfZbseF) format('svg');
+  src: url(../pipeline/fonts/pipeline.eot);
+  src: url(../pipeline/fonts/pipeline.eot?#iefix) format('embedded-opentype');
+  src: local('☺'), url(../pipeline/fonts/pipeline.woff) format('woff'), url(../pipeline/fonts/pipeline.ttf) format('truetype'), url(../pipeline/fonts/pipeline.svg#IyfZbseF) format('svg');
   font-weight: normal;
   font-style: normal;
 }
 .relative-url {
-  background-image: url(../images/sprite-buttons.png);
+  background-image: url(../pipeline/images/sprite-buttons.png);
 }
 .absolute-url {
   background-image: url(/images/sprite-buttons.png);

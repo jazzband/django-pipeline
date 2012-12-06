@@ -1,9 +1,11 @@
-try:
-    from staticfiles.finders import DefaultStorageFinder
-except ImportError:
-    from django.contrib.staticfiles.storage import DefaultStorageFinder # noqa
+import os
 
-from django.conf import settings
+try:
+    from staticfiles.finders import get_finders
+except ImportError:
+    from django.contrib.staticfiles.finders import get_finders  # noqa
+
+from pipeline.conf import settings
 
 from manifesto import Manifest
 
@@ -14,7 +16,8 @@ class PipelineManifest(Manifest):
     def __init__(self):
         self.packager = Packager()
         self.packages = self.collect_packages()
-        self.finder = DefaultStorageFinder()
+        self.finders = get_finders()
+        self.package_files = []
 
     def collect_packages(self):
         packages = []
@@ -29,12 +32,27 @@ class PipelineManifest(Manifest):
         return packages
 
     def cache(self):
+        ignore_patterns = getattr(settings, "STATICFILES_IGNORE_PATTERNS", None)
+
         if settings.PIPELINE:
             for package in self.packages:
+                self.package_files.append(package.output_filename)
                 yield str(self.packager.individual_url(package.output_filename))
         else:
             for package in self.packages:
                 for path in self.packager.compile(package.paths):
+                    self.package_files.append(path)
                     yield str(self.packager.individual_url(path))
-        for path in self.finder.list():
-            yield str(self.packager.individual_url(path))
+
+        for finder in self.finders:
+            for path, storage in finder.list(ignore_patterns):
+                # Prefix the relative path if the source storage contains it
+                if getattr(storage, 'prefix', None):
+                    prefixed_path = os.path.join(storage.prefix, path)
+                else:
+                    prefixed_path = path
+
+                # Dont add any doubles
+                if prefixed_path not in self.package_files:
+                    self.package_files.append(prefixed_path)
+                    yield str(self.packager.individual_url(prefixed_path))
