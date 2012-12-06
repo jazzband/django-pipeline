@@ -232,7 +232,11 @@ class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        pipe.stdin.write(smart_str(content))
+        try:
+            pipe.stdin.write(smart_str(content))
+        except IOError:
+            error = "Unable to pipe content to command: %s" % command
+            raise CompressorError(error)
         pipe.stdin.close()
 
         compressed_content = pipe.stdout.read()
