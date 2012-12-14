@@ -234,9 +234,9 @@ class SubProcessCompressor(CompressorBase):
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         try:
             pipe.stdin.write(smart_str(content))
-        except IOError:
-            error = "Unable to pipe content to command: %s" % command
-            raise CompressorError(error)
+        except IOError, e:
+            message = "Unable to pipe content to command: %s" % command
+            raise CompressorError(message, e)
         pipe.stdin.close()
 
         compressed_content = pipe.stdout.read()
