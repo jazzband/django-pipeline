@@ -29,8 +29,9 @@ Installation
 Recommendations
 ===============
 
-By default Pipeline uses YUI Compressor to compress CSS and JS.
-YUI Compressor is an excellent stand-alone application for dealing with JS and CSS-files.
-YUI Compressor can be downloaded from: http://developer.yahoo.com/yui/compressor/.
+Pipeline's default CSS and JS compressor is the YUI compressor, which uses yuglify.
+yuglify wraps UglifyJS and cssmin, applying the default YUI configurations to them.
+It can be downloaded from: https://github.com/yui/yuglify/.
 
-If you do not install YUI Compressor, make sure to disable the compressor in your settings.
+If you do not install yuglify, make sure to disable the compressor in your settings.
+
