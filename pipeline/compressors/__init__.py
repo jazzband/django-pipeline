@@ -11,7 +11,7 @@ from django.utils.encoding import smart_str, force_unicode
 try:
     from staticfiles import finders
 except ImportError:
-    from django.contrib.staticfiles import finders # noqa
+    from django.contrib.staticfiles import finders  # noqa
 
 from pipeline.conf import settings
 from pipeline.storage import default_storage
@@ -232,6 +232,7 @@ class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+
         try:
             pipe.stdin.write(smart_str(content))
         except IOError, e:

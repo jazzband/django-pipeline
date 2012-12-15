@@ -46,8 +46,7 @@ class Jinja2Compressed(object):
                     if type(getattr(pipeline_settings, setting)) == str:
                         val = "'%s'" % val
                 val = val if val else "''"
-                expr = "pipeline_settings.%s = %s" % (
-                        setting, val)
+                expr = "pipeline_settings.%s = %s" % (setting, val)
                 exec expr
             pipeline_settings.PIPELINE = getattr(django_settings,
                     'PIPELINE', not django_settings.DEBUG)

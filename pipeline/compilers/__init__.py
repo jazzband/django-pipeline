@@ -4,7 +4,7 @@ import subprocess
 try:
     from staticfiles import finders
 except ImportError:
-    from django.contrib.staticfiles import finders # noqa
+    from django.contrib.staticfiles import finders  # noqa
 
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
