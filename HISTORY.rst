@@ -3,6 +3,20 @@
 History
 =======
 
+
+1.1.22
+------
+
+* Better compressor error messages. Thanks to Steven Cummings.
+* Improve installation documentation. Thanks to Steven Cummings.
+* Fix packaging metadata. Thanks to Rui Coelho for noticing it.
+* Add documentation about non-packing storage.
+
+1.1.21
+------
+
+* Run stylus even if file is considered outdated.
+
 1.1.20
 ------
 
