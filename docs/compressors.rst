@@ -5,10 +5,48 @@ Compressors
 ===========
 
 
-YUI compressor
+Yuglify compressor
+==================
+
+The Yuglify compressor uses `yuglify <http://github.com/yui/yuglify>`_
+for compressing javascript and stylesheets.
+
+To use it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
+
+  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+
+To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSOR`` ::
+
+  PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+
+
+``PIPELINE_YUGLIFY_BINARY``
+---------------------------
+
+  Command line to execute for the Yuglify program.
+  You will most likely change this to the location of yuglify on your system.
+
+  Defaults to ``'/usr/bin/env yuglify'``.
+
+``PIPELINE_YUGLIFY_CSS_ARGUMENTS``
+----------------------------------
+
+  Additional arguments to use when compressing CSS.
+
+  Defaults to ``''``.
+
+``PIPELINE_YUGLIFY_JS_ARGUMENTS``
+---------------------------------
+
+  Additional arguments to use when compressing JavaScript.
+
+  Defaults to ``''``.
+
+
+YUI Compressor compressor
 =========================
 
-The YUI compressor uses `yuglify <http://github.com/yui/yuglify>`_
+The YUI compressor uses `yui-compressor <http://developer.yahoo.com/yui/compressor/>`_
 for compressing javascript and stylesheets.
 
 To use it for your stylesheets add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
@@ -26,7 +64,11 @@ To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSOR`` ::
   Command line to execute for the YUI program.
   You will most likely change this to the location of yui-compressor on your system.
 
-  Defaults to ``'/usr/bin/env yuglify'``.
+  Defaults to ``'/usr/bin/env yuicompressor'``.
+
+.. warning::
+  Don't point to ``yuicompressor.jar`` directly, we expect to find a executable script.
+
 
 ``PIPELINE_YUI_CSS_ARGUMENTS``
 ------------------------------

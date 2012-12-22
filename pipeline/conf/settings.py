@@ -8,11 +8,9 @@ PIPELINE_STORAGE = getattr(settings, 'PIPELINE_STORAGE',
     'pipeline.storage.PipelineFinderStorage')
 
 PIPELINE_CSS_COMPRESSOR = getattr(settings, 'PIPELINE_CSS_COMPRESSOR',
-    'pipeline.compressors.yui.YUICompressor'
-)
+                                  'pipeline.compressors.yuglify.YuglifyCompressor')
 PIPELINE_JS_COMPRESSOR = getattr(settings, 'PIPELINE_JS_COMPRESSOR',
-    'pipeline.compressors.yui.YUICompressor'
-)
+                                 'pipeline.compressors.yuglify.YuglifyCompressor')
 PIPELINE_COMPILERS = getattr(settings, 'PIPELINE_COMPILERS', [])
 
 PIPELINE_CSS = getattr(settings, 'PIPELINE_CSS', {})
@@ -27,9 +25,13 @@ PIPELINE_DISABLE_WRAPPER = getattr(settings, 'PIPELINE_DISABLE_WRAPPER', False)
 PIPELINE_CSSTIDY_BINARY = getattr(settings, 'PIPELINE_CSSTIDY_BINARY', '/usr/bin/env csstidy')
 PIPELINE_CSSTIDY_ARGUMENTS = getattr(settings, 'PIPELINE_CSSTIDY_ARGUMENTS', '--template=highest')
 
-PIPELINE_YUI_BINARY = getattr(settings, 'PIPELINE_YUI_BINARY', '/usr/bin/env yuglify')
-PIPELINE_YUI_CSS_ARGUMENTS = getattr(settings, 'PIPELINE_YUI_CSS_ARGUMENTS', '--terminal')
-PIPELINE_YUI_JS_ARGUMENTS = getattr(settings, 'PIPELINE_YUI_JS_ARGUMENTS', '--terminal')
+PIPELINE_YUGLIFY_BINARY = getattr(settings, 'PIPELINE_YUI_BINARY', '/usr/bin/env yuglify')
+PIPELINE_YUGLIFY_CSS_ARGUMENTS = getattr(settings, 'PIPELINE_YUI_CSS_ARGUMENTS', '--terminal')
+PIPELINE_YUGLIFY_JS_ARGUMENTS = getattr(settings, 'PIPELINE_YUI_JS_ARGUMENTS', '--terminal')
+
+PIPELINE_YUI_BINARY = getattr(settings, 'PIPELINE_YUI_BINARY', '/usr/bin/env yuicompressor')
+PIPELINE_YUI_CSS_ARGUMENTS = getattr(settings, 'PIPELINE_YUI_CSS_ARGUMENTS', '')
+PIPELINE_YUI_JS_ARGUMENTS = getattr(settings, 'PIPELINE_YUI_JS_ARGUMENTS', '')
 
 PIPELINE_CLOSURE_BINARY = getattr(settings, 'PIPELINE_CLOSURE_BINARY', '/usr/bin/env closure')
 PIPELINE_CLOSURE_ARGUMENTS = getattr(settings, 'PIPELINE_CLOSURE_ARGUMENTS', '')
