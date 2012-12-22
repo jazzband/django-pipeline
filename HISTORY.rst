@@ -4,6 +4,13 @@ History
 =======
 
 
+1.1.23
+------
+
+* Separate yuglify compressor from YUI compressor.
+* Improve HTML compression middleware.
+
+
 1.1.22
 ------
 
