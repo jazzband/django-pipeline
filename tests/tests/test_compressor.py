@@ -11,7 +11,7 @@ except ImportError:
 from django.test import TestCase
 
 from pipeline.compressors import Compressor, TEMPLATE_FUNC
-from pipeline.compressors.yui import YUICompressor
+from pipeline.compressors.yuglify import YuglifyCompressor
 
 from tests.utils import _
 
@@ -22,10 +22,10 @@ class CompressorTest(TestCase):
         self.compressor = Compressor()
 
     def test_js_compressor_class(self):
-        self.assertEquals(self.compressor.js_compressor, YUICompressor)
+        self.assertEquals(self.compressor.js_compressor, YuglifyCompressor)
 
     def test_css_compressor_class(self):
-        self.assertEquals(self.compressor.css_compressor, YUICompressor)
+        self.assertEquals(self.compressor.css_compressor, YuglifyCompressor)
 
     def test_concatenate_and_rewrite(self):
         css = self.compressor.concatenate_and_rewrite([
