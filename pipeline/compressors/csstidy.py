@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.core.files import temp as tempfile
 
 from pipeline.conf import settings

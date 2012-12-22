@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import base64
 
-from mock import patch
+try:
+    from mock import patch
+except ImportError:
+    from unittest.mock import patch  # noqa
 
 from django.test import TestCase
 
 from pipeline.compressors import Compressor, TEMPLATE_FUNC
 from pipeline.compressors.yuglify import YuglifyCompressor
 
-from paths import _
+from tests.utils import _
 
 
 class CompressorTest(TestCase):
@@ -99,7 +104,7 @@ class CompressorTest(TestCase):
         output = self.compressor.concatenate_and_rewrite([
             _('pipeline/css/urls.css'),
         ], 'css/screen.css')
-        self.assertEquals(u"""@font-face {
+        self.assertEquals("""@font-face {
   font-family: 'Pipeline';
   src: url(../pipeline/fonts/pipeline.eot);
   src: url(../pipeline/fonts/pipeline.eot?#iefix) format('embedded-opentype');

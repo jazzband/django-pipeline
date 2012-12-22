@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.conf import settings
 
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
@@ -5,7 +7,7 @@ PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
 
 PIPELINE_STORAGE = getattr(settings, 'PIPELINE_STORAGE',
-    'pipeline.storage.PipelineFinderStorage')
+                           'pipeline.storage.PipelineFinderStorage')
 
 PIPELINE_CSS_COMPRESSOR = getattr(settings, 'PIPELINE_CSS_COMPRESSOR',
                                   'pipeline.compressors.yuglify.YuglifyCompressor')
