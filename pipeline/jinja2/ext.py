@@ -8,6 +8,7 @@ from jinja2.ext import Extension
 
 from pipeline.conf import settings
 from pipeline.packager import Packager, PackageNotFound
+from pipeline.utils import guess_type
 
 
 class PipelineExtension(Extension):
@@ -19,15 +20,19 @@ class PipelineExtension(Extension):
         if stream.current.test('string'):
             if stream.look().test('string'):
                 token = stream.next()
-                package_name = nodes.Const(token.value, lineno=token.lineno)
+                package_name = token.value
             else:
-                package_name = parser.parse_expression()
+                package_name = parser.parse_expression().value
 
         if tag.value == "compressed_css":
-            return self.package_css(package_name)
+            return nodes.Output([
+                self.call_method('package_css', args=[package_name]),
+            ]).set_lineno(tag.lineno)
 
         if tag.value == "compressed_js":
-            return self.package_js(package_name)
+            return nodes.Output([
+                self.call_method('package_js', args=[package_name]),
+            ]).set_lineno(tag.lineno)
 
         return []
 
@@ -40,21 +45,31 @@ class PipelineExtension(Extension):
         try:
             package = packager.package_for('css', package_name)
         except PackageNotFound:
-            return ''  # fail silently, do not return anything if an invalid group is specified
+            return nodes.Markup('')
 
         if settings.PIPELINE:
-            return self.render_css(package, package.output_filename)
+            return nodes.Markup(self.render_css(package, package.output_filename))
         else:
             paths = packager.compile(package.paths)
-            return self.render_individual(package, paths)
+            return nodes.Markup(self.render_individual_css(package, paths))
 
     def render_css(self, package, path):
-        print "render"
-        return
+        template_name = "pipeline/css.jinja"
+        if package.template_name:
+            template_name = package.template_name
 
-    def render_individual(self, package, paths):
-        print "render"
-        return
+        context = package.extra_context
+        context.update({
+            'type': guess_type(path, 'text/css'),
+            'url': staticfiles_storage.url(path)
+        })
+
+        template = self.environment.get_template(template_name)
+        return template.render(**context)
+
+    def render_individual_css(self, package, paths):
+        tags = [self.render_css(package, path) for path in paths]
+        return '\n'.join(tags)
 
     def package_js(self, package_name):
         return

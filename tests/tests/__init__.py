@@ -1,6 +1,7 @@
 # -*- coding: utf-8 flake8: noqa -*-
 from compiler import *
 from compressor import *
+from extension import *
 from glob import *
 from packager import *
 from storage import *
