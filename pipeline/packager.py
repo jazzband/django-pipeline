@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
 
@@ -28,12 +30,12 @@ class Package(object):
     @property
     def paths(self):
         return [path for path in self.sources
-            if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+                if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
 
     @property
     def templates(self):
         return [path for path in self.sources
-            if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+                if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
 
     @property
     def output_filename(self):
@@ -86,8 +88,8 @@ class Packager(object):
 
     def pack_stylesheets(self, package, **kwargs):
         return self.pack(package, self.compressor.compress_css, css_compressed,
-            output_filename=package.output_filename,
-            variant=package.variant, **kwargs)
+                         output_filename=package.output_filename,
+                         variant=package.variant, **kwargs)
 
     def compile(self, paths, force=False):
         return self.compiler.compile(paths, force=force)
@@ -95,7 +97,7 @@ class Packager(object):
     def pack(self, package, compress, signal, **kwargs):
         output_filename = package.output_filename
         if self.verbose:
-            print "Saving: %s" % output_filename
+            print("Saving: %s" % output_filename)
         paths = self.compile(package.paths, force=True)
         content = compress(paths, **kwargs)
         self.save_file(output_filename, content)

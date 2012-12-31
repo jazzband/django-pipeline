@@ -1,13 +1,9 @@
-import inspect
+from __future__ import unicode_literals
 
-try:
-    from staticfiles.storage import staticfiles_storage
-except ImportError:
-    from django.contrib.staticfiles.storage import staticfiles_storage  # noqa
+from django.contrib.staticfiles.storage import staticfiles_storage
 
-from django.conf import settings as django_settings
+from django.conf import settings
 from jinja2 import Environment, FileSystemLoader
-from pipeline.conf import settings as pipeline_settings
 from pipeline.packager import Packager, PackageNotFound
 from pipeline.utils import guess_type
 
@@ -19,44 +15,13 @@ class Jinja2Compressed(object):
             raise PackageNotFound("Package type must be css or js, supplied %s" % package_type)
         self.package_type = package_type
         self.loader = FileSystemLoader((app_directories.app_template_dirs +
-            django_settings.TEMPLATE_DIRS))
-        self.get_pipeline_settings()
-
-    def get_pipeline_settings(self):
-        """
-        Because extra Jinja2 functions have to be declared
-        at creation time the new functions have to be declared before
-        django settings evaluation so when pipeline tries to import django
-        settings it will get the default globals rather than user defined
-        settings. This function attempts to fudge back in user defined
-        settings into pipeline settings as django.conf.settings is lazy
-        loaded and pipeline settings are not.
-
-        No harm intended :)
-
-        I guess a better more robust solution would be to make pipeline
-        settings lazy loaded also.
-        """
-        members = inspect.getmembers(pipeline_settings)
-        for setting, val in members:
-            if setting.startswith('PIPELINE'):
-                if hasattr(django_settings, setting):
-                    val = getattr(django_settings, setting)
-                else:
-                    if type(getattr(pipeline_settings, setting)) == str:
-                        val = "'%s'" % val
-                val = val if val else "''"
-                expr = "pipeline_settings.%s = %s" % (setting, val)
-                exec expr
-            pipeline_settings.PIPELINE = getattr(django_settings,
-                    'PIPELINE', not django_settings.DEBUG)
-        self.settings = pipeline_settings
+                                        settings.TEMPLATE_DIRS))
 
     def get_package(self, name):
         """Get the js or css package."""
         package = {
-            'js': self.settings.PIPELINE_JS.get(name, {}),
-            'css': self.settings.PIPELINE_CSS.get(name, {}),
+            'js': settings.PIPELINE_JS.get(name, {}),
+            'css': settings.PIPELINE_CSS.get(name, {}),
         }[self.package_type]
 
         if package:
@@ -101,7 +66,7 @@ class Jinja2Compressed(object):
         """Render the HTML Snippet"""
         self.get_package(name)
         if self.package:
-            if self.settings.PIPELINE:
+            if settings.PIPELINE:
                 return self.render(self.package.output_filename)
             else:
                 paths = self.packager.compile(self.package.paths)
@@ -127,7 +92,7 @@ class Jinja2Compressed(object):
 
     def render_inline_js(self, package, js):
         template_name = (self.package.template_name or
-                "pipeline/inline_js.jinja")
+                         "pipeline/inline_js.jinja")
         context = self.package.extra_context
         context.update({
             'source': js
