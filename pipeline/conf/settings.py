@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.conf import settings
 
 PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
@@ -5,7 +7,7 @@ PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
 
 PIPELINE_STORAGE = getattr(settings, 'PIPELINE_STORAGE',
-    'pipeline.storage.PipelineFinderStorage')
+                           'pipeline.storage.PipelineFinderStorage')
 
 PIPELINE_CSS_COMPRESSOR = getattr(settings, 'PIPELINE_CSS_COMPRESSOR',
                                   'pipeline.compressors.yuglify.YuglifyCompressor')
@@ -25,9 +27,9 @@ PIPELINE_DISABLE_WRAPPER = getattr(settings, 'PIPELINE_DISABLE_WRAPPER', False)
 PIPELINE_CSSTIDY_BINARY = getattr(settings, 'PIPELINE_CSSTIDY_BINARY', '/usr/bin/env csstidy')
 PIPELINE_CSSTIDY_ARGUMENTS = getattr(settings, 'PIPELINE_CSSTIDY_ARGUMENTS', '--template=highest')
 
-PIPELINE_YUGLIFY_BINARY = getattr(settings, 'PIPELINE_YUI_BINARY', '/usr/bin/env yuglify')
-PIPELINE_YUGLIFY_CSS_ARGUMENTS = getattr(settings, 'PIPELINE_YUI_CSS_ARGUMENTS', '--terminal')
-PIPELINE_YUGLIFY_JS_ARGUMENTS = getattr(settings, 'PIPELINE_YUI_JS_ARGUMENTS', '--terminal')
+PIPELINE_YUGLIFY_BINARY = getattr(settings, 'PIPELINE_YUGLIFY_BINARY', '/usr/bin/env yuglify')
+PIPELINE_YUGLIFY_CSS_ARGUMENTS = getattr(settings, 'PIPELINE_YUGLIFY_CSS_ARGUMENTS', '--terminal')
+PIPELINE_YUGLIFY_JS_ARGUMENTS = getattr(settings, 'PIPELINE_YUGLIFY_JS_ARGUMENTS', '--terminal')
 
 PIPELINE_YUI_BINARY = getattr(settings, 'PIPELINE_YUI_BINARY', '/usr/bin/env yuicompressor')
 PIPELINE_YUI_CSS_ARGUMENTS = getattr(settings, 'PIPELINE_YUI_CSS_ARGUMENTS', '')

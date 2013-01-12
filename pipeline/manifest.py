@@ -1,9 +1,8 @@
+from __future__ import unicode_literals
+
 import os
 
-try:
-    from staticfiles.finders import get_finders
-except ImportError:
-    from django.contrib.staticfiles.finders import get_finders  # noqa
+from django.contrib.staticfiles.finders import get_finders
 
 from pipeline.conf import settings
 

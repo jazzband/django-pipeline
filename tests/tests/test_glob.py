@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import os
 import shutil
 
@@ -20,7 +22,7 @@ class GlobTest(TestCase):
         base = os.path.join(self.storage.location, base)
         if not os.path.exists(base):
             os.makedirs(base)
-        self.storage.save(filename, ContentFile(None))
+        self.storage.save(filename, ContentFile(""))
 
     def assertSequenceEqual(self, l1, l2):
         self.assertEqual(set(l1), set(l2))

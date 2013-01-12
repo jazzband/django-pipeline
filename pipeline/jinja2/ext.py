@@ -1,10 +1,9 @@
-try:
-    from staticfiles.storage import staticfiles_storage
-except ImportError:
-    from django.contrib.staticfiles.storage import staticfiles_storage  # noqa
+from __future__ import unicode_literals
 
 from jinja2 import nodes
 from jinja2.ext import Extension
+
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 from pipeline.conf import settings
 from pipeline.packager import Packager, PackageNotFound

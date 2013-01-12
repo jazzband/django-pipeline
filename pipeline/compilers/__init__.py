@@ -1,10 +1,9 @@
+from __future__ import unicode_literals
+
 import os
 import subprocess
 
-try:
-    from staticfiles import finders
-except ImportError:
-    from django.contrib.staticfiles import finders  # noqa
+from django.contrib.staticfiles import finders
 
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
@@ -83,8 +82,8 @@ class CompilerError(Exception):
 class SubProcessCompiler(CompilerBase):
     def execute_command(self, command, content=None, cwd=None):
         pipe = subprocess.Popen(command, shell=True, cwd=cwd,
-            stdout=subprocess.PIPE, stdin=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+                                stdout=subprocess.PIPE, stdin=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
 
         if content:
             pipe.stdin.write(content)
@@ -102,6 +101,6 @@ class SubProcessCompiler(CompilerBase):
             raise CompilerError(error)
 
         if self.verbose:
-            print error
+            print(error)
 
         return compressed_content
