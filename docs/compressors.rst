@@ -33,14 +33,14 @@ To use it for your javascripts add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
   Additional arguments to use when compressing CSS.
 
-  Defaults to ``''``.
+  Defaults to ``'--terminal'``.
 
 ``PIPELINE_YUGLIFY_JS_ARGUMENTS``
 ---------------------------------
 
   Additional arguments to use when compressing JavaScript.
 
-  Defaults to ``''``.
+  Defaults to ``'--terminal'``.
 
 
 YUI Compressor compressor
