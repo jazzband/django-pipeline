@@ -4,12 +4,16 @@ History
 =======
 
 
+1.1.24
+------
+
+* Fix yui/yuglify settings overriding each other. Thanks to Fábio Santos.
+
 1.1.23
 ------
 
 * Separate yuglify compressor from YUI compressor.
 * Improve HTML compression middleware.
-
 
 1.1.22
 ------
