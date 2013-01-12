@@ -24,9 +24,7 @@ class PipelineExtension(Extension):
                 package_name = parser.parse_expression().value
 
         if tag.value == "compressed_css":
-            return nodes.Output([
-                self.call_method('package_css', args=[package_name]),
-            ]).set_lineno(tag.lineno)
+            return self.package_css(package_name)
 
         if tag.value == "compressed_js":
             return nodes.Output([
@@ -44,6 +42,7 @@ class PipelineExtension(Extension):
         try:
             package = packager.package_for('css', package_name)
         except PackageNotFound:
+            return self.environment.get_template('pipeline/css.jinja').module
             return nodes.Markup('')
 
         if settings.PIPELINE:
