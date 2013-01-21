@@ -66,7 +66,7 @@ class Jinja2Compressed(object):
         """Render the HTML Snippet"""
         self.get_package(name)
         if self.package:
-            if settings.PIPELINE:
+            if not settings.DEBUG:
                 return self.render(self.package.output_filename)
             else:
                 paths = self.packager.compile(self.package.paths)
