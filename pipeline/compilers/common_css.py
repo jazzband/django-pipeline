@@ -98,7 +98,7 @@ class BaseFileTree(object):
         """
         ret = []
 
-        for line in fhdl:
+        for line in fhdl.readlines():
             matches = self.import_exp.findall(line)
 
             for match in matches:

@@ -36,18 +36,18 @@ class CompilerTest(TestCase):
 
     def test_output_path(self):
         output_path = self.compiler.output_path("js/helpers.coffee", "js")
-        self.assertEquals(output_path, "js/helpers.js")
+        self.assertEqual(output_path, "js/helpers.js")
 
     def test_compilers_class(self):
         compilers_class = self.compiler.compilers
-        self.assertEquals(compilers_class[0], DummyCompiler)
+        self.assertEqual(compilers_class[0], DummyCompiler)
 
     def test_compile(self):
         paths = self.compiler.compile([
             _('pipeline/js/dummy.coffee'),
             _('pipeline/js/application.js'),
         ])
-        self.assertEquals(
+        self.assertEqual(
             [_('pipeline/js/dummy.js'), _('pipeline/js/application.js')],
             paths
         )
@@ -70,7 +70,7 @@ class FileTreeTestBase(object):
             files.append(node.name)
         files.sort()
 
-        self.assertEquals(files, self.flatlist)
+        self.assertEqual(files, self.flatlist)
 
 
 class LessFileTreeTest(FileTreeTestBase, TestCase):
@@ -121,14 +121,14 @@ class CssCompilerTestBase(object):
 
         # First round, shoud be outdated
         utime(real_tmp_file, (0, 0))
-        self.assertEquals(
+        self.assertEqual(
             True,
             self.compiler.is_outdated(self.root_file, self.tmp_name)
         )
 
         # Second round, should not be outdated
         utime(real_tmp_file, None)
-        self.assertEquals(
+        self.assertEqual(
             False,
             self.compiler.is_outdated(self.root_file, self.tmp_name)
         )
@@ -138,7 +138,7 @@ class CssCompilerTestBase(object):
             time() + 1,
             time() + 1
         ))
-        self.assertEquals(
+        self.assertEqual(
             True,
             self.compiler.is_outdated(self.root_file, self.tmp_name)
         )
