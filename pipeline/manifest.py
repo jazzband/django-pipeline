@@ -1,9 +1,8 @@
+from __future__ import unicode_literals
+
 import os
 
-try:
-    from staticfiles.finders import get_finders
-except ImportError:
-    from django.contrib.staticfiles.finders import get_finders  # noqa
+from django.contrib.staticfiles.finders import get_finders
 
 from pipeline.conf import settings
 
@@ -34,7 +33,7 @@ class PipelineManifest(Manifest):
     def cache(self):
         ignore_patterns = getattr(settings, "STATICFILES_IGNORE_PATTERNS", None)
 
-        if settings.PIPELINE:
+        if not settings.DEBUG:
             for package in self.packages:
                 self.package_files.append(package.output_filename)
                 yield str(self.packager.individual_url(package.output_filename))

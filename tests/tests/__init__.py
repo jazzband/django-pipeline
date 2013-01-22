@@ -1,8 +1,8 @@
 # -*- coding: utf-8 flake8: noqa -*-
-from compiler import *
-from compressor import *
-from glob import *
-from jinja2 import *
-from packager import *
-from storage import *
-from utils import *
+from .test_compiler import *
+from .test_compressor import *
+from .test_glob import *
+from .test_jinja2 import *
+from .test_packager import *
+from .test_storage import *
+from .test_utils import *

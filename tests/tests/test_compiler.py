@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from datetime import datetime
 from time import time
 from os import utime
@@ -13,7 +15,7 @@ from pipeline.compilers.less import LessFileTree, LessCompiler
 from pipeline.compilers.stylus import StylusFileTree, StylusCompiler
 from pipeline.compilers.sass import SASSFileTree, SASSCompiler
 
-from paths import _
+from tests.utils import _
 
 
 class DummyCompiler(CompilerBase):
@@ -30,7 +32,7 @@ class CompilerTest(TestCase):
     def setUp(self):
         self.compiler = Compiler()
         self.old_compilers = settings.PIPELINE_COMPILERS
-        settings.PIPELINE_COMPILERS = ['tests.tests.compiler.DummyCompiler']
+        settings.PIPELINE_COMPILERS = ['tests.tests.test_compiler.DummyCompiler']
 
     def test_output_path(self):
         output_path = self.compiler.output_path("js/helpers.coffee", "js")
