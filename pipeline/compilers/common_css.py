@@ -71,9 +71,10 @@ class BaseFileTree(object):
         """
         ret = []
 
-        try:
-            fhdl = self.storage.open(self.name, 'r')
-            subfiles = self.parse_imports(fhdl)
+        exists = self.storage.exists(self.name)
+
+        if exists:
+            subfiles = self.parse_imports(self.name)
 
             for subfile in subfiles:
                 for path in self.searchpath:
@@ -87,48 +88,47 @@ class BaseFileTree(object):
                             self.searchpath
                         ))
                         break
-        except IOError:
-            pass
 
         self.children = ret
 
-    def parse_imports(self, fhdl):
+    def parse_imports(self, name):
         """
         Parses a file looking for @import directives.
         """
         ret = []
 
-        for line in fhdl.readlines():
-            matches = self.import_exp.findall(line)
+        with self.storage.open(name, 'r') as fhdl:
+            for line in fhdl.readlines():
+                matches = self.import_exp.findall(line)
 
-            for match in matches:
-                filename = ""
+                for match in matches:
+                    filename = ""
 
-                if match[0][0] == '"':
-                    filename = match[1]
-                elif match[0][0] == "'":
-                    filename = match[2]
-                elif match[0][0] == "`":
-                    filename = match[3]
+                    if match[0][0] == '"':
+                        filename = match[1]
+                    elif match[0][0] == "'":
+                        filename = match[2]
+                    elif match[0][0] == "`":
+                        filename = match[3]
 
-                if filename == '':
-                    continue
+                    if filename == '':
+                        continue
 
-                if self.import_css or not filename.endswith(".css"):
-                    found_ext = False
-                    possible = []
+                    if self.import_css or not filename.endswith(".css"):
+                        found_ext = False
+                        possible = []
 
-                    for ext in self.extensions:
-                        possible.append("%s%s" % (filename, ext))
+                        for ext in self.extensions:
+                            possible.append("%s%s" % (filename, ext))
 
-                        if filename.endswith(ext):
-                            found_ext = True
-                            break
+                            if filename.endswith(ext):
+                                found_ext = True
+                                break
 
-                    if found_ext:
-                        ret.append(filename)
-                    else:
-                        ret += possible
+                        if found_ext:
+                            ret.append(filename)
+                        else:
+                            ret += possible
 
         return ret
 
