@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.contrib.staticfiles.finders import find
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
 
@@ -22,7 +23,7 @@ class Package(object):
             paths = []
             for pattern in self.config.get('source_filenames', []):
                 for path in glob(pattern):
-                    if not path in paths:
+                    if not path in paths and find(path):
                         paths.append(str(path))
             self._sources = paths
         return self._sources
