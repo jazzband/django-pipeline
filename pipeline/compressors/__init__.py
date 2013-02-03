@@ -13,6 +13,7 @@ from django.utils.encoding import smart_bytes, force_text
 from pipeline.conf import settings
 from pipeline.storage import default_storage
 from pipeline.utils import to_class, relpath
+from pipeline.exceptions import CompressorError
 
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
@@ -222,11 +223,6 @@ class CompressorBase(object):
 
     def filter_js(self, js):
         raise NotImplementedError
-
-
-class CompressorError(Exception):
-    """This exception is raised when a filter fails"""
-    pass
 
 
 class SubProcessCompressor(CompressorBase):

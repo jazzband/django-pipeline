@@ -4,11 +4,11 @@ import os
 import subprocess
 
 from django.contrib.staticfiles import finders
-
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
 
 from pipeline.conf import settings
+from pipeline.exceptions import CompilerError
 from pipeline.storage import default_storage
 from pipeline.utils import to_class
 
@@ -73,10 +73,6 @@ class CompilerBase(object):
         content = file.read()
         file.close()
         return content
-
-
-class CompilerError(Exception):
-    pass
 
 
 class SubProcessCompiler(CompilerBase):

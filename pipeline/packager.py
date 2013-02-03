@@ -4,9 +4,10 @@ from django.contrib.staticfiles.finders import find
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
 
-from pipeline.conf import settings
 from pipeline.compilers import Compiler
 from pipeline.compressors import Compressor
+from pipeline.conf import settings
+from pipeline.exceptions import PackageNotFound
 from pipeline.glob import glob
 from pipeline.signals import css_compressed, js_compressed
 from pipeline.storage import default_storage
@@ -121,7 +122,3 @@ class Packager(object):
         for name in config:
             packages[name] = Package(config[name])
         return packages
-
-
-class PackageNotFound(Exception):
-    pass
