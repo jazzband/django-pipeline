@@ -18,9 +18,9 @@ class Compiler(object):
         self.storage = storage
         self.verbose = verbose
 
+    @property
     def compilers(self):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
-    compilers = property(compilers)
 
     def compile(self, paths, force=False):
         for index, input_path in enumerate(paths):

@@ -43,13 +43,13 @@ class Compressor(object):
         self.storage = storage
         self.verbose = verbose
 
+    @property
     def js_compressor(self):
         return to_class(settings.PIPELINE_JS_COMPRESSOR)
-    js_compressor = property(js_compressor)
 
+    @property
     def css_compressor(self):
         return to_class(settings.PIPELINE_CSS_COMPRESSOR)
-    css_compressor = property(css_compressor)
 
     def compress_js(self, paths, templates=None, **kwargs):
         """Concatenate and compress JS files"""
