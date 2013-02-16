@@ -10,33 +10,22 @@ from pipeline.utils import guess_type
 from pipeline.templatetags.compressed import CompressedMixin
 
 
-def package_css():
-    return ""
-
-
 class PipelineExtension(CompressedMixin, Extension):
     tags = set(['compressed_css', 'compressed_js'])
 
     def parse(self, parser):
-        package_name = None
-        stream = parser.stream
-        tag = stream.next()
-        if stream.current.test('string'):
-            if stream.look().test('string'):
-                token = stream.next()
-                package_name = token.value
-            else:
-                package_name = parser.parse_expression().value
+        tag = next(parser.stream)
 
+        package_name = parser.parse_expression()
         if not package_name:
-            raise TemplateSyntaxError("Bad package name")
+            raise TemplateSyntaxError("Bad package name", tag.lineno)
 
         args = [package_name]
         if tag.value == "compressed_css":
-            return nodes.CallBlock(self.call_method('package_css', args), [], [], [])
+            return nodes.CallBlock(self.call_method('package_css', args), [], [], []).set_lineno(tag.lineno)
 
         if tag.value == "compressed_js":
-            return nodes.CallBlock(self.call_method('package_js', args), [], [], [])
+            return nodes.CallBlock(self.call_method('package_js', args), [], [], []).set_lineno(tag.lineno)
 
         return []
 

@@ -14,5 +14,15 @@ class ExtensionTest(TestCase):
             PackageLoader('pipeline', 'templates'))
 
     def test_no_package(self):
-        template = self.env.from_string(u"""{% compressed_css 'unknow' %}""")
-        self.assertEqual(u'', template.render(context))
+        template = self.env.from_string(u"""{% compressed_css "unknow" %}""")
+        self.assertEqual(u'', template.render())
+        template = self.env.from_string(u"""{% compressed_js "unknow" %}""")
+        self.assertEqual(u'', template.render())
+
+    def test_package_css(self):
+        template = self.env.from_string(u"""{% compressed_css "screen" %}""")
+        self.assertEqual(u'<link href="/static/screen.css" rel="stylesheet" type="text/css" />', template.render())
+
+    def test_package_js(self):
+        template = self.env.from_string(u"""{% compressed_js "scripts" %}""")
+        self.assertEqual(u'<script   type="text/css" src="/static/scripts.css" charset="utf-8"></script>', template.render())
