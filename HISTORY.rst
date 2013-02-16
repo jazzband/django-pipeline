@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.1
+-----
+
+* Improve exceptions hierarchy.
+* Improve our sub-process calls.
+* Update uglify-js documentation. Thanks to Andrey Antukh.
+
 1.3.0
 -----
 
