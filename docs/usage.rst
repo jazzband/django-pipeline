@@ -65,3 +65,15 @@ Pipeline provide a way to add your javascripts and stylesheets files to a
 cache-manifest via `Manifesto <http://manifesto.readthedocs.org/>`_.
 
 To do so, you just need to add manifesto app to your ``INSTALLED_APPS``.
+
+
+Jinja
+=====
+
+Pipeline also includes Jinja2 support and is used almost identically to the Django Template tags implementation.
+You just need to pass ``pipeline.jinja2.ext.PipelineExtension`` to your Jinja2 environment.
+
+Templates
+---------
+
+Unlike the Django template tag implementation the Jinja2 implementation uses different templates, so if you wish to override them please override pipeline/css.jinja and pipeline/js.jinja.
