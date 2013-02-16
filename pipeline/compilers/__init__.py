@@ -80,23 +80,11 @@ class SubProcessCompiler(CompilerBase):
         pipe = subprocess.Popen(command, shell=True, cwd=cwd,
                                 stdout=subprocess.PIPE, stdin=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
-
-        if content:
-            pipe.stdin.write(content)
-            pipe.stdin.close()
-
-        compressed_content = pipe.stdout.read()
-        pipe.stdout.close()
-
-        error = pipe.stderr.read()
-        pipe.stderr.close()
-
-        if pipe.wait() != 0:
-            if not error:
-                error = "Unable to apply %s compiler" % self.__class__.__name__
-            raise CompilerError(error)
-
+        if not content:
+            return content
+        stdout, stderr = pipe.communicate(content)
+        if stderr:
+            raise CompilerError(stderr)
         if self.verbose:
-            print(error)
-
-        return compressed_content
+            print(stderr)
+        return stdout
