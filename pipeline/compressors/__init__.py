@@ -13,6 +13,7 @@ from django.utils.encoding import smart_bytes, force_text
 from pipeline.conf import settings
 from pipeline.storage import default_storage
 from pipeline.utils import to_class, relpath
+from pipeline.exceptions import CompressorError
 
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
@@ -42,13 +43,13 @@ class Compressor(object):
         self.storage = storage
         self.verbose = verbose
 
+    @property
     def js_compressor(self):
         return to_class(settings.PIPELINE_JS_COMPRESSOR)
-    js_compressor = property(js_compressor)
 
+    @property
     def css_compressor(self):
         return to_class(settings.PIPELINE_CSS_COMPRESSOR)
-    css_compressor = property(css_compressor)
 
     def compress_js(self, paths, templates=None, **kwargs):
         """Concatenate and compress JS files"""
@@ -224,34 +225,15 @@ class CompressorBase(object):
         raise NotImplementedError
 
 
-class CompressorError(Exception):
-    """This exception is raised when a filter fails"""
-    pass
-
-
 class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
                                 stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        try:
-            pipe.stdin.write(smart_bytes(content))
-        except IOError as e:
-            message = "Unable to pipe content to command: %s" % command
-            raise CompressorError(message, e)
-        pipe.stdin.close()
-
-        compressed_content = pipe.stdout.read()
-        pipe.stdout.close()
-
-        error = pipe.stderr.read()
-        pipe.stderr.close()
-
-        if pipe.wait() != 0:
-            if not error:
-                error = "Unable to apply %s compressor" % self.__class__.__name__
-            raise CompressorError(error)
-
+        if not content:
+            return content
+        stdout, stderr = pipe.communicate(smart_bytes(content))
+        if stderr:
+            raise CompressorError(stderr)
         if self.verbose:
-            print(error)
-        return compressed_content
+            print(stderr)
+        return stdout

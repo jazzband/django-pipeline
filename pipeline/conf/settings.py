@@ -2,7 +2,8 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 
-PIPELINE = getattr(settings, 'PIPELINE', not settings.DEBUG)
+DEBUG = getattr(settings, 'DEBUG', False)
+
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
 

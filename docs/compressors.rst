@@ -121,7 +121,7 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 UglifyJS compressor
 ===================
 
-The UglifyJS compressor uses `UglifyJS <https://github.com/mishoo/UglifyJS/>`_ to
+The UglifyJS compressor uses `UglifyJS <https://github.com/mishoo/UglifyJS2/>`_ to
 compress javascripts.
 
 To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::

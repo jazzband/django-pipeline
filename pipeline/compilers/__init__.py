@@ -4,11 +4,11 @@ import os
 import subprocess
 
 from django.contrib.staticfiles import finders
-
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
 
 from pipeline.conf import settings
+from pipeline.exceptions import CompilerError
 from pipeline.storage import default_storage
 from pipeline.utils import to_class
 
@@ -18,9 +18,9 @@ class Compiler(object):
         self.storage = storage
         self.verbose = verbose
 
+    @property
     def compilers(self):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
-    compilers = property(compilers)
 
     def compile(self, paths, force=False):
         for index, input_path in enumerate(paths):
@@ -39,7 +39,7 @@ class Compiler(object):
                             outdated = self.is_outdated(input_path, output_path)
                         compiler.compile_file(infile, outfile, outdated=outdated, force=force)
                     except CompilerError:
-                        if not self.storage.exists(output_path) or not settings.PIPELINE:
+                        if not self.storage.exists(output_path) or settings.DEBUG:
                             raise
         return paths
 
@@ -75,32 +75,16 @@ class CompilerBase(object):
         return content
 
 
-class CompilerError(Exception):
-    pass
-
-
 class SubProcessCompiler(CompilerBase):
     def execute_command(self, command, content=None, cwd=None):
         pipe = subprocess.Popen(command, shell=True, cwd=cwd,
                                 stdout=subprocess.PIPE, stdin=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
-
-        if content:
-            pipe.stdin.write(content)
-            pipe.stdin.close()
-
-        compressed_content = pipe.stdout.read()
-        pipe.stdout.close()
-
-        error = pipe.stderr.read()
-        pipe.stderr.close()
-
-        if pipe.wait() != 0:
-            if not error:
-                error = "Unable to apply %s compiler" % self.__class__.__name__
-            raise CompilerError(error)
-
+        if not content:
+            return content
+        stdout, stderr = pipe.communicate(content)
+        if stderr:
+            raise CompilerError(stderr)
         if self.verbose:
-            print(error)
-
-        return compressed_content
+            print(stderr)
+        return stdout

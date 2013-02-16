@@ -28,7 +28,7 @@ class CompressedCSSNode(template.Node):
         except PackageNotFound:
             return ''  # fail silently, do not return anything if an invalid group is specified
 
-        if settings.PIPELINE:
+        if not settings.DEBUG:
             return self.render_css(package, package.output_filename)
         else:
             paths = self.packager.compile(package.paths)
@@ -64,7 +64,7 @@ class CompressedJSNode(template.Node):
         except PackageNotFound:
             return ''  # fail silently, do not return anything if an invalid group is specified
 
-        if settings.PIPELINE:
+        if not settings.DEBUG:
             return self.render_js(package, package.output_filename)
         else:
             paths = self.packager.compile(package.paths)
@@ -94,19 +94,19 @@ class CompressedJSNode(template.Node):
         return '\n'.join(tags)
 
 
+@register.tag
 def compressed_css(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError, '%r requires exactly one argument: the name of a group in the PIPELINE_CSS setting' % token.split_contents()[0]
+        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE_CSS setting' % token.split_contents()[0])
     return CompressedCSSNode(name)
-compressed_css = register.tag(compressed_css)
 
 
+@register.tag
 def compressed_js(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError, '%r requires exactly one argument: the name of a group in the PIPELINE_JS setting' % token.split_contents()[0]
+        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE_JS setting' % token.split_contents()[0])
     return CompressedJSNode(name)
-compressed_js = register.tag(compressed_js)
