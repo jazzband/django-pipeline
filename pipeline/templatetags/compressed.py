@@ -12,27 +12,46 @@ from pipeline.utils import guess_type
 register = template.Library()
 
 
-class CompressedCSSNode(template.Node):
+class CompressedMixin(object):
+    def package_for(self, package_name, package_type):
+        package = {
+            'js': getattr(settings, 'PIPELINE_JS', {}).get(package_name, {}),
+            'css': getattr(settings, 'PIPELINE_CSS', {}).get(package_name, {}),
+        }[package_type]
+
+        if package:
+            package = {package_name: package}
+
+        packager = {
+            'js': Packager(css_packages={}, js_packages=package),
+            'css': Packager(css_packages=package, js_packages={}),
+        }[package_type]
+
+        return packager.package_for(package_type, package_name)
+
+    def render_compressed(self, package, package_type):
+        if not settings.DEBUG:
+            method = getattr(self, "render_{0}".format(package_type))
+            return method(package, package.output_filename)
+        else:
+            packager = Packager()
+            method = getattr(self, "render_individual_{0}".format(package_type))
+            paths = packager.compile(package.paths)
+            templates = packager.pack_templates(package)
+            return method(package, paths, templates=templates)
+
+
+class CompressedCSSNode(CompressedMixin, template.Node):
     def __init__(self, name):
         self.name = name
 
     def render(self, context):
         package_name = template.Variable(self.name).resolve(context)
-        package = settings.PIPELINE_CSS.get(package_name, {})
-        if package:
-            package = {package_name: package}
-        self.packager = Packager(css_packages=package, js_packages={})
-
         try:
-            package = self.packager.package_for('css', package_name)
+            package = self.package_for(package_name, 'css')
         except PackageNotFound:
             return ''  # fail silently, do not return anything if an invalid group is specified
-
-        if not settings.DEBUG:
-            return self.render_css(package, package.output_filename)
-        else:
-            paths = self.packager.compile(package.paths)
-            return self.render_individual(package, paths)
+        return self.render_compressed(package, 'css')
 
     def render_css(self, package, path):
         template_name = package.template_name or "pipeline/css.html"
@@ -43,33 +62,22 @@ class CompressedCSSNode(template.Node):
         })
         return render_to_string(template_name, context)
 
-    def render_individual(self, package, paths):
+    def render_individual_css(self, package, paths, **kwargs):
         tags = [self.render_css(package, path) for path in paths]
         return '\n'.join(tags)
 
 
-class CompressedJSNode(template.Node):
+class CompressedJSNode(CompressedMixin, template.Node):
     def __init__(self, name):
         self.name = name
 
     def render(self, context):
         package_name = template.Variable(self.name).resolve(context)
-        package = settings.PIPELINE_JS.get(package_name, {})
-        if package:
-            package = {package_name: package}
-        self.packager = Packager(css_packages={}, js_packages=package)
-
         try:
-            package = self.packager.package_for('js', package_name)
+            package = self.package_for(package_name, 'js')
         except PackageNotFound:
             return ''  # fail silently, do not return anything if an invalid group is specified
-
-        if not settings.DEBUG:
-            return self.render_js(package, package.output_filename)
-        else:
-            paths = self.packager.compile(package.paths)
-            templates = self.packager.pack_templates(package)
-            return self.render_individual(package, paths, templates)
+        return self.render_compressed(package, 'js')
 
     def render_js(self, package, path):
         template_name = package.template_name or "pipeline/js.html"
@@ -87,7 +95,7 @@ class CompressedJSNode(template.Node):
         })
         return render_to_string("pipeline/inline_js.html", context)
 
-    def render_individual(self, package, paths, templates=None):
+    def render_individual_js(self, package, paths, templates=None):
         tags = [self.render_js(package, js) for js in paths]
         if templates:
             tags.append(self.render_inline(package, templates))
