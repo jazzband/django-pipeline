@@ -1,2 +1,2 @@
-recursive-include pipeline/templates *.html
+recursive-include pipeline/templates *.html *.jinja
 include AUTHORS LICENSE README.rst HISTORY.rst
