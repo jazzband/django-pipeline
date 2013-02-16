@@ -1,19 +1,24 @@
 from __future__ import unicode_literals
 
-from jinja2 import nodes
+from jinja2 import nodes, TemplateSyntaxError
 from jinja2.ext import Extension
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from pipeline.conf import settings
-from pipeline.packager import Packager, PackageNotFound
+from pipeline.packager import PackageNotFound
 from pipeline.utils import guess_type
+from pipeline.templatetags.compressed import CompressedMixin
 
 
-class PipelineExtension(Extension):
+def package_css():
+    return ""
+
+
+class PipelineExtension(CompressedMixin, Extension):
     tags = set(['compressed_css', 'compressed_js'])
 
     def parse(self, parser):
+        package_name = None
         stream = parser.stream
         tag = stream.next()
         if stream.current.test('string'):
@@ -23,45 +28,32 @@ class PipelineExtension(Extension):
             else:
                 package_name = parser.parse_expression().value
 
+        if not package_name:
+            raise TemplateSyntaxError("Bad package name")
+
+        args = [package_name]
         if tag.value == "compressed_css":
-            return self.package_css(package_name)
+            return nodes.CallBlock(self.call_method('package_css', args), [], [], [])
 
         if tag.value == "compressed_js":
-            return nodes.Output([
-                self.call_method('package_js', args=[package_name]),
-            ]).set_lineno(tag.lineno)
+            return nodes.CallBlock(self.call_method('package_js', args), [], [], [])
 
         return []
 
-    def package_css(self, package_name):
-        package = settings.PIPELINE_CSS.get(package_name, {})
-        if package:
-            package = {package_name: package}
-        packager = Packager(css_packages=package, js_packages={})
-
+    def package_css(self, package_name, *args, **kwargs):
         try:
-            package = packager.package_for('css', package_name)
+            package = self.package_for(package_name, 'css')
         except PackageNotFound:
-            return self.environment.get_template('pipeline/css.jinja').module
-            return nodes.Markup('')
-
-        if settings.PIPELINE:
-            return nodes.Markup(self.render_css(package, package.output_filename))
-        else:
-            paths = packager.compile(package.paths)
-            return nodes.Markup(self.render_individual_css(package, paths))
+            return ''  # fail silently, do not return anything if an invalid group is specified
+        return self.render_compressed(package, 'css')
 
     def render_css(self, package, path):
-        template_name = "pipeline/css.jinja"
-        if package.template_name:
-            template_name = package.template_name
-
+        template_name = package.template_name or "pipeline/css.jinja"
         context = package.extra_context
         context.update({
             'type': guess_type(path, 'text/css'),
             'url': staticfiles_storage.url(path)
         })
-
         template = self.environment.get_template(template_name)
         return template.render(**context)
 
@@ -69,5 +61,33 @@ class PipelineExtension(Extension):
         tags = [self.render_css(package, path) for path in paths]
         return '\n'.join(tags)
 
-    def package_js(self, package_name):
-        return
+    def package_js(self, package_name, *args, **kwargs):
+        try:
+            package = self.package_for(package_name, 'js')
+        except PackageNotFound:
+            return ''  # fail silently, do not return anything if an invalid group is specified
+        return self.render_compressed(package, 'js')
+
+    def render_js(self, package, path):
+        template_name = package.template_name or "pipeline/js.jinja"
+        context = package.extra_context
+        context.update({
+            'type': guess_type(path, 'text/javascript'),
+            'url': staticfiles_storage.url(path)
+        })
+        template = self.environment.get_template(template_name)
+        return template.render(**context)
+
+    def render_inline(self, package, js):
+        context = package.extra_context
+        context.update({
+            'source': js
+        })
+        template = self.environment.get_template("pipeline/inline_js.jinja")
+        return template.render(**context)
+
+    def render_individual_js(self, package, paths, templates=None):
+        tags = [self.render_js(package, js) for js in paths]
+        if templates:
+            tags.append(self.render_inline(package, templates))
+        return '\n'.join(tags)
