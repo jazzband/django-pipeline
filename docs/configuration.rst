@@ -105,14 +105,6 @@ Group options
 Other settings
 --------------
 
-``PIPELINE``
-............
-
-  When ``PIPELINE`` is ``True``, CSS and JavaScripts will be concatenated and filtered.
-  When ``False``, the source-files will be used instead.
-
-  Defaults to ``not DEBUG`` (compressed files will only be used when ``DEBUG`` is ``False``).
-
 ``PIPELINE_CSS_COMPRESSOR``
 ............................
 
