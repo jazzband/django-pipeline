@@ -42,7 +42,7 @@ Pipeline integrates with staticfiles, you just need to setup ``STATICFILES_STORA
 
 Then when you run ``collectstatic`` command, your CSS and your javascripts will be compressed in the same time ::
 
-    $ python oslo/manage.py collectstatic
+    $ python manage.py collectstatic
 
 
 Middleware
