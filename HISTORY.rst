@@ -3,6 +3,12 @@
 History
 =======
 
+1.3.2
+-----
+
+* Jinja2 support is back.
+* Many small improvements in documentation.
+
 1.3.1
 -----
 
