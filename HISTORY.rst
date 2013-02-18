@@ -3,6 +3,11 @@
 History
 =======
 
+1.3.3
+-----
+
+* Fix subprocess calls.
+
 1.3.2
 -----
 
