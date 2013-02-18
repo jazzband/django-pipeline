@@ -229,9 +229,9 @@ class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
                                 stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        if not content:
-            return content
-        stdout, stderr = pipe.communicate(smart_bytes(content))
+        if content:
+            content = smart_bytes(content)
+        stdout, stderr = pipe.communicate(content)
         if stderr:
             raise CompressorError(stderr)
         if self.verbose:

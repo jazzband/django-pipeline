@@ -5,7 +5,7 @@ import subprocess
 
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_str, smart_bytes
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
@@ -80,8 +80,8 @@ class SubProcessCompiler(CompilerBase):
         pipe = subprocess.Popen(command, shell=True, cwd=cwd,
                                 stdout=subprocess.PIPE, stdin=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
-        if not content:
-            return content
+        if content:
+            content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)
         if stderr:
             raise CompilerError(stderr)
