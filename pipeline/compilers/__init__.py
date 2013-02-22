@@ -83,7 +83,7 @@ class SubProcessCompiler(CompilerBase):
         if content:
             content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)
-        if stderr:
+        if stderr.strip():
             raise CompilerError(stderr)
         if self.verbose:
             print(stderr)
