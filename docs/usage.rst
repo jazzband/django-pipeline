@@ -44,6 +44,15 @@ Then when you run ``collectstatic`` command, your CSS and your javascripts will 
 
     $ python manage.py collectstatic
 
+Cache-busting
+=============
+
+Pipeline 1.2+ no longer provides its own cache-busting URL support (using e.g. the ``PIPELINE_VERSIONING`` setting) but uses
+Django's built-in staticfiles support for this. To set up cache-busting in conjunction with ``collectstatic`` as above, use ::
+
+    STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+This will handle cache-busting just as ``staticfiles``'s built-in ``CachedStaticFilesStorage`` does.
 
 Middleware
 ==========
