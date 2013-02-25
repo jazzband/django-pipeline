@@ -3,6 +3,13 @@
 History
 =======
 
+
+1.3.4
+-----
+
+* Fix false errors on subprocess. Thanks to Fabian Büchler.
+* Don't run MinifyHTMLMiddleware when DEBUG is True. Thanks to Venelin Stoykov.
+
 1.3.3
 -----
 
