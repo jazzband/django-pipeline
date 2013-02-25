@@ -38,7 +38,7 @@ Collect static
 
 Pipeline integrates with staticfiles, you just need to setup ``STATICFILES_STORAGE`` to ::
 
-    STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+    STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 Then when you run ``collectstatic`` command, your CSS and your javascripts will be compressed in the same time ::
 
