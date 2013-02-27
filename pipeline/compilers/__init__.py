@@ -1,7 +1,10 @@
 from __future__ import unicode_literals
 
+import multiprocessing
 import os
 import subprocess
+
+from multiprocessing.pool import ThreadPool
 
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
@@ -17,31 +20,34 @@ class Compiler(object):
     def __init__(self, storage=default_storage, verbose=False):
         self.storage = storage
         self.verbose = verbose
+        self.pool = ThreadPool(processes=multiprocessing.cpu_count())
 
     @property
     def compilers(self):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
 
     def compile(self, paths, force=False):
-        for index, input_path in enumerate(paths):
+        def _compile(input_path):
             for compiler in self.compilers:
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
                 if compiler.match_file(input_path):
                     output_path = self.output_path(input_path, compiler.output_extension)
-                    paths[index] = output_path
+                    infile = finders.find(input_path)
+                    outfile = finders.find(output_path)
+                    if outfile is None:
+                        outfile = self.output_path(infile, compiler.output_extension)
+                        outdated = True
+                    else:
+                        outdated = self.is_outdated(input_path, output_path)
                     try:
-                        infile = finders.find(input_path)
-                        outfile = finders.find(output_path)
-                        if outfile is None:
-                            outfile = self.output_path(infile, compiler.output_extension)
-                            outdated = True
-                        else:
-                            outdated = self.is_outdated(input_path, output_path)
                         compiler.compile_file(infile, outfile, outdated=outdated, force=force)
                     except CompilerError:
                         if not self.storage.exists(output_path) or settings.DEBUG:
                             raise
-        return paths
+                    return output_path
+            else:
+                return input_path
+        return self.pool.map(_compile, paths)
 
     def output_path(self, path, extension):
         path = os.path.splitext(path)
