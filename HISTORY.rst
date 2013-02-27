@@ -3,6 +3,10 @@
 History
 =======
 
+1.3.6
+-----
+
+* Make our threaded code compatible with python 3.
 
 1.3.5
 -----
