@@ -20,7 +20,6 @@ class Compiler(object):
     def __init__(self, storage=default_storage, verbose=False):
         self.storage = storage
         self.verbose = verbose
-        self.executor = futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
 
     @property
     def compilers(self):
@@ -47,7 +46,8 @@ class Compiler(object):
                     return output_path
             else:
                 return input_path
-        return self.executor.map(_compile, paths)
+        with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+            return list(executor.map(_compile, paths))
 
     def output_path(self, path, extension):
         path = os.path.splitext(path)
