@@ -14,6 +14,10 @@ setup(
     license='MIT',
     packages=find_packages(),
     zip_safe=False,
+    install_requires=[
+        'futures>=2.1.3',
+        'Django>=1.4.2'
+    ],
     include_package_data=True,
     classifiers=[
         'Environment :: Web Environment',

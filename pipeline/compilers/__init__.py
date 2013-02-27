@@ -4,7 +4,7 @@ import multiprocessing
 import os
 import subprocess
 
-from multiprocessing.pool import ThreadPool
+from concurrent import futures
 
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
@@ -20,7 +20,7 @@ class Compiler(object):
     def __init__(self, storage=default_storage, verbose=False):
         self.storage = storage
         self.verbose = verbose
-        self.pool = ThreadPool(processes=multiprocessing.cpu_count())
+        self.executor = futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
 
     @property
     def compilers(self):
@@ -47,7 +47,7 @@ class Compiler(object):
                     return output_path
             else:
                 return input_path
-        return self.pool.map(_compile, paths)
+        return self.executor.map(_compile, paths)
 
     def output_path(self, path, extension):
         path = os.path.splitext(path)
