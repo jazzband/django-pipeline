@@ -4,6 +4,11 @@ History
 =======
 
 
+1.3.5
+-----
+
+* Run compilers in threads, should improve performance in DEBUG mode.
+
 1.3.4
 -----
 
