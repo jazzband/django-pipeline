@@ -132,8 +132,8 @@ To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 ``PIPELINE_UGLIFYJS_BINARY``
 ----------------------------
 
-  Command line to execute for the Closure Compiler program.
-  You will most likely change this to the location of closure on your system.
+  Command line to execute for the UglifyJS program.
+  You will most likely change this to the location of uglifyjs on your system.
 
   Defaults to ``'/usr/bin/env uglifyjs'``.
 
