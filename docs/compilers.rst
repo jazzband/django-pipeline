@@ -91,7 +91,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 Stylus compiler
 ===============
 
-The Stylus compiler uses `Stylus <http://learnboost.github.com/stylus/>`
+The Stylus compiler uses `Stylus <http://learnboost.github.com/stylus/>`_
 to compile your stylesheets.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
@@ -147,3 +147,28 @@ A custom compiler for an imaginary compiler called jam ::
         return  # No need to recompiled file
       return jam.compile(infile, outfile)
 
+
+3rd Party Compilers
+===================
+
+Here is an (in)complete list of 3rd party compilers that integrate with django-pipeline
+
+Compass (requires RubyGem)
+--------------------------
+
+:Creator:
+    `Mila Labs <https://github.com/mila-labs>`_
+:Description:
+    Compass compiler for django-pipeline using the original Ruby gem.
+:Link:
+    `https://github.com/mila-labs/django-pipeline-compass`
+
+Compass (standalone)
+--------------------
+
+:Creator:
+    `Vitaly Babiyb <https://github.com/vbabiy>`_
+:Description:
+    django-pipeline-compass is a compiler for `django-pipeline <https://github.com/cyberdelia/django-pipeline>`_. Making it really easy to use scss and compass with out requiring the compass gem.
+:Link:
+    `https://github.com/vbabiy/django-pipeline-compass`
