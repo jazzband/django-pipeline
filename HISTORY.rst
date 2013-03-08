@@ -3,6 +3,13 @@
 History
 =======
 
+
+1.3.7
+-----
+
+* Don't require Django in setup.py. Thanks to Jannis Leidel.
+* A lot of documentation improvements. Thanks to Jared Scott and Christopher Dilorenzo.
+
 1.3.6
 -----
 
