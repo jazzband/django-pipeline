@@ -37,7 +37,7 @@ class Compiler(object):
                         outfile = self.output_path(infile, compiler.output_extension)
                         outdated = True
                     else:
-                        outdated = self.is_outdated(input_path, output_path)
+                        outdated = compiler.is_outdated(infile, outfile)
                     try:
                         compiler.compile_file(infile, outfile, outdated=outdated, force=force)
                     except CompilerError:
@@ -52,12 +52,6 @@ class Compiler(object):
     def output_path(self, path, extension):
         path = os.path.splitext(path)
         return '.'.join((path[0], extension))
-
-    def is_outdated(self, infile, outfile):
-        try:
-            return self.storage.modified_time(infile) > self.storage.modified_time(outfile)
-        except (OSError, NotImplementedError):
-            return True
 
 
 class CompilerBase(object):
@@ -79,6 +73,12 @@ class CompilerBase(object):
         content = file.read()
         file.close()
         return content
+
+    def is_outdated(self, infile, outfile):
+        try:
+            return self.storage.modified_time(infile) > self.storage.modified_time(outfile)
+        except (OSError, NotImplementedError):
+            return True
 
 
 class SubProcessCompiler(CompilerBase):
