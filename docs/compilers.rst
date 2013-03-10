@@ -91,7 +91,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 Stylus compiler
 ===============
 
-The Stylus compiler uses `Stylus <http://learnboost.github.com/stylus/>`
+The Stylus compiler uses `Stylus <http://learnboost.github.com/stylus/>`_
 to compile your stylesheets.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
