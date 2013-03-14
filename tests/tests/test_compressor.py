@@ -115,6 +115,9 @@ class CompressorTest(TestCase):
 .relative-url {
   background-image: url(../pipeline/images/sprite-buttons.png);
 }
+.relative-url-querystring {
+  background-image: url(../pipeline/images/sprite-buttons.png?v=1.0#foo=bar);
+}
 .absolute-url {
   background-image: url(/images/sprite-buttons.png);
 }
