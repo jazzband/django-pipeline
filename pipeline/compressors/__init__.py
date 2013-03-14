@@ -15,7 +15,7 @@ from pipeline.storage import default_storage
 from pipeline.utils import to_class, relpath
 from pipeline.exceptions import CompressorError
 
-URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[\?\#\d\w]*)[\'"]?\)'
+URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[^\'"\s]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
 
 DEFAULT_TEMPLATE_FUNC = "template"
