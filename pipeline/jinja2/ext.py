@@ -44,7 +44,7 @@ class PipelineExtension(CompressedMixin, Extension):
             'url': staticfiles_storage.url(path)
         })
         template = self.environment.get_template(template_name)
-        return template.render(**context)
+        return template.render(context)
 
     def render_individual_css(self, package, paths):
         tags = [self.render_css(package, path) for path in paths]
@@ -65,7 +65,7 @@ class PipelineExtension(CompressedMixin, Extension):
             'url': staticfiles_storage.url(path)
         })
         template = self.environment.get_template(template_name)
-        return template.render(**context)
+        return template.render(context)
 
     def render_inline(self, package, js):
         context = package.extra_context
@@ -73,7 +73,7 @@ class PipelineExtension(CompressedMixin, Extension):
             'source': js
         })
         template = self.environment.get_template("pipeline/inline_js.jinja")
-        return template.render(**context)
+        return template.render(context)
 
     def render_individual_js(self, package, paths, templates=None):
         tags = [self.render_js(package, js) for js in paths]
