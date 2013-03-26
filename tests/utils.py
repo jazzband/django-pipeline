@@ -13,7 +13,7 @@ def pipeline_settings(**kwargs):
     try:
         saved = {}
 
-        for name, value in kwargs.iteritems():
+        for name, value in kwargs.items():
             saved[name] = getattr(settings, name)
             setattr(settings, name, value)
 
@@ -21,5 +21,5 @@ def pipeline_settings(**kwargs):
 
     finally:
 
-        for name, value in saved.iteritems():
+        for name, value in saved.items():
             setattr(settings, name, value)
