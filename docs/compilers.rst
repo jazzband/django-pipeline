@@ -32,6 +32,33 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
   Defaults to ``''``.
 
+Live Script compiler
+======================
+
+The LiveScript compiler uses `LiveScript <https://github.com/gkz/LiveScript>`_
+to compile your javascripts.
+
+To use it add this to your ``PIPELINE_COMPILERS`` ::
+
+  PIPELINE_COMPILERS = (
+    'pipeline.compilers.livescript.LiveScriptCompiler',
+  )
+
+``PIPELINE_LIVE_SCRIPT_BINARY``
+---------------------------------
+
+  Command line to execute for LiveScript program.
+  You will most likely change this to the location of lsc on your system.
+
+  Defaults to ``'/usr/bin/env lsc'``.
+
+``PIPELINE_LIVE_SCRIPT_ARGUMENTS``
+------------------------------------
+
+  Additional arguments to use when lsc is called.
+
+  Defaults to ``''``.
+
 LESS compiler
 =============
 
