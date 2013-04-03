@@ -7,6 +7,8 @@ from django.test import TestCase
 
 from pipeline.jinja2.ext import PipelineExtension
 
+from tests.utils import pipeline_settings
+
 
 class ExtensionTest(TestCase):
     def setUp(self):
@@ -22,6 +24,13 @@ class ExtensionTest(TestCase):
     def test_package_css(self):
         template = self.env.from_string(u"""{% compressed_css "screen" %}""")
         self.assertEqual(u'<link href="/static/screen.css" rel="stylesheet" type="text/css" />', template.render())
+
+    def test_package_css_debug(self):
+        with pipeline_settings(DEBUG=True):
+            template = self.env.from_string(u"""{% compressed_css "screen" %}""")
+            self.assertEqual(u'''<link href="/static/pipeline/css/first.css" rel="stylesheet" type="text/css" />
+<link href="/static/pipeline/css/second.css" rel="stylesheet" type="text/css" />
+<link href="/static/pipeline/css/urls.css" rel="stylesheet" type="text/css" />''', template.render())
 
     def test_package_js(self):
         template = self.env.from_string(u"""{% compressed_js "scripts" %}""")

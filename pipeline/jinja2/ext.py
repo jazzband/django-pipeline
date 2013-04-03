@@ -46,7 +46,7 @@ class PipelineExtension(CompressedMixin, Extension):
         template = self.environment.get_template(template_name)
         return template.render(context)
 
-    def render_individual_css(self, package, paths):
+    def render_individual_css(self, package, paths, **kwargs):
         tags = [self.render_css(package, path) for path in paths]
         return '\n'.join(tags)
 
