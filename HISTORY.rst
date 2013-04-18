@@ -3,6 +3,15 @@
 History
 =======
 
+1.3.8
+-----
+
+* Improve compiler API. Thanks to Remy Sanchez.
+* Improve documentation on cache busting via staticfiles. Thanks to Rami Chowdhury.
+* Fix url() bug for url with querystring and hash in them. Thanks to Miroslav Shubernetskiy.
+* Add third party compilers in documentation. Thanks to Jared Scott.
+* Fix extension compatibility with both jinja2 and coffin. Thanks to Mark Sandstrom.
+* Add Livescript compiler. Thanks to Arnar Yngvason.
 
 1.3.7
 -----
