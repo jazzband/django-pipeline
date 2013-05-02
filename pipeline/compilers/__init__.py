@@ -37,7 +37,7 @@ class Compiler(object):
                         outfile = self.output_path(infile, compiler.output_extension)
                         outdated = True
                     else:
-                        outdated = compiler.is_outdated(infile, outfile)
+                        outdated = compiler.is_outdated(input_path, output_path)
                     try:
                         compiler.compile_file(infile, outfile, outdated=outdated, force=force)
                     except CompilerError:
