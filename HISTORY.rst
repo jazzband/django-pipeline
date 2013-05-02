@@ -3,6 +3,11 @@
 History
 =======
 
+1.3.9
+-----
+
+* Fix regression in Compiler. Thanks to David Hughes.
+
 1.3.8
 -----
 
