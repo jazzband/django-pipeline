@@ -53,6 +53,8 @@ Django's built-in staticfiles support for this. To set up cache-busting in conju
     STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 This will handle cache-busting just as ``staticfiles``'s built-in ``CachedStaticFilesStorage`` does.
+Note that when ``debug = False``, this will check the ``STATIC_ROOT`` for combined/minified files on requests.
+Depending on cache settings, these files may be cached due to the expensive nature of hashing file contents.
 
 Middleware
 ==========
