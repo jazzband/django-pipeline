@@ -188,7 +188,7 @@ Compass (requires RubyGem)
 :Description:
     Compass compiler for django-pipeline using the original Ruby gem.
 :Link:
-    `https://github.com/mila-labs/django-pipeline-compass`
+    `https://github.com/mila-labs/django-pipeline-compass-rubygem`
 
 Compass (standalone)
 --------------------
