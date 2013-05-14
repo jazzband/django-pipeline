@@ -154,6 +154,41 @@ Other settings
 
   Defaults to ``"_.template"``
 
+``PIPELINE_APP_MODULE``
+.......................
+
+  The name of the app module where Pipeline will look for additional ``PIPELINE_CSS``
+  and ``PIPELINE_JS`` group rules.
+
+  If empty or ``None``, Pipeline will not look for additional group rules within the apps.
+
+  Defaults to ``"compressed"``.
+
+.. note::
+
+  Please do not use ``"pipeline "`` as it will interfere with the Pipeline app name.
+
+``PIPELINE_NAMESPACE_APPS``
+...........................
+
+  If ``True``, Pipeline will namespace all of the group rules defined within the
+  apps according to the ``PIPELINE_NAMESPACE_FORMULA`` setting. This allows to avoid
+  group name collisions between the apps.
+
+  Defaults to ``True``.
+
+``PIPELINE_NAMESPACE_FORMULA``
+..............................
+
+  The format of how the key of the group rule will be formatted within the apps.
+  The value should be specified using
+  `Python's String Formatting <http://docs.python.org/2/library/string.html#formatstrings>`_
+  with the keyword arguments ``app_label`` and ``group_key``. For example, if using the
+  default value, the group key ``"stats"`` within the app ``"foo"`` will become
+  ``"foo_stats"``.
+
+  Defaults to ``"{app_label}_{group_key}"``.
+
 
 Embedding fonts and images
 ==========================

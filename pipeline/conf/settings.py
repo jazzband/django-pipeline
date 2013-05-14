@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
+from .utils import get_app_modules, get_groups
 
 DEBUG = getattr(settings, 'DEBUG', False)
 
@@ -16,8 +17,22 @@ PIPELINE_JS_COMPRESSOR = getattr(settings, 'PIPELINE_JS_COMPRESSOR',
                                  'pipeline.compressors.yuglify.YuglifyCompressor')
 PIPELINE_COMPILERS = getattr(settings, 'PIPELINE_COMPILERS', [])
 
+PIPELINE_APP_MODULE = getattr(settings, 'PIPELINE_APP_MODULE', 'compressed')
+PIPELINE_NAMESPACE_APPS = getattr(settings, 'PIPELINE_NAMESPACE_APPS', True)
+PIPELINE_NAMESPACE_FORMULA = getattr(settings, 'PIPELINE_NAMESPACE_FORMULA', '{app_label}_{group_key}')
+
 PIPELINE_CSS = getattr(settings, 'PIPELINE_CSS', {})
 PIPELINE_JS = getattr(settings, 'PIPELINE_JS', {})
+
+if PIPELINE_APP_MODULE:
+    for app in get_app_modules():
+        groups = get_groups(app,
+                            PIPELINE_APP_MODULE,
+                            PIPELINE_NAMESPACE_APPS,
+                            PIPELINE_NAMESPACE_FORMULA)
+
+        PIPELINE_CSS.update(groups['css'])
+        PIPELINE_JS.update(groups['js'])
 
 PIPELINE_TEMPLATE_NAMESPACE = getattr(settings, 'PIPELINE_TEMPLATE_NAMESPACE', "window.JST")
 PIPELINE_TEMPLATE_EXT = getattr(settings, 'PIPELINE_TEMPLATE_EXT', ".jst")
