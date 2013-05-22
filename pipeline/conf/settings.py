@@ -4,6 +4,8 @@ from django.conf import settings
 
 DEBUG = getattr(settings, 'DEBUG', False)
 
+PIPELINE_ENABLED = getattr(settings, 'PIPELINE_ENABLED', not DEBUG)
+
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
 
