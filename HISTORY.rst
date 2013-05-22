@@ -3,6 +3,12 @@
 History
 =======
 
+1.3.10
+------
+
+* Add ``PIPELINE_ENABLED`` settings. Huge thanks to Carl Meyer.
+* Update compass compiler documentation. Thanks to Camilo Nova.
+
 1.3.9
 -----
 
