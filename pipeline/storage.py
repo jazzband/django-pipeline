@@ -103,9 +103,13 @@ class BaseFinderStorage(PipelineStorage):
         if prefix:
             prefix = "%s%s" % (prefix, os.sep)
             name = name[len(prefix):]
-        if path == name:
+
+        norm_path = os.path.normpath(path)
+        norm_name = os.path.normpath(name)
+
+        if norm_path == norm_name:
             return name
-        if os.path.splitext(path)[0] == os.path.splitext(name)[0]:
+        if os.path.splitext(norm_path)[0] == os.path.splitext(norm_name)[0]:
             return name
         return None
 
