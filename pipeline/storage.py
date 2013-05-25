@@ -114,6 +114,8 @@ class BaseFinderStorage(PipelineStorage):
         return None
 
     def find_storage(self, name):
+        if os.name == 'nt':
+            name = name.replace('/', '\\')
         for finder in finders.get_finders():
             for path, storage in finder.list([]):
                 prefix = getattr(storage, 'prefix', None)
