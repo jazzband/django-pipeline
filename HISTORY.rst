@@ -3,6 +3,11 @@
 History
 =======
 
+1.3.11
+------
+
+* Fix Windows specific bug. Thanks to Tom Yam.
+
 1.3.10
 ------
 
