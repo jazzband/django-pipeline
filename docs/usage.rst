@@ -30,8 +30,9 @@ If you have specified the CSS-groups “screen” and “print” and a JavaScri
 with the name “scripts”, you would use the following code to output them all ::
 
    {% load compressed %}
-   {% compressed_css 'colors' %}
-   {% compressed_js 'stats' %}
+   {% compressed_css 'screen' %}
+   {% compressed_css 'print' %}
+   {% compressed_js 'scripts' %}
 
 Collect static
 ==============
