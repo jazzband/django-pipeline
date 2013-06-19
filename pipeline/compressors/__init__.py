@@ -4,7 +4,6 @@ import base64
 import os
 import posixpath
 import re
-import subprocess
 
 from itertools import takewhile
 
@@ -227,6 +226,7 @@ class CompressorBase(object):
 
 class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
+        import subprocess
         pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
                                 stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         if content:

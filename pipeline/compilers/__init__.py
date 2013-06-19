@@ -1,10 +1,6 @@
 from __future__ import unicode_literals
 
-import multiprocessing
 import os
-import subprocess
-
-from concurrent import futures
 
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
@@ -26,6 +22,8 @@ class Compiler(object):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
 
     def compile(self, paths, force=False):
+        import multiprocessing
+        from concurrent import futures
         def _compile(input_path):
             for compiler in self.compilers:
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
@@ -83,6 +81,7 @@ class CompilerBase(object):
 
 class SubProcessCompiler(CompilerBase):
     def execute_command(self, command, content=None, cwd=None):
+        import subprocess
         pipe = subprocess.Popen(command, shell=True, cwd=cwd,
                                 stdout=subprocess.PIPE, stdin=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
