@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.12
+------
+
+* Add minimal GAE support.
+* Make file globing deterministic. Thanks to Adam Charnock.
+* Fix tests packaging. Thanks to Mike Gilbert.
+
 1.3.11
 ------
 
