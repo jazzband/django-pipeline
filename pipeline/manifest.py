@@ -36,6 +36,7 @@ class PipelineManifest(Manifest):
         if settings.PIPELINE_ENABLED:
             for package in self.packages:
                 self.package_files.append(package.output_filename)
+                self.package_files += package.paths
                 yield str(self.packager.individual_url(package.output_filename))
         else:
             for package in self.packages:
