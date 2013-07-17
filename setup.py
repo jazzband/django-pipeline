@@ -12,7 +12,7 @@ setup(
     author_email='timothee.peignier@tryphon.org',
     url='https://github.com/cyberdelia/django-pipeline',
     license='MIT',
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=['tests', 'tests.tests']),
     zip_safe=False,
     install_requires=[
         'futures>=2.1.3',
