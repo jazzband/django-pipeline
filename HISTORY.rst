@@ -3,6 +3,12 @@
 History
 =======
 
+1.3.13
+------
+
+* Don't hardcode SASS arguments. Thanks to Cal Leeming.
+* Fix tests packaging (again). Thanks to Andrew Grigorev.
+
 1.3.12
 ------
 
