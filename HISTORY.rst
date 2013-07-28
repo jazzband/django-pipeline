@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.14
+------
+
+* Fix prefix handling. Thanks to Brian Montgomery.
+* Recalculate Content-Length after minifying HTML. Thanks to Camilo Nova.
+* Improve compiler outdated detection. Thanks to Hannes Ljungberg.
+
 1.3.13
 ------
 
