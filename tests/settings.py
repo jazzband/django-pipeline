@@ -13,12 +13,15 @@ SITE_ID = 1
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sites',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.auth',
     'django.contrib.admin',
     'pipeline',
     'tests',
 ]
+
+ROOT_URLCONF = 'tests.urls'
 
 MEDIA_URL = '/media/'
 
