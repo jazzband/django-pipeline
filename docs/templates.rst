@@ -58,6 +58,14 @@ your own extension via ``PIPELINE_TEMPLATE_EXT`` ::
 
   PIPELINE_TEMPLATE_EXT = '.mustache'
 
+Template separator
+..................
+
+Templates identifier are built using a replacement for directory separator,
+by default ``_``, but you specify your own sperator via ``PIPELINE_TEMPLATE_SEPARATOR`` ::
+
+  PIPELINE_TEMPLATE_SEPARATOR = '/'
+
 
 Using it with your favorite template library
 --------------------------------------------
@@ -92,6 +100,15 @@ To use it with `Handlebars <http://handlebarsjs.com/>`_, use the following setti
  PIPELINE_TEMPLATE_FUNC = 'Handlebars.compile'
  PIPELINE_TEMPLATE_NAMESPACE = 'Handlebars.templates'
 
+Ember.js + Handlebars
+.....................
+
+To use it with `Ember.js <http://emberjs.com/>`_, use the following settings ::
+
+ PIPELINE_TEMPLATE_EXT = '.handlebars'
+ PIPELINE_TEMPLATE_FUNC = 'Ember.Handlebars.compile'
+ PIPELINE_TEMPLATE_NAMESPACE = 'window.Ember.TEMPLATES'
+ PIPELINE_TEMPLATE_SEPARATOR = '/'
 
 Prototype
 .........

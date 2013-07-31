@@ -10,6 +10,7 @@ except ImportError:
     from unittest.mock import patch  # noqa
 
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from pipeline.compressors import Compressor, TEMPLATE_FUNC, \
     SubProcessCompressor
@@ -78,6 +79,17 @@ class CompressorTest(TestCase):
         name = self.compressor.template_name('templates\photo\detail.jst',
             'templates\\')
         self.assertEqual(name, 'photo_detail')
+
+    @override_settings(PIPELINE_TEMPLATE_SEPARATOR='/')
+    def test_template_name_separator(self):
+        name = self.compressor.template_name('templates/photo/detail.jst',
+            'templates/')
+        self.assertEqual(name, 'photo/detail')
+        name = self.compressor.template_name('templates/photo_edit.jst', '')
+        self.assertEqual(name, 'photo_edit')
+        name = self.compressor.template_name('templates\photo\detail.jst',
+            'templates\\')
+        self.assertEqual(name, 'photo/detail')
 
     def test_compile_templates(self):
         templates = self.compressor.compile_templates([_('pipeline/templates/photo/list.jst')])
