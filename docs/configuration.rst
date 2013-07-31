@@ -167,6 +167,13 @@ Other settings
 
   Defaults to ``"_.template"``
 
+``PIPELINE_TEMPLATE_SEPARATOR``
+...............................
+
+  Charater chain used by Pipeline as replacement for directory separator.
+
+  Defaults to ``"_"``
+
 
 Embedding fonts and images
 ==========================
