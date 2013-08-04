@@ -26,6 +26,16 @@ Also available if you want versioning ::
 
   STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineCachedStorage'
 
+If you use staticfiles with ``DEBUG = False`` (i.e. for integration tests
+with `Selenium <http://docs.seleniumhq.org/>`_) you should install the finder
+that allows staticfiles to locate your outputted assets : ::
+
+  STATICFILES_FINDERS = (
+      'django.contrib.staticfiles.finders.FileSystemFinder',
+      'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+      'pipeline.finders.PipelineFinder',
+  )
+
 
 Using with other storages
 =========================
