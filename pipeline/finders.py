@@ -36,6 +36,28 @@ class PipelineFinder(BaseFinder):
         return []
 
 
+class CachedFileFinder(BaseFinder):
+    """
+    A file finder that handles cached file storage
+    """
+
+    def find(self, path, all=False):
+        """
+        Work out the uncached name of the file and look that up instead
+        """
+
+        try:
+            start, _, extn = path.rsplit('.', 2)
+            path = '.'.join((start, extn))
+
+            return find(path, all=all)
+        except ValueError:
+            return []
+
+    def list(self, *args):
+        return []
+
+
 class BaseContribFinderMixin(object):
     IGNORED_PATTERNS = []
 

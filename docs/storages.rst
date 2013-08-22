@@ -36,12 +36,21 @@ that allows staticfiles to locate your outputted assets : ::
       'pipeline.finders.PipelineFinder',
   )
 
+If you use ``PipelineCachedStorage`` you may also like the ``CachedFileFinder``,
+which allows you to use integration tests with cached file URLs.
+
 If you want to exclude Pipelinable content from your collected static files,
 you can also use Pipeline's ``FileSystemFinder`` and ``AppDirectoriesFinder``.
 These finders will also exclude `unwanted` content like READMEs, tests and
 examples, which are particularly useful if you're collecting content from a
-tool like Bower.
+tool like Bower. ::
 
+  STATICFILES_FINDERS = (
+      'pipeline.finders.FileSystemFinder',
+      'pipeline.finders.AppDirectoriesFinder',
+      'pipeline.finders.PipelineFinder',
+      'pipeline.finders.CachedFileFinder',
+  )
 
 Using with other storages
 =========================
