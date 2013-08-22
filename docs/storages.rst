@@ -70,3 +70,33 @@ Your storage only need to inherit from ``PipelineMixin`` and/or ``CachedFilesMix
 
   class S3PipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
        pass
+
+Using Pipeline with Bower
+=========================
+
+`Bower <http://bower.io/>`_ is a `package manager for the web` that allows
+you to easily include frontend components with named versions. Integrating
+Bower with Pipeline is straightforward.
+
+Add your Bower directory to your ``STATICFILES_DIRS`` : ::
+
+  STATICFILES_DIRS = (
+    os.path.join(os.path.dirname(__file__), '..', 'bower_components'),
+  )
+
+Then process the relevant content through Pipeline : ::
+
+  PIPELINE_JS = {
+    'components': {
+      'source_filenames: (
+        'jquery/jquery.js',
+        # you can choose to be specific to reduce your payload
+        'jquery-ui/ui/*.js',
+      ),
+      'output_filename': 'js/components.js',
+    },
+  }
+
+``pipeline.finders.FileSystemFinder`` will help you by excluding much of the
+extra content that Bower includes with its components, such as READMEs, tests
+and examples, while still including images, fonts, CSS fragments etc.
