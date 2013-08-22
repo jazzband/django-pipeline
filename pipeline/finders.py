@@ -2,7 +2,8 @@
 A finder for using Pipeline compressed content with staticfiles
 """
 
-from django.contrib.staticfiles.finders import BaseFinder
+from django.contrib.staticfiles.finders import BaseFinder, find
+from django.contrib.staticfiles import finders
 
 from django.utils._os import safe_join
 
@@ -33,3 +34,63 @@ class PipelineFinder(BaseFinder):
 
     def list(self, *args):
         return []
+
+
+class BaseContribFinderMixin(object):
+    IGNORED_PATTERNS = []
+
+    def list(self, ignore_patterns):
+        if ignore_patterns:
+            ignore_patterns = ignore_patterns + self.IGNORED_PATTERNS
+
+        return super(BaseContribFinderMixin, self).list(ignore_patterns)
+
+
+class AppDirectoriesFinder(BaseContribFinderMixin,
+                           finders.AppDirectoriesFinder):
+    """
+    Like AppDirectoriesFinder, but doesn't return any additional ignored
+    patterns.
+
+    This allows us to concentrate/compress our components without dragging
+    the raw versions in via collectstatic.
+    """
+
+    IGNORED_PATTERNS = [
+        '*.js',  # we will concentrate it all ourselves through Pipeline
+        '*.css',
+        '*.less',
+        '*.scss',
+    ]
+
+
+class FileSystemFinder(BaseContribFinderMixin, finders.FileSystemFinder):
+    """
+    Like FileSystemFinder, but doesn't return any additional ignored patterns
+
+    This allows us to concentrate/compress our components without dragging
+    the raw versions in too.
+    """
+
+    IGNORED_PATTERNS = [
+        '*.js',  # we will concentrate it all ourselves through Pipeline
+        '*.less',
+        '*.scss',
+        '*.sh',
+        '*.html',
+        '*.md',
+        '*.markdown',
+        '*.php',
+        '*.txt',
+        'README*',
+        'LICENSE*',
+        '*examples*',
+        '*test*',
+        '*bin*',
+        '*samples*',
+        '*docs*',
+        '*build*',
+        '*demo*',
+        'Makefile*',
+        'Gemfile*',
+    ]
