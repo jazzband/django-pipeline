@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
 
+
 class LiveScriptCompiler(SubProcessCompiler):
     output_extension = 'js'
 
