@@ -9,8 +9,7 @@ from pipeline.conf import settings
 
 class MinifyHTMLMiddleware(object):
     def __init__(self):
-        if settings.DEBUG:
-            # On debug does not minify html
+        if not settings.PIPELINE_ENABLED:
             raise MiddlewareNotUsed
 
     def process_response(self, request, response):

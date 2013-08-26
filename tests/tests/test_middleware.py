@@ -5,6 +5,8 @@ from django.test import TestCase
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+from tests.utils import pipeline_settings
+
 
 class MiddlewareTest(TestCase):
     def test_middleware_off(self):
@@ -27,3 +29,25 @@ class MiddlewareTest(TestCase):
 
             length = str(len(response.content))
             self.assertEqual(length, response['Content-Length'])
+
+    def test_middleware_pipeline_enabled(self):
+        CUSTOM_MIDDLEWARE = (
+            'django.middleware.gzip.GZipMiddleware',
+            'pipeline.middleware.MinifyHTMLMiddleware',
+        ) + settings.MIDDLEWARE_CLASSES
+
+        with self.settings(MIDDLEWARE_CLASSES=CUSTOM_MIDDLEWARE):
+            with pipeline_settings(PIPELINE_ENABLED=True):
+                response = self.client.get(reverse('admin:index'))
+                self.assertNotIn('    ', response.content)
+
+    def test_middleware_pipeline_disabled(self):
+        CUSTOM_MIDDLEWARE = (
+            'django.middleware.gzip.GZipMiddleware',
+            'pipeline.middleware.MinifyHTMLMiddleware',
+        ) + settings.MIDDLEWARE_CLASSES
+
+        with self.settings(MIDDLEWARE_CLASSES=CUSTOM_MIDDLEWARE):
+            with pipeline_settings(PIPELINE_ENABLED=False):
+                response = self.client.get(reverse('admin:index'))
+                self.assertIn('    ', response.content)
