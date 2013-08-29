@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import base64
+import os
 
 try:
     from mock import patch
@@ -10,7 +11,8 @@ except ImportError:
 
 from django.test import TestCase
 
-from pipeline.compressors import Compressor, TEMPLATE_FUNC
+from pipeline.compressors import Compressor, TEMPLATE_FUNC, \
+    SubProcessCompressor
 from pipeline.compressors.yuglify import YuglifyCompressor
 
 from tests.utils import _
@@ -127,3 +129,14 @@ class CompressorTest(TestCase):
 .no-protocol-url {
   background-image: url(//images/sprite-buttons.png);
 }""", output)
+
+    def test_compressor_subprocess_unicode(self):
+        tests_path = os.path.dirname(os.path.dirname(__file__))
+        output = SubProcessCompressor(False).execute_command(
+            '/usr/bin/env cat',
+            open(tests_path + '/assets/css/unicode.css').read())
+        self.assertEqual(""".some_class {
+  // Some unicode
+  content: "áéíóú";
+}
+""", output)
