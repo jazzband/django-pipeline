@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.15
+------
+
+* Fix unicode handling in sub-process commands. Thanks to Caio Ariede.
+* MinifyHTMLMiddleware use PIPELINE_ENABLED. Thanks to Caio Ariede.
+* Add useful finders. Thanks to Danielle Madeley.
+
 1.3.14
 ------
 
