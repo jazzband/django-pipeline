@@ -39,7 +39,7 @@ class MiddlewareTest(TestCase):
         with self.settings(MIDDLEWARE_CLASSES=CUSTOM_MIDDLEWARE):
             with pipeline_settings(PIPELINE_ENABLED=True):
                 response = self.client.get(reverse('admin:index'))
-                self.assertNotIn('    ', response.content)
+                self.assertNotIn(b'    ', response.content)
 
     def test_middleware_pipeline_disabled(self):
         CUSTOM_MIDDLEWARE = (
@@ -50,4 +50,4 @@ class MiddlewareTest(TestCase):
         with self.settings(MIDDLEWARE_CLASSES=CUSTOM_MIDDLEWARE):
             with pipeline_settings(PIPELINE_ENABLED=False):
                 response = self.client.get(reverse('admin:index'))
-                self.assertIn('    ', response.content)
+                self.assertIn(b'    ', response.content)
