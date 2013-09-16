@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-pipeline',
-    version='1.3.9',
+    version='1.3.15',
     description='Pipeline is an asset packaging library for Django.',
     long_description=open('README.rst').read() + '\n\n' +
         open('HISTORY.rst').read(),
@@ -12,7 +12,7 @@ setup(
     author_email='timothee.peignier@tryphon.org',
     url='https://github.com/cyberdelia/django-pipeline',
     license='MIT',
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests', 'tests.tests']),
     zip_safe=False,
     install_requires=[
         'futures>=2.1.3',

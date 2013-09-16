@@ -112,7 +112,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
   Additional arguments to use when sass is called.
 
-  Defaults to ``''``.
+  Defaults to ``'--update'``.
 
 
 Stylus compiler

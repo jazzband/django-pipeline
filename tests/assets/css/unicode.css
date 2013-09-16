@@ -1,0 +1,4 @@
+.some_class {
+  // Some unicode
+  content: "áéíóú";
+}

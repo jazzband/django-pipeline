@@ -1,10 +1,6 @@
 from __future__ import unicode_literals
 
-import multiprocessing
 import os
-import subprocess
-
-from concurrent import futures
 
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
@@ -26,18 +22,16 @@ class Compiler(object):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
 
     def compile(self, paths, force=False):
+        import multiprocessing
+        from concurrent import futures
         def _compile(input_path):
             for compiler in self.compilers:
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
                 if compiler.match_file(input_path):
                     output_path = self.output_path(input_path, compiler.output_extension)
                     infile = finders.find(input_path)
-                    outfile = finders.find(output_path)
-                    if outfile is None:
-                        outfile = self.output_path(infile, compiler.output_extension)
-                        outdated = True
-                    else:
-                        outdated = compiler.is_outdated(input_path, output_path)
+                    outfile = self.output_path(infile, compiler.output_extension)
+                    outdated = compiler.is_outdated(input_path, output_path)
                     try:
                         compiler.compile_file(infile, outfile, outdated=outdated, force=force)
                     except CompilerError:
@@ -83,6 +77,7 @@ class CompilerBase(object):
 
 class SubProcessCompiler(CompilerBase):
     def execute_command(self, command, content=None, cwd=None):
+        import subprocess
         pipe = subprocess.Popen(command, shell=True, cwd=cwd,
                                 stdout=subprocess.PIPE, stdin=subprocess.PIPE,
                                 stderr=subprocess.PIPE)

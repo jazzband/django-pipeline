@@ -101,11 +101,17 @@ class BaseFinderStorage(PipelineStorage):
 
     def match_location(self, name, path, prefix=None):
         if prefix:
+            if prefix != name[:len(prefix)]:
+                return None
             prefix = "%s%s" % (prefix, os.sep)
             name = name[len(prefix):]
-        if path == name:
+
+        norm_path = os.path.normpath(path)
+        norm_name = os.path.normpath(name)
+
+        if norm_path == norm_name:
             return name
-        if os.path.splitext(path)[0] == os.path.splitext(name)[0]:
+        if os.path.splitext(norm_path)[0] == os.path.splitext(norm_name)[0]:
             return name
         return None
 

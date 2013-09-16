@@ -105,6 +105,13 @@ Group options
 Other settings
 --------------
 
+``PIPELINE_ENABLED``
+....................
+
+  ``True`` if assets should be compressed, ``False`` if not.
+
+  Defaults to ``not settings.DEBUG``.
+
 ``PIPELINE_CSS_COMPRESSOR``
 ............................
 

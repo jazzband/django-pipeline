@@ -30,7 +30,7 @@ class CompressedMixin(object):
         return packager.package_for(package_type, package_name)
 
     def render_compressed(self, package, package_type):
-        if not settings.DEBUG:
+        if settings.PIPELINE_ENABLED:
             method = getattr(self, "render_{0}".format(package_type))
             return method(package, package.output_filename)
         else:

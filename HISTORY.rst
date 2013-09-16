@@ -3,6 +3,44 @@
 History
 =======
 
+1.3.15
+------
+
+* Fix unicode handling in sub-process commands. Thanks to Caio Ariede.
+* MinifyHTMLMiddleware use PIPELINE_ENABLED. Thanks to Caio Ariede.
+* Add useful finders. Thanks to Danielle Madeley.
+
+1.3.14
+------
+
+* Fix prefix handling. Thanks to Brian Montgomery.
+* Recalculate Content-Length after minifying HTML. Thanks to Camilo Nova.
+* Improve compiler outdated detection. Thanks to Hannes Ljungberg.
+
+1.3.13
+------
+
+* Don't hardcode SASS arguments. Thanks to Cal Leeming.
+* Fix tests packaging (again). Thanks to Andrew Grigorev.
+
+1.3.12
+------
+
+* Add minimal GAE support.
+* Make file globing deterministic. Thanks to Adam Charnock.
+* Fix tests packaging. Thanks to Mike Gilbert.
+
+1.3.11
+------
+
+* Fix Windows specific bug. Thanks to Tom Yam.
+
+1.3.10
+------
+
+* Add ``PIPELINE_ENABLED`` settings. Huge thanks to Carl Meyer.
+* Update compass compiler documentation. Thanks to Camilo Nova.
+
 1.3.9
 -----
 

@@ -5,6 +5,8 @@ from .utils import get_app_modules, get_groups
 
 DEBUG = getattr(settings, 'DEBUG', False)
 
+PIPELINE_ENABLED = getattr(settings, 'PIPELINE_ENABLED', not DEBUG)
+
 PIPELINE_ROOT = getattr(settings, 'PIPELINE_ROOT', settings.STATIC_ROOT)
 PIPELINE_URL = getattr(settings, 'PIPELINE_URL', settings.STATIC_URL)
 
@@ -67,7 +69,7 @@ PIPELINE_LIVE_SCRIPT_BINARY = getattr(settings, 'PIPELINE_LIVE_SCRIPT_BINARY', '
 PIPELINE_LIVE_SCRIPT_ARGUMENTS = getattr(settings, 'PIPELINE_LIVE_SCRIPT_ARGUMENTS', '')
 
 PIPELINE_SASS_BINARY = getattr(settings, 'PIPELINE_SASS_BINARY', '/usr/bin/env sass')
-PIPELINE_SASS_ARGUMENTS = getattr(settings, 'PIPELINE_SASS_ARGUMENTS', '')
+PIPELINE_SASS_ARGUMENTS = getattr(settings, 'PIPELINE_SASS_ARGUMENTS', '--update')
 
 PIPELINE_STYLUS_BINARY = getattr(settings, 'PIPELINE_STYLUS_BINARY', '/usr/bin/env stylus')
 PIPELINE_STYLUS_ARGUMENTS = getattr(settings, 'PIPELINE_STYLUS_ARGUMENTS', '')
