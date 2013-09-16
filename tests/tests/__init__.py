@@ -5,5 +5,6 @@ from .test_extension import *
 from .test_glob import *
 from .test_middleware import *
 from .test_packager import *
+from .test_settings import *
 from .test_storage import *
 from .test_utils import *
