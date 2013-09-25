@@ -22,9 +22,9 @@ combined, compressed files will not be used), in order to make local debugging
 easy. When ``settings.DEBUG`` is set to ``False`` the opposite is true. You can
 override the default behavior by setting ``settings.PIPELINE_ENABLED``
 manually. When set to ``True`` or ``False`` this enables or disables,
-respectively, the usage of the combined, compressed file for each group. This
-may be useful, if you run into errors in your compressed code and need to debug
-it locally.
+respectively, the usage of the combined, compressed file for each resource
+group. This can be useful, if you encounter errors in your compressed code that
+don't occur in your uncompressed code and you want to debug them locally.
 
 If you need to change the output of the HTML-tags generated from the templatetags,
 this can be done by overriding the templates ``pipeline/css.html`` and ``pipeline/js.html``.
