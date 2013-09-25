@@ -16,9 +16,15 @@ They are used to output the ``<link>`` and ``<script>``-tags for the
 specified CSS/JavaScript-groups (as specified in the settings).
 The first argument must be the name of the CSS/JavaScript group.
 
-The templatetags will either output the source filenames or the compressed filenames,
-depending on the ``PIPELINE`` setting, if you do not specify the ``PIPELINE`` setting,
-the source files will be used in DEBUG-mode, and compressed files in non-DEBUG-mode.
+When ``settings.DEBUG`` is set to ``True`` the use of these template tags will
+result in a separate tag for each resource in a given group (i.e., the
+combined, compressed files will not be used), in order to make local debugging
+easy. When ``settings.DEBUG`` is set to ``False`` the opposite is true. You can
+override the default behavior by setting ``settings.PIPELINE_ENABLED``
+manually. When set to ``True`` or ``False`` this enables or disables,
+respectively, the usage of the combined, compressed file for each group. This
+may be useful, if you run into errors in your compressed code and need to debug
+it locally.
 
 If you need to change the output of the HTML-tags generated from the templatetags,
 this can be done by overriding the templates ``pipeline/css.html`` and ``pipeline/js.html``.
