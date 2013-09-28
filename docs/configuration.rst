@@ -91,6 +91,12 @@ Group options
 
   For CSS, if you do not specify ``extra_context``/``media``, the default media in
   the ``<link>`` output will be ``media="all"``.
+  
+  For JS, the default templates support the ``async`` and ``defer`` tag attributes which are controlled via ``extra_context``: ::
+  
+    'extra_context': {
+        'async': True,
+    },
 
 ``manifest``
 ............
