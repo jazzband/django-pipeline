@@ -63,7 +63,7 @@ def glob1(dirname, pattern):
         # and storage implementations are really exotic.
         return []
     if pattern[0] != '.':
-        names = filter(lambda x: x[0] != '.', names)
+        names = [x for x in names if x[0] != '.']
     return fnmatch.filter(names, pattern)
 
 

@@ -2,7 +2,11 @@ from __future__ import unicode_literals
 
 import mimetypes
 import posixpath
-import urllib
+
+try:
+    from urllib.parse import quote
+except ImportError:
+    from urllib import quote
 
 from django.utils import importlib
 from django.utils.encoding import smart_str
@@ -23,7 +27,7 @@ def to_class(class_str):
 def filepath_to_uri(path):
     if path is None:
         return path
-    return urllib.quote(smart_str(path).replace("\\", "/"), safe="/~!*()'#?")
+    return quote(smart_str(path).replace("\\", "/"), safe="/~!*()'#?")
 
 
 def guess_type(path, default=None):

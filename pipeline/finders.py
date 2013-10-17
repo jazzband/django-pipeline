@@ -1,8 +1,9 @@
+from itertools import chain
+
 from django.contrib.staticfiles.finders import BaseFinder, AppDirectoriesFinder, FileSystemFinder, find
 from django.utils._os import safe_join
 
 from pipeline.conf import settings
-
 
 class PipelineFinder(BaseFinder):
     def find(self, path, all=False):
@@ -10,7 +11,7 @@ class PipelineFinder(BaseFinder):
         Looks for files in PIPELINE_CSS and PIPELINE_JS
         """
         matches = []
-        for elem in settings.PIPELINE_CSS.values() + settings.PIPELINE_JS.values():
+        for elem in chain(settings.PIPELINE_CSS.values(), settings.PIPELINE_JS.values()):
             if elem['output_filename'] == path:
                 match = safe_join(settings.PIPELINE_ROOT, path)
                 if not all:
