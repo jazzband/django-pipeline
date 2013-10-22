@@ -2,9 +2,14 @@ from __future__ import unicode_literals
 
 from django.core.exceptions import MiddlewareNotUsed
 from django.utils.encoding import DjangoUnicodeDecodeError
-from django.utils.html import strip_spaces_between_tags as minify_html
 
 from pipeline.conf import settings
+from pipeline.html_utils import minify_html_leave_whitespace
+
+if settings.PIPELINE_MINIFY_HTML_LEAVE_WHITESPACE:
+    minify_html = minify_html_leave_whitespace
+else:
+    from django.utils.html import strip_spaces_between_tags as minify_html
 
 
 class MinifyHTMLMiddleware(object):
