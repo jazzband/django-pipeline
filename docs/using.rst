@@ -36,3 +36,10 @@ For their main and forum website:
 
 * http://www.ulule.com
 * http://vox.ulule.com
+
+Borsala
+-------
+
+Borsala is the social investment plaform. You can follow stock markets that are traded in Turkey:
+
+http://borsala.com
