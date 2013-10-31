@@ -92,7 +92,7 @@ class BaseFinderStorage(PipelineStorage):
         return exists
 
     def listdir(self, path):
-        for finder in finders.get_finders():
+        for finder in self.finders.get_finders():
             for storage in finder.storages.values():
                 try:
                     return storage.listdir(path)
@@ -116,7 +116,7 @@ class BaseFinderStorage(PipelineStorage):
         return None
 
     def find_storage(self, name):
-        for finder in finders.get_finders():
+        for finder in self.finders.get_finders():
             for path, storage in finder.list([]):
                 prefix = getattr(storage, 'prefix', None)
                 matched_path = self.match_location(name, path, prefix)
