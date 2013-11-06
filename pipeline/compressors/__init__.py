@@ -34,7 +34,6 @@ MIME_TYPES = {
 EMBED_EXTS = MIME_TYPES.keys()
 FONT_EXTS = ['.ttf', '.otf', '.woff']
 
-
 class Compressor(object):
     asset_contents = {}
 
@@ -237,3 +236,16 @@ class SubProcessCompressor(CompressorBase):
         if self.verbose:
             print(stderr)
         return force_text(stdout)
+
+
+class NoOpCompressor(Compressor):
+    """
+    A compressor which does no compression.
+    """
+
+    @property
+    def js_compressor(self):
+        return None
+
+    def css_compressor(self):
+        return None

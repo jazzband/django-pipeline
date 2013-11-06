@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.test import TestCase
 
 from pipeline.packager import Packager, PackageNotFound
+from pipeline.compressors import NoOpCompressor
 
 from tests.utils import _
 
@@ -59,7 +60,7 @@ class PackagerTest(TestCase):
 
         # replace the method to check we get the right compressor
         def mock(package, compress, signal, **kwargs):
-            self.assertNotEqual(compress, None)
+            self.assertNotEqual(compress.im_class, NoOpCompressor)
 
             called[0] = True
 
@@ -87,7 +88,7 @@ class PackagerTest(TestCase):
 
         # replace the method to check we get the right compressor
         def mock(package, compress, signal, **kwargs):
-            self.assertEqual(compress, None)
+            self.assertEqual(compress.im_class, NoOpCompressor)
 
             called[0] = True
 
