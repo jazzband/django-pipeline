@@ -107,6 +107,17 @@ Group options
 
   Defaults to ``True``.
 
+``compress``
+............
+
+  **Optional**
+
+  Used to disable compression (not concatenation) of this resource. See also
+  ``PIPELINE_CSS_COMPRESSOR`` and ``PIPELINE_JS_COMPRESSOR`` on how to disable
+  compression globally.
+
+  Defaults to ``True``.
+
 
 Other settings
 --------------
