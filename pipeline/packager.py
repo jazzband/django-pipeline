@@ -59,6 +59,10 @@ class Package(object):
     def manifest(self):
         return self.config.get('manifest', True)
 
+    @property
+    def compress(self):
+        return self.config.get('compress', True)
+
 
 class Packager(object):
     def __init__(self, storage=default_storage, verbose=False, css_packages=None, js_packages=None):
@@ -89,9 +93,11 @@ class Packager(object):
         return self.storage.url(filename)
 
     def pack_stylesheets(self, package, **kwargs):
-        return self.pack(package, self.compressor.compress_css, css_compressed,
+        compressor = self.compressor.compress_css if package.compress else None
+        return self.pack(package, compressor, css_compressed,
                          output_filename=package.output_filename,
-                         variant=package.variant, **kwargs)
+                         variant=package.variant,
+                         **kwargs)
 
     def compile(self, paths, force=False):
         return self.compiler.compile(paths, force=force)
@@ -107,7 +113,10 @@ class Packager(object):
         return output_filename
 
     def pack_javascripts(self, package, **kwargs):
-        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package.templates, **kwargs)
+        compressor = self.compressor.compress_js if package.compress else None
+        return self.pack(package, compressor, js_compressed,
+                         templates=package.templates,
+                         **kwargs)
 
     def pack_templates(self, package):
         return self.compressor.compile_templates(package.templates)
