@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.16
+------
+
+* Fix python3 compatibility. Thanks to Stephan Wienczny.
+* Various documentation improvements. Thanks to Chrish Clark, Michael Angeletti and Gokmen Gorgen.
+* Tests improvements. Thanks to Michał Górny.
+
 1.3.15
 ------
 
