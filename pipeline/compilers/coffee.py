@@ -8,7 +8,7 @@ class CoffeeScriptCompiler(SubProcessCompiler):
     output_extension = 'js'
 
     def match_file(self, path):
-        return path.endswith('.coffee')
+        return path.endswith('.coffee') or path.endswith('.litcoffee')
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:
