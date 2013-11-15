@@ -232,8 +232,8 @@ class SubProcessCompressor(CompressorBase):
         if content:
             content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)
-        if stderr.strip():
+        if stderr.strip() and pipe.returncode != 0:
             raise CompressorError(stderr)
-        if self.verbose:
+        elif self.verbose:
             print(stderr)
         return force_text(stdout)
