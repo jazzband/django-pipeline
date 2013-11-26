@@ -24,6 +24,7 @@ class Compiler(object):
     def compile(self, paths, force=False):
         import multiprocessing
         from concurrent import futures
+
         def _compile(input_path):
             for compiler in self.compilers:
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
@@ -40,6 +41,7 @@ class Compiler(object):
                     return output_path
             else:
                 return input_path
+
         with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
             return list(executor.map(_compile, paths))
 

@@ -5,6 +5,7 @@ from django.utils._os import safe_join
 
 from pipeline.conf import settings
 
+
 class PipelineFinder(BaseFinder):
     def find(self, path, all=False):
         """
