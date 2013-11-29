@@ -42,6 +42,14 @@ class DjangoTest(TestCase):
     def render_template(self, template):
         return Template(template).render(Context())
 
-    def test_compressed_css(self):
+    def test_compressed_empty(self):
         rendered = self.render_template(u"""{% load compressed %}{% compressed_css "unknow" %}""")
         self.assertEqual(u"", rendered)
+
+    def test_compressed_css(self):
+        rendered = self.render_template(u"""{% load compressed %}{% compressed_css "screen" %}""")
+        self.assertEqual(u'<link href="/static/screen.css" rel="stylesheet" type="text/css" />', rendered)
+
+    def test_compressed_js(self):
+        rendered = self.render_template(u"""{% load compressed %}{% compressed_js "scripts" %}""")
+        self.assertEqual(u'<script   type="text/css" src="/static/scripts.css" charset="utf-8"></script>', rendered)
