@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.17
+------
+
+* Improve tests.
+* Escape url in template tags. Thanks to Joshua Kehn.
+* Allow to change javascript templates separator. Thanks to Axel Haustant.
+
 1.3.16
 ------
 
