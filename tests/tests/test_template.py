@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from jinja2 import Environment, PackageLoader
 
+from django.template import Template, Context
 from django.test import TestCase
 
 from pipeline.jinja2.ext import PipelineExtension
@@ -10,7 +11,7 @@ from pipeline.jinja2.ext import PipelineExtension
 from tests.utils import pipeline_settings
 
 
-class ExtensionTest(TestCase):
+class JinjaTest(TestCase):
     def setUp(self):
         self.env = Environment(extensions=[PipelineExtension], loader=
             PackageLoader('pipeline', 'templates'))
@@ -35,3 +36,12 @@ class ExtensionTest(TestCase):
     def test_package_js(self):
         template = self.env.from_string(u"""{% compressed_js "scripts" %}""")
         self.assertEqual(u'<script   type="text/css" src="/static/scripts.css" charset="utf-8"></script>', template.render())
+
+
+class DjangoTest(TestCase):
+    def render_template(self, template):
+        return Template(template).render(Context())
+
+    def test_compressed_css(self):
+        rendered = self.render_template(u"""{% load compressed %}{% compressed_css "unknow" %}""")
+        self.assertEqual(u"", rendered)
