@@ -52,6 +52,25 @@ tool like Bower. ::
       'pipeline.finders.CachedFileFinder',
   )
 
+GZIP compression
+================
+
+Pipeline can also creates a gzipped version of your collected static files,
+so that you can avoid compressing them on the fly. ::
+
+  STATICFILES_STORAGE = 'your.app.GZIPCachedStorage'
+
+The storage need to inherit from ``GzipMixin``: ::
+
+  from staticfiles.storage import CachedStaticFilesStorage
+
+  from pipeline.storage import GZIPMixin
+
+
+  class GZIPCachedStorage(GZIPMixin, CachedStaticFilesStorage):
+      pass
+
+
 Using with other storages
 =========================
 
@@ -69,7 +88,7 @@ Your storage only need to inherit from ``PipelineMixin`` and/or ``CachedFilesMix
 
 
   class S3PipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
-       pass
+      pass
 
 Using Pipeline with Bower
 =========================

@@ -64,6 +64,6 @@ PIPELINE_JS = {
             'pipeline/js/application.js',
             'pipeline/templates/**/*.jst'
         ),
-        'output_filename': 'scripts.css'
+        'output_filename': 'scripts.js'
     }
 }
