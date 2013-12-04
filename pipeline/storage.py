@@ -83,7 +83,7 @@ class NonPackagingPipelineStorage(NonPackagingMixin, PipelineStorage):
     pass
 
 
-class PipelineCachedStorage(PipelineMixin, GZIPMixin, CachedFilesMixin, StaticFilesStorage):
+class PipelineCachedStorage(GZIPMixin, PipelineMixin, CachedFilesMixin, StaticFilesStorage):
     pass
 
 
