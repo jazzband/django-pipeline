@@ -105,7 +105,6 @@ class Packager(object):
         paths = self.compile(package.paths, force=True)
         content = compress(paths, **kwargs)
         self.save_file(output_filename, content)
-        self.save_gzip(output_filename, content)
         signal.send(sender=self, package=package, **kwargs)
         return output_filename
 
@@ -117,9 +116,6 @@ class Packager(object):
 
     def save_file(self, path, content):
         return self.storage.save(path, ContentFile(smart_str(content)))
-
-    def save_gzip(self, path, content):
-        return self.storage.save(path + '.gz', ContentFile(smart_str(compress(content, 9))))
 
     def create_packages(self, config):
         packages = {}

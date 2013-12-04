@@ -6,7 +6,9 @@ from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import CachedFilesMixin, StaticFilesStorage
 
 from django.core.exceptions import ImproperlyConfigured
+from django.core.files.base import ContentFile
 from django.core.files.storage import get_storage_class
+from django.utils.encoding import smart_str
 from django.utils.functional import LazyObject
 
 from pipeline.conf import settings
@@ -49,6 +51,28 @@ class PipelineMixin(object):
         return name
 
 
+class GZIPMixin(object):
+    def post_process(self, paths, dry_run=False, **options):
+        if dry_run:
+            return []
+
+        from zlib import compress
+        for path in paths:
+            file_content = self.open(path).read()
+            gzipped_content = compress(file_content, 9)
+            self.save(path + '.gz', ContentFile(smart_str(gzipped_content)))
+
+        super_class = super(GZIPMixin, self)
+        if hasattr(super_class, 'post_process'):
+            TEMP = super_class.post_process(paths, dry_run, **options)
+            return TEMP
+
+        return [
+            (path, path, True)
+            for path in paths
+        ]
+
+
 class NonPackagingMixin(object):
     packing = False
 
@@ -61,7 +85,7 @@ class NonPackagingPipelineStorage(NonPackagingMixin, PipelineStorage):
     pass
 
 
-class PipelineCachedStorage(PipelineMixin, CachedFilesMixin, StaticFilesStorage):
+class PipelineCachedStorage(PipelineMixin, GZIPMixin, CachedFilesMixin, StaticFilesStorage):
     pass
 
 
