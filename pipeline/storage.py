@@ -61,11 +61,9 @@ class GZIPMixin(object):
             file_content = self.open(path).read()
             gzipped_content = compress(file_content, 9)
             self.save(path + '.gz', ContentFile(smart_str(gzipped_content)))
-
         super_class = super(GZIPMixin, self)
         if hasattr(super_class, 'post_process'):
-            TEMP = super_class.post_process(paths, dry_run, **options)
-            return TEMP
+            return super_class.post_process(paths, dry_run, **options)
 
         return [
             (path, path, True)
