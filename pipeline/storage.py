@@ -117,11 +117,12 @@ class BaseFinderStorage(PipelineStorage):
 
     def find_storage(self, name):
         for finder in self.finders.get_finders():
-            for path, storage in finder.list([]):
-                prefix = getattr(storage, 'prefix', None)
-                matched_path = self.match_location(name, path, prefix)
-                if matched_path:
-                    return matched_path, storage
+            path = finder.find(name)
+            if path:
+                for storage_root, storage in finder.storages.items():
+                    if path.startswith(storage_root):
+                        return path, storage
+
         raise ValueError("The file '%s' could not be found with %r." % (name, self))
 
     def _open(self, name, mode="rb"):
