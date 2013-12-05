@@ -79,9 +79,9 @@ class Compressor(object):
             raise CompressorError("\"%s\" is not a valid variant" % variant)
 
     def compile_templates(self, paths):
-        compiled = ""
+        compiled = []
         if not paths:
-            return compiled
+            return ''
         namespace = settings.PIPELINE_TEMPLATE_NAMESPACE
         base_path = self.base_path(paths)
         for path in paths:
@@ -89,17 +89,17 @@ class Compressor(object):
             contents = re.sub("\r?\n", "\\\\n", contents)
             contents = re.sub("'", "\\'", contents)
             name = self.template_name(path, base_path)
-            compiled += "%s['%s'] = %s('%s');\n" % (
+            compiled.append("%s['%s'] = %s('%s');\n" % (
                 namespace,
                 name,
                 settings.PIPELINE_TEMPLATE_FUNC,
                 contents
-            )
+            ))
         compiler = TEMPLATE_FUNC if settings.PIPELINE_TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC else ""
         return "\n".join([
             "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
             compiler,
-            compiled
+            ''.join(compiled)
         ])
 
     def base_path(self, paths):
