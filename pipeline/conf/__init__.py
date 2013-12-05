@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import sys
-
 from django.conf import settings as _settings
+
+from .utils import get_app_modules, get_groups
+
 
 DEFAULTS = {
     'DEBUG': False,
@@ -18,6 +19,10 @@ DEFAULTS = {
     'PIPELINE_CSS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
     'PIPELINE_JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
     'PIPELINE_COMPILERS': [],
+
+    'PIPELINE_APP_MODULE': 'compressed',
+    'PIPELINE_NAMESPACE_APPS': True,
+    'PIPELINE_NAMESPACE_FORMULA': '{app_label}_{group_key}',
 
     'PIPELINE_CSS': {},
     'PIPELINE_JS': {},
@@ -93,3 +98,14 @@ class PipelineSettings(object):
             raise AttributeError("'%s' setting not found" % name)
 
 settings = PipelineSettings(_settings)
+
+
+if settings.PIPELINE_APP_MODULE:
+    for app in get_app_modules():
+        groups = get_groups(app,
+                            settings.PIPELINE_APP_MODULE,
+                            settings.PIPELINE_NAMESPACE_APPS,
+                            settings.PIPELINE_NAMESPACE_FORMULA)
+
+        settings.PIPELINE_CSS.update(groups['css'])
+        settings.PIPELINE_JS.update(groups['js'])
