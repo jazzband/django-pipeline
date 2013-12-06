@@ -3,6 +3,11 @@
 History
 =======
 
+1.3.18
+------
+
+* Performance improvements. Thanks to Miguel Araujo Perez.
+
 1.3.17
 ------
 
