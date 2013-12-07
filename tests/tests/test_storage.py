@@ -27,6 +27,6 @@ class StorageTest(TestCase):
     def test_find_storage(self):
         try:
             storage = PipelineFinderStorage()
-            storage.find_storage('testing.css')
+            storage.find_storage('app.css')
         except ValueError:
             self.fail()

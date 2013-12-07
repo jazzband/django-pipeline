@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'pipeline',
     'tests',
+    'tests.tests'
 ]
 
 ROOT_URLCONF = 'tests.urls'
