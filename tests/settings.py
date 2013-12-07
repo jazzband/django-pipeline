@@ -50,7 +50,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'pipeline/css/first.css',
             'pipeline/css/second.css',
-            'pipeline/css/urls.css',
+            'pipeline/css/urls.css'
         ),
         'output_filename': 'screen.css'
     }

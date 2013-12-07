@@ -103,8 +103,8 @@ class BaseFinderStorage(PipelineStorage):
         for finder in self.finders.get_finders():
             path = finder.find(name)
             if path:
-                for storage_root, storage in finder.storages.items():
-                    if path.startswith(storage_root):
+                for storage in finder.storages.values():
+                    if path.startswith(storage.location):
                         return path, storage
 
         raise ValueError("The file '%s' could not be found with %r." % (name, self))
