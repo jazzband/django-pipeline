@@ -12,6 +12,8 @@ from pipeline.glob import glob
 from pipeline.signals import css_compressed, js_compressed
 from pipeline.storage import default_storage
 
+from zlib import compress
+
 
 class Package(object):
     def __init__(self, config):
