@@ -22,9 +22,6 @@ class Compiler(object):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
 
     def compile(self, paths, force=False):
-        import multiprocessing
-        from concurrent import futures
-
         def _compile(input_path):
             for compiler in self.compilers:
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
@@ -42,6 +39,8 @@ class Compiler(object):
             else:
                 return input_path
 
+        import multiprocessing
+        from concurrent import futures
         with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
             return list(executor.map(_compile, paths))
 
