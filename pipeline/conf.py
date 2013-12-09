@@ -72,6 +72,8 @@ DEFAULTS = {
 
     'PIPELINE_EMBED_MAX_IMAGE_SIZE': 32700,
     'PIPELINE_EMBED_PATH': r'[/]?embed/',
+
+    'PIPELINE_ENABLE_GAE_SUPPORT': False,
 }
 
 
