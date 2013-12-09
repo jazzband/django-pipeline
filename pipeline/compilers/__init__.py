@@ -39,6 +39,9 @@ class Compiler(object):
             else:
                 return input_path
 
+        if settings.PIPELINE_ENABLE_GAE_SUPPORT:
+            return list(map(_compile, paths))
+
         import multiprocessing
         from concurrent import futures
         with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
