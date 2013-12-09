@@ -3,6 +3,12 @@
 History
 =======
 
+1.3.19
+------
+
+* Allow to pre-compress files via ``pipeline.storage.GZIPMixin``. Thanks to Edwin Lunando for the suggestion and early prototype.
+* Improve post processing.
+
 1.3.18
 ------
 
