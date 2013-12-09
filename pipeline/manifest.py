@@ -3,8 +3,10 @@ from __future__ import unicode_literals
 import os
 
 from django.contrib.staticfiles.finders import get_finders
+from django.conf import settings as dj_settings
 
 from pipeline.conf import settings
+from pipeline.storage import PipelineCachedStorage
 
 from manifesto import Manifest
 
@@ -17,6 +19,11 @@ class PipelineManifest(Manifest):
         self.packages = self.collect_packages()
         self.finders = get_finders()
         self.package_files = []
+        if dj_settings.STATICFILES_STORAGE == \
+                'pipeline.storage.PipelineCachedStorage':
+            self.pcs = PipelineCachedStorage()
+        else:
+            self.pcs = None
 
     def collect_packages(self):
         packages = []
@@ -31,12 +38,17 @@ class PipelineManifest(Manifest):
         return packages
 
     def cache(self):
-        ignore_patterns = getattr(settings, "STATICFILES_IGNORE_PATTERNS", None)
+        ignore_patterns = getattr(settings, "STATICFILES_IGNORE_PATTERNS",
+                                  None)
 
         if settings.PIPELINE_ENABLED:
             for package in self.packages:
-                self.package_files.append(package.output_filename)
-                yield str(self.packager.individual_url(package.output_filename))
+                if self.pcs:
+                    filename = self.pcs.hashed_name(package.output_filename)
+                else:
+                    filename = package.output_filename
+                self.package_files.append(filename)
+                yield str(self.packager.individual_url(filename))
         else:
             for package in self.packages:
                 for path in self.packager.compile(package.paths):
