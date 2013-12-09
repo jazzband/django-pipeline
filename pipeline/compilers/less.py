@@ -13,6 +13,8 @@ class LessCompiler(SubProcessCompiler):
         return filename.endswith('.less')
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
+        if not outdated and not force:
+            return  # File doesn't need to be recompiled
         command = "%s %s %s %s" % (
             settings.PIPELINE_LESS_BINARY,
             settings.PIPELINE_LESS_ARGUMENTS,
