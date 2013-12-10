@@ -39,10 +39,15 @@ class Compiler(object):
             else:
                 return input_path
 
-        import multiprocessing
-        from concurrent import futures
-        with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
-            return list(executor.map(_compile, paths))
+        try:
+            import multiprocessing
+            from concurrent import futures
+        except ImportError:
+            compiled_list = list(map(_compile, paths))
+        else:
+            with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+                compiled_list = list(executor.map(_compile, paths))
+        return compiled_list
 
     def output_path(self, path, extension):
         path = os.path.splitext(path)
