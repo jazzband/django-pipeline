@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import logging
 import os
 
 from django.contrib.staticfiles import finders
@@ -42,8 +43,9 @@ class Compiler(object):
         try:
             import multiprocessing
             from concurrent import futures
-        except ImportError:
+        except ImportError as e:
             compiled_list = list(map(_compile, paths))
+            logging.warning(msg='{}. Rendered non-multithreaded pipeline compilation.'.format(e))
         else:
             with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
                 compiled_list = list(executor.map(_compile, paths))
