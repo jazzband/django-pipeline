@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import logging
 import os
 
 from django.contrib.staticfiles import finders
@@ -22,9 +23,6 @@ class Compiler(object):
         return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
 
     def compile(self, paths, force=False):
-        import multiprocessing
-        from concurrent import futures
-
         def _compile(input_path):
             for compiler in self.compilers:
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
@@ -42,8 +40,16 @@ class Compiler(object):
             else:
                 return input_path
 
-        with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
-            return list(executor.map(_compile, paths))
+        try:
+            import multiprocessing
+            from concurrent import futures
+        except ImportError as e:
+            compiled_list = list(map(_compile, paths))
+            logging.warning(msg='{}. Rendered non-multithreaded pipeline compilation.'.format(e))
+        else:
+            with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+                compiled_list = list(executor.map(_compile, paths))
+        return compiled_list
 
     def output_path(self, path, extension):
         path = os.path.splitext(path)
