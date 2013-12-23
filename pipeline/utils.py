@@ -36,7 +36,7 @@ def guess_type(path, default=None):
     mimetype, _ = mimetypes.guess_type(path)
     if not mimetype:
         return default
-    return mimetype
+    return smart_str(mimetype)
 
 
 def relpath(path, start=posixpath.curdir):

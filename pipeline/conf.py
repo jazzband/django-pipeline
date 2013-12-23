@@ -63,11 +63,11 @@ DEFAULTS = {
     'PIPELINE_LESS_ARGUMENTS': '',
 
     'PIPELINE_MIMETYPES': (
-        ('text/coffeescript', '.coffee'),
-        ('text/less', '.less'),
-        ('text/javascript', '.js'),
-        ('text/x-sass', '.sass'),
-        ('text/x-scss', '.scss')
+        (b'text/coffeescript', '.coffee'),
+        (b'text/less', '.less'),
+        (b'application/javascript', '.js'),
+        (b'text/x-sass', '.sass'),
+        (b'text/x-scss', '.scss')
     ),
 
     'PIPELINE_EMBED_MAX_IMAGE_SIZE': 32700,
