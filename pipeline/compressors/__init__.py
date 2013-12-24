@@ -16,6 +16,7 @@ from pipeline.exceptions import CompressorError
 
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[^\'"\s]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
+NON_REWRITABLE_URL = re.compile(r'^(http:|https:|data:|//)')
 
 DEFAULT_TEMPLATE_FUNC = "template"
 TEMPLATE_FUNC = r"""var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};"""
@@ -125,7 +126,7 @@ class Compressor(object):
         for path in paths:
             def reconstruct(match):
                 asset_path = match.group(1)
-                if asset_path.startswith("http") or asset_path.startswith("//"):
+                if NON_REWRITABLE_URL.match(asset_path):
                     return "url(%s)" % asset_path
                 asset_url = self.construct_asset_path(asset_path, path,
                                                       output_filename, variant)
