@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.20
+------
+
+* Allow to run compilation without multiprocessing. Thanks to Rajiv Bose.
+* Don't rewrite data-uri. Thanks to Tomek Paczkowski.
+* Fix manifesto support.
+
 1.3.19
 ------
 
