@@ -177,7 +177,7 @@ class Compressor(object):
         if path in self.__class__.asset_contents:
             return self.__class__.asset_contents[path]
         data = self.read_bytes(path)
-        self.__class__.asset_contents[path] = base64.b64encode(data)
+        self.__class__.asset_contents[path] = base64.b64encode(data).decode('ascii')
         return self.__class__.asset_contents[path]
 
     def mime_type(self, path):

@@ -46,11 +46,20 @@ class CompressorTest(TestCase):
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):
+        self.compressor.asset_contents.clear()
         self.compressor.encoded_content(_('pipeline/images/arrow.png'))
         self.assertTrue(mock.called)
         mock.reset_mock()
         self.compressor.encoded_content(_('pipeline/images/arrow.png'))
         self.assertFalse(mock.called)
+
+    def test_encoded_content_output(self):
+        self.compressor.asset_contents.clear()
+        encoded = self.compressor.encoded_content(_('pipeline/images/arrow.png'))
+        expected = ('iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAAMk'
+                    'lEQVR42oXKwQkAMAxC0Q7rEk5voSEepCHC9/SOpLV3JPULgArV'
+                    'RtDIMEEiQ4NECRNdciCfK3K3wvEAAAAASUVORK5CYII=')
+        self.assertEqual(encoded, expected)
 
     def test_relative_path(self):
         relative_path = self.compressor.relative_path("images/sprite.png", 'css/screen.css')
