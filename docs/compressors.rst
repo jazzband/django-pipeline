@@ -93,9 +93,7 @@ to compress javascripts.
 
 To use it add this to your ``PIPELINE_JS_COMPRESSOR`` ::
 
-  PIPELINE_JS_COMPRESSOR = (
-    'pipeline.compressors.closure.ClosureCompressor',
-  )
+  PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.closure.ClosureCompressor'
 
 
 ``PIPELINE_CLOSURE_BINARY``
