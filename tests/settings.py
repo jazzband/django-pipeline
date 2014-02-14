@@ -65,5 +65,42 @@ PIPELINE_JS = {
             'pipeline/templates/**/*.jst'
         ),
         'output_filename': 'scripts.js'
+    },
+    'scripts_async': {
+        'source_filenames': (
+            'pipeline/js/first.js',
+            'pipeline/js/second.js',
+            'pipeline/js/application.js',
+            'pipeline/templates/**/*.jst'
+        ),
+        'output_filename': 'scripts_async.js',
+        'extra_context': {
+            'async': True,
+        }
+    },
+    'scripts_defer': {
+        'source_filenames': (
+            'pipeline/js/first.js',
+            'pipeline/js/second.js',
+            'pipeline/js/application.js',
+            'pipeline/templates/**/*.jst'
+        ),
+        'output_filename': 'scripts_defer.js',
+        'extra_context': {
+            'defer': True,
+        }
+    },
+    'scripts_async_defer': {
+        'source_filenames': (
+            'pipeline/js/first.js',
+            'pipeline/js/second.js',
+            'pipeline/js/application.js',
+            'pipeline/templates/**/*.jst'
+        ),
+        'output_filename': 'scripts_async_defer.js',
+        'extra_context': {
+            'async': True,
+            'defer': True,
+        }
     }
 }
