@@ -44,6 +44,9 @@ DEFAULTS = {
     'PIPELINE_UGLIFYJS_BINARY': '/usr/bin/env uglifyjs',
     'PIPELINE_UGLIFYJS_ARGUMENTS': '',
 
+    'PIPELINE_UGLIFYCSS_BINARY': '/usr/bin/env uglifycss',
+    'PIPELINE_UGLIFYCSS_ARGUMENTS': '',
+
     'PIPELINE_CSSMIN_BINARY': '/usr/bin/env cssmin',
     'PIPELINE_CSSMIN_ARGUMENTS': '',
 
