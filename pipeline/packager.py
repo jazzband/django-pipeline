@@ -5,7 +5,7 @@ from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
 
 from pipeline.compilers import Compiler
-from pipeline.compressors import Compressor
+from pipeline.compressors import Compressor, NoOpCompressor
 from pipeline.conf import settings
 from pipeline.exceptions import PackageNotFound
 from pipeline.glob import glob
@@ -59,12 +59,16 @@ class Package(object):
     def manifest(self):
         return self.config.get('manifest', True)
 
+    @property
+    def compress(self):
+        return self.config.get('compress', True)
+
 
 class Packager(object):
-    def __init__(self, storage=default_storage, verbose=False, css_packages=None, js_packages=None):
+    def __init__(self, storage=default_storage, verbose=False,
+                 css_packages=None, js_packages=None):
         self.storage = storage
         self.verbose = verbose
-        self.compressor = Compressor(storage=storage, verbose=verbose)
         self.compiler = Compiler(verbose=verbose)
         if css_packages is None:
             css_packages = settings.PIPELINE_CSS
@@ -74,6 +78,14 @@ class Packager(object):
             'css': self.create_packages(css_packages),
             'js': self.create_packages(js_packages),
         }
+
+    def compressor(self, package):
+        if package.compress:
+            c = Compressor
+        else:
+            c = NoOpCompressor
+
+        return c(storage=self.storage, verbose=self.verbose)
 
     def package_for(self, kind, package_name):
         try:
@@ -89,9 +101,11 @@ class Packager(object):
         return self.storage.url(filename)
 
     def pack_stylesheets(self, package, **kwargs):
-        return self.pack(package, self.compressor.compress_css, css_compressed,
+        compressor = self.compressor(package).compress_css
+        return self.pack(package, compressor, css_compressed,
                          output_filename=package.output_filename,
-                         variant=package.variant, **kwargs)
+                         variant=package.variant,
+                         **kwargs)
 
     def compile(self, paths, force=False):
         return self.compiler.compile(paths, force=force)
@@ -107,10 +121,13 @@ class Packager(object):
         return output_filename
 
     def pack_javascripts(self, package, **kwargs):
-        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package.templates, **kwargs)
+        compressor = self.compressor(package).compress_js
+        return self.pack(package, compressor, js_compressed,
+                         templates=package.templates,
+                         **kwargs)
 
     def pack_templates(self, package):
-        return self.compressor.compile_templates(package.templates)
+        return self.compressor(package).compile_templates(package.templates)
 
     def save_file(self, path, content):
         return self.storage.save(path, ContentFile(smart_str(content)))
