@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.21
+------
+
+* Fix whitespace and charset in templates tags output. Thanks to Philipp Wollermann.
+* Various documentation fixes. Thanks to Chris Applegate, Natal Ngetal, DJ Sharkey and Andy Kish.
+* Fix bug in data-uri handling when running Python 3. Thanks to Sander Steffann.
+
 1.3.20
 ------
 
