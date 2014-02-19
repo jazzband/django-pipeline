@@ -130,8 +130,16 @@ class BaseFinderStorage(PipelineStorage):
     def listdir(self, path):
         for finder in self.finders.get_finders():
             for storage in finder.storages.values():
+                if getattr(storage, 'prefix', None):
+                    prefix = storage.prefix
+                    if path == prefix or path.startswith(prefix + '/'):
+                        path_for_storage = path[len(prefix) + 1:]
+                    else:
+                        continue
+                else:
+                    path_for_storage = path
                 try:
-                    return storage.listdir(path)
+                    return storage.listdir(path_for_storage)
                 except OSError:
                     pass
 
