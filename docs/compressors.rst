@@ -173,6 +173,33 @@ Install the slimit library with your favorite Python package manager ::
   pip install slimit
 
 
+UglifyCSS compressor
+===================
+
+The UglifyCSS compressor uses `UglifyCSS <https://github.com/fmarcia/UglifyCSS/>`_ to
+compress javascripts.
+
+To use it add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
+
+  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.uglifycss.UglifyCSSCompressor'
+
+
+``PIPELINE_UGLIFYCSS_BINARY``
+----------------------------
+
+  Command line to execute for the UglifyCSS program.
+  You will most likely change this to the location of uglifycss on your system.
+
+  Defaults to ``'/usr/bin/env uglifycss'``.
+
+``PIPELINE_UGLIFYCSS_ARGUMENTS``
+-------------------------------
+
+  Additional arguments to use when uglifycss is called.
+
+  Default to ``''``
+
+
 CSSTidy compressor
 ==================
 
