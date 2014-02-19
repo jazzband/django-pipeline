@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 import os
 
-from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str, smart_bytes
 
@@ -27,7 +26,7 @@ class Compiler(object):
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
                 if compiler.match_file(input_path):
                     output_path = self.output_path(input_path, compiler.output_extension)
-                    infile = finders.find(input_path)
+                    infile = self.storage.path(input_path)
                     outfile = self.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(input_path, output_path)
                     try:
