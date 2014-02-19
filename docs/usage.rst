@@ -32,7 +32,7 @@ this can be done by overriding the templates ``pipeline/css.html`` and ``pipelin
 Example
 -------
 
-If you have specified the CSS-groups “screen” and “print” and a JavaScript-group
+If you have specified the CSS-groups “colors” and “stats” and a JavaScript-group
 with the name “scripts”, you would use the following code to output them all ::
 
    {% load compressed %}
