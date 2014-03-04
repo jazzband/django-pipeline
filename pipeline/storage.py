@@ -74,7 +74,7 @@ class GZIPMixin(object):
             return
 
         for path in paths:
-            if not matches_patterns(path, self.gzip_patterns):
+            if path and not matches_patterns(path, self.gzip_patterns):
                 continue
             original_file = self.open(path)
             gzipped_path = "{0}.gz".format(path)
