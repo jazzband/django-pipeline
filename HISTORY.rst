@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.22
+------
+
+* Fix mimetype declaration. Thanks to Thomas Parslow.
+* Fix gzip mixin. Thanks to Sayed Raianul Kabir.
+* Small documentation improvements. Thanks to Kristoffer Smedlund for the report.
+
 1.3.21
 ------
 
