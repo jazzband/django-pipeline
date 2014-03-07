@@ -128,12 +128,17 @@ class BaseFinderStorage(PipelineStorage):
         return exists
 
     def listdir(self, path):
+        directories, files = [], []
         for finder in self.finders.get_finders():
             for storage in finder.storages.values():
                 try:
-                    return storage.listdir(path)
+                    new_directories, new_files = storage.listdir(path)
                 except OSError:
                     pass
+                else:
+                    directories.extend(new_directories)
+                    files.extend(new_files)
+        return directories, files
 
     def find_storage(self, name):
         for finder in self.finders.get_finders():
