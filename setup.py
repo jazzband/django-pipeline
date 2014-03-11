@@ -6,8 +6,8 @@ setup(
     name='django-pipeline',
     version='1.3.22',
     description='Pipeline is an asset packaging library for Django.',
-    long_description=open('README.rst').read() + '\n\n' +
-        open('HISTORY.rst').read(),
+    long_description=open('README.rst', 'rb').read().decode('utf-8') + '\n\n' +
+        open('HISTORY.rst', 'rb').read().decode('utf-8'),
     author='Timothée Peignier',
     author_email='timothee.peignier@tryphon.org',
     url='https://github.com/cyberdelia/django-pipeline',
