@@ -3,6 +3,13 @@
 History
 =======
 
+1.3.23
+------
+
+* Fix gzip mixin regression. Thanks to Sayed Raianul Kabir.
+* Improve PipelineStorage listdir method. Thanks to Julien Hartmann.
+* Fix setup.py. Thanks to Benjamin Peterson and Colin Dunklau.
+
 1.3.22
 ------
 
