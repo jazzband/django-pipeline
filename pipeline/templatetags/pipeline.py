@@ -6,14 +6,14 @@ from django import template
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
-from pipeline.conf import settings
-from pipeline.packager import Packager, PackageNotFound
-from pipeline.utils import guess_type
+from ..conf import settings
+from ..packager import Packager, PackageNotFound
+from ..utils import guess_type
 
 register = template.Library()
 
 
-class CompressedMixin(object):
+class PipelineMixin(object):
     def package_for(self, package_name, package_type):
         package = {
             'js': getattr(settings, 'PIPELINE_JS', {}).get(package_name, {}),
@@ -42,7 +42,7 @@ class CompressedMixin(object):
             return method(package, paths, templates=templates)
 
 
-class CompressedCSSNode(CompressedMixin, template.Node):
+class StylesheetNode(PipelineMixin, template.Node):
     def __init__(self, name):
         self.name = name
 
@@ -68,7 +68,7 @@ class CompressedCSSNode(CompressedMixin, template.Node):
         return '\n'.join(tags)
 
 
-class CompressedJSNode(CompressedMixin, template.Node):
+class JavascriptNode(PipelineMixin, template.Node):
     def __init__(self, name):
         self.name = name
 
@@ -104,18 +104,18 @@ class CompressedJSNode(CompressedMixin, template.Node):
 
 
 @register.tag
-def compressed_css(parser, token):
+def stylesheet(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE_CSS setting' % token.split_contents()[0])
-    return CompressedCSSNode(name)
+    return StylesheetNode(name)
 
 
 @register.tag
-def compressed_js(parser, token):
+def javascript(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE_JS setting' % token.split_contents()[0])
-    return CompressedJSNode(name)
+    return JavascriptNode(name)

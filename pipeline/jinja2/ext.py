@@ -7,11 +7,11 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 
 from pipeline.packager import PackageNotFound
 from pipeline.utils import guess_type
-from pipeline.templatetags.compressed import CompressedMixin
+from pipeline.templatetags.pipeline import PipelineMixin
 
 
-class PipelineExtension(CompressedMixin, Extension):
-    tags = set(['compressed_css', 'compressed_js'])
+class PipelineExtension(PipelineMixin, Extension):
+    tags = set(['stylesheet', 'javascript'])
 
     def parse(self, parser):
         tag = next(parser.stream)
@@ -21,10 +21,10 @@ class PipelineExtension(CompressedMixin, Extension):
             raise TemplateSyntaxError("Bad package name", tag.lineno)
 
         args = [package_name]
-        if tag.value == "compressed_css":
+        if tag.value == "stylesheet":
             return nodes.CallBlock(self.call_method('package_css', args), [], [], []).set_lineno(tag.lineno)
 
-        if tag.value == "compressed_js":
+        if tag.value == "javascript":
             return nodes.CallBlock(self.call_method('package_js', args), [], [], []).set_lineno(tag.lineno)
 
         return []

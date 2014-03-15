@@ -9,8 +9,8 @@ Describes how to use Pipeline when it is installed and configured.
 Templatetags
 ============
 
-Pipeline includes two template tags: ``compressed_css`` and ``compressed_js``,
-in a template library called ``compressed``.
+Pipeline includes two template tags: ``stylesheet`` and ``javascript``,
+in a template library called ``pipeline``.
 
 They are used to output the ``<link>`` and ``<script>``-tags for the
 specified CSS/JavaScript-groups (as specified in the settings).
@@ -35,10 +35,10 @@ Example
 If you have specified the CSS-groups “colors” and “stats” and a JavaScript-group
 with the name “scripts”, you would use the following code to output them all ::
 
-   {% load compressed %}
-   {% compressed_css 'colors' %}
-   {% compressed_css 'stats' %}
-   {% compressed_js 'scripts' %}
+   {% load pipeline %}
+   {% stylesheet 'colors' %}
+   {% stylesheet 'stats' %}
+   {% javascript 'scripts' %}
 
 Collect static
 ==============
