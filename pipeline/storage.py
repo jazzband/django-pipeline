@@ -74,15 +74,16 @@ class GZIPMixin(object):
             return
 
         for path in paths:
-            if path and not matches_patterns(path, self.gzip_patterns):
-                continue
-            original_file = self.open(path)
-            gzipped_path = "{0}.gz".format(path)
-            if self.exists(gzipped_path):
-                self.delete(gzipped_path)
-            gzipped_file = self._compress(original_file)
-            gzipped_path = self.save(gzipped_path, gzipped_file)
-            yield gzipped_path, gzipped_path, True
+            if path:
+                if not matches_patterns(path, self.gzip_patterns):
+                    continue
+                original_file = self.open(path)
+                gzipped_path = "{0}.gz".format(path)
+                if self.exists(gzipped_path):
+                    self.delete(gzipped_path)
+                gzipped_file = self._compress(original_file)
+                gzipped_path = self.save(gzipped_path, gzipped_file)
+                yield gzipped_path, gzipped_path, True
 
 
 class NonPackagingMixin(object):
