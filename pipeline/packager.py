@@ -65,7 +65,7 @@ class Packager(object):
         self.storage = storage
         self.verbose = verbose
         self.compressor = Compressor(storage=storage, verbose=verbose)
-        self.compiler = Compiler(verbose=verbose)
+        self.compiler = Compiler(storage=storage, verbose=verbose)
         if css_packages is None:
             css_packages = settings.PIPELINE_CSS
         if js_packages is None:
