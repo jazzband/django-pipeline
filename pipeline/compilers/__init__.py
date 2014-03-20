@@ -76,7 +76,7 @@ class CompilerBase(object):
     def is_outdated(self, infile, outfile):
         try:
             return self.storage.modified_time(infile) > self.storage.modified_time(outfile)
-        except (OSError, NotImplementedError):
+        except (OSError, NotImplementedError, AttributeError):
             return True
 
 
