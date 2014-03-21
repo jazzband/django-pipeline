@@ -6,9 +6,11 @@ from django import template
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
+from ..collector import default_collector
 from ..conf import settings
 from ..packager import Packager, PackageNotFound
 from ..utils import guess_type
+
 
 register = template.Library()
 
@@ -35,6 +37,8 @@ class PipelineMixin(object):
             method = getattr(self, "render_{0}".format(package_type))
             return method(package, package.output_filename)
         else:
+            default_collector.collect()
+
             packager = Packager()
             method = getattr(self, "render_individual_{0}".format(package_type))
             paths = packager.compile(package.paths)

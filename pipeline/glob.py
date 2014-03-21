@@ -4,7 +4,7 @@ import os
 import re
 import fnmatch
 
-from pipeline.storage import default_storage
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 __all__ = ["glob", "iglob"]
 
@@ -26,7 +26,7 @@ def iglob(pathname):
     """
     if not has_magic(pathname):
         try:
-            if default_storage.exists(pathname):
+            if staticfiles_storage.exists(pathname):
                 yield pathname
         except NotImplementedError:
             # Being optimistic
@@ -56,7 +56,7 @@ def iglob(pathname):
 
 def glob1(dirname, pattern):
     try:
-        directories, files = default_storage.listdir(dirname)
+        directories, files = staticfiles_storage.listdir(dirname)
         names = directories + files
     except Exception:
         # We are not sure that dirname is a real directory
@@ -68,7 +68,7 @@ def glob1(dirname, pattern):
 
 
 def glob0(dirname, basename):
-    if default_storage.exists(os.path.join(dirname, basename)):
+    if staticfiles_storage.exists(os.path.join(dirname, basename)):
         return [basename]
     return []
 

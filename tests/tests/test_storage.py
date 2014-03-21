@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 
-from pipeline.storage import PipelineStorage, PipelineFinderStorage
+from pipeline.storage import PipelineStorage
 
 from tests.utils import pipeline_settings
 
@@ -19,10 +19,3 @@ class StorageTest(TestCase):
             processed_files = storage.post_process({})
             self.assertTrue(('screen.css', 'screen.css', True) in processed_files)
             self.assertTrue(('scripts.js', 'scripts.js', True) in processed_files)
-
-    def test_find_storage(self):
-        try:
-            storage = PipelineFinderStorage()
-            storage.find_storage('app.css')
-        except ValueError:
-            self.fail()

@@ -7,10 +7,10 @@ import re
 
 from itertools import takewhile
 
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import smart_bytes, force_text
 
 from pipeline.conf import settings
-from pipeline.storage import default_storage
 from pipeline.utils import to_class, relpath
 from pipeline.exceptions import CompressorError
 
@@ -39,7 +39,9 @@ FONT_EXTS = ['.ttf', '.otf', '.woff']
 class Compressor(object):
     asset_contents = {}
 
-    def __init__(self, storage=default_storage, verbose=False):
+    def __init__(self, storage=None, verbose=False):
+        if storage is None:
+            storage = staticfiles_storage
         self.storage = storage
         self.verbose = verbose
 
@@ -191,7 +193,7 @@ class Compressor(object):
         given the path of the stylesheet that contains it.
         """
         if posixpath.isabs(path):
-            path = posixpath.join(default_storage.location, path)
+            path = posixpath.join(staticfiles_storage.location, path)
         else:
             path = posixpath.join(start, path)
         return posixpath.normpath(path)
@@ -204,7 +206,7 @@ class Compressor(object):
 
     def read_bytes(self, path):
         """Read file content in binary mode"""
-        file = default_storage.open(path)
+        file = staticfiles_storage.open(path)
         content = file.read()
         file.close()
         return content

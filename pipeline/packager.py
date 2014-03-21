@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.finders import find
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str
@@ -10,7 +11,6 @@ from pipeline.conf import settings
 from pipeline.exceptions import PackageNotFound
 from pipeline.glob import glob
 from pipeline.signals import css_compressed, js_compressed
-from pipeline.storage import default_storage
 
 
 class Package(object):
@@ -61,11 +61,13 @@ class Package(object):
 
 
 class Packager(object):
-    def __init__(self, storage=default_storage, verbose=False, css_packages=None, js_packages=None):
+    def __init__(self, storage=None, verbose=False, css_packages=None, js_packages=None):
+        if storage is None:
+            storage = staticfiles_storage
         self.storage = storage
         self.verbose = verbose
         self.compressor = Compressor(storage=storage, verbose=verbose)
-        self.compiler = Compiler(verbose=verbose)
+        self.compiler = Compiler(storage=storage, verbose=verbose)
         if css_packages is None:
             css_packages = settings.PIPELINE_CSS
         if js_packages is None:

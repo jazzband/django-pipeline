@@ -29,8 +29,8 @@ class GlobTest(TestCase):
 
     def setUp(self):
         self.storage = FileSystemStorage(local_path('glob_dir'))
-        self.old_storage = glob.default_storage
-        glob.default_storage = self.storage
+        self.old_storage = glob.staticfiles_storage
+        glob.staticfiles_storage = self.storage
         self.mktemp('a', 'D')
         self.mktemp('aab', 'F')
         self.mktemp('aaa', 'zzzF')
@@ -47,7 +47,7 @@ class GlobTest(TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.storage.location)
-        glob.default_storage = self.old_storage
+        glob.staticfiles_storage = self.old_storage
 
     def test_glob_literal(self):
         self.assertSequenceEqual(self.glob('a'),

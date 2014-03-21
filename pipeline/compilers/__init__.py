@@ -7,18 +7,19 @@ try:
 except ImportError:
     from pipes import quote
 
-from django.contrib.staticfiles import finders
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str, smart_bytes
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
-from pipeline.storage import default_storage
 from pipeline.utils import to_class
 
 
 class Compiler(object):
-    def __init__(self, storage=default_storage, verbose=False):
+    def __init__(self, storage=None, verbose=False):
+        if storage is None:
+            storage = staticfiles_storage
         self.storage = storage
         self.verbose = verbose
 
@@ -32,7 +33,7 @@ class Compiler(object):
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
                 if compiler.match_file(input_path):
                     output_path = self.output_path(input_path, compiler.output_extension)
-                    infile = finders.find(input_path)
+                    infile = self.storage.path(input_path)
                     outfile = self.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(input_path, output_path)
                     try:

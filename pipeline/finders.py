@@ -1,12 +1,17 @@
 from itertools import chain
 
-from django.contrib.staticfiles.finders import BaseFinder, AppDirectoriesFinder, FileSystemFinder, find
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.contrib.staticfiles.finders import BaseFinder, BaseStorageFinder, AppDirectoriesFinder, FileSystemFinder, find
 from django.utils._os import safe_join
 
 from pipeline.conf import settings
 
 
-class PipelineFinder(BaseFinder):
+class PipelineFinder(BaseStorageFinder):
+    storage = staticfiles_storage
+
+
+class ManifestFinder(BaseFinder):
     def find(self, path, all=False):
         """
         Looks for files in PIPELINE_CSS and PIPELINE_JS

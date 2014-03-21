@@ -15,6 +15,8 @@ from django.test.utils import override_settings
 from pipeline.compressors import Compressor, TEMPLATE_FUNC, \
     SubProcessCompressor
 from pipeline.compressors.yuglify import YuglifyCompressor
+from pipeline.collector import default_collector
+
 
 from tests.utils import _
 
@@ -23,6 +25,7 @@ class CompressorTest(TestCase):
     def setUp(self):
         self.maxDiff = None
         self.compressor = Compressor()
+        default_collector.collect()
 
     def test_js_compressor_class(self):
         self.assertEqual(self.compressor.js_compressor, YuglifyCompressor)
@@ -172,3 +175,6 @@ class CompressorTest(TestCase):
   content: "áéíóú";
 }
 """, output)
+
+    def tearDown(self):
+        default_collector.clear()

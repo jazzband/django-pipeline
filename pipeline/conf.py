@@ -11,8 +11,6 @@ DEFAULTS = {
     'PIPELINE_ROOT': _settings.STATIC_ROOT,
     'PIPELINE_URL': _settings.STATIC_URL,
 
-    'PIPELINE_STORAGE': 'pipeline.storage.PipelineFinderStorage',
-
     'PIPELINE_CSS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
     'PIPELINE_JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
     'PIPELINE_COMPILERS': [],
