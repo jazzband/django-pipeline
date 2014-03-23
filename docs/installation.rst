@@ -19,9 +19,17 @@ Installation
 
         STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
+4. Add the ``PipelineFinder`` to ``STATICFILES_FINDERS`` ::
+
+        STATICFILES_FINDERS = (
+            'django.contrib.staticfiles.finders.FileSystemFinder',
+            'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+            'pipeline.finders.PipelineFinder',
+        )
+
 
 .. note::
-  You need to use ``Django>=1.5`` to be able to use this version of pipeline.
+  You need to use ``Django>=1.6`` to be able to use this version of pipeline.
 
 .. _GitHub: http://github.com/cyberdelia/django-pipeline
 .. _PyPI: http://pypi.python.org/pypi/django-pipeline
