@@ -77,6 +77,7 @@ class FileSystemFinder(PatternFilterMixin, FileSystemFinder):
     """
     ignore_patterns = [
         '*.js',
+        '*.css',
         '*.less',
         '*.scss',
         '*.sh',
