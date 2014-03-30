@@ -2,7 +2,10 @@ from __future__ import unicode_literals
 
 import os
 
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from django.utils.datastructures import SortedDict as OrderedDict
 
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
