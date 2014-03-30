@@ -91,9 +91,9 @@ Group options
 
   For CSS, if you do not specify ``extra_context``/``media``, the default media in
   the ``<link>`` output will be ``media="all"``.
-  
+
   For JS, the default templates support the ``async`` and ``defer`` tag attributes which are controlled via ``extra_context``: ::
-  
+
     'extra_context': {
         'async': True,
     },
@@ -170,9 +170,25 @@ Other settings
 ``PIPELINE_TEMPLATE_SEPARATOR``
 ...............................
 
-  Charater chain used by Pipeline as replacement for directory separator.
+  Character chain used by Pipeline as replacement for directory separator.
 
   Defaults to ``"_"``
+
+
+``PIPELINE_MYMETYPES``
+......................
+
+  Tuple that match file extension with their corresponding mimetypes.
+
+  Defaults to ::
+  
+    (
+      (b'text/coffeescript', '.coffee'),
+      (b'text/less', '.less'),
+      (b'application/javascript', '.js'),
+      (b'text/x-sass', '.sass'),
+      (b'text/x-scss', '.scss')
+    )
 
 
 Embedding fonts and images
