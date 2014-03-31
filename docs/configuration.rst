@@ -175,13 +175,13 @@ Other settings
   Defaults to ``"_"``
 
 
-``PIPELINE_MYMETYPES``
+``PIPELINE_MIMETYPES``
 ......................
 
   Tuple that match file extension with their corresponding mimetypes.
 
   Defaults to ::
-  
+
     (
       (b'text/coffeescript', '.coffee'),
       (b'text/less', '.less'),
