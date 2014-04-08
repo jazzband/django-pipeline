@@ -2,6 +2,11 @@ from __future__ import unicode_literals
 
 import os
 
+try:
+    from shlex import quote
+except ImportError:
+    from pipes import quote
+
 from django.contrib.staticfiles import finders
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_str, smart_bytes
@@ -31,7 +36,8 @@ class Compiler(object):
                     outfile = self.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(input_path, output_path)
                     try:
-                        compiler.compile_file(infile, outfile, outdated=outdated, force=force)
+                        compiler.compile_file(quote(infile), quote(outfile),
+                            outdated=outdated, force=force)
                     except CompilerError:
                         if not self.storage.exists(output_path) or settings.DEBUG:
                             raise
