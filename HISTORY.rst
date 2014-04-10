@@ -3,6 +3,12 @@
 History
 =======
 
+1.3.24
+------
+
+* Quote path before passing them to compilers.
+* Add documentation around PIPELINE_MIMETYPES.
+
 1.3.23
 ------
 
