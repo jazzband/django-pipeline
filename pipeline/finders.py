@@ -97,4 +97,5 @@ class FileSystemFinder(PatternFilterMixin, FileSystemFinder):
         '*demo*',
         'Makefile*',
         'Gemfile*',
+        'node_modules',
     ]
