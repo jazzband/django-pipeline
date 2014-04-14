@@ -190,6 +190,10 @@ Other settings
       (b'text/x-scss', '.scss')
     )
 
+.. warning::
+  If you support Internet Explorer version 8 and below, you should
+  declare javascript files as ``text/javascript``.
+
 
 Embedding fonts and images
 ==========================
