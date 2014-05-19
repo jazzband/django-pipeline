@@ -107,7 +107,7 @@ Then process the relevant content through Pipeline : ::
 
   PIPELINE_JS = {
     'components': {
-      'source_filenames: (
+      'source_filenames': (
         'jquery/jquery.js',
         # you can choose to be specific to reduce your payload
         'jquery-ui/ui/*.js',
