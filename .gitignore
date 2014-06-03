@@ -3,6 +3,7 @@
 :2e_*
 *.tmproj
 .*.swp
+*.swo
 build
 dist
 MANIFEST
@@ -18,3 +19,4 @@ tests/assets/js/dummy.js
 .venv
 .project
 .pydevproject
+.ropeproject

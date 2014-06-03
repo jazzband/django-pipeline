@@ -238,3 +238,11 @@ class SubProcessCompressor(CompressorBase):
         elif self.verbose:
             print(stderr)
         return force_text(stdout)
+
+
+class NoopCompressor(CompressorBase):
+    def compress_js(self, js):
+        return js
+
+    def compress_css(self, css):
+        return css
