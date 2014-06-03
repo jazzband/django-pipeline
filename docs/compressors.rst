@@ -221,6 +221,13 @@ command to compress stylesheets. To use it, add this to your ``PIPELINE_CSS_COMP
 
   Default to ``''``
 
+No-op compressor
+=================
+
+The no-op compressor does no compression, only concatenation.  It is used for debuggin faulty concatenation. Sometimes one js file will not end with a semi-colon and the next js file will not start with a semi-colon.  This will cause neither file to work properly. To use it, add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
+
+PIPELINE_CSS_COMPRESSOR = 'no_op.NoopCompressor'
+PIPELINE_JS_COMPRESSOR = 'no_op.NoopCompressor'
 
 Write your own compressor class
 ===============================
