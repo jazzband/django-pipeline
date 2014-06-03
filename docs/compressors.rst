@@ -226,8 +226,8 @@ No-op compressor
 
 The no-op compressor does no compression, only concatenation.  Use it for debugging faulty concatenation. To use it, add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
 
-PIPELINE_CSS_COMPRESSOR = 'no_op.NoopCompressor'
-PIPELINE_JS_COMPRESSOR = 'no_op.NoopCompressor'
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.no_op.NoopCompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.no_op.NoopCompressor'
 
 Write your own compressor class
 ===============================
