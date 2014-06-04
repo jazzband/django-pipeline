@@ -61,14 +61,19 @@ class Compressor(object):
             if not settings.PIPELINE_DISABLE_WRAPPER:
                 js = "(function() { %s }).call(this);" % js
 
-            return js
+            return js, None
 
         compressor_cls = self.js_compressor
         if compressor_cls:
             compressor = compressor_cls(verbose=self.verbose)
-            js = getattr(compressor, 'compress_js')(get_js, paths)
+            if hasattr(compressor, 'compress_js_with_source_map'):
+                return getattr(compressor,
+                             'compress_js_with_source_map')(get_js, paths)
+            else:
+                js = getattr(compressor, 'compress_js')(get_js, paths)
+                return js, None
 
-        return js
+        return js, None
 
     def compress_css(self, paths, output_filename, variant=None, **kwargs):
         """Concatenate and compress CSS files"""
@@ -77,9 +82,9 @@ class Compressor(object):
         if compressor:
             css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
         if not variant:
-            return css
+            return css, None
         elif variant == "datauri":
-            return self.with_data_uri(css)
+            return self.with_data_uri(css), None
         else:
             raise CompressorError("\"%s\" is not a valid variant" % variant)
 

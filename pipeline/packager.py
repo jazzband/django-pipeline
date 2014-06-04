@@ -101,7 +101,12 @@ class Packager(object):
         if self.verbose:
             print("Saving: %s" % output_filename)
         paths = self.compile(package.paths, force=True)
-        content = compress(paths, **kwargs)
+        content, source_map = compress(paths, **kwargs)
+        if source_map is not None:
+            source_map_output_filename = output_filename + '.map'
+            self.save_file(source_map_output_filename, source_map)
+            content = content + '\n/*# sourceMappingURL={} */'.format(
+                source_map_output_filename)
         self.save_file(output_filename, content)
         signal.send(sender=self, package=package, **kwargs)
         return output_filename
