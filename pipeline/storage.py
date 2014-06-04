@@ -99,7 +99,12 @@ class NonPackagingPipelineStorage(NonPackagingMixin, PipelineStorage):
 
 
 class PipelineCachedStorage(PipelineMixin, CachedStaticFilesStorage):
-    pass
+    patterns = (
+        ("*.css", (
+            r"""(url\(['"]{0,1}\s*(.*?)["']{0,1}\))""",
+            (r"""(@import\s*["']\s*(?!\s*about:)(.*?)["'])""", """@import url("%s")"""),
+        )),
+    )
 
 
 class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
