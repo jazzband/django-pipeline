@@ -61,6 +61,8 @@ class Compressor(object):
             if not settings.PIPELINE_DISABLE_WRAPPER:
                 js = "(function() { %s }).call(this);" % js
 
+            return js
+
         compressor_cls = self.js_compressor
         if compressor_cls:
             compressor = compressor_cls(verbose=self.verbose)
