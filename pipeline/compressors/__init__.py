@@ -53,16 +53,18 @@ class Compressor(object):
 
     def compress_js(self, paths, templates=None, **kwargs):
         """Concatenate and compress JS files"""
-        js = self.concatenate(paths)
-        if templates:
-            js = js + self.compile_templates(templates)
+        def get_js():
+            js = self.concatenate(paths)
+            if templates:
+                js = js + self.compile_templates(templates)
 
-        if not settings.PIPELINE_DISABLE_WRAPPER:
-            js = "(function() { %s }).call(this);" % js
+            if not settings.PIPELINE_DISABLE_WRAPPER:
+                js = "(function() { %s }).call(this);" % js
 
-        compressor = self.js_compressor
-        if compressor:
-            js = getattr(compressor(verbose=self.verbose), 'compress_js')(js)
+        compressor_cls = self.js_compressor
+        if compressor_cls:
+            compressor = compressor_cls(verbose=self.verbose)
+            js = getattr(compressor, 'compress_js')(get_js, paths)
 
         return js
 
