@@ -99,12 +99,23 @@ class NonPackagingPipelineStorage(NonPackagingMixin, PipelineStorage):
 
 
 class PipelineCachedStorage(PipelineMixin, CachedStaticFilesStorage):
-    patterns = (
-        ("*.css", (
-            r"""(url\(['"]{0,1}\s*(.*?)["']{0,1}\))""",
-            (r"""(@import\s*["']\s*(?!\s*about:)(.*?)["'])""", """@import url("%s")"""),
-        )),
-    )
+    def url_converter(self, name, template=None):
+        """
+        Returns the custom URL converter for the given file name.
+        """
+        django_converter = super(PipelineCachedStorage, self).url_converter(
+            name, template=template)
+
+        def converter(matchobj):
+            matched, url = matchobj.groups()
+            # Completely ignore http(s) prefixed URLs,
+            # fragments and data-uri URLs
+            if url.startswith(('about:')):
+                return matched
+
+            return django_converter(matchobj)
+
+        return converter
 
 
 class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
