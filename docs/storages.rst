@@ -60,7 +60,7 @@ so that you can avoid compressing them on the fly. ::
 
   STATICFILES_STORAGE = 'your.app.GZIPCachedStorage'
 
-The storage need to inherit from ``GzipMixin``: ::
+The storage need to inherit from ``GZIPMixin``: ::
 
   from staticfiles.storage import CachedStaticFilesStorage
 
