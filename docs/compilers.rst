@@ -9,7 +9,7 @@ Coffee Script compiler
 ======================
 
 The Coffee Script compiler uses `Coffee Script <http://jashkenas.github.com/coffee-script/>`_
-to compile your javascripts.
+to compile your javascript.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
 
@@ -36,7 +36,7 @@ Live Script compiler
 ======================
 
 The LiveScript compiler uses `LiveScript <https://github.com/gkz/LiveScript>`_
-to compile your javascripts.
+to compile your javascript.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
 
