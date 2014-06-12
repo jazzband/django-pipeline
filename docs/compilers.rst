@@ -8,7 +8,7 @@ Compilers
 Coffee Script compiler
 ======================
 
-The Coffee Script compiler uses `Coffee Script <http://jashkenas.github.com/coffee-script/>`_
+The Coffee Script compiler uses `Coffee Script <http://jashkenas.github.com/coffeescript/>`_
 to compile your javascripts.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
