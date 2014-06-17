@@ -31,13 +31,14 @@ class Compiler(object):
             for compiler in self.compilers:
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
                 if compiler.match_file(input_path):
-                    output_path = self.output_path(input_path, compiler.output_extension)
+                    try:
+                        output_path = compiler.output_path(input_path)
+                    except NotImplementedError:
+                        output_path = self.output_path(input_path, compiler.output_extension)
                     infile = finders.find(input_path)
-                    outfile = self.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(input_path, output_path)
                     try:
-                        compiler.compile_file(quote(infile), quote(outfile),
-                            outdated=outdated, force=force)
+                        compiler.compile_file(quote(infile), quote(output_path), outdated=outdated, force=force)
                     except CompilerError:
                         if not self.storage.exists(output_path) or settings.DEBUG:
                             raise
@@ -68,6 +69,9 @@ class CompilerBase(object):
         raise NotImplementedError
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
+        raise NotImplementedError
+
+    def output_path(self, filename):
         raise NotImplementedError
 
     def save_file(self, path, content):
