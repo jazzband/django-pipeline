@@ -13,8 +13,8 @@ from tests.utils import pipeline_settings
 
 class JinjaTest(TestCase):
     def setUp(self):
-        self.env = Environment(extensions=[PipelineExtension], loader=
-            PackageLoader('pipeline', 'templates'))
+        self.env = Environment(extensions=[PipelineExtension],
+            loader=PackageLoader('pipeline', 'templates'))
 
     def test_no_package(self):
         template = self.env.from_string(u"""{% stylesheet "unknow" %}""")

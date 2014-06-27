@@ -106,4 +106,3 @@ class PipelineCachedStorage(PipelineMixin, CachedStaticFilesStorage):
 
 class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
     pass
-
