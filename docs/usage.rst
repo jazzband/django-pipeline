@@ -37,7 +37,8 @@ with the name “scripts”, you would use the following code to output them all
 
    {% load compressed %}
    {% compressed_css 'colors' %}
-   {% compressed_js 'stats' %}
+   {% compressed_css 'stats' %}
+   {% compressed_js 'scripts' %}
 
 Collect static
 ==============
