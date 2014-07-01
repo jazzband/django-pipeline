@@ -226,6 +226,8 @@ No-Op Compressor
 
 The No-Op compressor is an No Operation compressors. It is effectivly an empty compressor.  Therefore when used, only concatenation occurs.  This can be useful for debugging faulty concatenation due to poorly written javascript and other errors. To use it, add this to your ``PIPELINE_CSS_COMPRESSOR`` & ``PIPELINE_JS_COMPRESSOR`` ::
 
+Add it to your settings ::
+
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.no_op.NoOpCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.no_op.NoOpCompressor'
 
