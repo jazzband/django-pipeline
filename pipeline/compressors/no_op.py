@@ -1,6 +1,6 @@
 from pipeline.compressors import Compressor, CompressorBase
 
-class NoopCompressor(CompressorBase):
+class NoOpCompressor(CompressorBase):
     def compress_js(self, js):
         return js
 

@@ -62,6 +62,9 @@ DEFAULTS = {
     'PIPELINE_LESS_BINARY': '/usr/bin/env lessc',
     'PIPELINE_LESS_ARGUMENTS': '',
 
+    'PIPELINE_NOOP_BINARY': '',
+    'PIPELINE_NOOP_ARGUMENTS': '',
+
     'PIPELINE_MIMETYPES': (
         (b'text/coffeescript', '.coffee'),
         (b'text/less', '.less'),
