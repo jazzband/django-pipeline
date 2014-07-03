@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import os.path
 
 from django.contrib.staticfiles.finders import find
 from django.core.files.base import ContentFile
@@ -90,24 +91,32 @@ class Packager(object):
 
     def pack_stylesheets(self, package, **kwargs):
         return self.pack(package, self.compressor.compress_css, css_compressed,
+                         '/*# sourceMappingURL={} */',
                          output_filename=package.output_filename,
                          variant=package.variant, **kwargs)
 
     def compile(self, paths, force=False):
         return self.compiler.compile(paths, force=force)
 
-    def pack(self, package, compress, signal, **kwargs):
+    def pack(self, package, compress, signal, source_mapping_template, **kwargs):
         output_filename = package.output_filename
         if self.verbose:
             print("Saving: %s" % output_filename)
         paths = self.compile(package.paths, force=True)
-        content = compress(paths, **kwargs)
+        content, source_map = compress(paths, **kwargs)
+        if source_map is not None:
+            source_map_output_filename = output_filename + '.map'
+            self.save_file(source_map_output_filename, source_map)
+            content = content + '\n' + source_mapping_template.format(
+                os.path.basename(source_map_output_filename))
         self.save_file(output_filename, content)
         signal.send(sender=self, package=package, **kwargs)
         return output_filename
 
     def pack_javascripts(self, package, **kwargs):
-        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package.templates, **kwargs)
+        return self.pack(package, self.compressor.compress_js, js_compressed,
+                         '//# sourceMappingURL={}',
+                         templates=package.templates, **kwargs)
 
     def pack_templates(self, package):
         return self.compressor.compile_templates(package.templates)

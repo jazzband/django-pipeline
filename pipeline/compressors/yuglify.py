@@ -9,8 +9,8 @@ class YuglifyCompressor(SubProcessCompressor):
         command = '%s --type=%s %s' % (settings.PIPELINE_YUGLIFY_BINARY, compress_type, arguments)
         return self.execute_command(command, content)
 
-    def compress_js(self, js):
-        return self.compress_common(js, 'js', settings.PIPELINE_YUGLIFY_JS_ARGUMENTS)
+    def compress_js(self, get_js, *args, **kwargs):
+        return self.compress_common(get_js(), 'js', settings.PIPELINE_YUGLIFY_JS_ARGUMENTS)
 
     def compress_css(self, css):
         return self.compress_common(css, 'css', settings.PIPELINE_YUGLIFY_CSS_ARGUMENTS)

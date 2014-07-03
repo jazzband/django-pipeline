@@ -16,7 +16,7 @@ from pipeline.exceptions import CompressorError
 
 URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[^\'"\s]*)[\'"]?\)'
 URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
-NON_REWRITABLE_URL = re.compile(r'^(http:|https:|data:|//)')
+NON_REWRITABLE_URL = re.compile(r'^(http:|https:|data:|about:|//)')
 
 DEFAULT_TEMPLATE_FUNC = "template"
 TEMPLATE_FUNC = r"""var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};"""
@@ -53,18 +53,27 @@ class Compressor(object):
 
     def compress_js(self, paths, templates=None, **kwargs):
         """Concatenate and compress JS files"""
-        js = self.concatenate(paths)
-        if templates:
-            js = js + self.compile_templates(templates)
+        def get_js():
+            js = self.concatenate(paths)
+            if templates:
+                js = js + self.compile_templates(templates)
 
-        if not settings.PIPELINE_DISABLE_WRAPPER:
-            js = "(function() { %s }).call(this);" % js
+            if not settings.PIPELINE_DISABLE_WRAPPER:
+                js = "(function() { %s }).call(this);" % js
 
-        compressor = self.js_compressor
-        if compressor:
-            js = getattr(compressor(verbose=self.verbose), 'compress_js')(js)
+            return js
 
-        return js
+        compressor_cls = self.js_compressor
+        if compressor_cls:
+            compressor = compressor_cls(verbose=self.verbose)
+            if hasattr(compressor, 'compress_js_with_source_map'):
+                return getattr(compressor,
+                             'compress_js_with_source_map')(get_js, paths)
+            else:
+                js = getattr(compressor, 'compress_js')(get_js, paths)
+                return js, None
+
+        return js, None
 
     def compress_css(self, paths, output_filename, variant=None, **kwargs):
         """Concatenate and compress CSS files"""
@@ -73,9 +82,9 @@ class Compressor(object):
         if compressor:
             css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
         if not variant:
-            return css
+            return css, None
         elif variant == "datauri":
-            return self.with_data_uri(css)
+            return self.with_data_uri(css), None
         else:
             raise CompressorError("\"%s\" is not a valid variant" % variant)
 

@@ -8,6 +8,6 @@ class JSMinCompressor(CompressorBase):
     JS compressor based on the Python library jsmin
     (http://pypi.python.org/pypi/jsmin/).
     """
-    def compress_js(self, js):
+    def compress_js(self, get_js, *args, **kwargs):
         from jsmin import jsmin
-        return jsmin(js)
+        return jsmin(get_js())
