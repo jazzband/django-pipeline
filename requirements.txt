@@ -1,2 +1,3 @@
 tox
+wheel
 flake8
