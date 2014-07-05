@@ -3,6 +3,12 @@
 History
 =======
 
+1.3.25
+------
+
+* Many documentation improvements. Thanks to Brad Pitcher, Jaromir Fojtu and Feanil Patel.
+* Add no-op compressors. Thanks to Zachary Kazanski.
+
 1.3.24
 ------
 
