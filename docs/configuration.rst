@@ -229,7 +229,7 @@ You can override these rules using the following settings:
 .................................
 
   Setting that controls the maximum image size (in bytes) to embed in CSS using Data-URIs.
-  Internet Explorer 8 has issues with assets under 32 kilobytes.
+  Internet Explorer 8 has issues with assets over 32 kilobytes.
 
   Defaults to ``32700``
 
