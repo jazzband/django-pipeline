@@ -5,6 +5,6 @@ from pipeline.compressors import SubProcessCompressor
 
 
 class ClosureCompressor(SubProcessCompressor):
-    def compress_js(self, get_js, *args, **kwargs):
+    def compress_js(self, js):
         command = '%s %s' % (settings.PIPELINE_CLOSURE_BINARY, settings.PIPELINE_CLOSURE_ARGUMENTS)
-        return self.execute_command(command, get_js())
+        return self.execute_command(command, js)

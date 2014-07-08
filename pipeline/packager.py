@@ -106,12 +106,15 @@ class Packager(object):
         content, source_map = compress(paths, **kwargs)
         if source_map is not None:
             source_map_output_filename = output_filename + '.map'
+            if self.verbose:
+                print("Saving: %s" % source_map_output_filename)
             self.save_file(source_map_output_filename, source_map)
             content = content + '\n' + source_mapping_template.format(
                 os.path.basename(source_map_output_filename))
+            yield source_map_output_filename
         self.save_file(output_filename, content)
         signal.send(sender=self, package=package, **kwargs)
-        return output_filename
+        yield output_filename
 
     def pack_javascripts(self, package, **kwargs):
         return self.pack(package, self.compressor.compress_js, js_compressed,

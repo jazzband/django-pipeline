@@ -68,9 +68,9 @@ class Compressor(object):
             compressor = compressor_cls(verbose=self.verbose)
             if hasattr(compressor, 'compress_js_with_source_map'):
                 return getattr(compressor,
-                             'compress_js_with_source_map')(get_js, paths)
+                             'compress_js_with_source_map')(paths)
             else:
-                js = getattr(compressor, 'compress_js')(get_js, paths)
+                js = getattr(compressor, 'compress_js')(get_js())
                 return js, None
 
         return js, None
