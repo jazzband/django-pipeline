@@ -29,7 +29,7 @@ class PipelineMixin(object):
             package = packager.package_for('css', package_name)
             output_file = package.output_filename
             if self.packing:
-                processor = packager.pack_stylesheets(package):
+                processor = packager.pack_stylesheets(package)
             else:
                 processor = [package.output_filename]
             for output_filename in processor:
@@ -38,7 +38,7 @@ class PipelineMixin(object):
         for package_name in packager.packages['js']:
             package = packager.package_for('js', package_name)
             if self.packing:
-                processor = packager.pack_javascripts(package):
+                processor = packager.pack_javascripts(package)
             else:
                 processor = [package.output_filename]
             for output_filename in processor:
