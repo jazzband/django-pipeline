@@ -30,6 +30,11 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'tests.urls'
 
+MIDDLEWARE_CLASSES = (
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware'
+)
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = local_path('media')
