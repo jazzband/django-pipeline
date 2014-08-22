@@ -51,9 +51,6 @@ class Compressor(object):
     def css_compressor(self):
         return to_class(settings.PIPELINE_CSS_COMPRESSOR)
 
-    @property
-    def enable
-
     def compress_js(self, paths, enable_min=True, templates=None, **kwargs):
         """Concatenate and compress JS files"""
         js = self.concatenate(paths)
