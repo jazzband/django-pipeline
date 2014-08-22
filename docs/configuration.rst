@@ -107,6 +107,15 @@ Group options
 
   Defaults to ``True``.
 
+``enable_min``
+..............
+
+  **Optional**
+
+  Indicates if you want this group to be minified or not.
+
+  Defaults to ``True``.
+
 
 Other settings
 --------------
