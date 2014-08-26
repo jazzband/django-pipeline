@@ -62,7 +62,7 @@ so that you can avoid compressing them on the fly. ::
 
 The storage need to inherit from ``GZIPMixin``: ::
 
-  from staticfiles.storage import CachedStaticFilesStorage
+  from django.contrib.staticfiles.storage import CachedStaticFilesStorage
 
   from pipeline.storage import GZIPMixin
 
@@ -80,7 +80,7 @@ You can also use your own custom storage, for example, if you want to use S3 for
 
 Your storage only need to inherit from ``PipelineMixin`` and/or ``CachedFilesMixin`` : ::
 
-  from staticfiles.storage import CachedFilesMixin
+  from django.contrib.staticfiles.storage import CachedFilesMixin
 
   from pipeline.storage import PipelineMixin
 
