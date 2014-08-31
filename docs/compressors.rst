@@ -220,6 +220,14 @@ command to compress stylesheets. To use it, add this to your ``PIPELINE_CSS_COMP
   Additional arguments to use when cssmin is called.
 
   Default to ``''``
+  
+rCSSmin compressor
+=================
+
+The rCSSmin compressor uses the `rCSSmin <https://github.com/ndparker/rcssmin>`_
+package to compress stylesheets. To use it, add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
+
+  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.rcssmin.RCSSMinCompressor'
 
 No-Op Compressors
 =================
