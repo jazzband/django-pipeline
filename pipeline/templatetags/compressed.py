@@ -97,9 +97,16 @@ class CompressedJSNode(CompressedMixin, template.Node):
         return render_to_string("pipeline/inline_js.html", context)
 
     def render_individual_js(self, package, paths, templates=None):
-        tags = [self.render_js(package, js) for js in paths]
         if templates:
-            tags.append(self.render_inline(package, templates))
+            if settings.PIPELINE_TEMPLATE_RENDER_FIRST:
+                tags = [self.render_inline(package, templates)]
+                tags.extend([self.render_js(package, js) for js in paths])
+            else:
+                tags = [self.render_js(package, js) for js in paths]
+                tags.append(self.render_inline(package, templates))
+        else:
+            tags = [self.render_js(package, js) for js in paths]
+
         return '\n'.join(tags)
 
 
