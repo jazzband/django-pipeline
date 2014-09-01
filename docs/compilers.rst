@@ -144,6 +144,51 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
   Defaults to ``''``.
 
 
+Handlebars compiler
+===================
+
+The Handlebars template compiler uses
+`Handlebars <http://handlebarsjs.com/precompilation.html>`_
+to precompile your templates.
+
+To use it add this to your ``PIPELINE_COMPILERS`` ::
+
+  PIPELINE_COMPILERS = (
+    'pipeline.compilers.handlebars.HandlebarsCompiler',
+  )
+
+Handlebars precompiled templates require ``handlebars.runtime.js`` to execute.
+
+.. code:: python
+
+  PIPELINE_JS = {
+    'templates': {
+        'source_filenames': {
+            'handlebars/handlebars.runtime.js',
+            'templates/*.handlebars',
+        },
+        'output_filename': 'js/templates.js',
+    }
+  }
+
+N.B. these templates are in ``static/templates/`` not ``templates/``
+
+
+``PIPELINE_HANDLEBARS_BINARY``
+------------------------------
+
+  Command line to execute for handlebars program.
+  You will most likely change this to the location of handlebars on your system.
+
+  Defaults to ``'/usr/bin/env handlebars'``.
+
+``PIPELINE_HANDLEBARS_ARGUMENTS``
+---------------------------------
+
+  Additional arguments to use when handlebars is called.
+
+  Defaults to ``''``.
+
 
 Write your own compiler class
 =============================

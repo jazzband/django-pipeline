@@ -62,12 +62,18 @@ DEFAULTS = {
     'PIPELINE_LESS_BINARY': '/usr/bin/env lessc',
     'PIPELINE_LESS_ARGUMENTS': '',
 
+    'PIPELINE_HANDLEBARS_BINARY': '/usr/bin/env handlebars',
+    'PIPELINE_HANDLEBARS_ARGUMENTS': '',
+
     'PIPELINE_MIMETYPES': (
         (b'text/coffeescript', '.coffee'),
         (b'text/less', '.less'),
         (b'application/javascript', '.js'),
         (b'text/x-sass', '.sass'),
-        (b'text/x-scss', '.scss')
+        (b'text/x-scss', '.scss'),
+        (b'text/x-handlebars-template', '*.handlebars'),
+        (b'text/x-handlebars-template', '*.hbs'),
+        (b'text/x-handlebars-template', '*.hjs'),
     ),
 
     'PIPELINE_EMBED_MAX_IMAGE_SIZE': 32700,

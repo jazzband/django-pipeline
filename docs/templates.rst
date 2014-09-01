@@ -94,7 +94,10 @@ And use these settings ::
 Handlebars
 ..........
 
-To use it with `Handlebars <http://handlebarsjs.com/>`_, use the following settings ::
+See `Handlebars compiler`_ for documentation on precompiling templates to
+Javascript.
+
+Alternatively, to use it with `Handlebars <http://handlebarsjs.com/>`_, use the following settings ::
 
  PIPELINE_TEMPLATE_EXT = '.handlebars'
  PIPELINE_TEMPLATE_FUNC = 'Handlebars.compile'
