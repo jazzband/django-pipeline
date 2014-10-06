@@ -206,6 +206,11 @@ command to compress stylesheets. To use it, add this to your ``PIPELINE_CSS_COMP
 
   PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
 
+Install the cssmin library with your favorite Python package manager ::
+
+  pip install cssmin
+
+
 ``PIPELINE_CSSMIN_BINARY``
 ---------------------------
 
