@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
+from django.conf import settings
+from django.contrib.staticfiles import finders
 
 from pipeline.storage import PipelineStorage, PipelineFinderStorage
 
@@ -26,3 +28,27 @@ class StorageTest(TestCase):
             storage.find_storage('app.css')
         except ValueError:
             self.fail()
+
+    def test_nonexistent_file_pipeline_finder(self):
+        CUSTOM_FINDERS = settings.STATICFILES_FINDERS + ('pipeline.finders.PipelineFinder',)
+        with self.settings(STATICFILES_FINDERS=CUSTOM_FINDERS):
+            path = finders.find('nothing.css')
+            self.assertIsNone(path)
+
+    def test_nonexistent_file_cached_finder(self):
+        CUSTOM_FINDERS = settings.STATICFILES_FINDERS + ('pipeline.finders.CachedFileFinder',)
+        with self.settings(STATICFILES_FINDERS=CUSTOM_FINDERS):
+            path = finders.find('nothing.css')
+            self.assertIsNone(path)
+
+    def test_nonexistent_double_extension_file_pipeline_finder(self):
+        CUSTOM_FINDERS = settings.STATICFILES_FINDERS + ('pipeline.finders.PipelineFinder',)
+        with self.settings(STATICFILES_FINDERS=CUSTOM_FINDERS):
+            path = finders.find('app.css.map')
+            self.assertIsNone(path)
+
+    def test_nonexistent_double_extension_file_cached_finder(self):
+        CUSTOM_FINDERS = settings.STATICFILES_FINDERS + ('pipeline.finders.CachedFileFinder',)
+        with self.settings(STATICFILES_FINDERS=CUSTOM_FINDERS):
+            path = finders.find('app.css.map')
+            self.assertIsNone(path)
