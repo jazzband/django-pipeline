@@ -3,6 +3,12 @@
 History
 =======
 
+1.3.26
+------
+
+* Fix default javscript mimetype to be more IE friendly.
+* Fix storage documentation. Thanks to Jacob Haslehurst.
+
 1.3.25
 ------
 
