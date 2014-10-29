@@ -185,7 +185,7 @@ Other settings
     (
       (b'text/coffeescript', '.coffee'),
       (b'text/less', '.less'),
-      (b'application/javascript', '.js'),
+      (b'text/javascript', '.js'),
       (b'text/x-sass', '.sass'),
       (b'text/x-scss', '.scss')
     )

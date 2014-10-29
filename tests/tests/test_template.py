@@ -35,19 +35,19 @@ class JinjaTest(TestCase):
 
     def test_package_js(self):
         template = self.env.from_string(u"""{% compressed_js "scripts" %}""")
-        self.assertEqual(u'<script type="application/javascript" src="/static/scripts.js" charset="utf-8"></script>', template.render())
+        self.assertEqual(u'<script type="text/javascript" src="/static/scripts.js" charset="utf-8"></script>', template.render())
 
     def test_package_js_async(self):
         template = self.env.from_string(u"""{% compressed_js "scripts_async" %}""")
-        self.assertEqual(u'<script async type="application/javascript" src="/static/scripts_async.js" charset="utf-8"></script>', template.render())
+        self.assertEqual(u'<script async type="text/javascript" src="/static/scripts_async.js" charset="utf-8"></script>', template.render())
 
     def test_package_js_defer(self):
         template = self.env.from_string(u"""{% compressed_js "scripts_defer" %}""")
-        self.assertEqual(u'<script defer type="application/javascript" src="/static/scripts_defer.js" charset="utf-8"></script>', template.render())
+        self.assertEqual(u'<script defer type="text/javascript" src="/static/scripts_defer.js" charset="utf-8"></script>', template.render())
 
     def test_package_js_async_defer(self):
         template = self.env.from_string(u"""{% compressed_js "scripts_async_defer" %}""")
-        self.assertEqual(u'<script async defer type="application/javascript" src="/static/scripts_async_defer.js" charset="utf-8"></script>', template.render())
+        self.assertEqual(u'<script async defer type="text/javascript" src="/static/scripts_async_defer.js" charset="utf-8"></script>', template.render())
 
 
 class DjangoTest(TestCase):
@@ -64,16 +64,16 @@ class DjangoTest(TestCase):
 
     def test_compressed_js(self):
         rendered = self.render_template(u"""{% load compressed %}{% compressed_js "scripts" %}""")
-        self.assertEqual(u'<script type="application/javascript" src="/static/scripts.js" charset="utf-8"></script>', rendered)
+        self.assertEqual(u'<script type="text/javascript" src="/static/scripts.js" charset="utf-8"></script>', rendered)
 
     def test_compressed_js_async(self):
         rendered = self.render_template(u"""{% load compressed %}{% compressed_js "scripts_async" %}""")
-        self.assertEqual(u'<script async type="application/javascript" src="/static/scripts_async.js" charset="utf-8"></script>', rendered)
+        self.assertEqual(u'<script async type="text/javascript" src="/static/scripts_async.js" charset="utf-8"></script>', rendered)
 
     def test_compressed_js_defer(self):
         rendered = self.render_template(u"""{% load compressed %}{% compressed_js "scripts_defer" %}""")
-        self.assertEqual(u'<script defer type="application/javascript" src="/static/scripts_defer.js" charset="utf-8"></script>', rendered)
+        self.assertEqual(u'<script defer type="text/javascript" src="/static/scripts_defer.js" charset="utf-8"></script>', rendered)
 
     def test_compressed_js_async_defer(self):
         rendered = self.render_template(u"""{% load compressed %}{% compressed_js "scripts_async_defer" %}""")
-        self.assertEqual(u'<script async defer type="application/javascript" src="/static/scripts_async_defer.js" charset="utf-8"></script>', rendered)
+        self.assertEqual(u'<script async defer type="text/javascript" src="/static/scripts_async_defer.js" charset="utf-8"></script>', rendered)
