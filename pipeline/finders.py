@@ -65,6 +65,7 @@ class AppDirectoriesFinder(PatternFilterMixin, AppDirectoriesFinder):
         '*.css',
         '*.less',
         '*.scss',
+        '*.styl',
     ]
 
 
@@ -79,6 +80,7 @@ class FileSystemFinder(PatternFilterMixin, FileSystemFinder):
         '*.js',
         '*.less',
         '*.scss',
+        '*.styl',
         '*.sh',
         '*.html',
         '*.md',
