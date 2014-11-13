@@ -73,7 +73,7 @@ class Compressor(object):
                 js = getattr(compressor, 'compress_js')(get_js())
                 return js, None
 
-        return js, None
+        return None, None
 
     def compress_css(self, paths, output_filename, variant=None, **kwargs):
         """Concatenate and compress CSS files"""
