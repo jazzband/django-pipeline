@@ -43,7 +43,7 @@ class CompilerTest(TestCase):
         ])
         self.assertEqual([_('pipeline/js/dummy.js'), _('pipeline/js/application.js')], list(paths))
 
-    def _get_mocked_concurrency_packages(self, mock_cpu_count=4):
+    def _get_mocked_concurrency_packages(self, mock_cpu_count):
         multiprocessing_mock = MagicMock()
         multiprocessing_mock.cpu_count.return_value = mock_cpu_count
 
@@ -64,7 +64,7 @@ class CompilerTest(TestCase):
         CPU count.
         '''
         modules, thread_pool_executor_mock = (
-            self._get_mocked_concurrency_packages())
+            self._get_mocked_concurrency_packages(mock_cpu_count=4))
 
         settings.PIPELINE_COMPILER_CONCURRENCY = 2
 
