@@ -1,7 +1,10 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
-from mock import MagicMock, patch
+try:
+    from mock import MagicMock, patch
+except ImportError:
+    from unittest.mock import MagicMock, patch
 
 from pipeline.conf import settings
 from pipeline.compilers import Compiler, CompilerBase
