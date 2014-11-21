@@ -3,6 +3,11 @@
 History
 =======
 
+1.4.1
+=====
+
+* Fix storage logic. Thanks to Quentin Pradet for the report.
+
 1.4.0
 =====
 
