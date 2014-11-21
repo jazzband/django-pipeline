@@ -14,8 +14,8 @@ from pipeline.storage import default_storage
 from pipeline.utils import to_class, relpath
 from pipeline.exceptions import CompressorError
 
-URL_DETECTOR = r'url\([\'"]?([^\s)]+\.[a-z]+[^\'"\s]*)[\'"]?\)'
-URL_REPLACER = r'url\(__EMBED__(.+?)(\?\d+)?\)'
+URL_DETECTOR = r"""url\(['"]{0,1}\s*(.*?)["']{0,1}\)"""
+URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""
 NON_REWRITABLE_URL = re.compile(r'^(http:|https:|data:|//)')
 
 DEFAULT_TEMPLATE_FUNC = "template"
@@ -158,7 +158,7 @@ class Compressor(object):
             return False
         if not (re.search(settings.PIPELINE_EMBED_PATH, path.replace('\\', '/')) and self.storage.exists(path)):
             return False
-        if not ext in EMBED_EXTS:
+        if ext not in EMBED_EXTS:
             return False
         if not (font or len(self.encoded_content(path)) < settings.PIPELINE_EMBED_MAX_IMAGE_SIZE):
             return False
