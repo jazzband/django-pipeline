@@ -2,52 +2,35 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
-from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.http import HttpRequest, HttpResponse
 
-from tests.utils import pipeline_settings
+from pipeline.middleware import MinifyHTMLMiddleware
 
 
 class MiddlewareTest(TestCase):
-    def test_middleware_off(self):
-        response = self.client.get(reverse('admin:index'))
+    whitespace = b'    '
 
+    def setUp(self):
+        self.req = HttpRequest()
+        self.req.META = {
+            'SERVER_NAME': 'testserver',
+            'SERVER_PORT': 80,
+        }
+        self.req.path = self.req.path_info = "/"
+        self.resp = HttpResponse()
+        self.resp.status_code = 200
+        self.resp.content = self.whitespace
+
+    def test_middleware_html(self):
+        self.resp['Content-Type'] = 'text/html; charset=UTF-8'
+
+        response = MinifyHTMLMiddleware().process_response(self.req, self.resp)
         self.assertIn('text/html', response['Content-Type'])
-        # Should not come if not compressed
-        self.assertNotIn('Content-Length', response)
+        self.assertNotIn(self.whitespace, response.content)
 
-    def test_middleware_on(self):
-        CUSTOM_MIDDLEWARE = (
-            'django.middleware.gzip.GZipMiddleware',
-            'pipeline.middleware.MinifyHTMLMiddleware',
-        ) + settings.MIDDLEWARE_CLASSES
+    def test_middleware_text(self):
+        self.resp['Content-Type'] = 'text/plain; charset=UTF-8'
 
-        with self.settings(MIDDLEWARE_CLASSES=CUSTOM_MIDDLEWARE):
-            response = self.client.get(reverse('admin:index'))
-
-            self.assertIn('text/html', response['Content-Type'])
-
-            length = str(len(response.content))
-            self.assertEqual(length, response['Content-Length'])
-
-    def test_middleware_pipeline_enabled(self):
-        CUSTOM_MIDDLEWARE = (
-            'django.middleware.gzip.GZipMiddleware',
-            'pipeline.middleware.MinifyHTMLMiddleware',
-        ) + settings.MIDDLEWARE_CLASSES
-
-        with self.settings(MIDDLEWARE_CLASSES=CUSTOM_MIDDLEWARE):
-            with pipeline_settings(PIPELINE_ENABLED=True):
-                response = self.client.get(reverse('admin:index'))
-                self.assertNotIn(b'    ', response.content)
-
-    def test_middleware_pipeline_disabled(self):
-        CUSTOM_MIDDLEWARE = (
-            'django.middleware.gzip.GZipMiddleware',
-            'pipeline.middleware.MinifyHTMLMiddleware',
-        ) + settings.MIDDLEWARE_CLASSES
-
-        with self.settings(MIDDLEWARE_CLASSES=CUSTOM_MIDDLEWARE):
-            with pipeline_settings(PIPELINE_ENABLED=False):
-                response = self.client.get(reverse('admin:index'))
-                self.assertIn(b'    ', response.content)
+        response = MinifyHTMLMiddleware().process_response(self.req, self.resp)
+        self.assertIn('text/plain', response['Content-Type'])
+        self.assertIn(self.whitespace, response.content)

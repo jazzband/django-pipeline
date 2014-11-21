@@ -18,9 +18,13 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.admin',
     'pipeline',
-    'tests',
     'tests.tests'
 ]
+
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware'
+)
 
 ROOT_URLCONF = 'tests.urls'
 
