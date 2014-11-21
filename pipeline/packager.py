@@ -24,7 +24,7 @@ class Package(object):
             paths = []
             for pattern in self.config.get('source_filenames', []):
                 for path in glob(pattern):
-                    if not path in paths and find(path):
+                    if path not in paths and find(path):
                         paths.append(str(path))
             self._sources = paths
         return self._sources
