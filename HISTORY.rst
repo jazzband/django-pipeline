@@ -3,6 +3,12 @@
 History
 =======
 
+1.3.27
+------
+
+* Fix bug in URL rewriting. Thanks to Clinton Blackburn for the report.
+* Ignore stylus files in finders. Thanks to Evandro Myller.
+
 1.3.26
 ------
 
