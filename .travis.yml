@@ -1,4 +1,7 @@
 language: python
+
+sudo: false
+
 env:
   - TOXENV=py26-1.6.X
   - TOXENV=py27-1.6.X
@@ -7,5 +10,7 @@ env:
   - TOXENV=py27
   - TOXENV=pypy
   - TOXENV=py33
+
 docsinstall: pip install -q tox
+
 script: tox
