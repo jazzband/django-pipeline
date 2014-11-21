@@ -34,6 +34,35 @@ Installation
 .. _GitHub: http://github.com/cyberdelia/django-pipeline
 .. _PyPI: http://pypi.python.org/pypi/django-pipeline
 
+================
+Upgrading to 1.4
+================
+
+To upgrade to pipeline 1.4, you will need to follow theses steps:
+
+1. Rewrite all templates like follow
+
+    .. code-block:: python
+    
+        {% load compressed %}
+        {% compressed_js 'group' %}
+        {% compressed_css 'group' %}
+
+    .. code-block:: python
+
+        {% load pipeline %}
+        {% javascript 'group' %}
+        {% stylesheet 'group' %}
+
+2. Add the ``PipelineFinder`` to ``STATICFILES_FINDERS`` ::
+
+        STATICFILES_FINDERS = (
+            'django.contrib.staticfiles.finders.FileSystemFinder',
+            'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+            'pipeline.finders.PipelineFinder',
+        )
+
+
 Recommendations
 ===============
 
