@@ -17,7 +17,7 @@ class PipelineMixin(object):
     packing = True
 
     def __init__(self, location=None, *args, **kwargs):
-        if settings.PIPELINE_ENABLED and location is None:
+        if not settings.PIPELINE_ENABLED and location is None:
             location = tempfile.mkdtemp()
         super(PipelineMixin, self).__init__(location, *args, **kwargs)
 
