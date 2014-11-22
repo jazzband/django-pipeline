@@ -34,7 +34,6 @@ Installation
 .. _GitHub: http://github.com/cyberdelia/django-pipeline
 .. _PyPI: http://pypi.python.org/pypi/django-pipeline
 
-================
 Upgrading to 1.4
 ================
 
