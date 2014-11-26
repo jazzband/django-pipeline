@@ -220,6 +220,29 @@ command to compress stylesheets. To use it, add this to your ``PIPELINE_CSS_COMP
   Additional arguments to use when cssmin is called.
 
   Default to ``''``
+  
+CSSO compressor
+=================
+
+The csso compressor uses the `csso <https://github.com/css/csso>`_
+command to compress stylesheets. To use it, add this to your ``PIPELINE_CSS_COMPRESSOR`` ::
+
+  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.csso.CSSOCompressor'
+
+``PIPELINE_CSSO_BINARY``
+---------------------------
+
+  Command line to execute for csso program.
+  You will most likely change this to the location of csso on your system.
+
+  Defaults to ``'/usr/bin/env csso'``
+
+``PIPELINE_CSSO_ARGUMENTS``
+------------------------------
+
+  Additional arguments to use when csso is called.
+
+  Default to ``''``
 
 No-Op Compressors
 =================

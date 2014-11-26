@@ -45,6 +45,9 @@ DEFAULTS = {
     'PIPELINE_CSSMIN_BINARY': '/usr/bin/env cssmin',
     'PIPELINE_CSSMIN_ARGUMENTS': '',
 
+    'PIPELINE_CSSO_BINARY': '/usr/bin/env csso',
+    'PIPELINE_CSSO_ARGUMENTS': '',
+
     'PIPELINE_COFFEE_SCRIPT_BINARY': '/usr/bin/env coffee',
     'PIPELINE_COFFEE_SCRIPT_ARGUMENTS': '',
 
