@@ -10,6 +10,17 @@ from pipeline.conf import settings
 class PipelineFinder(BaseStorageFinder):
     storage = staticfiles_storage
 
+    def find(self, path, all=False):
+        if not settings.PIPELINE_ENABLED:
+            return super(PipelineFinder, self).find(path, all)
+        else:
+            return []
+
+    def list(self, ignore_patterns):
+        if not settings.PIPELINE_ENABLED:
+            return super(PipelineFinder, self).list(ignore_patterns)
+        else:
+            return []
 
 class ManifestFinder(BaseFinder):
     def find(self, path, all=False):
