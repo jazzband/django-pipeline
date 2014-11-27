@@ -3,6 +3,12 @@
 History
 =======
 
+1.4.2
+=====
+
+* Fix finder bug. Thanks to Quentin Pradet, Remi and Sam Kuehn for the report
+* Update finders documentation. Thanks to Thomas Schreiber, Grégoire Astruc and Tobias Birmili for the report.
+
 1.4.1
 =====
 
