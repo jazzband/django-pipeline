@@ -67,8 +67,9 @@ class StorageTest(TestCase):
         st = 'tests.tests.test_storage.PipelineNoPathStorage'
         cos = ['tests.tests.test_storage.DummyCSSCompiler']
         with override_settings(STATICFILES_STORAGE=st, PIPELINE_COMPILERS=cos):
-            staticfiles_storage._setup()
-            try:
-                call_command('collectstatic', verbosity=0, interactive=False)
-            except NotImplementedError:
-                assert False, 'Received an error running collectstatic'
+            with pipeline_settings(PIPELINE_JS_COMPRESSOR=None, PIPELINE_CSS_COMPRESSOR=None):
+                staticfiles_storage._setup()
+                try:
+                    call_command('collectstatic', verbosity=0, interactive=False)
+                except NotImplementedError:
+                    assert False, 'Received an error running collectstatic'
