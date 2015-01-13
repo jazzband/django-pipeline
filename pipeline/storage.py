@@ -16,11 +16,6 @@ from pipeline.conf import settings
 class PipelineMixin(object):
     packing = True
 
-    def __init__(self, location=None, *args, **kwargs):
-        if not settings.PIPELINE_ENABLED and location is None:
-            location = tempfile.mkdtemp()
-        super(PipelineMixin, self).__init__(location, *args, **kwargs)
-
     def post_process(self, paths, dry_run=False, **options):
         if dry_run:
             return
