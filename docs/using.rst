@@ -48,3 +48,8 @@ Novapost
 --------
 
 For PeopleDoc suite products: http://www.people-doc.com/
+
+Sophicware
+----------
+
+Sophicware offers web hosting and DevOps as a service: http://sophicware.com
