@@ -3,6 +3,12 @@
 History
 =======
 
+1.4.3
+=====
+
+* Remove tempdir storage location. Thanks to Kristian Glass.
+* Make the SASS compiler compatible with more non-ruby SASS. Thanks to Corrado Primier.
+
 1.4.2
 =====
 
