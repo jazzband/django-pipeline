@@ -52,7 +52,7 @@ DEFAULTS = {
     'PIPELINE_LIVE_SCRIPT_ARGUMENTS': '',
 
     'PIPELINE_SASS_BINARY': '/usr/bin/env sass',
-    'PIPELINE_SASS_ARGUMENTS': '--update',
+    'PIPELINE_SASS_ARGUMENTS': '',
 
     'PIPELINE_STYLUS_BINARY': '/usr/bin/env stylus',
     'PIPELINE_STYLUS_ARGUMENTS': '',
