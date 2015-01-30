@@ -3,6 +3,12 @@
 History
 =======
 
+1.4.4.1
+=====
+
+* Remove ruby sass implementation specifics.
+* Remove artefacts in package.
+
 1.4.3
 =====
 
