@@ -144,6 +144,34 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
   Defaults to ``''``.
 
 
+ES6 compiler
+============
+
+The ES6 compiler uses `6to5 <https://6to5.org>`_
+to convert ES6+ code into vanilla ES5.
+
+To use it add this to your ``PIPELINE_COMPILERS`` ::
+
+  PIPELINE_COMPILERS = (
+      'pipeline.compilers.es6.ES6Compiler',
+  )
+
+
+``PIPELINE_6TO5_BINARY``
+--------------------------
+
+  Command line to execute for 6to5 program.
+  You will most likely change this to the location of 6to5 on your system.
+
+  Defaults to ``'/usr/bin/env 6to5'``.
+
+``PIPELINE_6TO5_ARGUMENTS``
+-----------------------------
+
+  Additional arguments to use when 6to5 is called.
+
+  Defaults to ``''``.
+
 
 Write your own compiler class
 =============================

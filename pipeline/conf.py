@@ -48,6 +48,9 @@ DEFAULTS = {
     'PIPELINE_COFFEE_SCRIPT_BINARY': '/usr/bin/env coffee',
     'PIPELINE_COFFEE_SCRIPT_ARGUMENTS': '',
 
+    'PIPELINE_6TO5_BINARY': '/usr/bin/env 6to5',
+    'PIPELINE_6TO5_ARGUMENTS': '',
+
     'PIPELINE_LIVE_SCRIPT_BINARY': '/usr/bin/env lsc',
     'PIPELINE_LIVE_SCRIPT_ARGUMENTS': '',
 
