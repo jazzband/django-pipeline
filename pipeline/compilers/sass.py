@@ -13,7 +13,7 @@ class SASSCompiler(SubProcessCompiler):
         return filename.endswith(('.scss', '.sass'))
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = "%s %s %s:%s" % (
+        command = "%s %s %s %s" % (
             settings.PIPELINE_SASS_BINARY,
             settings.PIPELINE_SASS_ARGUMENTS,
             infile,

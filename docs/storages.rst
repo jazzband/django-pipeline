@@ -48,8 +48,8 @@ tool like Bower. ::
   STATICFILES_FINDERS = (
       'pipeline.finders.FileSystemFinder',
       'pipeline.finders.AppDirectoriesFinder',
-      'pipeline.finders.PipelineFinder',
       'pipeline.finders.CachedFileFinder',
+      'pipeline.finders.PipelineFinder',
   )
 
 GZIP compression
