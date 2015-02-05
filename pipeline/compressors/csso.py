@@ -10,7 +10,7 @@ class CSSOCompressor(SubProcessCompressor):
     def compress_css(self, css):
         try:
             input_file = tempfile.NamedTemporaryFile(suffix='.pipeline', delete=False)
-            input_file.write(css)
+            input_file.write(css.encode('utf-8'))
             input_file.close()
             command = "%s --input %s %s" % (settings.PIPELINE_CSSO_BINARY, input_file.name, settings.PIPELINE_CSSO_ARGUMENTS)
             return self.execute_command(command, None)
