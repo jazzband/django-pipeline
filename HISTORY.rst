@@ -3,8 +3,15 @@
 History
 =======
 
-1.4.4.1
+1.4.5
 =====
+
+* Add ES6/6to5 compiler.
+* Fix URL rewriter quote handling. Thanks to Josh Braegger.
+* Improve FyleSystemFinder. Thanks to Jon Dufresne.
+
+1.4.4.1
+=======
 
 * Remove ruby sass implementation specifics.
 * Remove artefacts in package.
