@@ -1,5 +1,8 @@
 import os
-local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
+
+
+def local_path(path):
+    return os.path.join(os.path.dirname(__file__), path)
 
 DATABASES = {
     'default': {

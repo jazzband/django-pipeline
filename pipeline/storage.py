@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 import gzip
-import tempfile
 
 from io import BytesIO
 
@@ -9,8 +8,6 @@ from django.contrib.staticfiles.storage import CachedStaticFilesStorage, StaticF
 from django.contrib.staticfiles.utils import matches_patterns
 
 from django.core.files.base import File
-
-from pipeline.conf import settings
 
 
 class PipelineMixin(object):

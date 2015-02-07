@@ -22,6 +22,7 @@ class PipelineFinder(BaseStorageFinder):
         else:
             return []
 
+
 class ManifestFinder(BaseFinder):
     def find(self, path, all=False):
         """

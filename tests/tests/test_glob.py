@@ -9,7 +9,9 @@ from django.test import TestCase
 
 from pipeline import glob
 
-local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
+
+def local_path(path):
+    return os.path.join(os.path.dirname(__file__), path)
 
 
 class GlobTest(TestCase):
