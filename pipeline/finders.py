@@ -94,6 +94,7 @@ class FileSystemFinder(PatternFilterMixin, FileSystemFinder):
     """
     ignore_patterns = [
         '*.js',
+        '*.css',
         '*.less',
         '*.scss',
         '*.styl',
@@ -114,4 +115,5 @@ class FileSystemFinder(PatternFilterMixin, FileSystemFinder):
         '*demo*',
         'Makefile*',
         'Gemfile*',
+        'node_modules',
     ]
