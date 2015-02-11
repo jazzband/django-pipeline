@@ -24,6 +24,7 @@ DEFAULTS = {
     'PIPELINE_TEMPLATE_SEPARATOR': "_",
 
     'PIPELINE_DISABLE_WRAPPER': False,
+    'PIPELINE_JS_CONCAT_SEPARATOR': '\n',
 
     'PIPELINE_CSSTIDY_BINARY': '/usr/bin/env csstidy',
     'PIPELINE_CSSTIDY_ARGUMENTS': '--template=highest',
