@@ -17,10 +17,7 @@ class PipelineFinder(BaseStorageFinder):
             return []
 
     def list(self, ignore_patterns):
-        if not settings.PIPELINE_ENABLED:
-            return super(PipelineFinder, self).list(ignore_patterns)
-        else:
-            return []
+        return []
 
 
 class ManifestFinder(BaseFinder):
