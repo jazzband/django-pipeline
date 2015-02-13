@@ -13,7 +13,8 @@ class LessCompiler(SubProcessCompiler):
         return filename.endswith('.less')
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = "%s %s %s %s" % (
+        # Pipe to file rather than provide outfile arg due to a bug in lessc
+        command = "%s %s %s > %s" % (
             settings.PIPELINE_LESS_BINARY,
             settings.PIPELINE_LESS_ARGUMENTS,
             infile,
