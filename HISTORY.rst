@@ -3,12 +3,19 @@
 History
 =======
 
+1.4.6
+=====
+
+* Improve LESS adapter compatibility. Thanks to Wictor Olseryd.
+* Fix ``PipelineFinder`` behavior. Thanks to Aleksey Porfirov.
+* Small tests and code improvements.
+
 1.4.5
 =====
 
 * Add ES6/6to5 compiler.
 * Fix URL rewriter quote handling. Thanks to Josh Braegger.
-* Improve FyleSystemFinder. Thanks to Jon Dufresne.
+* Improve ``FileSystemFinder``. Thanks to Jon Dufresne.
 
 1.4.4.1
 =======
