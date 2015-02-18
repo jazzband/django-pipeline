@@ -147,7 +147,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 ES6 compiler
 ============
 
-The ES6 compiler uses `6to5 <https://6to5.org>`_
+The ES6 compiler uses `Babel <https://babeljs.io>`_
 to convert ES6+ code into vanilla ES5.
 
 To use it add this to your ``PIPELINE_COMPILERS`` ::
@@ -157,18 +157,18 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
   )
 
 
-``PIPELINE_6TO5_BINARY``
+``PIPELINE_BABEL_BINARY``
 --------------------------
 
-  Command line to execute for 6to5 program.
-  You will most likely change this to the location of 6to5 on your system.
+  Command line to execute for babel program.
+  You will most likely change this to the location of babel on your system.
 
-  Defaults to ``'/usr/bin/env 6to5'``.
+  Defaults to ``'/usr/bin/env babel'``.
 
-``PIPELINE_6TO5_ARGUMENTS``
+``PIPELINE_BABEL_ARGUMENTS``
 -----------------------------
 
-  Additional arguments to use when 6to5 is called.
+  Additional arguments to use when babel is called.
 
   Defaults to ``''``.
 
