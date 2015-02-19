@@ -159,6 +159,11 @@ class Compressor(object):
         font = ext in FONT_EXTS
         if not variant:
             return False
+
+        # strip STATIC_URL from path
+        if path.startswith(settings.STATIC_URL):
+            path = path[len(settings.STATIC_URL):]
+
         if not (re.search(settings.PIPELINE_EMBED_PATH, path.replace('\\', '/')) and self.storage.exists(path)):
             return False
         if ext not in EMBED_EXTS:
@@ -170,6 +175,11 @@ class Compressor(object):
     def with_data_uri(self, css):
         def datauri(match):
             path = match.group(1)
+
+            # strip STATIC_URL from path
+            if path.startswith(settings.STATIC_URL):
+                path = path[len(settings.STATIC_URL):]
+
             mime_type = self.mime_type(path)
             data = self.encoded_content(path)
             return "url(\"data:%s;charset=utf-8;base64,%s\")" % (mime_type, data)
