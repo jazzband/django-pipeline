@@ -39,16 +39,18 @@ Upgrading to 1.4
 
 To upgrade to pipeline 1.4, you will need to follow theses steps:
 
-1. Rewrite all templates like follow
+1. Update templates to use the new syntax
 
     .. code-block:: python
     
+        {# pipeline<1.4 #}
         {% load compressed %}
         {% compressed_js 'group' %}
         {% compressed_css 'group' %}
 
     .. code-block:: python
-
+    
+        {# pipeline=1.4 #}
         {% load pipeline %}
         {% javascript 'group' %}
         {% stylesheet 'group' %}
