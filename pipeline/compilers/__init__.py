@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import os
+from datetime import datetime
 
 try:
     from shlex import quote
@@ -108,3 +109,27 @@ class SubProcessCompiler(CompilerBase):
         if pipe.returncode != 0:
             raise CompilerError("Command '{0}' returned non-zero exit status {1}".format(command, pipe.returncode))
         return stdout
+
+
+class StaticFilesCompilerMixin(object):
+    def path(self, name):
+        return finders.find(name)
+
+    def read_file(self, path):
+        file = open(path, 'rb')
+        content = file.read()
+        file.close()
+        return content
+
+    def modified_time(self, name):
+        return datetime.fromtimestamp(os.path.getmtime(self.path(name)))
+
+    def is_outdated(self, infile, outfile):
+        try:
+            return self.modified_time(infile) > self.storage.modified_time(outfile)
+        except (OSError, NotImplementedError):
+            return True
+
+    def post_process(self, outfile, name):
+        content = self.read_file(outfile)
+        self.save_file(name, content)
