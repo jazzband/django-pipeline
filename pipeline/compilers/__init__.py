@@ -39,6 +39,8 @@ class Compiler(object):
                     outdated = compiler.is_outdated(input_path, output_path)
                     compiler.compile_file(quote(infile), quote(outfile),
                         outdated=outdated, force=force)
+                    if hasattr(compiler, 'post_process'):
+                        compiler.post_process(outfile, name=output_path)
                     return output_path
             else:
                 return input_path
