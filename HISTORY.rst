@@ -3,6 +3,13 @@
 History
 =======
 
+1.4.7
+=====
+
+* Rename 6to5 settings to match the new name: "babel".
+* Improve upgrade instructions. Thanks to Collin Stedman.
+* Make compiler work with storage not implementing path. Thanks to Brad Pitcher.
+
 1.4.6
 =====
 
