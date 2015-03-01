@@ -101,5 +101,5 @@ class SubProcessCompiler(CompilerBase):
         if self.verbose:
             print(stderr)
         if pipe.returncode != 0:
-            raise CompilerError("Command '%s' returned non-zero exit status %d".format(command, pipe.returncode))
+            raise CompilerError("Command '{0}' returned non-zero exit status {1}".format(command, pipe.returncode))
         return stdout
