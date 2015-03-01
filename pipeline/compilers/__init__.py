@@ -40,12 +40,8 @@ class Compiler(object):
                         infile = finders.find(input_path)
                     outfile = self.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(input_path, output_path)
-                    try:
-                        compiler.compile_file(quote(infile), quote(outfile),
-                            outdated=outdated, force=force)
-                    except CompilerError:
-                        if not self.storage.exists(output_path) or settings.DEBUG:
-                            raise
+                    compiler.compile_file(quote(infile), quote(outfile),
+                        outdated=outdated, force=force)
                     return output_path
             else:
                 return input_path
