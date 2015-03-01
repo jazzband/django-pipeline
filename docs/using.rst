@@ -13,13 +13,11 @@ Are you using pipeline and not being in this list? Drop us a line.
 
 For their internal tools: http://www.20minutes.fr
 
-The Molly Project
------------------
+Borsala
+-------
 
-Molly is a framework for the rapid development of information and service
-portals targeted at mobile internet devices: http://mollyproject.org
+Borsala is the social investment plaform. You can follow stock markets that are traded in Turkey: http://borsala.com
 
-It powers the University of Oxford's mobile portal: http://m.ox.ac.uk/
 
 Croisé dans le Métro
 --------------------
@@ -29,20 +27,21 @@ For their main and mobile website:
 * http://www.croisedanslemetro.com
 * http://m.croisedanslemetro.com
 
-Ulule
------
+The Molly Project
+-----------------
 
-For their main and forum website:
+Molly is a framework for the rapid development of information and service
+portals targeted at mobile internet devices: http://mollyproject.org
 
-* http://www.ulule.com
-* http://vox.ulule.com
+It powers the University of Oxford's mobile portal: http://m.ox.ac.uk/
 
-Borsala
+Mozilla
 -------
 
-Borsala is the social investment plaform. You can follow stock markets that are traded in Turkey:
-
-http://borsala.com
+Powering mozilla.org:
+ 
+* https://www.mozilla.org
+* https://github.com/mozilla/bedrock
 
 Novapost
 --------
@@ -53,3 +52,11 @@ Sophicware
 ----------
 
 Sophicware offers web hosting and DevOps as a service: http://sophicware.com
+
+Ulule
+-----
+
+For their main and forum website:
+
+* http://www.ulule.com
+* http://vox.ulule.com
