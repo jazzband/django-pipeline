@@ -76,19 +76,25 @@ Using with other storages
 
 You can also use your own custom storage, for example, if you want to use S3 for your assets : ::
 
-  STATICFILES_STORAGE = 'your.app.S3PipelineStorage'
+  STATICFILES_STORAGE = 'your.app.S3PipelineManifestStorage'
 
-Your storage only need to inherit from ``PipelineMixin`` and/or ``CachedFilesMixin`` : ::
+Your storage only needs to inherit from ``PipelineMixin`` and ``ManifestFilesMixin`` or ``CachedFilesMixin``.
 
-  from django.contrib.staticfiles.storage import CachedFilesMixin
+In Django 1.7+ you should use `ManifestFilesMixin <https://docs.djangoproject.com/en/1.7/ref/contrib/staticfiles/#manifeststaticfilesstorage>`_
+unless you don't have access to the local filesystem in which case you should use ``CachedFilesMixin``. ::
+
+  from django.contrib.staticfiles.storage import CachedFilesMixin, ManifestFilesMixin
 
   from pipeline.storage import PipelineMixin
 
   from storages.backends.s3boto import S3BotoStorage
 
-
-  class S3PipelineStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
+  class S3PipelineManifestStorage(PipelineMixin, ManifestFilesMixin, S3BotoStorage):
       pass
+
+  class S3PipelineCachedStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
+      pass
+
 
 Using Pipeline with Bower
 =========================
