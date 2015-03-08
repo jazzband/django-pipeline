@@ -153,6 +153,9 @@ class CompressorTest(TestCase):
 .no-protocol-url {
   background-image: url(//images/sprite-buttons.png);
 }
+.anchor-tag-url {
+  background-image: url(#image-gradient);
+}
 @font-face{src:url(../pipeline/fonts/pipeline.eot);src:url(../pipeline/fonts/pipeline.eot?#iefix) format('embedded-opentype'),url(../pipeline/fonts/pipeline.woff) format('woff'),url(../pipeline/fonts/pipeline.ttf) format('truetype');}
 """, output)
 

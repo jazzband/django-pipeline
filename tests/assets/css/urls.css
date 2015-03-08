@@ -21,4 +21,7 @@
 .no-protocol-url {
   background-image: url(//images/sprite-buttons.png);
 }
+.anchor-tag-url {
+  background-image: url(#image-gradient);
+}
 @font-face{src:url(../fonts/pipeline.eot);src:url(../fonts/pipeline.eot?#iefix) format('embedded-opentype'),url(../fonts/pipeline.woff) format('woff'),url(../fonts/pipeline.ttf) format('truetype');}
