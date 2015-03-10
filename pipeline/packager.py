@@ -20,14 +20,22 @@ class Package(object):
 
     @property
     def sources(self):
-        if not self._sources:
-            paths = []
-            for pattern in self.config.get('source_filenames', []):
+        def _findfiles(patterns):
+            paths = set()
+            for pattern in patterns:
                 for path in glob(pattern):
                     if path not in paths and find(path):
-                        paths.append(str(path))
-            self._sources = paths
+                        paths.add(str(path))
+            return paths
+
+        if not self._sources:
+            source_filenames = self.config.get('source_filenames', [])
+            ignore_filenames = self.config.get('ignore_filenames', [])
+            source_paths = _findfiles(source_filenames)
+            ignore_paths = _findfiles(ignore_filenames)
+            self._sources = list(source_paths - ignore_paths)
         return self._sources
+
 
     @property
     def paths(self):
