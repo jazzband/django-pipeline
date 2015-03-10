@@ -173,6 +173,29 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
   Defaults to ``''``.
 
 
+.. _StaticFilesCompilerMixin:
+
+Static files compiler mixin
+===========================
+
+When using compilers together with a remote storage, like S3,
+you need to extend the compiler of choice to use staticfiles instead of the remote storage.
+
+To do so, you just have to create your own compiler class that inherits from
+``pipeline.compilers.StaticFilesCompilerMixin`` and your desired compiler.
+
+Example
+-------
+
+A custom less compiler extended with staticfiles usage ::
+
+  from pipeline.compilers import StaticFilesCompilerMixin
+  from pipeline.compilers.less import LessCompiler
+
+  class LocalLessCompiler(StaticFilesCompilerMixin, LessCompiler):
+      pass
+
+
 Write your own compiler class
 =============================
 
