@@ -31,7 +31,7 @@ The Molly Project
 -----------------
 
 Molly is a framework for the rapid development of information and service
-portals targeted at mobile internet devices: http://mollyproject.org
+portals targeted at mobile internet devices: https://github.com/mollyproject/mollyproject
 
 It powers the University of Oxford's mobile portal: http://m.ox.ac.uk/
 
