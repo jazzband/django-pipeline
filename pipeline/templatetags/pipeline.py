@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django import template
+from django.template.base import VariableDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
@@ -16,6 +17,15 @@ register = template.Library()
 
 
 class PipelineMixin(object):
+    request = None
+    _request_var = None
+
+    @property
+    def request_var(self):
+        if not self._request_var:
+            self._request_var = template.Variable('request')
+        return self._request_var
+
     def package_for(self, package_name, package_type):
         package = {
             'js': getattr(settings, 'PIPELINE_JS', {}).get(package_name, {}),
@@ -32,12 +42,18 @@ class PipelineMixin(object):
 
         return packager.package_for(package_type, package_name)
 
+    def render(self, context):
+        try:
+            self.request = self.request_var.resolve(context)
+        except VariableDoesNotExist:
+            pass
+
     def render_compressed(self, package, package_type):
         if settings.PIPELINE_ENABLED:
             method = getattr(self, "render_{0}".format(package_type))
             return method(package, package.output_filename)
         else:
-            default_collector.collect()
+            default_collector.collect(self.request)
 
             packager = Packager()
             method = getattr(self, "render_individual_{0}".format(package_type))
@@ -51,7 +67,9 @@ class StylesheetNode(PipelineMixin, template.Node):
         self.name = name
 
     def render(self, context):
+        super(StylesheetNode, self).render(context)
         package_name = template.Variable(self.name).resolve(context)
+
         try:
             package = self.package_for(package_name, 'css')
         except PackageNotFound:
@@ -77,7 +95,9 @@ class JavascriptNode(PipelineMixin, template.Node):
         self.name = name
 
     def render(self, context):
+        super(JavascriptNode, self).render(context)
         package_name = template.Variable(self.name).resolve(context)
+
         try:
             package = self.package_for(package_name, 'js')
         except PackageNotFound:
