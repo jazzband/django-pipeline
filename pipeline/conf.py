@@ -63,6 +63,9 @@ DEFAULTS = {
     'PIPELINE_LESS_BINARY': '/usr/bin/env lessc',
     'PIPELINE_LESS_ARGUMENTS': '',
 
+    'PIPELINE_NG_ANNOTATE_BINARY': '/usr/bin/env ng-annotate',
+    'PIPELINE_NG_ANNOTATE_ARGUMENTS': '--add',
+
     'PIPELINE_MIMETYPES': (
         (b'text/coffeescript', '.coffee'),
         (b'text/less', '.less'),
