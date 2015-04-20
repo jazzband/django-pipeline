@@ -7,6 +7,9 @@ from pipeline.compilers import SubProcessCompiler
 class NgAnnnotateCompiler(SubProcessCompiler):
     output_extension = 'js'
 
+    def match_file(self, path):
+        return path.endswith('.js')
+
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:
             return  # File doesn't need to be recompiled
