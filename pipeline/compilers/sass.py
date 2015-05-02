@@ -13,10 +13,17 @@ class SASSCompiler(SubProcessCompiler):
         return filename.endswith(('.scss', '.sass'))
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = "%s %s %s %s" % (
-            settings.PIPELINE_SASS_BINARY,
-            settings.PIPELINE_SASS_ARGUMENTS,
-            infile,
-            outfile
+        sass_command = "{sass_binary} {sass_arguments} {infile} {outfile}"
+
+        # If the update option is used, the command syntax changes slightly.
+        if "--update" in settings.PIPELINE_SASS_ARGUMENTS:
+            sass_command = "{sass_binary} {sass_arguments} {infile}:{outfile}"
+
+        command = sass_command.format(
+            sass_binary=settings.PIPELINE_SASS_BINARY,
+            sass_arguments=settings.PIPELINE_SASS_ARGUMENTS,
+            infile=infile,
+            outfile=outfile
         )
+
         return self.execute_command(command, cwd=dirname(infile))
