@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import importlib
 import mimetypes
 import posixpath
 
@@ -8,7 +9,6 @@ try:
 except ImportError:
     from urllib import quote
 
-from django.utils import importlib
 from django.utils.encoding import smart_str
 
 from pipeline.conf import settings
