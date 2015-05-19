@@ -6,7 +6,7 @@ from jinja2 import Environment, PackageLoader
 from django.template import Template, Context
 from django.test import TestCase
 
-from pipeline.jinja2.ext import PipelineExtension
+from pipeline.templatetags.ext import PipelineExtension
 
 from tests.utils import pipeline_settings
 

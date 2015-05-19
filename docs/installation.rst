@@ -29,28 +29,28 @@ Installation
 
 
 .. note::
-  You need to use ``Django>=1.6`` to be able to use this version of pipeline.
+  You need to use ``Django>=1.7`` to be able to use this version of pipeline.
 
 .. _GitHub: http://github.com/cyberdelia/django-pipeline
 .. _PyPI: http://pypi.python.org/pypi/django-pipeline
 
-Upgrading to 1.4
+Upgrading from 1.3
 ================
 
-To upgrade to pipeline 1.4, you will need to follow theses steps:
+To upgrade from pipeline 1.3, you will need to follow theses steps:
 
 1. Update templates to use the new syntax
 
     .. code-block:: python
-    
+
         {# pipeline<1.4 #}
         {% load compressed %}
         {% compressed_js 'group' %}
         {% compressed_css 'group' %}
 
     .. code-block:: python
-    
-        {# pipeline=1.4 #}
+
+        {# pipeline>=1.4 #}
         {% load pipeline %}
         {% javascript 'group' %}
         {% stylesheet 'group' %}
@@ -72,4 +72,3 @@ Yuglify wraps UglifyJS and cssmin, applying the default YUI configurations to th
 It can be downloaded from: https://github.com/yui/yuglify/.
 
 If you do not install yuglify, make sure to disable the compressor in your settings.
-

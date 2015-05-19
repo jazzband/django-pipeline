@@ -39,7 +39,7 @@ class PipelineMixin(object):
             for name, hashed_name, processed in super_class.post_process(paths.copy(), dry_run, **options):
                 yield name, hashed_name, processed
 
-    def get_available_name(self, name):
+    def get_available_name(self, name, max_length=None):
         if self.exists(name):
             self.delete(name)
         return name

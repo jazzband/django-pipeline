@@ -5,9 +5,9 @@ from jinja2.ext import Extension
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from pipeline.packager import PackageNotFound
-from pipeline.utils import guess_type
-from pipeline.templatetags.pipeline import PipelineMixin
+from ..packager import PackageNotFound
+from ..utils import guess_type
+from .pipeline import PipelineMixin
 
 
 class PipelineExtension(PipelineMixin, Extension):
