@@ -31,7 +31,6 @@ class Collector(object):
             self.request = request
             found_files = OrderedDict()
             for finder in finders.get_finders():
-                print finder
                 # Ignore our finder to avoid looping
                 if isinstance(finder, PipelineFinder):
                     continue
