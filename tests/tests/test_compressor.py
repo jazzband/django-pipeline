@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import base64
 import os
+import io
 
 try:
     from mock import patch
@@ -175,7 +176,7 @@ class CompressorTest(TestCase):
         tests_path = os.path.dirname(os.path.dirname(__file__))
         output = SubProcessCompressor(False).execute_command(
             '/usr/bin/env cat',
-            open(tests_path + '/assets/css/unicode.css').read())
+            io.open(tests_path + '/assets/css/unicode.css', encoding="utf-8").read())
         self.assertEqual(""".some_class {
   // Some unicode
   content: "áéíóú";
