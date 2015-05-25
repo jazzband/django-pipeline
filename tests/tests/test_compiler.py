@@ -22,7 +22,7 @@ class DummyCompiler(CompilerBase):
 
 class CompilerTest(TestCase):
     def setUp(self):
-        default_collector.collect()
+        default_collector.collect(True)
         self.compiler = Compiler()
         self.old_compilers = settings.PIPELINE_COMPILERS
         settings.PIPELINE_COMPILERS = ['tests.tests.test_compiler.DummyCompiler']

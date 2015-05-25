@@ -10,7 +10,7 @@ from tests.utils import _
 
 class PackagerTest(TestCase):
     def setUp(self):
-        default_collector.collect()
+        default_collector.collect(True)
 
     def test_package_for(self):
         packager = Packager()

@@ -11,6 +11,8 @@ from pipeline.finders import PipelineFinder
 
 
 class Collector(object):
+    is_collected = False
+
     def __init__(self, storage=None):
         if storage is None:
             storage = staticfiles_storage
@@ -24,7 +26,9 @@ class Collector(object):
         for d in dirs:
             self.clear(os.path.join(path, d))
 
-    def collect(self):
+    def collect(self, collect=None):
+        if not collect and self.is_collected:
+            return
         found_files = OrderedDict()
         for finder in finders.get_finders():
             # Ignore our finder to avoid looping
@@ -39,6 +43,7 @@ class Collector(object):
                 if prefixed_path not in found_files:
                     found_files[prefixed_path] = (storage, path)
                     self.copy_file(path, prefixed_path, storage)
+        self.is_collected = True
 
     def copy_file(self, path, prefixed_path, source_storage):
         # Delete the target file if needed or break
