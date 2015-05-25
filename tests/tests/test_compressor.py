@@ -25,7 +25,7 @@ class CompressorTest(TestCase):
     def setUp(self):
         self.maxDiff = None
         self.compressor = Compressor()
-        default_collector.collect()
+        default_collector.collect(True)
 
     def test_js_compressor_class(self):
         self.assertEqual(self.compressor.js_compressor, YuglifyCompressor)
