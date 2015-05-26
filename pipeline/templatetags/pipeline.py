@@ -18,9 +18,13 @@ register = template.Library()
 
 class PipelineMixin(object):
     request = None
+    _request_var = None
 
-    def __init__(self, name):
-        self.request_var = template.Variable('request')
+    @property
+    def request_var(self):
+        if not self._request_var:
+            self._request_var = template.Variable('request')
+        return self._request_var
 
     def package_for(self, package_name, package_type):
         package = {
@@ -60,7 +64,6 @@ class PipelineMixin(object):
 
 class StylesheetNode(PipelineMixin, template.Node):
     def __init__(self, name):
-        super(StylesheetNode, self).__init__(name)
         self.name = name
 
     def render(self, context):
@@ -89,7 +92,6 @@ class StylesheetNode(PipelineMixin, template.Node):
 
 class JavascriptNode(PipelineMixin, template.Node):
     def __init__(self, name):
-        super(JavascriptNode, self).__init__(name)
         self.name = name
 
     def render(self, context):
