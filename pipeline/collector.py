@@ -11,6 +11,8 @@ from pipeline.finders import PipelineFinder
 
 
 class Collector(object):
+    request = None
+
     def __init__(self, storage=None):
         if storage is None:
             storage = staticfiles_storage
@@ -24,21 +26,23 @@ class Collector(object):
         for d in dirs:
             self.clear(os.path.join(path, d))
 
-    def collect(self):
-        found_files = OrderedDict()
-        for finder in finders.get_finders():
-            # Ignore our finder to avoid looping
-            if isinstance(finder, PipelineFinder):
-                continue
-            for path, storage in finder.list(['CVS', '.*', '*~']):
-                # Prefix the relative path if the source storage contains it
-                if getattr(storage, 'prefix', None):
-                    prefixed_path = os.path.join(storage.prefix, path)
-                else:
-                    prefixed_path = path
-                if prefixed_path not in found_files:
-                    found_files[prefixed_path] = (storage, path)
-                    self.copy_file(path, prefixed_path, storage)
+    def collect(self, request=None):
+        if not self.request or not self.request is request:  # Prevent execution multiple times per request
+            self.request = request
+            found_files = OrderedDict()
+            for finder in finders.get_finders():
+                # Ignore our finder to avoid looping
+                if isinstance(finder, PipelineFinder):
+                    continue
+                for path, storage in finder.list(['CVS', '.*', '*~']):
+                    # Prefix the relative path if the source storage contains it
+                    if getattr(storage, 'prefix', None):
+                        prefixed_path = os.path.join(storage.prefix, path)
+                    else:
+                        prefixed_path = path
+                    if prefixed_path not in found_files:
+                        found_files[prefixed_path] = (storage, path)
+                        self.copy_file(path, prefixed_path, storage)
 
     def copy_file(self, path, prefixed_path, source_storage):
         # Delete the target file if needed or break
