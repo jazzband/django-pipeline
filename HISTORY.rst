@@ -3,6 +3,13 @@
 History
 =======
 
+1.5.1
+=====
+
+* Prevent collecting all static multiple times per request. Thanks to Allard Stijnman.
+* Fix encoding issues. Thanks to Leonardo Orozco.
+* Improve Django 1.8. Thanks to Carl Meyer.
+
 1.5.0
 =====
 
