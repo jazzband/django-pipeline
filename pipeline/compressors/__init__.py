@@ -142,7 +142,13 @@ class Compressor(object):
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
-        return "\n".join([self.read_text(path) for path in paths])
+        content = []
+        for path in paths:
+            text = self.read_text(path)
+            if path.endswith('.js') and not text.rstrip().endswith(';'):
+                text += ';'
+            content.append(text)
+        return "\n".join(content)
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
