@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.finders import find
 from django.core.files.base import ContentFile
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_bytes
 
 from pipeline.compilers import Compiler
 from pipeline.compressors import Compressor
@@ -115,7 +115,7 @@ class Packager(object):
         return self.compressor.compile_templates(package.templates)
 
     def save_file(self, path, content):
-        return self.storage.save(path, ContentFile(smart_str(content)))
+        return self.storage.save(path, ContentFile(smart_bytes(content)))
 
     def create_packages(self, config):
         packages = {}

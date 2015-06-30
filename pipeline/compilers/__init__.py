@@ -10,7 +10,7 @@ except ImportError:
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
-from django.utils.encoding import smart_str, smart_bytes
+from django.utils.encoding import smart_bytes
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
@@ -72,7 +72,7 @@ class CompilerBase(object):
         raise NotImplementedError
 
     def save_file(self, path, content):
-        return self.storage.save(path, ContentFile(smart_str(content)))
+        return self.storage.save(path, ContentFile(smart_bytes(content)))
 
     def read_file(self, path):
         file = self.storage.open(path, 'rb')
