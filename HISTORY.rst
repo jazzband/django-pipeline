@@ -3,6 +3,12 @@
 History
 =======
 
+1.5.2
+=====
+
+* Use smart_bytes and smart_text appropriately. Thanks to Tadas Dailyda.
+* Fix outdated logic. Thanks to Tadas Dailyda.
+
 1.5.1
 =====
 
