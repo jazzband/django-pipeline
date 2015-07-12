@@ -55,7 +55,9 @@ class Compressor(object):
 
     def compress_js(self, paths, templates=None, **kwargs):
         """Concatenate and compress JS files"""
-        js = self.concatenate(paths)
+        sep = settings.PIPELINE_JS_CONCAT_SEPARATOR
+
+        js = self.concatenate(paths, sep=sep)
         if templates:
             js = js + self.compile_templates(templates)
 
@@ -140,9 +142,9 @@ class Compressor(object):
             stylesheets.append(content)
         return '\n'.join(stylesheets)
 
-    def concatenate(self, paths):
+    def concatenate(self, paths, sep='\n'):
         """Concatenate together a list of files"""
-        return "\n".join([self.read_text(path) for path in paths])
+        return sep.join([self.read_text(path) for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
