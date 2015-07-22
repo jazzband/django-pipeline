@@ -118,3 +118,17 @@ PIPELINE_JS = {
         }
     }
 }
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': TEMPLATE_DIRS,
+    },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'APP_DIRS': True,
+        'DIRS': TEMPLATE_DIRS,
+    }
+]
