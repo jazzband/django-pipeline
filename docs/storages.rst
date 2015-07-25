@@ -111,7 +111,7 @@ Add your Bower directory to your ``STATICFILES_DIRS`` : ::
 
 Then process the relevant content through Pipeline : ::
 
-  PIPELINE_JS = {
+  PIPELINE['JAVASCRIPT'] = {
     'components': {
       'source_filenames': (
         'jquery/jquery.js',

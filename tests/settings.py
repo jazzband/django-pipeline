@@ -60,61 +60,63 @@ TEMPLATE_DIRS = (
     local_path('templates'),
 )
 
-PIPELINE_CSS = {
-    'screen': {
-        'source_filenames': (
-            'pipeline/css/first.css',
-            'pipeline/css/second.css',
-            'pipeline/css/urls.css'
-        ),
-        'output_filename': 'screen.css'
-    }
-}
-PIPELINE_JS = {
-    'scripts': {
-        'source_filenames': (
-            'pipeline/js/first.js',
-            'pipeline/js/second.js',
-            'pipeline/js/application.js',
-            'pipeline/templates/**/*.jst'
-        ),
-        'output_filename': 'scripts.js'
-    },
-    'scripts_async': {
-        'source_filenames': (
-            'pipeline/js/first.js',
-            'pipeline/js/second.js',
-            'pipeline/js/application.js',
-            'pipeline/templates/**/*.jst'
-        ),
-        'output_filename': 'scripts_async.js',
-        'extra_context': {
-            'async': True,
+PIPELINE = {
+    'STYLESHEETS': {
+        'screen': {
+            'source_filenames': (
+                'pipeline/css/first.css',
+                'pipeline/css/second.css',
+                'pipeline/css/urls.css'
+            ),
+            'output_filename': 'screen.css'
         }
     },
-    'scripts_defer': {
-        'source_filenames': (
-            'pipeline/js/first.js',
-            'pipeline/js/second.js',
-            'pipeline/js/application.js',
-            'pipeline/templates/**/*.jst'
-        ),
-        'output_filename': 'scripts_defer.js',
-        'extra_context': {
-            'defer': True,
-        }
-    },
-    'scripts_async_defer': {
-        'source_filenames': (
-            'pipeline/js/first.js',
-            'pipeline/js/second.js',
-            'pipeline/js/application.js',
-            'pipeline/templates/**/*.jst'
-        ),
-        'output_filename': 'scripts_async_defer.js',
-        'extra_context': {
-            'async': True,
-            'defer': True,
+    'JAVASCRIPT': {
+        'scripts': {
+            'source_filenames': (
+                'pipeline/js/first.js',
+                'pipeline/js/second.js',
+                'pipeline/js/application.js',
+                'pipeline/templates/**/*.jst'
+            ),
+            'output_filename': 'scripts.js'
+        },
+        'scripts_async': {
+            'source_filenames': (
+                'pipeline/js/first.js',
+                'pipeline/js/second.js',
+                'pipeline/js/application.js',
+                'pipeline/templates/**/*.jst'
+            ),
+            'output_filename': 'scripts_async.js',
+            'extra_context': {
+                'async': True,
+            }
+        },
+        'scripts_defer': {
+            'source_filenames': (
+                'pipeline/js/first.js',
+                'pipeline/js/second.js',
+                'pipeline/js/application.js',
+                'pipeline/templates/**/*.jst'
+            ),
+            'output_filename': 'scripts_defer.js',
+            'extra_context': {
+                'defer': True,
+            }
+        },
+        'scripts_async_defer': {
+            'source_filenames': (
+                'pipeline/js/first.js',
+                'pipeline/js/second.js',
+                'pipeline/js/application.js',
+                'pipeline/templates/**/*.jst'
+            ),
+            'output_filename': 'scripts_async_defer.js',
+            'extra_context': {
+                'async': True,
+                'defer': True,
+            }
         }
     }
 }

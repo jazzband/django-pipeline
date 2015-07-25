@@ -20,7 +20,7 @@ When ``settings.DEBUG`` is set to ``True`` the use of these template tags will
 result in a separate tag for each resource in a given group (i.e., the
 combined, compressed files will not be used), in order to make local debugging
 easy. When ``settings.DEBUG`` is set to ``False`` the opposite is true. You can
-override the default behavior by setting ``settings.PIPELINE_ENABLED``
+override the default behavior by setting ``settings.PIPELINE['PIPELINE_ENABLED']``
 manually. When set to ``True`` or ``False`` this enables or disables,
 respectively, the usage of the combined, compressed file for each resource
 group. This can be useful, if you encounter errors in your compressed code that

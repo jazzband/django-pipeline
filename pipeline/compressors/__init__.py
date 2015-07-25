@@ -47,11 +47,11 @@ class Compressor(object):
 
     @property
     def js_compressor(self):
-        return to_class(settings.PIPELINE_JS_COMPRESSOR)
+        return to_class(settings.JS_COMPRESSOR)
 
     @property
     def css_compressor(self):
-        return to_class(settings.PIPELINE_CSS_COMPRESSOR)
+        return to_class(settings.CSS_COMPRESSOR)
 
     def compress_js(self, paths, templates=None, **kwargs):
         """Concatenate and compress JS files"""
@@ -85,7 +85,7 @@ class Compressor(object):
         compiled = []
         if not paths:
             return ''
-        namespace = settings.PIPELINE_TEMPLATE_NAMESPACE
+        namespace = settings.TEMPLATE_NAMESPACE
         base_path = self.base_path(paths)
         for path in paths:
             contents = self.read_text(path)
@@ -95,10 +95,10 @@ class Compressor(object):
             compiled.append("%s['%s'] = %s('%s');\n" % (
                 namespace,
                 name,
-                settings.PIPELINE_TEMPLATE_FUNC,
+                settings.TEMPLATE_FUNC,
                 contents
             ))
-        compiler = TEMPLATE_FUNC if settings.PIPELINE_TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC else ""
+        compiler = TEMPLATE_FUNC if settings.TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC else ""
         return "\n".join([
             "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
             compiler,
@@ -118,9 +118,9 @@ class Compressor(object):
         if path == base:
             base = os.path.dirname(path)
         name = re.sub(r"^%s[\/\\]?(.*)%s$" % (
-            re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
+            re.escape(base), re.escape(settings.TEMPLATE_EXT)
         ), r"\1", path)
-        return re.sub(r"[\/\\]", settings.PIPELINE_TEMPLATE_SEPARATOR, name)
+        return re.sub(r"[\/\\]", settings.TEMPLATE_SEPARATOR, name)
 
     def concatenate_and_rewrite(self, paths, output_filename, variant=None):
         """Concatenate together files and rewrite urls"""
@@ -163,11 +163,11 @@ class Compressor(object):
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not (re.search(settings.PIPELINE_EMBED_PATH, path.replace('\\', '/')) and self.storage.exists(path)):
+        if not (re.search(settings.EMBED_PATH, path.replace('\\', '/')) and self.storage.exists(path)):
             return False
         if ext not in EMBED_EXTS:
             return False
-        if not (font or len(self.encoded_content(path)) < settings.PIPELINE_EMBED_MAX_IMAGE_SIZE):
+        if not (font or len(self.encoded_content(path)) < settings.EMBED_MAX_IMAGE_SIZE):
             return False
         return True
 
