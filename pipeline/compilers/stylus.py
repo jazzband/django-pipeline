@@ -14,8 +14,8 @@ class StylusCompiler(SubProcessCompiler):
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         command = "%s %s %s" % (
-            settings.PIPELINE_STYLUS_BINARY,
-            settings.PIPELINE_STYLUS_ARGUMENTS,
+            settings.STYLUS_BINARY,
+            settings.STYLUS_ARGUMENTS,
             infile
         )
         return self.execute_command(command, cwd=dirname(infile))

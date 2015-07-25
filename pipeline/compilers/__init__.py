@@ -26,7 +26,7 @@ class Compiler(object):
 
     @property
     def compilers(self):
-        return [to_class(compiler) for compiler in settings.PIPELINE_COMPILERS]
+        return [to_class(compiler) for compiler in settings.COMPILERS]
 
     def compile(self, paths, force=False):
         def _compile(input_path):
