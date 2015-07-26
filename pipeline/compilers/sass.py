@@ -14,8 +14,8 @@ class SASSCompiler(SubProcessCompiler):
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         command = "%s %s %s %s" % (
-            settings.PIPELINE_SASS_BINARY,
-            settings.PIPELINE_SASS_ARGUMENTS,
+            settings.SASS_BINARY,
+            settings.SASS_ARGUMENTS,
             infile,
             outfile
         )

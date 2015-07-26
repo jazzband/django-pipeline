@@ -14,8 +14,8 @@ class ES6Compiler(SubProcessCompiler):
         if not outdated and not force:
             return  # File doesn't need to be recompiled
         command = "%s %s %s -o %s" % (
-            settings.PIPELINE_BABEL_BINARY,
-            settings.PIPELINE_BABEL_ARGUMENTS,
+            settings.BABEL_BINARY,
+            settings.BABEL_ARGUMENTS,
             infile,
             outfile
         )

@@ -14,8 +14,8 @@ class LiveScriptCompiler(SubProcessCompiler):
         if not outdated and not force:
             return  # File doesn't need to be recompiled
         command = "%s -cp %s %s > %s" % (
-            settings.PIPELINE_LIVE_SCRIPT_BINARY,
-            settings.PIPELINE_LIVE_SCRIPT_ARGUMENTS,
+            settings.LIVE_SCRIPT_BINARY,
+            settings.LIVE_SCRIPT_ARGUMENTS,
             infile,
             outfile
         )

@@ -32,12 +32,12 @@ class Package(object):
     @property
     def paths(self):
         return [path for path in self.sources
-                if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+                if not path.endswith(settings.TEMPLATE_EXT)]
 
     @property
     def templates(self):
         return [path for path in self.sources
-                if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+                if path.endswith(settings.TEMPLATE_EXT)]
 
     @property
     def output_filename(self):
