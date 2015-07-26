@@ -45,10 +45,10 @@ class CachedFileFinder(BaseFinder):
         """
         try:
             start, _, extn = path.rsplit('.', 2)
-            path = '.'.join((start, extn))
-            return find(path, all=all)
         except ValueError:
             return []
+        path = '.'.join((start, extn))
+        return find(path, all=all) or []
 
     def list(self, *args):
         return []
