@@ -2,7 +2,11 @@
 import io
 
 from setuptools import setup, find_packages
+import sys
 
+install_requires = []
+if (sys.version_info[0], sys.version_info[1]) < (3, 2):
+    install_requires.append('futures>=2.1.3')
 
 setup(
     name='django-pipeline',
@@ -16,9 +20,7 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['tests', 'tests.tests']),
     zip_safe=False,
-    install_requires=[
-        'futures>=2.1.3',
-    ],
+    install_requires=install_requires,
     include_package_data=True,
     classifiers=[
         'Environment :: Web Environment',
