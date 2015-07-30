@@ -3,7 +3,12 @@ import io
 
 from setuptools import setup, find_packages
 
-
+install_requires = []
+try:
+    from concurrent import futures
+except ImportError:
+    futures = None
+    install_requires.append('futures>=2.1.3')
 setup(
     name='django-pipeline',
     version='1.5.2',
@@ -16,9 +21,7 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['tests', 'tests.tests']),
     zip_safe=False,
-    install_requires=[
-        'futures>=2.1.3',
-    ],
+    install_requires=install_requires,
     include_package_data=True,
     classifiers=[
         'Environment :: Web Environment',
