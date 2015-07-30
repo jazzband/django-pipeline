@@ -2,13 +2,12 @@
 import io
 
 from setuptools import setup, find_packages
+import sys
 
 install_requires = []
-try:
-    from concurrent import futures
-except ImportError:
-    futures = None
+if (sys.version_info[0], sys.version_info[1]) < (3, 2):
     install_requires.append('futures>=2.1.3')
+
 setup(
     name='django-pipeline',
     version='1.5.2',
