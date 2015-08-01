@@ -3,6 +3,17 @@
 History
 =======
 
+1.5.3
+=====
+
+* Fix futures import. Thanks to Mathieu Gallet.
+* Make GZIPMixin returns the gziped file.
+* Fix import shadowing. Thanks to Christofer Bertonha.
+* Fix tests settings for Django 1.9. Thanks to Leonardo Orozco.
+* Improve javascript concatenation. Thanks to Simon Lydell and Alex Gavrișco.
+* Improve finder logic. Thanks to Nathan Shafer and James Keys.
+* Documentation fix. Thanks to Stefano Brentegani.
+
 1.5.2
 =====
 
