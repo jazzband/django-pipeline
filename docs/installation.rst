@@ -37,7 +37,7 @@ Installation
 Upgrading from 1.3
 ================
 
-To upgrade from pipeline 1.3, you will need to follow theses steps:
+To upgrade from pipeline 1.3, you will need to follow these steps:
 
 1. Update templates to use the new syntax
 
