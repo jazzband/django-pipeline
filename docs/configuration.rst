@@ -253,7 +253,9 @@ Wrapped javascript output
 
 All javascript output is wrapped in an anonymous function : ::
 
-  (function(){ ... })();
+  (function(){ 
+    //JS output...
+  })();
 
 This safety wrapper, make it difficult to pollute the global namespace by accident and improve performance.
 
