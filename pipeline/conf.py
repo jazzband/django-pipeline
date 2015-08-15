@@ -13,8 +13,8 @@ DEFAULTS = {
     'JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
     'COMPILERS': [],
 
-    'PIPELINE_CSS': {},
-    'PIPELINE_JS': {},
+    'STYLESHEETS': {},
+    'JAVASCRIPT': {},
 
     'TEMPLATE_NAMESPACE': "window.JST",
     'TEMPLATE_EXT': ".jst",

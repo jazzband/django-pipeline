@@ -9,7 +9,7 @@ Configuration and list of available settings for Pipeline. Pipeline settings are
 
   PIPELINE = {
       'PIPELINE_ENABLED': True,
-      'PIPELINE_JS': {
+      'JAVASCRIPT': {
           'stats': {
               'source_filenames': (
                 'js/jquery.js',
@@ -33,7 +33,7 @@ The basic syntax for specifying CSS/JavaScript groups files is ::
 
   PIPELINE = {
 
-      'PIPELINE_CSS': {
+      'STYLESHEETS': {
           'colors': {
               'source_filenames': (
                 'css/core.css',
@@ -47,7 +47,7 @@ The basic syntax for specifying CSS/JavaScript groups files is ::
           },
       },
 
-      'PIPELINE_JS': {
+      'JAVASCRIPT': {
           'stats': {
               'source_filenames': (
                 'js/jquery.js',
@@ -221,7 +221,7 @@ modern browsers.
 
 To do so, setup variant group options to the method you wish to use : ::
 
-  PIPELINE_CSS = {
+  'STYLESHEETS' = {
       'master': {
           'source_filenames': (
             'css/core.css',
