@@ -61,7 +61,7 @@ TEMPLATE_DIRS = (
 )
 
 PIPELINE = {
-    'PIPELINE_CSS': {
+    'STYLESHEETS': {
         'screen': {
             'source_filenames': (
                 'pipeline/css/first.css',
@@ -71,7 +71,7 @@ PIPELINE = {
             'output_filename': 'screen.css'
         }
     },
-    'PIPELINE_JS': {
+    'JAVASCRIPT': {
         'scripts': {
             'source_filenames': (
                 'pipeline/js/first.js',
