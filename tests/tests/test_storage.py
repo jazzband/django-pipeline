@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
+from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.management import call_command
 from django.test import TestCase
@@ -71,13 +73,6 @@ class StorageTest(TestCase):
                     call_command('collectstatic', verbosity=0, interactive=False)
                 except NotImplementedError:
                     self.fail('Received an error running collectstatic')
-
-    # def test_find_storage(self):
-    #     try:
-    #         storage = PipelineFinderStorage()
-    #         storage.find_storage('app.css')
-    #     except ValueError:
-    #         self.fail()
 
     def test_nonexistent_file_pipeline_finder(self):
         CUSTOM_FINDERS = settings.STATICFILES_FINDERS + ('pipeline.finders.PipelineFinder',)

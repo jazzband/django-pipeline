@@ -20,3 +20,4 @@ tests/assets/js/dummy.js
 .project
 .pydevproject
 .ropeproject
+__pycache__

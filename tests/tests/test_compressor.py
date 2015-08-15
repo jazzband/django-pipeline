@@ -44,7 +44,7 @@ class CompressorTest(TestCase):
             _('pipeline/js/first.js'),
             _('pipeline/js/second.js')
         ])
-        self.assertEqual("""function concat() {\n  console.log(arguments);\n}\n\nfunction cat() {\n  console.log("hello world");\n}\n""", js)
+        self.assertEqual("""(function() {\n  window.concat = function() {\n    console.log(arguments);\n  }\n}()) // No semicolon\n\n;(function() {\n  window.cat = function() {\n    console.log("hello world");\n  }\n}());\n""", js)
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):

@@ -60,7 +60,7 @@ class Compressor(object):
             js = js + self.compile_templates(templates)
 
         if not settings.DISABLE_WRAPPER:
-            js = "(function() { %s }).call(this);" % js
+            js = "(function() {\n%s\n}).call(this);" % js
 
         compressor = self.js_compressor
         if compressor:
@@ -142,7 +142,11 @@ class Compressor(object):
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
-        return "\n".join([self.read_text(path) for path in paths])
+        # Note how a semicolon is added between the two files to make sure that
+        # their behavior is not changed. '(expression1)\n(expression2)' calls
+        # `expression1` with `expression2` as an argument! Superfluos semicolons
+        # are valid in JavaScript and will be removed by the minifier.
+        return "\n;".join([self.read_text(path) for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
