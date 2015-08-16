@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import os
 
+from django.conf.settings import settings as django_settings
 from django.contrib.staticfiles.finders import get_finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 
@@ -32,7 +33,6 @@ class PipelineManifest(Manifest):
         return packages
 
     def cache(self):
-        ignore_patterns = getattr(settings, "STATICFILES_IGNORE_PATTERNS", None)
 
         if settings.PIPELINE_ENABLED:
             for package in self.packages:
@@ -45,6 +45,7 @@ class PipelineManifest(Manifest):
                     self.package_files.append(path)
                     yield staticfiles_storage.url(path)
 
+        ignore_patterns = getattr(django_settings, "STATICFILES_IGNORE_PATTERNS", None)
         for finder in self.finders:
             for path, storage in finder.list(ignore_patterns):
                 # Prefix the relative path if the source storage contains it
@@ -55,5 +56,6 @@ class PipelineManifest(Manifest):
 
                 # Dont add any doubles
                 if prefixed_path not in self.package_files:
+
                     self.package_files.append(prefixed_path)
                     yield staticfiles_storage.url(prefixed_path)

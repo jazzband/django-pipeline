@@ -24,8 +24,8 @@ class CompilerTest(TestCase):
     def setUp(self):
         default_collector.collect()
         self.compiler = Compiler()
-        self.old_compilers = settings.PIPELINE_COMPILERS
-        settings.PIPELINE_COMPILERS = ['tests.tests.test_compiler.DummyCompiler']
+        self.old_compilers = settings.COMPILERS
+        settings.COMPILERS = ['tests.tests.test_compiler.DummyCompiler']
 
     def test_output_path(self):
         output_path = self.compiler.output_path("js/helpers.coffee", "js")
@@ -44,4 +44,4 @@ class CompilerTest(TestCase):
 
     def tearDown(self):
         default_collector.clear()
-        settings.PIPELINE_COMPILERS = self.old_compilers
+        settings.COMPILERS = self.old_compilers

@@ -28,8 +28,8 @@ class PipelineMixin(object):
 
     def package_for(self, package_name, package_type):
         package = {
-            'js': getattr(settings, 'PIPELINE_JS', {}).get(package_name, {}),
-            'css': getattr(settings, 'PIPELINE_CSS', {}).get(package_name, {}),
+            'js': getattr(settings, 'JAVASCRIPT', {}).get(package_name, {}),
+            'css': getattr(settings, 'STYLESHEETS', {}).get(package_name, {}),
         }[package_type]
 
         if package:
@@ -132,7 +132,7 @@ def stylesheet(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE_CSS setting' % token.split_contents()[0])
+        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.STYLESHEETS setting' % token.split_contents()[0])
     return StylesheetNode(name)
 
 
@@ -141,5 +141,5 @@ def javascript(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE_JS setting' % token.split_contents()[0])
+        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.JAVASVRIPT setting' % token.split_contents()[0])
     return JavascriptNode(name)

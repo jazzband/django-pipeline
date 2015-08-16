@@ -14,8 +14,8 @@ class CoffeeScriptCompiler(SubProcessCompiler):
         if not outdated and not force:
             return  # File doesn't need to be recompiled
         command = "%s -cp %s %s > %s" % (
-            settings.PIPELINE_COFFEE_SCRIPT_BINARY,
-            settings.PIPELINE_COFFEE_SCRIPT_ARGUMENTS,
+            settings.COFFEE_SCRIPT_BINARY,
+            settings.COFFEE_SCRIPT_ARGUMENTS,
             infile,
             outfile
         )
