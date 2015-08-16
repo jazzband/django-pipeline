@@ -13,9 +13,16 @@ class ES6Compiler(SubProcessCompiler):
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:
             return  # File doesn't need to be recompiled
+
+        args = list(settings.BABEL_ARGUMENTS)
+
+        sourcemap_flags = set(['-s', '--source-maps'])
+        if settings.OUTPUT_SOURCEMAPS and not(set(args) & sourcemap_flags):
+            args += ['--source-maps', 'true']
+
         command = (
             settings.BABEL_BINARY,
-            settings.BABEL_ARGUMENTS,
+            args,
             infile,
             "-o",
             outfile

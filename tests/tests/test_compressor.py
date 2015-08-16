@@ -212,10 +212,10 @@ class CompressorImplementationTest(TestCase):
         }
         with pipeline_settings(**override_settings):
             if compress_type == 'js':
-                result = self.compressor.compress_js(
+                result, source_map = self.compressor.compress_js(
                     [_('pipeline/js/first.js'), _('pipeline/js/second.js')])
             else:
-                result = self.compressor.compress_css(
+                result, source_map = self.compressor.compress_css(
                     [_('pipeline/css/first.css'), _('pipeline/css/second.css')],
                     os.path.join('pipeline', 'css', os.path.basename(expected_file)))
         with self.compressor.storage.open(expected_file) as f:

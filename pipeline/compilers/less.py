@@ -14,9 +14,15 @@ class LessCompiler(SubProcessCompiler):
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         # Pipe to file rather than provide outfile arg due to a bug in lessc
+        args = list(settings.LESS_ARGUMENTS)
+
+        if settings.OUTPUT_SOURCEMAPS and '--source-map' not in args:
+            args += ['--source-map']
+
         command = (
             settings.LESS_BINARY,
-            settings.LESS_ARGUMENTS,
+            args,
             infile,
+            outfile,
         )
-        return self.execute_command(command, cwd=dirname(infile), stdout_captured=outfile)
+        return self.execute_command(command, cwd=dirname(infile))

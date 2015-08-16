@@ -37,6 +37,8 @@ DEFAULTS = {
 
     'DISABLE_WRAPPER': False,
 
+    'OUTPUT_SOURCEMAPS': False,
+
     'CSSTIDY_BINARY': '/usr/bin/env csstidy',
     'CSSTIDY_ARGUMENTS': '--template=highest',
 
