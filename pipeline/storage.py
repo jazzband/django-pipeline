@@ -79,12 +79,6 @@ class GZIPMixin(object):
                 gzipped_path = self.save(gzipped_path, gzipped_file)
                 yield gzipped_path, gzipped_path, True
 
-    def url(self, name, force=False):
-        url = super(GZIPMixin, self).url(name, force)
-        if matches_patterns(name, self.gzip_patterns):
-            return "{0}.gz".format(url)
-        return url
-
 
 class NonPackagingMixin(object):
     packing = False
