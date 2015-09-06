@@ -1,4 +1,5 @@
 recursive-include pipeline/templates *.html *.jinja
+recursive-include pipeline/jinja2 *.html *.jinja
 include AUTHORS LICENSE README.rst HISTORY.rst
 recursive-include tests *
 recursive-exclude tests *.pyc *.pyo
