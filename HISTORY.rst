@@ -3,6 +3,12 @@
 History
 =======
 
+1.5.4
+=====
+
+* Stop returning gzipped file when using GZIPMixin.
+* Fix jinja templates packaging.
+
 1.5.3
 =====
 
