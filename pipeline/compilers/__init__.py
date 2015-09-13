@@ -87,13 +87,22 @@ class CompilerBase(object):
 
 class SubProcessCompiler(CompilerBase):
     def execute_command(self, command, content=None, cwd=None, stdout_as_result=None):
+        argument_list = []
+        for arg in command:
+            if isinstance(arg, str):
+                argument_list.append(arg)
+            else:
+                argument_list.extend(arg)
+                # Flatten one layer of command lists here to make compiler
+                # modules simple.
+
         import subprocess
         output_file = subprocess.PIPE
         if stdout_as_result:
             output_file = tempfile.NamedTemporaryFile(delete=False, 
                     dir=cwd or os.path.dirname(stdout_as_result) or os.cwd)
         try:
-            pipe = subprocess.Popen(command, cwd=cwd,
+            pipe = subprocess.Popen(argument_list, cwd=cwd,
                                     stdout=output_file, stdin=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
             if content:
