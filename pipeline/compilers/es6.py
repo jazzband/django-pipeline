@@ -13,10 +13,11 @@ class ES6Compiler(SubProcessCompiler):
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:
             return  # File doesn't need to be recompiled
-        command = "%s %s %s -o %s" % (
+        command = (
             settings.BABEL_BINARY,
             settings.BABEL_ARGUMENTS,
             infile,
+            "-o",
             outfile
         )
         return self.execute_command(command)

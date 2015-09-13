@@ -1,16 +1,14 @@
 from __future__ import unicode_literals
 
 import os
-
-try:
-    from shlex import quote
-except ImportError:
-    from pipes import quote
+import subprocess
+from tempfile import NamedTemporaryFile
 
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_bytes
+from django.utils.six import string_types
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
@@ -40,8 +38,8 @@ class Compiler(object):
                         infile = finders.find(input_path)
                     outfile = self.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(input_path, output_path)
-                    compiler.compile_file(quote(infile), quote(outfile),
-                        outdated=outdated, force=force)
+                    compiler.compile_file(infile, outfile,
+                                          outdated=outdated, force=force)
                     return output_path
             else:
                 return input_path
@@ -90,18 +88,55 @@ class CompilerBase(object):
 
 
 class SubProcessCompiler(CompilerBase):
-    def execute_command(self, command, content=None, cwd=None):
-        import subprocess
-        pipe = subprocess.Popen(command, shell=True, cwd=cwd,
-                                stdout=subprocess.PIPE, stdin=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        if content:
-            content = smart_bytes(content)
-        stdout, stderr = pipe.communicate(content)
-        if stderr.strip():
-            raise CompilerError(stderr)
-        if self.verbose:
-            print(stderr)
-        if pipe.returncode != 0:
-            raise CompilerError("Command '{0}' returned non-zero exit status {1}".format(command, pipe.returncode))
-        return stdout
+    def execute_command(self, command, cwd=None, stdout_captured=None):
+        """Execute a command at cwd, saving its normal output at
+        stdout_captured. Errors, defined as nonzero return code or a failure
+        to start execution, will raise a CompilerError exception with a
+        description of the cause. They do not write output.
+
+        This is file-system safe (any valid file names are allowed, even with
+        spaces or crazy characters) and OS agnostic (existing and future OSes
+        that Python supports should already work).
+
+        The only thing weird here is that any incoming command arg item may
+        itself be a tuple. This allows compiler implementations to look clean
+        while supporting historical string config settings and maintaining
+        backwards compatibility. Thus, we flatten one layer deep.
+         ((env, foocomp), infile, (-arg,)) -> (env, foocomp, infile, -arg)
+        """
+        argument_list = []
+        for flattening_arg in command:
+            if isinstance(flattening_arg, string_types):
+                argument_list.append(flattening_arg)
+            else:
+                argument_list.extend(flattening_arg)
+
+        try:
+            # We always catch stdout in a file, but we may not have a use for it.
+            temp_file_container = cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
+            with NamedTemporaryFile(delete=False, dir=temp_file_container) as stdout:
+                compiling = subprocess.Popen(argument_list, cwd=cwd,
+                                             stdout=stdout,
+                                             stderr=subprocess.PIPE)
+                _, stderr = compiling.communicate()
+
+            if compiling.returncode != 0:
+                stdout_captured = None  # Don't save erroneous result.
+                raise CompilerError(
+                    "{0!r} exit code {1}\n{2}".format(argument_list, compiling.returncode, stderr))
+
+            # User wants to see everything that happened.
+            if self.verbose:
+                with open(stdout.name) as out:
+                    print(out.read())
+                print(stderr)
+        except OSError as e:
+            stdout_captured = None  # Don't save erroneous result.
+            raise CompilerError(e)
+        finally:
+            # Decide what to do with captured stdout.
+            if stdout_captured:
+                os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
+            else:
+                os.remove(stdout.name)
+

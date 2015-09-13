@@ -13,7 +13,7 @@ class StylusCompiler(SubProcessCompiler):
         return filename.endswith('.styl')
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = "%s %s %s" % (
+        command = (
             settings.STYLUS_BINARY,
             settings.STYLUS_ARGUMENTS,
             infile

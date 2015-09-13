@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import shlex
+
 from django.conf import settings as _settings
 
 DEFAULTS = {
@@ -77,12 +79,26 @@ DEFAULTS = {
 
 
 class PipelineSettings(object):
-    '''
+    """
     Container object for pipeline settings
-    '''
+    """
     def __init__(self, wrapped_settings):
         DEFAULTS.update(wrapped_settings)
         self.__dict__ = DEFAULTS
 
+    def __getattr__(self, name):
+        if hasattr(self, name):
+            value = getattr(self, name)
+        elif name in self:
+            value = DEFAULTS[name]
+        else:
+            raise AttributeError("'%s' setting not found" % name)
+
+        if name.endswith(("_BINARY", "_ARGUMENTS")):
+            if isinstance(value, (type(u""), type(b""))):
+                return tuple(shlex.split(value))
+            return tuple(value)
+
+        return value
 
 settings = PipelineSettings(_settings.PIPELINE)

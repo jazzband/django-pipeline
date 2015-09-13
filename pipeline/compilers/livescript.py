@@ -13,10 +13,10 @@ class LiveScriptCompiler(SubProcessCompiler):
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:
             return  # File doesn't need to be recompiled
-        command = "%s -cp %s %s > %s" % (
+        command = (
             settings.LIVE_SCRIPT_BINARY,
+            "-cp",
             settings.LIVE_SCRIPT_ARGUMENTS,
             infile,
-            outfile
         )
-        return self.execute_command(command)
+        return self.execute_command(command, stdout_captured=outfile)
