@@ -14,9 +14,9 @@ from ..conf import settings
 from ..packager import Packager, PackageNotFound
 from ..utils import guess_type
 
+logger = logging.getLogger(__name__)
 
 register = template.Library()
-
 
 class PipelineMixin(object):
     request = None
@@ -75,7 +75,7 @@ class StylesheetNode(PipelineMixin, template.Node):
         try:
             package = self.package_for(package_name, 'css')
         except PackageNotFound:
-            logging.warn("Package %r is unknown. Check PIPELINE_CSS in your settings.", package_name)
+            logger.warn("Package %r is unknown. Check PIPELINE_CSS in your settings.", package_name)
             return ''  # fail silently, do not return anything if an invalid group is specified
         return self.render_compressed(package, 'css')
 
@@ -104,7 +104,7 @@ class JavascriptNode(PipelineMixin, template.Node):
         try:
             package = self.package_for(package_name, 'js')
         except PackageNotFound:
-            logging.warn("Package %r is unknown. Check PIPELINE_JS in your settings.", package_name)
+            logger.warn("Package %r is unknown. Check PIPELINE_JS in your settings.", package_name)
             return ''  # fail silently, do not return anything if an invalid group is specified
         return self.render_compressed(package, 'js')
 
