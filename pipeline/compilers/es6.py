@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import shlex
-
 from pipeline.conf import settings
 from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
@@ -18,7 +16,7 @@ class ES6Compiler(SubProcessCompiler):
             return  # File doesn't need to be recompiled
         command = (
             settings.PIPELINE_BABEL_BINARY,
-        ) + tuple(shlex.split(settings.PIPELINE_BABEL_SCRIPT_ARGUMENTS)) + (
+            settings.PIPELINE_BABEL_SCRIPT_ARGUMENTS,
             infile,
             "-o",
             outfile

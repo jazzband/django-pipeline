@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import shlex
-
 from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
 
@@ -18,7 +16,7 @@ class CoffeeScriptCompiler(SubProcessCompiler):
         command = (
             settings.PIPELINE_COFFEE_SCRIPT_BINARY,
             "-cp",
-        ) + tuple(shlex.split(settings.PIPELINE_COFFEE_SCRIPT_ARGUMENTS)) + (
+            settings.PIPELINE_COFFEE_SCRIPT_ARGUMENTS,
             infile,
         )
         return self.execute_command(command, stdout_as_result=outfile)

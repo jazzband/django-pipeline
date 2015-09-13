@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import shlex
-
 from pipeline.conf import settings
 from os.path import dirname
 
@@ -19,7 +17,7 @@ class LessCompiler(SubProcessCompiler):
         # Pipe to file rather than provide outfile arg due to a bug in lessc
         command = (
             settings.PIPELINE_LESS_BINARY,
-        ) + tuple(shlex.split(settings.PIPELINE_LESS_SCRIPT_ARGUMENTS)) + (
+            settings.PIPELINE_LESS_SCRIPT_ARGUMENTS,
             infile,
         )
         return self.execute_command(command, cwd=dirname(infile), stdout_as_result=outfile)

@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import shlex
-
 from pipeline.conf import settings
 from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
@@ -19,7 +17,7 @@ class LiveScriptCompiler(SubProcessCompiler):
         command = (
             settings.PIPELINE_LIVE_SCRIPT_BINARY,
             "-cp",
-        ) + tuple(shlex.split(settings.PIPELINE_LIVE_SCRIPT_ARGUMENTS)) + (
+            settings.PIPELINE_LIVE_SCRIPT_ARGUMENTS,
             infile,
         )
         return self.execute_command(command, stdout_as_result=outfile)
