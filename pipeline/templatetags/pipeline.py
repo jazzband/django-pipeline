@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import logging
+
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django import template
@@ -73,6 +75,7 @@ class StylesheetNode(PipelineMixin, template.Node):
         try:
             package = self.package_for(package_name, 'css')
         except PackageNotFound:
+            logging.warn("Package %r is unknown. Check PIPELINE_CSS in your settings.", package_name)
             return ''  # fail silently, do not return anything if an invalid group is specified
         return self.render_compressed(package, 'css')
 
@@ -101,6 +104,7 @@ class JavascriptNode(PipelineMixin, template.Node):
         try:
             package = self.package_for(package_name, 'js')
         except PackageNotFound:
+            logging.warn("Package %r is unknown. Check PIPELINE_JS in your settings.", package_name)
             return ''  # fail silently, do not return anything if an invalid group is specified
         return self.render_compressed(package, 'js')
 
