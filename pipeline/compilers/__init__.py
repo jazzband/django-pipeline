@@ -1,11 +1,7 @@
 from __future__ import unicode_literals
 
 import os
-
-try:
-    from shlex import quote
-except ImportError:
-    from pipes import quote
+import tempfile
 
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -40,7 +36,7 @@ class Compiler(object):
                         infile = finders.find(input_path)
                     outfile = self.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(input_path, output_path)
-                    compiler.compile_file(quote(infile), quote(outfile),
+                    compiler.compile_file(infile, outfile,
                         outdated=outdated, force=force)
                     return output_path
             else:
@@ -90,18 +86,29 @@ class CompilerBase(object):
 
 
 class SubProcessCompiler(CompilerBase):
-    def execute_command(self, command, content=None, cwd=None):
+    def execute_command(self, command, content=None, cwd=None, stdout_as_result=None):
         import subprocess
-        pipe = subprocess.Popen(command, shell=True, cwd=cwd,
-                                stdout=subprocess.PIPE, stdin=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        if content:
-            content = smart_bytes(content)
-        stdout, stderr = pipe.communicate(content)
+        output_file = subprocess.PIPE
+        if stdout_as_result:
+            output_file = tempfile.NamedTemporaryFile(delete=False)
+        try:
+            pipe = subprocess.Popen(command, cwd=cwd,
+                                    stdout=output_file, stdin=subprocess.PIPE,
+                                    stderr=subprocess.PIPE)
+            if content:
+                content = smart_bytes(content)
+            stdout, stderr = pipe.communicate(content)
+        except OSError as exc:
+            raise CompilerError(exc)
+        finally:
+            if stdout_as_result:
+                output_file.close()
         if stderr.strip():
             raise CompilerError(stderr)
         if self.verbose:
             print(stderr)
         if pipe.returncode != 0:
             raise CompilerError("Command '{0}' returned non-zero exit status {1}".format(command, pipe.returncode))
+        if stdout_as_result:
+            os.rename(output_file.name, os.path.join(cwd or os.curdir, stdout_as_result))
         return stdout
