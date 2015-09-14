@@ -17,7 +17,7 @@ class LessCompiler(SubProcessCompiler):
         # Pipe to file rather than provide outfile arg due to a bug in lessc
         command = (
             settings.PIPELINE_LESS_BINARY,
-            settings.PIPELINE_LESS_SCRIPT_ARGUMENTS,
+            settings.PIPELINE_LESS_ARGUMENTS,
             infile,
         )
         return self.execute_command(command, cwd=dirname(infile), stdout_as_result=outfile)
