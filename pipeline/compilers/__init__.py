@@ -99,8 +99,8 @@ class SubProcessCompiler(CompilerBase):
         import subprocess
         output_file = subprocess.PIPE
         if stdout_captured:
-            output_file = tempfile.NamedTemporaryFile(delete=False, 
-                    dir=cwd or os.path.dirname(stdout_captured) or os.cwd)
+            output_file = tempfile.NamedTemporaryFile(delete=False,
+                    dir=cwd or os.path.dirname(stdout_captured) or os.getcwd())
         try:
             pipe = subprocess.Popen(argument_list, cwd=cwd,
                                     stdout=output_file, stdin=subprocess.PIPE,
