@@ -16,7 +16,7 @@ class ES6Compiler(SubProcessCompiler):
             return  # File doesn't need to be recompiled
         command = (
             settings.PIPELINE_BABEL_BINARY,
-            settings.PIPELINE_BABEL_SCRIPT_ARGUMENTS,
+            settings.PIPELINE_BABEL_ARGUMENTS,
             infile,
             "-o",
             outfile
