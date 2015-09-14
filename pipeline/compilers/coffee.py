@@ -19,4 +19,4 @@ class CoffeeScriptCompiler(SubProcessCompiler):
             settings.PIPELINE_COFFEE_SCRIPT_ARGUMENTS,
             infile,
         )
-        return self.execute_command(command, stdout_as_result=outfile)
+        return self.execute_command(command, stdout_captured=outfile)

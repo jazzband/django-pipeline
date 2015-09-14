@@ -20,4 +20,4 @@ class LessCompiler(SubProcessCompiler):
             settings.PIPELINE_LESS_ARGUMENTS,
             infile,
         )
-        return self.execute_command(command, cwd=dirname(infile), stdout_as_result=outfile)
+        return self.execute_command(command, cwd=dirname(infile), stdout_captured=outfile)

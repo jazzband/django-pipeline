@@ -20,4 +20,4 @@ class LiveScriptCompiler(SubProcessCompiler):
             settings.PIPELINE_LIVE_SCRIPT_ARGUMENTS,
             infile,
         )
-        return self.execute_command(command, stdout_as_result=outfile)
+        return self.execute_command(command, stdout_captured=outfile)

@@ -86,7 +86,7 @@ class CompilerBase(object):
 
 
 class SubProcessCompiler(CompilerBase):
-    def execute_command(self, command, content=None, cwd=None, stdout_as_result=None):
+    def execute_command(self, command, content=None, cwd=None, stdout_captured=None):
         argument_list = []
         for arg in command:
             if isinstance(arg, str):
@@ -98,9 +98,9 @@ class SubProcessCompiler(CompilerBase):
 
         import subprocess
         output_file = subprocess.PIPE
-        if stdout_as_result:
+        if stdout_captured:
             output_file = tempfile.NamedTemporaryFile(delete=False, 
-                    dir=cwd or os.path.dirname(stdout_as_result) or os.cwd)
+                    dir=cwd or os.path.dirname(stdout_captured) or os.cwd)
         try:
             pipe = subprocess.Popen(argument_list, cwd=cwd,
                                     stdout=output_file, stdin=subprocess.PIPE,
@@ -120,5 +120,5 @@ class SubProcessCompiler(CompilerBase):
         if pipe.returncode != 0:
             raise CompilerError("Command '{0}' returned non-zero exit status {1}".format(command, pipe.returncode))
         if stdout_as_result:
-            os.rename(output_file.name, os.path.join(cwd or os.curdir, stdout_as_result))
+            os.rename(output_file.name, os.path.join(cwd or os.curdir, stdout_captured))
         return stdout
