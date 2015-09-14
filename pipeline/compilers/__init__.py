@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
 import os
-import tempfile
+import subprocess
+from tempfile import NamedTemporaryFile
 
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -86,39 +87,59 @@ class CompilerBase(object):
 
 
 class SubProcessCompiler(CompilerBase):
-    def execute_command(self, command, content=None, cwd=None, stdout_captured=None):
-        argument_list = []
-        for arg in command:
-            if isinstance(arg, str):
-                argument_list.append(arg)
-            else:
-                argument_list.extend(arg)
-                # Flatten one layer of command lists here to make compiler
-                # modules simple.
+    def execute_command(self, command, cwd=None, stdout_captured=None):
+        """Execute a command at cwd, saving its normal output at
+        stdout_captured. Errors, defined as nonzero return code or a failure
+        to start execution, will raise a CompilerError exception with a
+        description of the cause. They do not write output.
 
-        import subprocess
-        output_file = subprocess.PIPE
-        if stdout_captured:
-            output_file = tempfile.NamedTemporaryFile(delete=False,
-                    dir=cwd or os.path.dirname(stdout_captured) or os.getcwd())
+        This is file-system safe (any valid file names are allowed, even with
+        spaces or crazy characters) and OS agnostic (existing and future OSes
+        that Python supports should already work).
+
+        The only thing weird here is that any incoming command arg item may
+        itself be a tuple. This allows compiler implementations to look clean
+        while supporting historical string config settings and maintaining
+        backwards compatibility. Thus, we flatten one layer deep.
+         ((env, foocomp), infile, (-arg,)) -> (env, foocomp, infile, -arg)
+        """
+
+        argument_list = []
+        for flattening_arg in command:
+            if isinstance(flattening_arg, str):
+                argument_list.append(flattening_arg)
+            else:
+                argument_list.extend(flattening_arg)
+
         try:
-            pipe = subprocess.Popen(argument_list, cwd=cwd,
-                                    stdout=output_file, stdin=subprocess.PIPE,
-                                    stderr=subprocess.PIPE)
-            if content:
-                content = smart_bytes(content)
-            stdout, stderr = pipe.communicate(content)
+            # We always catch stdout in a file, but we may not have a use for it.
+            temp_file_container = cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
+            with NamedTemporaryFile(delete=False, dir=temp_file_container) as stdout:
+
+                compiling = subprocess.Popen(argument_list, cwd=cwd,
+                                             stdout=stdout,
+                                             stderr=subprocess.PIPE)
+                _, stderr = compiling.communicate()
+
+            if compiling.returncode != 0:
+                stdout_captured = None  # Don't save erroneous result.
+                raise CompilerError(
+                    "{0!r} exit code {1}\n{2}".format(argument_list, compiling.returncode, stderr))
+
+            # User wants to see everything that happened.
+            if self.verbose:
+                with open(stdout.name) as out:
+                    print(out.read())
+                print(stderr)
+
         except OSError as exc:
+            stdout_captured = None  # Don't save erroneous result.
             raise CompilerError(exc)
+
         finally:
-            if stdout_as_result:
-                output_file.close()
-        if stderr.strip():
-            raise CompilerError(stderr)
-        if self.verbose:
-            print(stderr)
-        if pipe.returncode != 0:
-            raise CompilerError("Command '{0}' returned non-zero exit status {1}".format(command, pipe.returncode))
-        if stdout_as_result:
-            os.rename(output_file.name, os.path.join(cwd or os.curdir, stdout_captured))
-        return stdout
+            # Decide what to do with captured stdout.
+            if stdout_captured:
+                os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
+            else:
+                os.remove(stdout.name)
+
