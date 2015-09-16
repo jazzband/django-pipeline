@@ -106,7 +106,7 @@ class SubProcessCompiler(CompilerBase):
 
         argument_list = []
         for flattening_arg in command:
-            if isinstance(flattening_arg, str):
+            if isinstance(flattening_arg, (type(u""), type(b""))):
                 argument_list.append(flattening_arg)
             else:
                 argument_list.extend(flattening_arg)
