@@ -82,14 +82,15 @@ class PipelineSettings(object):
     '''
     Lazy Django settings wrapper for Django Pipeline
     '''
-    def __init__(self, wrapped_settings):
+    def __init__(self, wrapped_settings, DEFAULTS=DEFAULTS):
         self.wrapped_settings = wrapped_settings
+        self.DEFAULTS = DEFAULTS
 
     def __getattr__(self, name):
         if hasattr(self.wrapped_settings, name):
             value = getattr(self.wrapped_settings, name)
-        elif name in DEFAULTS:
-            value = DEFAULTS[name]
+        elif name in self.DEFAULTS:
+            value = self.DEFAULTS[name]
         else:
             raise AttributeError("'%s' setting not found" % name)
 
