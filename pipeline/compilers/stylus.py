@@ -18,4 +18,6 @@ class StylusCompiler(SubProcessCompiler):
             settings.PIPELINE_STYLUS_ARGUMENTS,
             infile
         )
-        return self.execute_command(command, cwd=dirname(infile))
+        
+        cwd = dirname(infile).replace("'", "")
+        return self.execute_command(command, cwd=cwd)
