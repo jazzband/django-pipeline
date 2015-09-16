@@ -95,7 +95,7 @@ class PipelineSettings(object):
             raise AttributeError("'%s' setting not found" % name)
 
         if name.startswith("PIPELINE_") and name.endswith(("_BINARY", "_ARGUMENTS")):
-            if isinstance(value, str):
+            if isinstance(value, (type(u""), type(b""))):
                 return tuple(shlex.split(value))
             return tuple(value)
 
