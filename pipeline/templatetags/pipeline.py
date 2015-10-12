@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 register = template.Library()
 
-
 class PipelineMixin(object):
     request = None
     _request_var = None
