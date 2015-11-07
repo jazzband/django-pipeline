@@ -87,7 +87,7 @@ Jinja
 =====
 
 Pipeline also includes Jinja2 support and is used almost identically to the Django Template tags implementation.
-You just need to pass ``pipeline.templatetags.ext.PipelineExtension`` to your Jinja2 environment.
+You just need to pass ``pipeline.jinja2.ext.PipelineExtension`` to your Jinja2 environment.
 
 Templates
 ---------
