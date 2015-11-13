@@ -13,6 +13,9 @@ from .pipeline import PipelineMixin
 class PipelineExtension(PipelineMixin, Extension):
     tags = set(['stylesheet', 'javascript'])
 
+    def get_collector_env(self):
+        return self.environment
+
     def parse(self, parser):
         tag = next(parser.stream)
 
