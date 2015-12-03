@@ -35,7 +35,7 @@ Installation
 .. _PyPI: http://pypi.python.org/pypi/django-pipeline
 
 Upgrading from 1.3
-================
+==================
 
 To upgrade from pipeline 1.3, you will need to follow these steps:
 

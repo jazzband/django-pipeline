@@ -5,7 +5,7 @@ Configuration
 =============
 
 
-Configuration and list of available settings for Pipeline. Pipeline settings are namespaced in a PIPELINE dictionary in your project settings, e.g.:
+Configuration and list of available settings for Pipeline. Pipeline settings are namespaced in a PIPELINE dictionary in your project settings, e.g.: ::
 
   PIPELINE = {
       'PIPELINE_ENABLED': True,
@@ -32,7 +32,6 @@ syntax to select multiples files.
 The basic syntax for specifying CSS/JavaScript groups files is ::
 
   PIPELINE = {
-
       'STYLESHEETS': {
           'colors': {
               'source_filenames': (
@@ -46,7 +45,6 @@ The basic syntax for specifying CSS/JavaScript groups files is ::
               },
           },
       },
-
       'JAVASCRIPT': {
           'stats': {
               'source_filenames': (
@@ -271,7 +269,7 @@ Wrapped javascript output
 
 All javascript output is wrapped in an anonymous function : ::
 
-  (function(){ 
+  (function(){
     //JS output...
   })();
 

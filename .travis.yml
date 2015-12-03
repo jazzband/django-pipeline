@@ -1,13 +1,11 @@
 language: python
 sudo: false
 env:
-  - TOXENV=py27-1.7.X
-  - TOXENV=pypy-1.7.X
-  - TOXENV=py33-1.7.X
-  - TOXENV=py34-1.7.X
-  - TOXENV=py27
-  - TOXENV=pypy
-  - TOXENV=py33
-  - TOXENV=py34
+  - TOXENV=py27-django18
+  - TOXENV=pypy-django18
+  - TOXENV=py34-django18
+  - TOXENV=py27-django19
+  - TOXENV=pypy-django19
+  - TOXENV=py34-django19
 docsinstall: pip install -q tox
 script: tox
