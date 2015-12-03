@@ -52,7 +52,12 @@ class Compiler(object):
         except ImportError:
             return list(map(_compile, paths))
         else:
-            with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+            max_workers = (
+                settings.PIPELINE_COMPILER_CONCURRENCY or
+                multiprocessing.cpu_count())
+            with futures.ThreadPoolExecutor(
+                max_workers=max_workers
+            ) as executor:
                 return list(executor.map(_compile, paths))
 
     def output_path(self, path, extension):

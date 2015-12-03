@@ -118,6 +118,14 @@ Other settings
 
   Defaults to ``not settings.DEBUG``.
 
+``PIPELINE_COMPILER_CONCURRENCY``
+.................................
+
+  If set, overrides the number of threads used to compile assets. Otherwise the
+  compiler will attempt to use as many threads as there are available cores.
+
+  Defaults to ``None``.
+
 ``PIPELINE_CSS_COMPRESSOR``
 ............................
 
