@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from pipeline.conf import settings
+from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
 
 
@@ -13,10 +14,10 @@ class LiveScriptCompiler(SubProcessCompiler):
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:
             return  # File doesn't need to be recompiled
-        command = "%s -cp %s %s > %s" % (
+        command = (
             settings.PIPELINE_LIVE_SCRIPT_BINARY,
+            "-cp",
             settings.PIPELINE_LIVE_SCRIPT_ARGUMENTS,
             infile,
-            outfile
         )
-        return self.execute_command(command)
+        return self.execute_command(command, stdout_captured=outfile)

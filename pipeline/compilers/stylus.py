@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from pipeline.conf import settings
 from os.path import dirname
 
 from pipeline.conf import settings
@@ -13,7 +14,7 @@ class StylusCompiler(SubProcessCompiler):
         return filename.endswith('.styl')
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = "%s %s %s" % (
+        command = (
             settings.PIPELINE_STYLUS_BINARY,
             settings.PIPELINE_STYLUS_ARGUMENTS,
             infile

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import shlex
+
 from django.conf import settings as _settings
 
 DEFAULTS = {
@@ -80,15 +82,23 @@ class PipelineSettings(object):
     '''
     Lazy Django settings wrapper for Django Pipeline
     '''
-    def __init__(self, wrapped_settings):
+    def __init__(self, wrapped_settings, DEFAULTS=DEFAULTS):
         self.wrapped_settings = wrapped_settings
+        self.DEFAULTS = DEFAULTS
 
     def __getattr__(self, name):
         if hasattr(self.wrapped_settings, name):
-            return getattr(self.wrapped_settings, name)
-        elif name in DEFAULTS:
-            return DEFAULTS[name]
+            value = getattr(self.wrapped_settings, name)
+        elif name in self.DEFAULTS:
+            value = self.DEFAULTS[name]
         else:
             raise AttributeError("'%s' setting not found" % name)
+
+        if name.startswith("PIPELINE_") and name.endswith(("_BINARY", "_ARGUMENTS")):
+            if isinstance(value, (type(u""), type(b""))):
+                return tuple(shlex.split(value))
+            return tuple(value)
+
+        return value
 
 settings = PipelineSettings(_settings)

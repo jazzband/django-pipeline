@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from pipeline.conf import settings
 from os.path import dirname
 
 from pipeline.conf import settings
@@ -13,7 +14,7 @@ class SASSCompiler(SubProcessCompiler):
         return filename.endswith(('.scss', '.sass'))
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = "%s %s %s %s" % (
+        command = (
             settings.PIPELINE_SASS_BINARY,
             settings.PIPELINE_SASS_ARGUMENTS,
             infile,
