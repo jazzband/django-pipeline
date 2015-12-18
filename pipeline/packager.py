@@ -32,12 +32,12 @@ class Package(object):
     @property
     def paths(self):
         return [path for path in self.sources
-                if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+                if not path.endswith(settings.TEMPLATE_EXT)]
 
     @property
     def templates(self):
         return [path for path in self.sources
-                if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+                if path.endswith(settings.TEMPLATE_EXT)]
 
     @property
     def output_filename(self):
@@ -69,9 +69,9 @@ class Packager(object):
         self.compressor = Compressor(storage=storage, verbose=verbose)
         self.compiler = Compiler(storage=storage, verbose=verbose)
         if css_packages is None:
-            css_packages = settings.PIPELINE_CSS
+            css_packages = settings.STYLESHEETS
         if js_packages is None:
-            js_packages = settings.PIPELINE_JS
+            js_packages = settings.JAVASCRIPT
         self.packages = {
             'css': self.create_packages(css_packages),
             'js': self.create_packages(js_packages),

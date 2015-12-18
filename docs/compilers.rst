@@ -11,13 +11,13 @@ Coffee Script compiler
 The Coffee Script compiler uses `Coffee Script <http://jashkenas.github.com/coffeescript/>`_
 to compile your javascript.
 
-To use it add this to your ``PIPELINE_COMPILERS`` ::
+To use it add this to your ``PIPELINE['COMPILERS']`` ::
 
-  PIPELINE_COMPILERS = (
+  PIPELINE['COMPILERS'] = (
     'pipeline.compilers.coffee.CoffeeScriptCompiler',
   )
 
-``PIPELINE_COFFEE_SCRIPT_BINARY``
+``COFFEE_SCRIPT_BINARY``
 ---------------------------------
 
   Command line to execute for coffee program.
@@ -25,7 +25,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
   Defaults to ``'/usr/bin/env coffee'``.
 
-``PIPELINE_COFFEE_SCRIPT_ARGUMENTS``
+``COFFEE_SCRIPT_ARGUMENTS``
 ------------------------------------
 
   Additional arguments to use when coffee is called.
@@ -38,13 +38,13 @@ Live Script compiler
 The LiveScript compiler uses `LiveScript <https://github.com/gkz/LiveScript>`_
 to compile your javascript.
 
-To use it add this to your ``PIPELINE_COMPILERS`` ::
+To use it add this to your ``PIPELINE['COMPILERS']`` ::
 
-  PIPELINE_COMPILERS = (
+  PIPELINE['COMPILERS'] = (
     'pipeline.compilers.livescript.LiveScriptCompiler',
   )
 
-``PIPELINE_LIVE_SCRIPT_BINARY``
+``LIVE_SCRIPT_BINARY``
 ---------------------------------
 
   Command line to execute for LiveScript program.
@@ -52,7 +52,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
   Defaults to ``'/usr/bin/env lsc'``.
 
-``PIPELINE_LIVE_SCRIPT_ARGUMENTS``
+``LIVE_SCRIPT_ARGUMENTS``
 ------------------------------------
 
   Additional arguments to use when lsc is called.
@@ -65,13 +65,13 @@ LESS compiler
 The LESS compiler uses `LESS <http://lesscss.org/>`_
 to compile your stylesheets.
 
-To use it add this to your ``PIPELINE_COMPILERS`` ::
+To use it add this to your ``PIPELINE['COMPILERS']`` ::
 
-  PIPELINE_COMPILERS = (
+  PIPELINE['COMPILERS'] = (
     'pipeline.compilers.less.LessCompiler',
   )
 
-``PIPELINE_LESS_BINARY``
+``LESS_BINARY``
 ------------------------
 
   Command line to execute for lessc program.
@@ -79,7 +79,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
   Defaults to ``'/usr/bin/env lessc'``.
 
-``PIPELINE_LESS_ARGUMENTS``
+``LESS_ARGUMENTS``
 ---------------------------
 
   Additional arguments to use when lessc is called.
@@ -92,14 +92,14 @@ SASS compiler
 The SASS compiler uses `SASS <http://sass-lang.com/>`_
 to compile your stylesheets.
 
-To use it add this to your ``PIPELINE_COMPILERS`` ::
+To use it add this to your ``PIPELINE['COMPILERS']`` ::
 
-  PIPELINE_COMPILERS = (
+  PIPELINE['COMPILERS'] = (
     'pipeline.compilers.sass.SASSCompiler',
   )
 
 
-``PIPELINE_SASS_BINARY``
+``SASS_BINARY``
 ------------------------
 
   Command line to execute for sass program.
@@ -107,7 +107,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
   Defaults to ``'/usr/bin/env sass'``.
 
-``PIPELINE_SASS_ARGUMENTS``
+``SASS_ARGUMENTS``
 ---------------------------
 
   Additional arguments to use when sass is called.
@@ -121,14 +121,14 @@ Stylus compiler
 The Stylus compiler uses `Stylus <http://learnboost.github.com/stylus/>`_
 to compile your stylesheets.
 
-To use it add this to your ``PIPELINE_COMPILERS`` ::
+To use it add this to your ``PIPELINE['COMPILERS']`` ::
 
-  PIPELINE_COMPILERS = (
+  PIPELINE['COMPILERS'] = (
       'pipeline.compilers.stylus.StylusCompiler',
   )
 
 
-``PIPELINE_STYLUS_BINARY``
+``STYLUS_BINARY``
 --------------------------
 
   Command line to execute for stylus program.
@@ -136,7 +136,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
   Defaults to ``'/usr/bin/env stylus'``.
 
-``PIPELINE_STYLUS_ARGUMENTS``
+``STYLUS_ARGUMENTS``
 -----------------------------
 
   Additional arguments to use when stylus is called.
@@ -150,14 +150,14 @@ ES6 compiler
 The ES6 compiler uses `Babel <https://babeljs.io>`_
 to convert ES6+ code into vanilla ES5.
 
-To use it add this to your ``PIPELINE_COMPILERS`` ::
+To use it add this to your ``PIPELINE['COMPILERS']`` ::
 
-  PIPELINE_COMPILERS = (
+  PIPELINE['COMPILERS'] = (
       'pipeline.compilers.es6.ES6Compiler',
   )
 
 
-``PIPELINE_BABEL_BINARY``
+``BABEL_BINARY``
 --------------------------
 
   Command line to execute for babel program.
@@ -165,7 +165,7 @@ To use it add this to your ``PIPELINE_COMPILERS`` ::
 
   Defaults to ``'/usr/bin/env babel'``.
 
-``PIPELINE_BABEL_ARGUMENTS``
+``BABEL_ARGUMENTS``
 -----------------------------
 
   Additional arguments to use when babel is called.
@@ -182,7 +182,7 @@ of compilers.
 To do so, you just have to create a class that inherits from ``pipeline.compilers.CompilerBase``
 and implements ``match_file`` and ``compile_file`` when needed.
 
-Finally, specify it in the tuple of compilers ``PIPELINE_COMPILERS`` in the settings.
+Finally, specify it in the tuple of compilers ``PIPELINE['COMPILERS']`` in the settings.
 
 Example
 -------

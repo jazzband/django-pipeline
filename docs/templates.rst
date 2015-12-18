@@ -5,9 +5,9 @@ Javascript Templates
 ====================
 
 Pipeline allows you to use javascript templates along with your javascript views.
-To use your javascript templates, just add them to your ``PIPELINE_JS`` group ::
+To use your javascript templates, just add them to your ``JAVASCRIPT`` group ::
 
-  PIPELINE_JS = {
+  PIPELINE['JAVASCRIPT'] = {
     'application': {
       'source_filenames': (
         'js/application.js',
@@ -37,34 +37,34 @@ Configuration
 Template function
 .................
 
-By default, Pipeline uses a variant of `Micro Templating <http://ejohn.org/blog/javascript-micro-templating/>`_ to compile the templates, but you can choose your preferred JavaScript templating engine by changing ``PIPELINE_TEMPLATE_FUNC`` ::
+By default, Pipeline uses a variant of `Micro Templating <http://ejohn.org/blog/javascript-micro-templating/>`_ to compile the templates, but you can choose your preferred JavaScript templating engine by changing ``PIPELINE['TEMPLATE_FUNC']`` ::
 
-  PIPELINE_TEMPLATE_FUNC = 'template'
+  PIPELINE['TEMPLATE_FUNC'] = 'template'
 
 Template namespace
 ..................
 
 Your templates are made available in a top-level object, by default ``window.JST``,
-but you can choose your own via ``PIPELINE_TEMPLATE_NAMESPACE`` ::
+but you can choose your own via ``PIPELINE['TEMPLATE_NAMESPACE']`` ::
 
-  PIPELINE_TEMPLATE_NAMESPACE = 'window.Template'
+  PIPELINE['TEMPLATE_NAMESPACE'] = 'window.Template'
 
 
 Template extension
 ..................
 
 Templates are detected by their extension, by default ``.jst``, but you can use
-your own extension via ``PIPELINE_TEMPLATE_EXT`` ::
+your own extension via ``PIPELINE['TEMPLATE_EXT']`` ::
 
-  PIPELINE_TEMPLATE_EXT = '.mustache'
+  PIPELINE['TEMPLATE_EXT'] = '.mustache'
 
 Template separator
 ..................
 
 Templates identifier are built using a replacement for directory separator,
-by default ``_``, but you specify your own sperator via ``PIPELINE_TEMPLATE_SEPARATOR`` ::
+by default ``_``, but you specify your own separator via ``PIPELINE['TEMPLATE_SEPARATOR']`` ::
 
-  PIPELINE_TEMPLATE_SEPARATOR = '/'
+  PIPELINE['TEMPLATE_SEPARATOR'] = '/'
 
 
 Using it with your favorite template library
@@ -88,33 +88,33 @@ some extra javascript ::
 
 And use these settings ::
 
- PIPELINE_TEMPLATE_EXT = '.mustache'
- PIPELINE_TEMPLATE_FUNC = 'Mustache.template'
+ PIPELINE['TEMPLATE_EXT'] = '.mustache'
+ PIPELINE['TEMPLATE_FUNC'] = 'Mustache.template'
 
 Handlebars
 ..........
 
 To use it with `Handlebars <http://handlebarsjs.com/>`_, use the following settings ::
 
- PIPELINE_TEMPLATE_EXT = '.handlebars'
- PIPELINE_TEMPLATE_FUNC = 'Handlebars.compile'
- PIPELINE_TEMPLATE_NAMESPACE = 'Handlebars.templates'
+ PIPELINE['TEMPLATE_EXT'] = '.handlebars'
+ PIPELINE['TEMPLATE_FUNC'] = 'Handlebars.compile'
+ PIPELINE['TEMPLATE_NAMESPACE'] = 'Handlebars.templates'
 
 Ember.js + Handlebars
 .....................
 
 To use it with `Ember.js <http://emberjs.com/>`_, use the following settings ::
 
- PIPELINE_TEMPLATE_EXT = '.handlebars'
- PIPELINE_TEMPLATE_FUNC = 'Ember.Handlebars.compile'
- PIPELINE_TEMPLATE_NAMESPACE = 'window.Ember.TEMPLATES'
- PIPELINE_TEMPLATE_SEPARATOR = '/'
+ PIPELINE['TEMPLATE_EXT'] = '.handlebars'
+ PIPELINE['TEMPLATE_FUNC'] = 'Ember.Handlebars.compile'
+ PIPELINE['TEMPLATE_NAMESPACE'] = 'window.Ember.TEMPLATES'
+ PIPELINE['TEMPLATE_SEPARATOR'] = '/'
 
 Prototype
 .........
 
 To use it with `Prototype <http://www.prototypejs.org/>`_, just setup your
-``PIPELINE_TEMPLATE_FUNC`` ::
+``PIPELINE['TEMPLATE_FUNC']`` ::
 
-  PIPELINE_TEMPLATE_FUNC = 'new Template'
+  PIPELINE['TEMPLATE_FUNC'] = 'new Template'
 

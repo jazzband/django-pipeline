@@ -11,15 +11,13 @@ except ImportError:
     from unittest.mock import patch  # noqa
 
 from django.test import TestCase
-from django.test.utils import override_settings
 
 from pipeline.compressors import Compressor, TEMPLATE_FUNC, \
     SubProcessCompressor
 from pipeline.compressors.yuglify import YuglifyCompressor
 from pipeline.collector import default_collector
 
-
-from tests.utils import _
+from tests.utils import _, pipeline_settings
 
 
 class CompressorTest(TestCase):
@@ -93,16 +91,20 @@ class CompressorTest(TestCase):
             'templates\\')
         self.assertEqual(name, 'photo_detail')
 
-    @override_settings(PIPELINE_TEMPLATE_SEPARATOR='/')
+    from pipeline.conf import DEFAULTS
+    pipeline_settings = DEFAULTS.copy()
+    pipeline_settings['TEMPLATE_SEPARATOR'] = '/'
+
     def test_template_name_separator(self):
-        name = self.compressor.template_name('templates/photo/detail.jst',
-            'templates/')
-        self.assertEqual(name, 'photo/detail')
-        name = self.compressor.template_name('templates/photo_edit.jst', '')
-        self.assertEqual(name, 'photo_edit')
-        name = self.compressor.template_name('templates\photo\detail.jst',
-            'templates\\')
-        self.assertEqual(name, 'photo/detail')
+        with pipeline_settings(TEMPLATE_SEPARATOR='/'):
+            name = self.compressor.template_name('templates/photo/detail.jst',
+                'templates/')
+            self.assertEqual(name, 'photo/detail')
+            name = self.compressor.template_name('templates/photo_edit.jst', '')
+            self.assertEqual(name, 'photo_edit')
+            name = self.compressor.template_name('templates\photo\detail.jst',
+                'templates\\')
+            self.assertEqual(name, 'photo/detail')
 
     def test_compile_templates(self):
         templates = self.compressor.compile_templates([_('pipeline/templates/photo/list.jst')])

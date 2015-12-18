@@ -5,7 +5,22 @@ Configuration
 =============
 
 
-Configuration and list of available settings for Pipeline
+Configuration and list of available settings for Pipeline. Pipeline settings are namespaced in a PIPELINE dictionary in your project settings, e.g.: ::
+
+  PIPELINE = {
+      'PIPELINE_ENABLED': True,
+      'JAVASCRIPT': {
+          'stats': {
+              'source_filenames': (
+                'js/jquery.js',
+                'js/d3.js',
+                'js/collections/*.js',
+                'js/application.js',
+              ),
+              'output_filename': 'js/stats.js',
+          }
+      }
+  }
 
 
 Specifying files
@@ -16,29 +31,30 @@ syntax to select multiples files.
 
 The basic syntax for specifying CSS/JavaScript groups files is ::
 
-  PIPELINE_CSS = {
-      'colors': {
-          'source_filenames': (
-            'css/core.css',
-            'css/colors/*.css',
-            'css/layers.css'
-          ),
-          'output_filename': 'css/colors.css',
-          'extra_context': {
-              'media': 'screen,projection',
+  PIPELINE = {
+      'STYLESHEETS': {
+          'colors': {
+              'source_filenames': (
+                'css/core.css',
+                'css/colors/*.css',
+                'css/layers.css'
+              ),
+              'output_filename': 'css/colors.css',
+              'extra_context': {
+                  'media': 'screen,projection',
+              },
           },
       },
-  }
-
-  PIPELINE_JS = {
-      'stats': {
-          'source_filenames': (
-            'js/jquery.js',
-            'js/d3.js',
-            'js/collections/*.js',
-            'js/application.js',
-          ),
-          'output_filename': 'js/stats.js',
+      'JAVASCRIPT': {
+          'stats': {
+              'source_filenames': (
+                'js/jquery.js',
+                'js/d3.js',
+                'js/collections/*.js',
+                'js/application.js',
+              ),
+              'output_filename': 'js/stats.js',
+          }
       }
   }
 
@@ -118,7 +134,7 @@ Other settings
 
   Defaults to ``not settings.DEBUG``.
 
-``PIPELINE_CSS_COMPRESSOR``
+``CSS_COMPRESSOR``
 ............................
 
   Compressor class to be applied to CSS files.
@@ -127,7 +143,7 @@ Other settings
 
   Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``.
 
-``PIPELINE_JS_COMPRESSOR``
+JS_COMPRESSOR``
 ...........................
 
   Compressor class to be applied to JavaScript files.
@@ -140,7 +156,7 @@ Other settings
 
   Please note that in order to use Yuglify compressor, you need to install Yuglify (see :doc:`installation` for more details).
 
-``PIPELINE_TEMPLATE_NAMESPACE``
+TEMPLATE_NAMESPACE``
 ...............................
 
   Object name where all of your compiled templates will be added, from within your browser.
@@ -149,7 +165,7 @@ Other settings
   Defaults to ``"window.JST"``
 
 
-``PIPELINE_TEMPLATE_EXT``
+TEMPLATE_EXT``
 .........................
 
   The extension for which Pipeline will consider the file as a Javascript template.
@@ -157,7 +173,7 @@ Other settings
 
   Defaults to ``".jst"``
 
-``PIPELINE_TEMPLATE_FUNC``
+TEMPLATE_FUNC``
 ..........................
 
   JavaScript function that compiles your JavaScript templates.
@@ -167,7 +183,7 @@ Other settings
 
   Defaults to ``"_.template"``
 
-``PIPELINE_TEMPLATE_SEPARATOR``
+TEMPLATE_SEPARATOR``
 ...............................
 
   Character chain used by Pipeline as replacement for directory separator.
@@ -175,7 +191,7 @@ Other settings
   Defaults to ``"_"``
 
 
-``PIPELINE_MIMETYPES``
+MIMETYPES``
 ......................
 
   Tuple that match file extension with their corresponding mimetypes.
@@ -203,7 +219,7 @@ modern browsers.
 
 To do so, setup variant group options to the method you wish to use : ::
 
-  PIPELINE_CSS = {
+  'STYLESHEETS' = {
       'master': {
           'source_filenames': (
             'css/core.css',
@@ -225,7 +241,7 @@ Overriding embedding settings
 
 You can override these rules using the following settings:
 
-``PIPELINE_EMBED_MAX_IMAGE_SIZE``
+EMBED_MAX_IMAGE_SIZE``
 .................................
 
   Setting that controls the maximum image size (in bytes) to embed in CSS using Data-URIs.
@@ -233,7 +249,7 @@ You can override these rules using the following settings:
 
   Defaults to ``32700``
 
-``PIPELINE_EMBED_PATH``
+EMBED_PATH``
 .......................
 
   Setting the directory that an asset needs to be in so that it is embedded
@@ -253,10 +269,10 @@ Wrapped javascript output
 
 All javascript output is wrapped in an anonymous function : ::
 
-  (function(){ 
+  (function(){
     //JS output...
   })();
 
 This safety wrapper, make it difficult to pollute the global namespace by accident and improve performance.
 
-You can override this behavior by setting ``PIPELINE_DISABLE_WRAPPER`` to ``True``.
+You can override this behavior by setting DISABLE_WRAPPER`` to ``True``.

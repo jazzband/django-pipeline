@@ -15,8 +15,8 @@ class LessCompiler(SubProcessCompiler):
     def compile_file(self, infile, outfile, outdated=False, force=False):
         # Pipe to file rather than provide outfile arg due to a bug in lessc
         command = "%s %s %s > %s" % (
-            settings.PIPELINE_LESS_BINARY,
-            settings.PIPELINE_LESS_ARGUMENTS,
+            settings.LESS_BINARY,
+            settings.LESS_ARGUMENTS,
             infile,
             outfile
         )
