@@ -16,7 +16,7 @@ setup(
         io.open('HISTORY.rst', encoding='utf-8').read(),
     author='Timothée Peignier',
     author_email='timothee.peignier@tryphon.org',
-    url='https://github.com/cyberdelia/django-pipeline',
+    url='https://github.com/jazzband/django-pipeline',
     license='MIT',
     packages=find_packages(exclude=['tests', 'tests.tests']),
     zip_safe=False,

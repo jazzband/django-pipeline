@@ -224,6 +224,6 @@ Compass (standalone)
 :Creator:
     `Vitaly Babiy <https://github.com/vbabiy>`_
 :Description:
-    django-pipeline-compass is a compiler for `django-pipeline <https://github.com/cyberdelia/django-pipeline>`_. Making it really easy to use scss and compass with out requiring the compass gem.
+    django-pipeline-compass is a compiler for `django-pipeline <https://github.com/jazzband/django-pipeline>`_. Making it really easy to use scss and compass with out requiring the compass gem.
 :Link:
     `https://github.com/vbabiy/django-pipeline-compass`

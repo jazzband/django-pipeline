@@ -31,7 +31,7 @@ Installation
 .. note::
   You need to use ``Django>=1.7`` to be able to use this version of pipeline.
 
-.. _GitHub: http://github.com/cyberdelia/django-pipeline
+.. _GitHub: http://github.com/jazzband/django-pipeline
 .. _PyPI: http://pypi.python.org/pypi/django-pipeline
 
 Upgrading from 1.3
