@@ -9,3 +9,11 @@ env:
   - TOXENV=py34-django19
 docsinstall: pip install -q tox
 script: tox
+deploy:
+  provider: pypi
+  user: jazzband
+  distributions: "sdist bdist_wheel"
+  on:
+    tags: true
+    repo: jazzband/django-pipeline
+    condition: "$TOXENV = py27-django19"
