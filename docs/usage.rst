@@ -96,7 +96,7 @@ You just need to pass ``pipeline.templatetags.ext.PipelineExtension`` to your Ji
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'myproject.jinja2.environment',
-            'extensions': ['pipeline.templatetags.ext.PipelineExtension']
+            'extensions': ['pipeline.jinja2.PipelineExtension']
         }
     }
 
