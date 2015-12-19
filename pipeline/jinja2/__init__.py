@@ -7,7 +7,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 
 from ..packager import PackageNotFound
 from ..utils import guess_type
-from .pipeline import PipelineMixin
+from ..templatetags.pipeline import PipelineMixin
 
 
 class PipelineExtension(PipelineMixin, Extension):

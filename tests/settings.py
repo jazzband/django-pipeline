@@ -56,10 +56,6 @@ STATICFILES_FINDERS = (
 
 SECRET_KEY = "django-pipeline"
 
-TEMPLATE_DIRS = (
-    local_path('templates'),
-)
-
 PIPELINE = {
     'STYLESHEETS': {
         'screen': {
@@ -122,6 +118,11 @@ PIPELINE = {
 }
 
 
+TEMPLATE_DIRS = (
+    local_path('templates'),
+)
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -132,5 +133,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'APP_DIRS': True,
         'DIRS': TEMPLATE_DIRS,
+        'OPTIONS': {
+            'extensions': ['pipeline.jinja2.PipelineExtension']
+        }
     }
 ]
