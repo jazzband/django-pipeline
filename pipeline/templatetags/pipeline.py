@@ -20,14 +20,6 @@ register = template.Library()
 
 
 class PipelineMixin(object):
-    request = None
-    _request_var = None
-
-    @property
-    def request_var(self):
-        if not self._request_var:
-            self._request_var = template.Variable('request')
-        return self._request_var
 
     def package_for(self, package_name, package_type):
         package = {
@@ -45,18 +37,15 @@ class PipelineMixin(object):
 
         return packager.package_for(package_type, package_name)
 
-    def render(self, context):
-        try:
-            self.request = self.request_var.resolve(context)
-        except VariableDoesNotExist:
-            pass
+    def get_collector_env(self):
+        return None
 
     def render_compressed(self, package, package_type):
         if settings.PIPELINE_ENABLED:
             method = getattr(self, "render_{0}".format(package_type))
             return method(package, package.output_filename)
         else:
-            default_collector.collect(self.request)
+            default_collector.collect(self.get_collector_env())
 
             packager = Packager()
             method = getattr(self, "render_individual_{0}".format(package_type))
@@ -65,7 +54,27 @@ class PipelineMixin(object):
             return method(package, paths, templates=templates)
 
 
-class StylesheetNode(PipelineMixin, template.Node):
+class DjangoPipelineMixin(PipelineMixin):
+    request = None
+    _request_var = None
+
+    def get_collector_env(self):
+        return self.request
+
+    @property
+    def request_var(self):
+        if not self._request_var:
+            self._request_var = template.Variable('request')
+        return self._request_var
+
+    def render(self, context):
+        try:
+            self.request = self.request_var.resolve(context)
+        except VariableDoesNotExist:
+            pass
+
+
+class StylesheetNode(DjangoPipelineMixin, template.Node):
     def __init__(self, name):
         self.name = name
 
@@ -94,7 +103,7 @@ class StylesheetNode(PipelineMixin, template.Node):
         return '\n'.join(tags)
 
 
-class JavascriptNode(PipelineMixin, template.Node):
+class JavascriptNode(DjangoPipelineMixin, template.Node):
     def __init__(self, name):
         self.name = name
 

@@ -11,7 +11,8 @@ from pipeline.finders import PipelineFinder
 
 
 class Collector(object):
-    request = None
+
+    env = None
 
     def __init__(self, storage=None):
         if storage is None:
@@ -26,10 +27,10 @@ class Collector(object):
         for d in dirs:
             self.clear(os.path.join(path, d))
 
-    def collect(self, request=None):
-        if self.request and self.request is request:
+    def collect(self, env=None):
+        if self.env and self.env is env:
             return
-        self.request = request
+        self.env = env
         found_files = OrderedDict()
         for finder in finders.get_finders():
             # Ignore our finder to avoid looping
