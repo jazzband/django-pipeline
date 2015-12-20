@@ -64,6 +64,13 @@ To upgrade from pipeline 1.3, you will need to follow these steps:
         )
 
 
+Upgrading from 1.5
+==================
+
+To upgrade from pipeline 1.5, you will need update all your ``PIPELINE_*``
+settings and move them under the new ``PIPELINE`` setting.
+See :ref:`ref-configuration`.
+
 Recommendations
 ===============
 
