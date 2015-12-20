@@ -19,3 +19,5 @@ deploy:
     tags: true
     repo: jazzband/django-pipeline
     condition: "$TOXENV = py27-django19"
+notifications:
+  email: false
