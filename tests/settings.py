@@ -121,6 +121,11 @@ TEMPLATE_DIRS = (
     local_path('templates'),
 )
 
+TEMPLATE_DIRS = (
+    local_path('templates'),
+)
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
