@@ -117,11 +117,9 @@ PIPELINE = {
     }
 }
 
-
 TEMPLATE_DIRS = (
     local_path('templates'),
 )
-
 
 TEMPLATES = [
     {
@@ -138,3 +136,19 @@ TEMPLATES = [
         }
     }
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'pipeline.templatetags.pipeline': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+        },
+    },
+}
