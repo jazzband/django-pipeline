@@ -95,6 +95,10 @@ unless you don't have access to the local filesystem in which case you should us
   class S3PipelineCachedStorage(PipelineMixin, CachedFilesMixin, S3BotoStorage):
       pass
 
+.. note::
+  When using custom storage in combination with compilers you may also need to use ``StaticFilesCompilerMixin``
+  (see StaticFilesCompilerMixin_ for more details).
+
 
 Using Pipeline with Bower
 =========================
