@@ -20,4 +20,6 @@ class LessCompiler(SubProcessCompiler):
             infile,
             outfile
         )
-        return self.execute_command(command, cwd=dirname(infile))
+        
+        cwd = dirname(infile).replace("'", "")
+        return self.execute_command(command, cwd=cwd)
