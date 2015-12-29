@@ -1,7 +1,6 @@
-import contextlib
 import os
 
-from pipeline.conf import settings
+from django.test import override_settings
 
 
 def _(path):
@@ -9,14 +8,6 @@ def _(path):
     return path.replace('/', os.sep).replace('\\', os.sep)
 
 
-@contextlib.contextmanager
-def pipeline_settings(**kwargs):
-    try:
-        saved = {}
-        for name, value in kwargs.items():
-            saved[name] = getattr(settings, name)
-            setattr(settings, name, value)
-        yield
-    finally:
-        for name, value in saved.items():
-            setattr(settings, name, value)
+class pipeline_settings(override_settings):
+    def __init__(self, **kwargs):
+        self.options = {'PIPELINE': kwargs}

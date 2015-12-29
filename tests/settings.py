@@ -57,6 +57,7 @@ STATICFILES_FINDERS = (
 SECRET_KEY = "django-pipeline"
 
 PIPELINE = {
+    'PIPELINE_ENABLED': True,
     'STYLESHEETS': {
         'screen': {
             'source_filenames': (

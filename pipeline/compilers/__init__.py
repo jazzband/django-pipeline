@@ -139,4 +139,3 @@ class SubProcessCompiler(CompilerBase):
                 os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
             else:
                 os.remove(stdout.name)
-

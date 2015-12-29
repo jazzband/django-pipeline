@@ -7,6 +7,7 @@ from django.template import Template, Context
 from django.test import TestCase
 
 from pipeline.jinja2 import PipelineExtension
+from pipeline.conf import settings
 
 from tests.utils import pipeline_settings
 
@@ -26,10 +27,10 @@ class JinjaTest(TestCase):
         template = self.env.from_string(u"""{% stylesheet "screen" %}""")
         self.assertEqual(u'<link href="/static/screen.css" rel="stylesheet" type="text/css" />', template.render())
 
+    @pipeline_settings(PIPELINE_ENABLED=False)
     def test_package_css_disabled(self):
-        with pipeline_settings(PIPELINE_ENABLED=False):
-            template = self.env.from_string(u"""{% stylesheet "screen" %}""")
-            self.assertEqual(u'''<link href="/static/pipeline/css/first.css" rel="stylesheet" type="text/css" />
+        template = self.env.from_string(u"""{% stylesheet "screen" %}""")
+        self.assertEqual(u'''<link href="/static/pipeline/css/first.css" rel="stylesheet" type="text/css" />
 <link href="/static/pipeline/css/second.css" rel="stylesheet" type="text/css" />
 <link href="/static/pipeline/css/urls.css" rel="stylesheet" type="text/css" />''', template.render())
 

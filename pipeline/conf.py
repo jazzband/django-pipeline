@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import collections
 import shlex
 
 from django.conf import settings as _settings
+from django.core.signals import setting_changed
+from django.dispatch import receiver
+from django.utils.six import string_types
+
 
 DEFAULTS = {
     'PIPELINE_ENABLED': not _settings.DEBUG,
@@ -78,27 +83,42 @@ DEFAULTS = {
 }
 
 
-class PipelineSettings(object):
+class PipelineSettings(collections.MutableMapping):
     """
     Container object for pipeline settings
     """
     def __init__(self, wrapped_settings):
-        DEFAULTS.update(wrapped_settings)
-        self.__dict__ = DEFAULTS
+        self.settings = DEFAULTS.copy()
+        self.settings.update(wrapped_settings)
 
-    def __getattr__(self, name):
-        if hasattr(self, name):
-            value = getattr(self, name)
-        elif name in self:
-            value = DEFAULTS[name]
-        else:
-            raise AttributeError("'%s' setting not found" % name)
-
-        if name.endswith(("_BINARY", "_ARGUMENTS")):
-            if isinstance(value, (type(u""), type(b""))):
+    def __getitem__(self, key):
+        value = self.settings[key]
+        if key.endswith(("_BINARY", "_ARGUMENTS")):
+            if isinstance(value, string_types):
                 return tuple(shlex.split(value))
             return tuple(value)
-
         return value
 
+    def __setitem__(self, key, value):
+        self.settings[key] = value
+
+    def __delitem__(self, key):
+        del self.store[key]
+
+    def __iter__(self):
+        return iter(self.settings)
+
+    def __len__(self):
+        return len(self.settings)
+
+    def __getattr__(self, name):
+        return self.__getitem__(name)
+
+
 settings = PipelineSettings(_settings.PIPELINE)
+
+
+@receiver(setting_changed)
+def reload_settings(**kwargs):
+    if kwargs['setting'] == 'PIPELINE':
+        settings.update(kwargs['value'])
