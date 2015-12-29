@@ -64,64 +64,64 @@ Group options
 ``source_filenames``
 ....................
 
-  **Required**
+**Required**
 
-  Is a tuple with the source files to be compressed.
-  The files are concatenated in the order specified in the tuple.
+Is a tuple with the source files to be compressed.
+The files are concatenated in the order specified in the tuple.
 
 
 ``output_filename``
 ...................
 
-  **Required**
+**Required**
 
-  Is the filename of the (to be) compressed file.
+Is the filename of the (to be) compressed file.
 
 ``variant``
 ...........
 
-  **Optional**
+**Optional**
 
-  Is the variant you want to apply to your CSS. This allow you to embed images
-  and fonts in CSS with data-URI.
-  Allowed values are : ``None`` and ``datauri``.
+Is the variant you want to apply to your CSS. This allow you to embed images
+and fonts in CSS with data-URI.
+Allowed values are : ``None`` and ``datauri``.
 
-  Defaults to ``None``.
+Defaults to ``None``.
 
 ``template_name``
 .................
 
-  **Optional**
+**Optional**
 
-  Name of the template used to render ``<script>`` for js package or ``<link>`` for css package.
+Name of the template used to render ``<script>`` for js package or ``<link>`` for css package.
 
-  Defaults to ``None``.
+Defaults to ``None``.
 
 ``extra_context``
 .................
 
-  **Optional**
+**Optional**
 
-  Is a dictionary of values to add to the template context,
-  when generating the HTML for the HTML-tags with the templatetags.
+Is a dictionary of values to add to the template context,
+when generating the HTML for the HTML-tags with the templatetags.
 
-  For CSS, if you do not specify ``extra_context``/``media``, the default media in
-  the ``<link>`` output will be ``media="all"``.
+For CSS, if you do not specify ``extra_context``/``media``, the default media in
+the ``<link>`` output will be ``media="all"``.
 
-  For JS, the default templates support the ``async`` and ``defer`` tag attributes which are controlled via ``extra_context``: ::
+For JS, the default templates support the ``async`` and ``defer`` tag attributes which are controlled via ``extra_context``: ::
 
-    'extra_context': {
-        'async': True,
-    },
+  'extra_context': {
+      'async': True,
+  },
 
 ``manifest``
 ............
 
-  **Optional**
+**Optional**
 
-  Indicate if you want this group to appear in your cache manifest.
+Indicate if you want this group to appear in your cache manifest.
 
-  Defaults to ``True``.
+Defaults to ``True``.
 
 
 Other settings
@@ -130,27 +130,27 @@ Other settings
 ``PIPELINE_ENABLED``
 ....................
 
-  ``True`` if assets should be compressed, ``False`` if not.
+``True`` if assets should be compressed, ``False`` if not.
 
-  Defaults to ``not settings.DEBUG``.
+Defaults to ``not settings.DEBUG``.
 
 ``CSS_COMPRESSOR``
 ............................
 
-  Compressor class to be applied to CSS files.
+Compressor class to be applied to CSS files.
 
-  If empty or ``None``, CSS files won't be compressed.
+If empty or ``None``, CSS files won't be compressed.
 
-  Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``.
+Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``.
 
 JS_COMPRESSOR``
 ...........................
 
-  Compressor class to be applied to JavaScript files.
+Compressor class to be applied to JavaScript files.
 
-  If empty or ``None``, JavaScript files won't be compressed.
+If empty or ``None``, JavaScript files won't be compressed.
 
-  Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``
+Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``
 
 .. note::
 
@@ -159,52 +159,52 @@ JS_COMPRESSOR``
 TEMPLATE_NAMESPACE``
 ...............................
 
-  Object name where all of your compiled templates will be added, from within your browser.
-  To access them with your own JavaScript namespace, change it to the object of your choice.
+Object name where all of your compiled templates will be added, from within your browser.
+To access them with your own JavaScript namespace, change it to the object of your choice.
 
-  Defaults to ``"window.JST"``
+Defaults to ``"window.JST"``
 
 
 TEMPLATE_EXT``
 .........................
 
-  The extension for which Pipeline will consider the file as a Javascript template.
-  To use a different extension, like ``.mustache``, set this settings to ``.mustache``.
+The extension for which Pipeline will consider the file as a Javascript template.
+To use a different extension, like ``.mustache``, set this settings to ``.mustache``.
 
-  Defaults to ``".jst"``
+Defaults to ``".jst"``
 
 TEMPLATE_FUNC``
 ..........................
 
-  JavaScript function that compiles your JavaScript templates.
-  Pipeline doesn't bundle a javascript template library, but the default
-  setting is to use the
-  `underscore <http://documentcloud.github.com/underscore/>`_ template function.
+JavaScript function that compiles your JavaScript templates.
+Pipeline doesn't bundle a javascript template library, but the default
+setting is to use the
+`underscore <http://documentcloud.github.com/underscore/>`_ template function.
 
-  Defaults to ``"_.template"``
+Defaults to ``"_.template"``
 
 TEMPLATE_SEPARATOR``
 ...............................
 
-  Character chain used by Pipeline as replacement for directory separator.
+Character chain used by Pipeline as replacement for directory separator.
 
-  Defaults to ``"_"``
+Defaults to ``"_"``
 
 
 MIMETYPES``
 ......................
 
-  Tuple that match file extension with their corresponding mimetypes.
+Tuple that match file extension with their corresponding mimetypes.
 
-  Defaults to ::
+Defaults to ::
 
-    (
-      (b'text/coffeescript', '.coffee'),
-      (b'text/less', '.less'),
-      (b'text/javascript', '.js'),
-      (b'text/x-sass', '.sass'),
-      (b'text/x-scss', '.scss')
-    )
+  (
+    (b'text/coffeescript', '.coffee'),
+    (b'text/less', '.less'),
+    (b'text/javascript', '.js'),
+    (b'text/x-sass', '.sass'),
+    (b'text/x-scss', '.scss')
+  )
 
 .. warning::
   If you support Internet Explorer version 8 and below, you should
@@ -244,17 +244,17 @@ You can override these rules using the following settings:
 EMBED_MAX_IMAGE_SIZE``
 .................................
 
-  Setting that controls the maximum image size (in bytes) to embed in CSS using Data-URIs.
-  Internet Explorer 8 has issues with assets over 32 kilobytes.
+Setting that controls the maximum image size (in bytes) to embed in CSS using Data-URIs.
+Internet Explorer 8 has issues with assets over 32 kilobytes.
 
-  Defaults to ``32700``
+Defaults to ``32700``
 
 EMBED_PATH``
 .......................
 
-  Setting the directory that an asset needs to be in so that it is embedded
+Setting the directory that an asset needs to be in so that it is embedded
 
-  Defaults to ``r'[/]?embed/'``
+Defaults to ``r'[/]?embed/'``
 
 
 Rewriting CSS urls
