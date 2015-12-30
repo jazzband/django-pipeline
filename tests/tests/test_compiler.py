@@ -7,7 +7,6 @@ from django.test import TestCase
 
 from pipeline.collector import default_collector
 from pipeline.compilers import Compiler, CompilerBase, SubProcessCompiler
-from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
 
 from tests.utils import _, pipeline_settings
