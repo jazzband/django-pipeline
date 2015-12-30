@@ -13,7 +13,7 @@ if os.name == 'posix' and sys.version_info[0] < 3:
 
 setup(
     name='django-pipeline',
-    version='1.6.0',
+    version='1.6.1',
     description='Pipeline is an asset packaging library for Django.',
     long_description=io.open('README.rst', encoding='utf-8').read() + '\n\n' +
         io.open('HISTORY.rst', encoding='utf-8').read(),

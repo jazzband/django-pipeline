@@ -3,6 +3,13 @@
 History
 =======
 
+1.6.1
+=====
+
+* Fix path quoting issues. Thanks to Chad Miller.
+* Use subprocess32 package when possible.
+* Documentation fixes. Thanks to Sławek Ehlert and Jannis Leidel.
+
 1.6.0
 =====
 
