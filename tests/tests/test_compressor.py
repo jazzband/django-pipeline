@@ -12,8 +12,11 @@ except ImportError:
 
 from django.test import TestCase
 
-from pipeline.compressors import Compressor, TEMPLATE_FUNC, \
+from pipeline.compressors import (
+    Compressor,
+    TEMPLATE_FUNC,
     SubProcessCompressor
+)
 from pipeline.compressors.yuglify import YuglifyCompressor
 from pipeline.collector import default_collector
 
@@ -74,32 +77,32 @@ class CompressorTest(TestCase):
         self.assertEqual(base_path, _('js/templates'))
 
     def test_absolute_path(self):
-        absolute_path = self.compressor.absolute_path('../../images/sprite.png',
-            'css/plugins/')
+        absolute_path = self.compressor.absolute_path(
+            '../../images/sprite.png', 'css/plugins/')
         self.assertEqual(absolute_path, 'images/sprite.png')
         absolute_path = self.compressor.absolute_path('/images/sprite.png',
-            'css/plugins/')
+                                                      'css/plugins/')
         self.assertEqual(absolute_path, '/images/sprite.png')
 
     def test_template_name(self):
         name = self.compressor.template_name('templates/photo/detail.jst',
-            'templates/')
+                                             'templates/')
         self.assertEqual(name, 'photo_detail')
         name = self.compressor.template_name('templates/photo_edit.jst', '')
         self.assertEqual(name, 'photo_edit')
         name = self.compressor.template_name('templates\photo\detail.jst',
-            'templates\\')
+                                             'templates\\')
         self.assertEqual(name, 'photo_detail')
 
     @pipeline_settings(TEMPLATE_SEPARATOR='/')
     def test_template_name_separator(self):
         name = self.compressor.template_name('templates/photo/detail.jst',
-            'templates/')
+                                             'templates/')
         self.assertEqual(name, 'photo/detail')
         name = self.compressor.template_name('templates/photo_edit.jst', '')
         self.assertEqual(name, 'photo_edit')
         name = self.compressor.template_name('templates\photo\detail.jst',
-            'templates\\')
+                                             'templates\\')
         self.assertEqual(name, 'photo/detail')
 
     def test_compile_templates(self):
@@ -118,11 +121,12 @@ class CompressorTest(TestCase):
         self.assertFalse(self.compressor.embeddable(_('pipeline/images/arrow.dat'), 'datauri'))
 
     def test_construct_asset_path(self):
-        asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
-            "css/plugins/gallery.css", "css/gallery.css")
+        asset_path = self.compressor.construct_asset_path(
+            "../../images/sprite.png", "css/plugins/gallery.css",
+            "css/gallery.css")
         self.assertEqual(asset_path, "../images/sprite.png")
-        asset_path = self.compressor.construct_asset_path("/images/sprite.png",
-            "css/plugins/gallery.css", "css/gallery.css")
+        asset_path = self.compressor.construct_asset_path(
+            "/images/sprite.png", "css/plugins/gallery.css", "css/gallery.css")
         self.assertEqual(asset_path, "/images/sprite.png")
 
     def test_url_rewrite(self):
@@ -173,7 +177,7 @@ class CompressorTest(TestCase):
     def test_compressor_subprocess_unicode(self):
         tests_path = os.path.dirname(os.path.dirname(__file__))
         output = SubProcessCompressor(False).execute_command(
-            '/usr/bin/env cat',
+            ['/usr/bin/env cat'],
             io.open(tests_path + '/assets/css/unicode.css', encoding="utf-8").read())
         self.assertEqual(""".some_class {
   // Some unicode

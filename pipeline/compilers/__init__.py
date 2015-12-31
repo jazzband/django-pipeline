@@ -14,11 +14,10 @@ from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_bytes
-from django.utils.six import string_types
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
-from pipeline.utils import to_class
+from pipeline.utils import to_class, command_as_flat_list
 
 
 class Compiler(object):
@@ -104,18 +103,8 @@ class SubProcessCompiler(CompilerBase):
         spaces or crazy characters) and OS agnostic (existing and future OSes
         that Python supports should already work).
 
-        The only thing weird here is that any incoming command arg item may
-        itself be a tuple. This allows compiler implementations to look clean
-        while supporting historical string config settings and maintaining
-        backwards compatibility. Thus, we flatten one layer deep.
-         ((env, foocomp), infile, (-arg,)) -> (env, foocomp, infile, -arg)
         """
-        argument_list = []
-        for flattening_arg in command:
-            if isinstance(flattening_arg, string_types):
-                argument_list.append(flattening_arg)
-            else:
-                argument_list.extend(flattening_arg)
+        argument_list = command_as_flat_list(command)
 
         try:
             # We always catch stdout in a file, but we may not have a use for it.

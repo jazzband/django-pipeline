@@ -6,7 +6,10 @@ from pipeline.compressors import SubProcessCompressor
 
 class UglifyJSCompressor(SubProcessCompressor):
     def compress_js(self, js):
-        command = '%s %s' % (settings.UGLIFYJS_BINARY, settings.UGLIFYJS_ARGUMENTS)
+        command = [
+            settings.UGLIFYJS_BINARY,
+            settings.UGLIFYJS_ARGUMENTS
+        ]
         if self.verbose:
-            command += ' --verbose'
+            command.append('--verbose')
         return self.execute_command(command, js)
