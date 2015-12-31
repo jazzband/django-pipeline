@@ -11,7 +11,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import smart_bytes, force_text
 
 from pipeline.conf import settings
-from pipeline.utils import to_class, relpath
+from pipeline.utils import to_class, relpath, command_as_flat_list
 from pipeline.exceptions import CompressorError
 
 URL_DETECTOR = r"""url\((['"]){0,1}\s*(.*?)["']{0,1}\)"""
@@ -235,8 +235,9 @@ class CompressorBase(object):
 class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         import subprocess
-        pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
-                                stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        pipe = subprocess.Popen(command_as_flat_list(command), shell=True,
+                                stdout=subprocess.PIPE, stdin=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         if content:
             content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)

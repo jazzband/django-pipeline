@@ -10,6 +10,7 @@ except ImportError:
     from urllib import quote
 
 from django.utils.encoding import smart_text
+from django.utils.six import string_types
 
 from pipeline.conf import settings
 
@@ -54,3 +55,21 @@ def relpath(path, start=posixpath.curdir):
     if not rel_list:
         return posixpath.curdir
     return posixpath.join(*rel_list)
+
+
+def command_as_flat_list(command):
+    """Returns transformed command with nested lists as flat list.
+    For example:
+        ((env, foocomp), infile, (-arg,)) -> (env, foocomp, infile, -arg)
+    """
+    if isinstance(command, string_types):
+        return [command]
+
+    argument_list = []
+    for flattening_arg in command:
+        if isinstance(flattening_arg, string_types):
+            argument_list.append(flattening_arg)
+        else:
+            argument_list.extend(flattening_arg)
+
+    return argument_list

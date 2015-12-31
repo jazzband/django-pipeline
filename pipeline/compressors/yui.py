@@ -6,7 +6,11 @@ from pipeline.compressors import SubProcessCompressor
 
 class YUICompressor(SubProcessCompressor):
     def compress_common(self, content, compress_type, arguments):
-        command = '%s --type=%s %s' % (settings.YUI_BINARY, compress_type, arguments)
+        command = (
+            settings.YUI_BINARY,
+            '--type={}'.format(compress_type),
+            arguments
+        )
         return self.execute_command(command, content)
 
     def compress_js(self, js):

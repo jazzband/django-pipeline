@@ -10,8 +10,9 @@ class CSSTidyCompressor(SubProcessCompressor):
     def compress_css(self, css):
         output_file = tempfile.NamedTemporaryFile(suffix='.pipeline')
 
-        command = '%s - %s %s' % (
+        command = (
             settings.CSSTIDY_BINARY,
+            '-',
             settings.CSSTIDY_ARGUMENTS,
             output_file.name
         )
