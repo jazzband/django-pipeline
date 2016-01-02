@@ -20,7 +20,7 @@ To use it for your javascripts add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
   PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
 
 
-``PIPELINE_YUGLIFY_BINARY``
+``YUGLIFY_BINARY``
 ---------------------------
 
   Command line to execute for the Yuglify program.
@@ -28,14 +28,14 @@ To use it for your javascripts add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
 
   Defaults to ``'/usr/bin/env yuglify'``.
 
-``PIPELINE_YUGLIFY_CSS_ARGUMENTS``
+``YUGLIFY_CSS_ARGUMENTS``
 ----------------------------------
 
   Additional arguments to use when compressing CSS.
 
   Defaults to ``'--terminal'``.
 
-``PIPELINE_YUGLIFY_JS_ARGUMENTS``
+``YUGLIFY_JS_ARGUMENTS``
 ---------------------------------
 
   Additional arguments to use when compressing JavaScript.
@@ -58,7 +58,7 @@ To use it for your javascripts add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
   PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.yui.YUICompressor'
 
 
-``PIPELINE_YUI_BINARY``
+``YUI_BINARY``
 -----------------------
 
   Command line to execute for the YUI program.
@@ -70,14 +70,14 @@ To use it for your javascripts add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
   Don't point to ``yuicompressor.jar`` directly, we expect to find a executable script.
 
 
-``PIPELINE_YUI_CSS_ARGUMENTS``
+``YUI_CSS_ARGUMENTS``
 ------------------------------
 
   Additional arguments to use when compressing CSS.
 
   Defaults to ``''``.
 
-``PIPELINE_YUI_JS_ARGUMENTS``
+``YUI_JS_ARGUMENTS``
 -----------------------------
 
   Additional arguments to use when compressing JavaScript.
@@ -96,7 +96,7 @@ To use it add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
   PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.closure.ClosureCompressor'
 
 
-``PIPELINE_CLOSURE_BINARY``
+``CLOSURE_BINARY``
 ---------------------------
 
   Command line to execute for the Closure Compiler program.
@@ -108,7 +108,7 @@ To use it add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
   Don't point to ``compiler.jar`` directly, we expect to find a executable script.
 
 
-``PIPELINE_CLOSURE_ARGUMENTS``
+``CLOSURE_ARGUMENTS``
 ------------------------------
 
   Additional arguments to use when closure is called.
@@ -127,7 +127,7 @@ To use it add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
   PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 
 
-``PIPELINE_UGLIFYJS_BINARY``
+``UGLIFYJS_BINARY``
 ----------------------------
 
   Command line to execute for the UglifyJS program.
@@ -135,7 +135,7 @@ To use it add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
 
   Defaults to ``'/usr/bin/env uglifyjs'``.
 
-``PIPELINE_UGLIFYJS_ARGUMENTS``
+``UGLIFYJS_ARGUMENTS``
 -------------------------------
 
   Additional arguments to use when uglifyjs is called.
@@ -183,7 +183,7 @@ To us it for your stylesheets add this to your ``PIPELINE['CSS_COMPRESSOR']`` ::
 
   PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.csstidy.CSSTidyCompressor'
 
-``PIPELINE_CSSTIDY_BINARY``
+``CSSTIDY_BINARY``
 ---------------------------
 
   Command line to execute for csstidy program.
@@ -191,7 +191,7 @@ To us it for your stylesheets add this to your ``PIPELINE['CSS_COMPRESSOR']`` ::
 
   Defaults to ``'/usr/bin/env csstidy'``
 
-``PIPELINE_CSSTIDY_ARGUMENTS``
+``CSSTIDY_ARGUMENTS``
 ------------------------------
 
   Additional arguments to use when csstidy is called.
@@ -206,7 +206,7 @@ command to compress stylesheets. To use it, add this to your ``PIPELINE['CSS_COM
 
   PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.cssmin.CSSMinCompressor'
 
-``PIPELINE_CSSMIN_BINARY``
+``CSSMIN_BINARY``
 ---------------------------
 
   Command line to execute for cssmin program.
@@ -214,7 +214,7 @@ command to compress stylesheets. To use it, add this to your ``PIPELINE['CSS_COM
 
   Defaults to ``'/usr/bin/env cssmin'``
 
-``PIPELINE_CSSMIN_ARGUMENTS``
+``CSSMIN_ARGUMENTS``
 ------------------------------
 
   Additional arguments to use when cssmin is called.
@@ -264,4 +264,3 @@ Add it to your settings ::
 
   PIPELINE['CSS_COMPRESSOR'] = 'jam.compressors.JamCompressor'
   PIPELINE['JS_COMPRESSOR'] = 'jam.compressors.JamCompressor'
-
