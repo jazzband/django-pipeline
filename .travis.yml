@@ -7,17 +7,26 @@ env:
   - TOXENV=py27-django19
   - TOXENV=pypy-django19
   - TOXENV=py34-django19
-docsinstall: pip install -q tox
+install: pip install -q tox
 script: tox
 deploy:
-  provider: pypi
-  user: jazzband
-  distributions: "sdist bdist_wheel"
-  password:
-    secure: rECBwGxp/D0BcaNe6lW0XSjLOMkQLXm/Etft+l+wxhZZxkoaS5t38pWb1/wvWBuPa9I0GagRPbqap72PYJeEgS4BIgsIP8YRTxkggDJ6+CtecyMBxWWSKc94QW/x2HETQ1cYGsLwXgMEGV4WkjzKUUM3SYTjfz0jkMfMv0szufQ=
-  on:
-    tags: true
-    repo: jazzband/django-pipeline
-    condition: "$TOXENV = py27-django19"
+  - provider: pypi
+    user: jazzband
+    distributions: "sdist bdist_wheel"
+    password:
+      secure: rECBwGxp/D0BcaNe6lW0XSjLOMkQLXm/Etft+l+wxhZZxkoaS5t38pWb1/wvWBuPa9I0GagRPbqap72PYJeEgS4BIgsIP8YRTxkggDJ6+CtecyMBxWWSKc94QW/x2HETQ1cYGsLwXgMEGV4WkjzKUUM3SYTjfz0jkMfMv0szufQ=
+    on:
+      tags: true
+      repo: jazzband/django-pipeline
+      condition: "$TOXENV = py27-django19"
+  - provider: pypi
+    user: jazzband
+    distributions: "bdist_wheel"
+    password:
+      secure: rECBwGxp/D0BcaNe6lW0XSjLOMkQLXm/Etft+l+wxhZZxkoaS5t38pWb1/wvWBuPa9I0GagRPbqap72PYJeEgS4BIgsIP8YRTxkggDJ6+CtecyMBxWWSKc94QW/x2HETQ1cYGsLwXgMEGV4WkjzKUUM3SYTjfz0jkMfMv0szufQ=
+    on:
+      tags: true
+      repo: jazzband/django-pipeline
+      condition: "$TOXENV = py34-django19"
 notifications:
   email: false
