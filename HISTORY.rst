@@ -3,6 +3,11 @@
 History
 =======
 
+1.6.4
+=====
+
+* Fix compressor subprocess calls.
+
 1.6.3
 =====
 
