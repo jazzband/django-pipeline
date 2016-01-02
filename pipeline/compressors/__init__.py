@@ -243,7 +243,7 @@ class SubProcessCompressor(CompressorBase):
             else:
                 argument_list.extend(flattening_arg)
 
-        pipe = subprocess.Popen(argument_list, shell=True, stdout=subprocess.PIPE,
+        pipe = subprocess.Popen(argument_list, stdout=subprocess.PIPE,
                                 stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         if content:
             content = smart_bytes(content)
