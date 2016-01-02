@@ -7,7 +7,6 @@ from django.template import Template, Context
 from django.test import TestCase
 
 from pipeline.jinja2 import PipelineExtension
-from pipeline.conf import settings
 
 from tests.utils import pipeline_settings
 

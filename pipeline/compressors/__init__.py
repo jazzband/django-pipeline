@@ -4,15 +4,17 @@ import base64
 import os
 import posixpath
 import re
+import subprocess
 
 from itertools import takewhile
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import smart_bytes, force_text
+from django.utils.six import string_types
 
 from pipeline.conf import settings
-from pipeline.utils import to_class, relpath
 from pipeline.exceptions import CompressorError
+from pipeline.utils import to_class, relpath
 
 URL_DETECTOR = r"""url\((['"]){0,1}\s*(.*?)["']{0,1}\)"""
 URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""
@@ -234,8 +236,14 @@ class CompressorBase(object):
 
 class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
-        import subprocess
-        pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
+        argument_list = []
+        for flattening_arg in command:
+            if isinstance(flattening_arg, string_types):
+                argument_list.append(flattening_arg)
+            else:
+                argument_list.extend(flattening_arg)
+
+        pipe = subprocess.Popen(argument_list, shell=True, stdout=subprocess.PIPE,
                                 stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         if content:
             content = smart_bytes(content)

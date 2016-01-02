@@ -171,10 +171,9 @@ class CompressorTest(TestCase):
 """, output)
 
     def test_compressor_subprocess_unicode(self):
-        tests_path = os.path.dirname(os.path.dirname(__file__))
-        output = SubProcessCompressor(False).execute_command(
-            '/usr/bin/env cat',
-            io.open(tests_path + '/assets/css/unicode.css', encoding="utf-8").read())
+        path = os.path.dirname(os.path.dirname(__file__))
+        content = io.open(path + '/assets/css/unicode.css', encoding="utf-8").read()
+        output = SubProcessCompressor(False).execute_command(('cat',), content)
         self.assertEqual(""".some_class {
   // Some unicode
   content: "áéíóú";
