@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 import io
-import os
-import sys
 
 from setuptools import setup, find_packages
+import sys
 
 install_requires = []
 if (sys.version_info[0], sys.version_info[1]) < (3, 2):
     install_requires.append('futures>=2.1.3')
-if os.name == 'posix' and sys.version_info[0] < 3:
-    install_requires.append('subprocess32>=3.2.7')
 
 setup(
     name='django-pipeline',
