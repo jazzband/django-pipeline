@@ -3,6 +3,11 @@
 History
 =======
 
+1.6.3
+=====
+
+* Fix compressor command flattening.
+
 1.6.2
 =====
 
