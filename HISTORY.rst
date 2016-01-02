@@ -3,6 +3,11 @@
 History
 =======
 
+1.6.2
+=====
+
+* Remove subprocess32 usage since it breaks universal support.
+
 1.6.1
 =====
 
