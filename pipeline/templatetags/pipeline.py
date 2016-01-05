@@ -56,7 +56,8 @@ class PipelineMixin(object):
             method = getattr(self, "render_{0}".format(package_type))
             return method(package, package.output_filename)
         else:
-            default_collector.collect(self.request)
+            if settings.PIPELINE_COLLECTOR_ENABLED:
+                default_collector.collect(self.request)
 
             packager = Packager()
             method = getattr(self, "render_individual_{0}".format(package_type))

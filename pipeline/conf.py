@@ -13,6 +13,8 @@ from django.utils.six import string_types
 DEFAULTS = {
     'PIPELINE_ENABLED': not _settings.DEBUG,
 
+    'PIPELINE_COLLECTOR_ENABLED': True,
+
     'PIPELINE_ROOT': _settings.STATIC_ROOT,
     'PIPELINE_URL': _settings.STATIC_URL,
 
