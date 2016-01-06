@@ -134,6 +134,17 @@ Other settings
 
 Defaults to ``not settings.DEBUG``.
 
+``PIPELINE_COLLECTOR_ENABLED``
+....................
+
+``True`` if assets should be collected in develop , ``False`` if not.
+
+Defaults to ``True``
+
+.. note::
+
+  this only work when PIPELINE_ENABLED is False.
+
 ``CSS_COMPRESSOR``
 ............................
 
