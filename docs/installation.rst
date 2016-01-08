@@ -79,3 +79,11 @@ Yuglify wraps UglifyJS and cssmin, applying the default YUI configurations to th
 It can be downloaded from: https://github.com/yui/yuglify/.
 
 If you do not install yuglify, make sure to disable the compressor in your settings.
+
+Supported Django versions
+=========================
+
+Following versions of Django are supported:
+
+- 1.8.*
+- 1.9.*
