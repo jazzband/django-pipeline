@@ -1,4 +1,12 @@
 # -*- coding: utf-8 flake8: noqa -*-
+import os
+import sys
+
+
+if sys.platform.startswith('win'):
+    os.environ.setdefault('NUMBER_OF_PROCESSORS', '1')
+
+
 from .test_compiler import *
 from .test_compressor import *
 from .test_template import *
