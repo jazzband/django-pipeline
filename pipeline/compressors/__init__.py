@@ -14,7 +14,7 @@ from django.utils.six import string_types
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompressorError
-from pipeline.utils import to_class, relpath
+from pipeline.utils import to_class, relpath, set_std_streams_blocking
 
 URL_DETECTOR = r"""url\((['"]){0,1}\s*(.*?)["']{0,1}\)"""
 URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""
@@ -248,6 +248,7 @@ class SubProcessCompressor(CompressorBase):
         if content:
             content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)
+        set_std_streams_blocking()
         if stderr.strip() and pipe.returncode != 0:
             raise CompressorError(stderr)
         elif self.verbose:

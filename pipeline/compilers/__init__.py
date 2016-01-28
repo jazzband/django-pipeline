@@ -12,7 +12,7 @@ from django.utils.six import string_types
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
-from pipeline.utils import to_class
+from pipeline.utils import to_class, set_std_streams_blocking
 
 
 class Compiler(object):
@@ -120,6 +120,7 @@ class SubProcessCompiler(CompilerBase):
                                              stdout=stdout,
                                              stderr=subprocess.PIPE)
                 _, stderr = compiling.communicate()
+                set_std_streams_blocking()
 
             if compiling.returncode != 0:
                 stdout_captured = None  # Don't save erroneous result.
