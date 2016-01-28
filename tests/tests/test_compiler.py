@@ -1,13 +1,18 @@
 from __future__ import unicode_literals
 
 import sys
-from unittest import skipIf
+from unittest import skipIf, skipUnless
 
+from django.conf import settings
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.test import TestCase
+from django.test.client import RequestFactory
+from django.utils.encoding import smart_bytes
 
 from pipeline.collector import default_collector
 from pipeline.compilers import Compiler, CompilerBase, SubProcessCompiler
 from pipeline.exceptions import CompilerError
+from pipeline.utils import to_class
 
 from tests.utils import _, pipeline_settings
 
@@ -169,3 +174,56 @@ class FailingCompilerTest(TestCase):
 
     def tearDown(self):
         default_collector.clear()
+
+
+@skipUnless(settings.HAS_NODE, "requires node")
+class CompilerImplementation(TestCase):
+
+    def setUp(self):
+        self.compiler = Compiler()
+        default_collector.collect(RequestFactory().get('/'))
+
+    def tearDown(self):
+        default_collector.clear()
+
+    def _test_compiler(self, compiler_cls_str, infile, expected):
+        compiler_cls = to_class(compiler_cls_str)
+        compiler = compiler_cls(verbose=False, storage=staticfiles_storage)
+        infile_path = staticfiles_storage.path(infile)
+        outfile_path = compiler.output_path(infile_path, compiler.output_extension)
+        compiler.compile_file(_(infile_path), _(outfile_path), force=True)
+        with open(outfile_path) as f:
+            result = f.read()
+        with staticfiles_storage.open(expected) as f:
+            expected = f.read()
+        self.assertEqual(smart_bytes(result), expected)
+
+    def test_sass(self):
+        self._test_compiler('pipeline.compilers.sass.SASSCompiler',
+            'pipeline/compilers/scss/input.scss',
+            'pipeline/compilers/scss/expected.css')
+
+    def test_coffeescript(self):
+        self._test_compiler('pipeline.compilers.coffee.CoffeeScriptCompiler',
+            'pipeline/compilers/coffee/input.coffee',
+            'pipeline/compilers/coffee/expected.js')
+
+    def test_less(self):
+        self._test_compiler('pipeline.compilers.less.LessCompiler',
+            'pipeline/compilers/less/input.less',
+            'pipeline/compilers/less/expected.css')
+
+    def test_es6(self):
+        self._test_compiler('pipeline.compilers.es6.ES6Compiler',
+            'pipeline/compilers/es6/input.es6',
+            'pipeline/compilers/es6/expected.js')
+
+    def test_stylus(self):
+        self._test_compiler('pipeline.compilers.stylus.StylusCompiler',
+            'pipeline/compilers/stylus/input.styl',
+            'pipeline/compilers/stylus/expected.css')
+
+    def test_livescript(self):
+        self._test_compiler('pipeline.compilers.livescript.LiveScriptCompiler',
+            'pipeline/compilers/livescript/input.ls',
+            'pipeline/compilers/livescript/expected.js')

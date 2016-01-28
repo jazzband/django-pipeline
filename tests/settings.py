@@ -1,4 +1,5 @@
 import os
+import distutils.spawn
 
 
 def local_path(path):
@@ -117,6 +118,28 @@ PIPELINE = {
         }
     }
 }
+
+NODE_MODULES_PATH = local_path('node_modules')
+NODE_BIN_PATH = os.path.join(NODE_MODULES_PATH, '.bin')
+NODE_EXE_PATH = distutils.spawn.find_executable('node')
+HAS_NODE = os.path.exists(NODE_BIN_PATH) and NODE_EXE_PATH
+
+if HAS_NODE:
+    def node_exe_path(command):
+        exe_ext = '.cmd' if os.name == 'nt' else ''
+        return os.path.join(NODE_BIN_PATH, "%s%s" % (command, exe_ext))
+
+    PIPELINE.update({
+        'SASS_BINARY': node_exe_path('node-sass'),
+        'COFFEE_SCRIPT_BINARY': node_exe_path('coffee'),
+        'COFFEE_SCRIPT_ARGUMENTS': ['--no-header'],
+        'LESS_BINARY': node_exe_path('lessc'),
+        'BABEL_BINARY': node_exe_path('babel'),
+        'BABEL_ARGUMENTS': ['--presets', 'es2015'],
+        'STYLUS_BINARY': node_exe_path('stylus'),
+        'LIVE_SCRIPT_BINARY': node_exe_path('lsc'),
+        'LIVE_SCRIPT_ARGUMENTS': ['--no-header'],
+    })
 
 TEMPLATE_DIRS = (
     local_path('templates'),

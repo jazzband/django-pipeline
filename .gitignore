@@ -13,6 +13,7 @@ docs/_build/
 coverage/
 tests/static/
 tests/assets/js/dummy.js
+tests/node_modules/
 .tox/
 .DS_Store
 .idea
@@ -21,3 +22,6 @@ tests/assets/js/dummy.js
 .pydevproject
 .ropeproject
 __pycache__
+npm-debug.log
+tests/npm-cache
+django-pipeline-*/
