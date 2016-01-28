@@ -1,3 +1,4 @@
+import glob
 import os
 import distutils.spawn
 
@@ -59,6 +60,8 @@ SECRET_KEY = "django-pipeline"
 
 PIPELINE = {
     'PIPELINE_ENABLED': True,
+    'JS_COMPRESSOR': None,
+    'CSS_COMPRESSOR': None,
     'STYLESHEETS': {
         'screen': {
             'source_filenames': (
@@ -122,7 +125,11 @@ PIPELINE = {
 NODE_MODULES_PATH = local_path('node_modules')
 NODE_BIN_PATH = os.path.join(NODE_MODULES_PATH, '.bin')
 NODE_EXE_PATH = distutils.spawn.find_executable('node')
+JAVA_EXE_PATH = distutils.spawn.find_executable('java')
+CSSTIDY_EXE_PATH = distutils.spawn.find_executable('csstidy')
 HAS_NODE = os.path.exists(NODE_BIN_PATH) and NODE_EXE_PATH
+HAS_JAVA = bool(JAVA_EXE_PATH)
+HAS_CSSTIDY = bool(CSSTIDY_EXE_PATH)
 
 if HAS_NODE:
     def node_exe_path(command):
@@ -139,7 +146,23 @@ if HAS_NODE:
         'STYLUS_BINARY': node_exe_path('stylus'),
         'LIVE_SCRIPT_BINARY': node_exe_path('lsc'),
         'LIVE_SCRIPT_ARGUMENTS': ['--no-header'],
+        'YUGLIFY_BINARY': node_exe_path('yuglify'),
+        'UGLIFYJS_BINARY': node_exe_path('uglifyjs'),
+        'CSSMIN_BINARY': node_exe_path('cssmin'),
     })
+
+if HAS_NODE and HAS_JAVA:
+    PIPELINE.update({
+        'CLOSURE_BINARY': [
+            JAVA_EXE_PATH, '-jar',
+            os.path.join(NODE_MODULES_PATH, 'google-closure-compiler', 'compiler.jar')],
+        'YUI_BINARY': [
+            JAVA_EXE_PATH, '-jar',
+            glob.glob(os.path.join(NODE_MODULES_PATH, 'yuicompressor', 'build', '*.jar'))[0]]
+    })
+
+if HAS_CSSTIDY:
+    PIPELINE.update({'CSSTIDY_BINARY': CSSTIDY_EXE_PATH})
 
 TEMPLATE_DIRS = (
     local_path('templates'),

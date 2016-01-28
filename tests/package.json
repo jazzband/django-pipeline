@@ -17,6 +17,11 @@
     "less": "^2.5.3",
     "livescript": "^1.4.0",
     "node-sass": "^3.4.2",
-    "stylus": "^0.53.0"
+    "stylus": "^0.53.0",
+    "cssmin": "^0.4.3",
+    "google-closure-compiler": "^20151216.2.0",
+    "uglify-js": "^2.6.1",
+    "yuglify": "^0.1.4",
+    "yuicompressor": "^2.4.8"
   }
 }
