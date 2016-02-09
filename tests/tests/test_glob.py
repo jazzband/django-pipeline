@@ -55,7 +55,6 @@ class GlobTest(TestCase):
         self.assertSequenceEqual(self.glob('a'), [self.normpath('a')])
         self.assertSequenceEqual(self.glob('a', 'D'), [self.normpath('a', 'D')])
         self.assertSequenceEqual(self.glob('aab'), [self.normpath('aab')])
-        self.assertSequenceEqual(self.glob('zymurgy'), [])
 
     def test_glob_one_directory(self):
         self.assertSequenceEqual(

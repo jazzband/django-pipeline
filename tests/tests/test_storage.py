@@ -6,6 +6,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings, modify_settings
 
+from pipeline.collector import default_collector
 from pipeline.storage import PipelineStorage
 
 from tests.tests.test_compiler import DummyCompiler
@@ -49,11 +50,13 @@ class StorageTest(TestCase):
 
     @pipeline_settings(JS_COMPRESSOR=None, CSS_COMPRESSOR=None)
     def test_post_process_dry_run(self):
+        default_collector.collect()
         processed_files = PipelineStorage().post_process({}, True)
         self.assertEqual(list(processed_files), [])
 
-    @pipeline_settings(JS_COMPRESSOR=None, CSS_COMPRESSOR=None)
+    @pipeline_settings(JS_COMPRESSOR=None, CSS_COMPRESSOR=None, COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'])
     def test_post_process(self):
+        default_collector.collect()
         storage = PipelineStorage()
         processed_files = storage.post_process({})
         self.assertTrue(('screen.css', 'screen.css', True) in processed_files)
