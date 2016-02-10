@@ -81,7 +81,9 @@ class DummyCompilerTest(TestCase):
         self.compiler = Compiler()
 
     def test_output_path(self):
-        output_path = self.compiler.output_path("js/helpers.coffee", "js")
+        compiler_class = self.compiler.compilers[0]
+        compiler = compiler_class(verbose=self.compiler.verbose, storage=self.compiler.storage)
+        output_path = compiler.output_path("js/helpers.coffee", "js")
         self.assertEqual(output_path, "js/helpers.js")
 
     def test_compilers_class(self):
@@ -107,7 +109,9 @@ class CompilerStdoutTest(TestCase):
         self.compiler = Compiler()
 
     def test_output_path(self):
-        output_path = self.compiler.output_path("js/helpers.coffee", "js")
+        compiler_class = self.compiler.compilers[0]
+        compiler = compiler_class(verbose=self.compiler.verbose, storage=self.compiler.storage)
+        output_path = compiler.output_path("js/helpers.coffee", "js")
         self.assertEqual(output_path, "js/helpers.js")
 
     def test_compile(self):
@@ -126,7 +130,9 @@ class CompilerSelfWriterTest(TestCase):
         self.compiler = Compiler()
 
     def test_output_path(self):
-        output_path = self.compiler.output_path("js/helpers.coffee", "js")
+        compiler_class = self.compiler.compilers[0]
+        compiler = compiler_class(verbose=self.compiler.verbose, storage=self.compiler.storage)
+        output_path = compiler.output_path("js/helpers.coffee", "js")
         self.assertEqual(output_path, "js/helpers.js")
 
     def test_compile(self):
