@@ -3,6 +3,12 @@
 History
 =======
 
+1.6.5
+=====
+
+* Fix Django < 1.8 compatibility. Thanks to David Trowbridge.
+* Allow to disable collector during development. Thanks to Leonardo Orozco.
+
 1.6.4
 =====
 
