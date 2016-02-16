@@ -25,12 +25,7 @@ def iglob(pathname):
 
     """
     if not has_magic(pathname):
-        try:
-            if staticfiles_storage.exists(pathname):
-                yield pathname
-        except NotImplementedError:
-            # Being optimistic
-            yield pathname
+        yield pathname
         return
     dirname, basename = os.path.split(pathname)
     if not dirname:
