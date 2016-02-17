@@ -112,9 +112,12 @@ class SubProcessCompiler(CompilerBase):
                 argument_list.extend(flattening_arg)
 
         try:
+            stdout_name = None
+
             # We always catch stdout in a file, but we may not have a use for it.
             temp_file_container = cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
             with NamedTemporaryFile(delete=False, dir=temp_file_container) as stdout:
+                stdout_name = stdout.name
                 compiling = subprocess.Popen(argument_list, cwd=cwd,
                                              stdout=stdout,
                                              stderr=subprocess.PIPE)
@@ -135,7 +138,8 @@ class SubProcessCompiler(CompilerBase):
             raise CompilerError(e)
         finally:
             # Decide what to do with captured stdout.
-            if stdout_captured:
-                os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
-            else:
-                os.remove(stdout.name)
+            if stdout_name:
+                if stdout_captured:
+                    os.rename(stdout_name, os.path.join(cwd or os.curdir, stdout_captured))
+                else:
+                    os.remove(stdout_name)
