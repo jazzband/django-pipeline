@@ -3,5 +3,8 @@ recursive-include pipeline/jinja2 *.html *.jinja
 include AUTHORS LICENSE README.rst HISTORY.rst
 recursive-include tests *
 recursive-exclude tests *.pyc *.pyo
+recursive-exclude tests/node_modules *
+recursive-exclude tests/npm-cache *
+recursive-exclude tests/npm *
 include docs/Makefile docs/make.bat docs/conf.py
 recursive-include docs *.rst

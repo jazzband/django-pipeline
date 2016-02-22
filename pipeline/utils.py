@@ -1,8 +1,16 @@
 from __future__ import unicode_literals
 
+try:
+    import fcntl
+except ImportError:
+    # windows
+    fcntl = None
+
 import importlib
 import mimetypes
 import posixpath
+import os
+import sys
 
 try:
     from urllib.parse import quote
@@ -54,3 +62,19 @@ def relpath(path, start=posixpath.curdir):
     if not rel_list:
         return posixpath.curdir
     return posixpath.join(*rel_list)
+
+
+def set_std_streams_blocking():
+    """
+    Set stdout and stderr to be blocking.
+
+    This is called after Popen.communicate() to revert stdout and stderr back
+    to be blocking (the default) in the event that the process to which they
+    were passed manipulated one or both file descriptors to be non-blocking.
+    """
+    if not fcntl:
+        return
+    for f in (sys.__stdout__, sys.__stderr__):
+        fileno = f.fileno()
+        flags = fcntl.fcntl(fileno, fcntl.F_GETFL)
+        fcntl.fcntl(fileno, fcntl.F_SETFL, flags & ~os.O_NONBLOCK)

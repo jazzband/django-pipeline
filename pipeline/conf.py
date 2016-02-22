@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
 import collections
 import shlex
 
@@ -101,7 +102,7 @@ class PipelineSettings(collections.MutableMapping):
         value = self.settings[key]
         if key.endswith(("_BINARY", "_ARGUMENTS")):
             if isinstance(value, string_types):
-                return tuple(shlex.split(value))
+                return tuple(shlex.split(value, posix=(os.name == 'posix')))
             return tuple(value)
         return value
 

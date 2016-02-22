@@ -11,18 +11,24 @@ try:
 except ImportError:
     from unittest.mock import patch  # noqa
 
-from unittest import skipIf
+from unittest import skipIf, skipUnless
 
+from django.conf import settings
 from django.test import TestCase
+from django.test.client import RequestFactory
+from django.utils.encoding import smart_bytes
 
-from pipeline.compressors import Compressor, TEMPLATE_FUNC, \
-    SubProcessCompressor
+from pipeline.compressors import (
+    Compressor, TEMPLATE_FUNC, SubProcessCompressor)
 from pipeline.compressors.yuglify import YuglifyCompressor
 from pipeline.collector import default_collector
 
 from tests.utils import _, pipeline_settings
 
 
+@pipeline_settings(
+    CSS_COMPRESSOR='pipeline.compressors.yuglify.YuglifyCompressor',
+    JS_COMPRESSOR='pipeline.compressors.yuglify.YuglifyCompressor')
 class CompressorTest(TestCase):
     def setUp(self):
         self.maxDiff = None
@@ -186,3 +192,84 @@ class CompressorTest(TestCase):
 
     def tearDown(self):
         default_collector.clear()
+
+
+class CompressorImplementationTest(TestCase):
+
+    maxDiff = None
+
+    def setUp(self):
+        self.compressor = Compressor()
+        default_collector.collect(RequestFactory().get('/'))
+
+    def tearDown(self):
+        default_collector.clear()
+
+    def _test_compressor(self, compressor_cls, compress_type, expected_file):
+        override_settings = {
+            ("%s_COMPRESSOR" % compress_type.upper()): compressor_cls,
+        }
+        with pipeline_settings(**override_settings):
+            if compress_type == 'js':
+                result = self.compressor.compress_js(
+                    [_('pipeline/js/first.js'), _('pipeline/js/second.js')])
+            else:
+                result = self.compressor.compress_css(
+                    [_('pipeline/css/first.css'), _('pipeline/css/second.css')],
+                    os.path.join('pipeline', 'css', os.path.basename(expected_file)))
+        with self.compressor.storage.open(expected_file) as f:
+            expected = f.read()
+        self.assertEqual(smart_bytes(result), expected)
+
+    def test_jsmin(self):
+        self._test_compressor('pipeline.compressors.jsmin.JSMinCompressor',
+            'js', 'pipeline/compressors/jsmin.js')
+
+    def test_slimit(self):
+        self._test_compressor('pipeline.compressors.slimit.SlimItCompressor',
+            'js', 'pipeline/compressors/slimit.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    def test_uglifyjs(self):
+        self._test_compressor('pipeline.compressors.uglifyjs.UglifyJSCompressor',
+            'js', 'pipeline/compressors/uglifyjs.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    def test_yuglify_js(self):
+        self._test_compressor('pipeline.compressors.yuglify.YuglifyCompressor',
+            'js', 'pipeline/compressors/yuglify.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    def test_yuglify_css(self):
+        self._test_compressor('pipeline.compressors.yuglify.YuglifyCompressor',
+            'css', 'pipeline/compressors/yuglify.css')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    def test_cssmin(self):
+        self._test_compressor('pipeline.compressors.cssmin.CSSMinCompressor',
+            'css', 'pipeline/compressors/cssmin.css')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    @skipUnless(settings.HAS_JAVA, "requires java")
+    def test_closure(self):
+        self._test_compressor('pipeline.compressors.closure.ClosureCompressor',
+            'js', 'pipeline/compressors/closure.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    @skipUnless(settings.HAS_JAVA, "requires java")
+    def test_yui_js(self):
+        self._test_compressor('pipeline.compressors.yui.YUICompressor',
+            'js', 'pipeline/compressors/yui.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    @skipUnless(settings.HAS_JAVA, "requires java")
+    def test_yui_css(self):
+        self._test_compressor('pipeline.compressors.yui.YUICompressor',
+            'css', 'pipeline/compressors/yui.css')
+
+    @skipUnless(settings.HAS_CSSTIDY, "requires csstidy")
+    def test_csstidy(self):
+        self._test_compressor('pipeline.compressors.csstidy.CSSTidyCompressor',
+            'css', 'pipeline/compressors/csstidy.css')
+
+
