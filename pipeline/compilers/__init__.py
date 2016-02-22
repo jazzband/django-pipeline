@@ -31,12 +31,12 @@ class Compiler(object):
             for compiler in self.compilers:
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
                 if compiler.match_file(input_path):
-                    output_path = self.output_path(input_path, compiler.output_extension)
+                    output_path = compiler.output_path(input_path, compiler.output_extension)
                     try:
                         infile = self.storage.path(input_path)
                     except NotImplementedError:
                         infile = finders.find(input_path)
-                    outfile = self.output_path(infile, compiler.output_extension)
+                    outfile = compiler.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(input_path, output_path)
                     compiler.compile_file(infile, outfile,
                                           outdated=outdated, force=force)
@@ -52,10 +52,6 @@ class Compiler(object):
         else:
             with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
                 return list(executor.map(_compile, paths))
-
-    def output_path(self, path, extension):
-        path = os.path.splitext(path)
-        return '.'.join((path[0], extension))
 
 
 class CompilerBase(object):
@@ -77,6 +73,10 @@ class CompilerBase(object):
         content = file.read()
         file.close()
         return content
+
+    def output_path(self, path, extension):
+        path = os.path.splitext(path)
+        return '.'.join((path[0], extension))
 
     def is_outdated(self, infile, outfile):
         if not self.storage.exists(outfile):
