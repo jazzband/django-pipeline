@@ -111,6 +111,7 @@ class SubProcessCompiler(CompilerBase):
             else:
                 argument_list.extend(flattening_arg)
 
+        stdout = None
         try:
             # We always catch stdout in a file, but we may not have a use for it.
             temp_file_container = cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
@@ -135,7 +136,8 @@ class SubProcessCompiler(CompilerBase):
             raise CompilerError(e)
         finally:
             # Decide what to do with captured stdout.
-            if stdout_captured:
-                os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
-            else:
-                os.remove(stdout.name)
+            if stdout:
+                if stdout_captured:
+                    os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
+                else:
+                    os.remove(stdout.name)
