@@ -35,12 +35,12 @@ class Compiler(object):
                         infile = self.storage.path(input_path)
                     except NotImplementedError:
                         infile = finders.find(input_path)
-                    outfile = self.output_path(infile, compiler.output_extension)
+                    outfile = compiler.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(infile, outfile)
                     compiler.compile_file(infile, outfile,
                                           outdated=outdated, force=force)
 
-                    return self.output_path(input_path, compiler.output_extension)
+                    return compiler.output_path(input_path, compiler.output_extension)
             else:
                 return input_path
 
@@ -52,10 +52,6 @@ class Compiler(object):
         else:
             with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
                 return list(executor.map(_compile, paths))
-
-    def output_path(self, path, extension):
-        path = os.path.splitext(path)
-        return '.'.join((path[0], extension))
 
 
 class CompilerBase(object):
@@ -77,6 +73,10 @@ class CompilerBase(object):
         content = file.read()
         file.close()
         return content
+
+    def output_path(self, path, extension):
+        path = os.path.splitext(path)
+        return '.'.join((path[0], extension))
 
     def is_outdated(self, infile, outfile):
         if not self.storage.exists(outfile):
@@ -111,6 +111,7 @@ class SubProcessCompiler(CompilerBase):
             else:
                 argument_list.extend(flattening_arg)
 
+        stdout = None
         try:
             # We always catch stdout in a file, but we may not have a use for it.
             temp_file_container = cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
@@ -135,7 +136,8 @@ class SubProcessCompiler(CompilerBase):
             raise CompilerError(e)
         finally:
             # Decide what to do with captured stdout.
-            if stdout_captured:
-                os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
-            else:
-                os.remove(stdout.name)
+            if stdout:
+                if stdout_captured:
+                    os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
+                else:
+                    os.remove(stdout.name)
