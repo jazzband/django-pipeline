@@ -3,6 +3,18 @@
 History
 =======
 
+1.6.6
+=====
+
+* Fix filtering-out of files which require a finder to locate.
+* Allow compilers to override the output path.
+* Fix error reporting when a compiler fails to execute.
+* Fix IOErrors when running collectstatic with some nodejs-based compilers and
+  compressors. Thanks to Frankie Dintino.
+* Fix compatibility of unit tests when running on Windows. Thanks to Frankie
+  Dintino.
+* Add unit tests for compilers and compressors. Thanks to Frankie Dintino.
+
 1.6.5
 =====
 
