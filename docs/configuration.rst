@@ -135,7 +135,7 @@ Other settings
 Defaults to ``not settings.DEBUG``.
 
 ``PIPELINE_COLLECTOR_ENABLED``
-....................
+..............................
 
 ``True`` if assets should be collected in develop , ``False`` if not.
 
@@ -146,7 +146,7 @@ Defaults to ``True``
   this only work when PIPELINE_ENABLED is False.
 
 ``CSS_COMPRESSOR``
-............................
+..................
 
 Compressor class to be applied to CSS files.
 
@@ -155,7 +155,7 @@ If empty or ``None``, CSS files won't be compressed.
 Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``.
 
 ``JS_COMPRESSOR``
-...........................
+.................
 
 Compressor class to be applied to JavaScript files.
 
@@ -168,7 +168,7 @@ Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``
   Please note that in order to use Yuglify compressor, you need to install Yuglify (see :doc:`installation` for more details).
 
 ``TEMPLATE_NAMESPACE``
-...............................
+......................
 
 Object name where all of your compiled templates will be added, from within your browser.
 To access them with your own JavaScript namespace, change it to the object of your choice.
@@ -177,7 +177,7 @@ Defaults to ``"window.JST"``
 
 
 ``TEMPLATE_EXT``
-.........................
+................
 
 The extension for which Pipeline will consider the file as a Javascript template.
 To use a different extension, like ``.mustache``, set this settings to ``.mustache``.
@@ -185,7 +185,7 @@ To use a different extension, like ``.mustache``, set this settings to ``.mustac
 Defaults to ``".jst"``
 
 ``TEMPLATE_FUNC``
-..........................
+.................
 
 JavaScript function that compiles your JavaScript templates.
 Pipeline doesn't bundle a javascript template library, but the default
@@ -195,7 +195,7 @@ setting is to use the
 Defaults to ``"_.template"``
 
 ``TEMPLATE_SEPARATOR``
-...............................
+......................
 
 Character chain used by Pipeline as replacement for directory separator.
 
@@ -203,7 +203,7 @@ Defaults to ``"_"``
 
 
 ``MIMETYPES``
-......................
+.............
 
 Tuple that match file extension with their corresponding mimetypes.
 
@@ -253,7 +253,7 @@ Overriding embedding settings
 You can override these rules using the following settings:
 
 ``EMBED_MAX_IMAGE_SIZE``
-.................................
+........................
 
 Setting that controls the maximum image size (in bytes) to embed in CSS using Data-URIs.
 Internet Explorer 8 has issues with assets over 32 kilobytes.
@@ -261,7 +261,7 @@ Internet Explorer 8 has issues with assets over 32 kilobytes.
 Defaults to ``32700``
 
 ``EMBED_PATH``
-.......................
+..............
 
 Setting the directory that an asset needs to be in so that it is embedded
 
