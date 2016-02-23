@@ -149,6 +149,7 @@ if HAS_NODE:
         'YUGLIFY_BINARY': node_exe_path('yuglify'),
         'UGLIFYJS_BINARY': node_exe_path('uglifyjs'),
         'CSSMIN_BINARY': node_exe_path('cssmin'),
+        'CLEANCSS_BINARY': node_exe_path('cleancss'),
     })
 
 if HAS_NODE and HAS_JAVA:

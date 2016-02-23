@@ -57,6 +57,9 @@ DEFAULTS = {
     'CSSMIN_BINARY': '/usr/bin/env cssmin',
     'CSSMIN_ARGUMENTS': '',
 
+    'CLEANCSS_BINARY': '/usr/bin/env cssclean',
+    'CLEANCSS_ARGUMENTS': '',
+
     'COFFEE_SCRIPT_BINARY': '/usr/bin/env coffee',
     'COFFEE_SCRIPT_ARGUMENTS': '',
 
