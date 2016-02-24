@@ -4,7 +4,13 @@ from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.management import call_command
 from django.test import TestCase
-from django.test.utils import override_settings, modify_settings
+from django.test.utils import override_settings
+
+try:
+    from django.test.utils import modify_settings
+except ImportError:
+    # Django < 1.7
+    from tests.utils import modify_settings
 
 from pipeline.collector import default_collector
 from pipeline.storage import PipelineStorage
