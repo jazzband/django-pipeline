@@ -23,6 +23,8 @@ DEFAULTS = {
     'PIPELINE_ROOT': _settings.STATIC_ROOT,
     'PIPELINE_URL': _settings.STATIC_URL,
 
+    'SHOW_ERRORS_INLINE': _settings.DEBUG,
+
     'CSS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
     'JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
     'COMPILERS': [],

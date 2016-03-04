@@ -156,7 +156,16 @@ class InvalidCompilerTest(TestCase):
         self.compiler = Compiler()
 
     def test_compile(self):
-        self.assertRaises(CompilerError, self.compiler.compile, [_('pipeline/js/dummy.coffee')])
+        with self.assertRaises(CompilerError) as cm:
+            self.compiler.compile([_('pipeline/js/dummy.coffee')])
+
+            e = cm.exception
+            self.assertEqual(
+                e.command,
+                ['this-exists-nowhere-as-a-command-and-should-fail',
+                 'pipeline/js/dummy.coffee',
+                 'pipeline/js/dummy.junk'])
+            self.assertEqual(e.error_output, '')
 
     def tearDown(self):
         default_collector.clear()
@@ -170,7 +179,12 @@ class FailingCompilerTest(TestCase):
         self.compiler = Compiler()
 
     def test_compile(self):
-        self.assertRaises(CompilerError, self.compiler.compile, [_('pipeline/js/dummy.coffee')])
+        with self.assertRaises(CompilerError) as cm:
+            self.compiler.compile([_('pipeline/js/dummy.coffee')])
+
+            e = cm.exception
+            self.assertEqual(e.command, ['/usr/bin/env', 'false'])
+            self.assertEqual(e.error_output, '')
 
     def tearDown(self):
         default_collector.clear()

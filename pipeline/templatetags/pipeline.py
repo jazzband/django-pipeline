@@ -1,16 +1,18 @@
 from __future__ import unicode_literals
 
 import logging
+import subprocess
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django import template
-from django.template.base import VariableDoesNotExist
+from django.template.base import Context, VariableDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 from ..collector import default_collector
 from ..conf import settings
+from ..exceptions import CompilerError
 from ..packager import Packager, PackageNotFound
 from ..utils import guess_type
 
@@ -51,7 +53,7 @@ class PipelineMixin(object):
         except VariableDoesNotExist:
             pass
 
-    def render_compressed(self, package, package_type):
+    def render_compressed(self, package, package_name, package_type):
         if settings.PIPELINE_ENABLED:
             method = getattr(self, "render_{0}".format(package_type))
             return method(package, package.output_filename)
@@ -61,9 +63,28 @@ class PipelineMixin(object):
 
             packager = Packager()
             method = getattr(self, "render_individual_{0}".format(package_type))
-            paths = packager.compile(package.paths)
+
+            try:
+                paths = packager.compile(package.paths)
+            except CompilerError as e:
+                if settings.SHOW_ERRORS_INLINE:
+                    method = getattr(self, 'render_error_{0}'.format(
+                        package_type))
+
+                    return method(package_name, e)
+                else:
+                    raise
+
             templates = packager.pack_templates(package)
             return method(package, paths, templates=templates)
+
+    def render_error(self, package_type, package_name, e):
+        return render_to_string('pipeline/compile_error.html', Context({
+            'package_type': package_type,
+            'package_name': package_name,
+            'command': subprocess.list2cmdline(e.command),
+            'errors': e.error_output,
+        }))
 
 
 class StylesheetNode(PipelineMixin, template.Node):
@@ -79,7 +100,7 @@ class StylesheetNode(PipelineMixin, template.Node):
         except PackageNotFound:
             logger.warn("Package %r is unknown. Check PIPELINE_CSS in your settings.", package_name)
             return ''  # fail silently, do not return anything if an invalid group is specified
-        return self.render_compressed(package, 'css')
+        return self.render_compressed(package, package_name, 'css')
 
     def render_css(self, package, path):
         template_name = package.template_name or "pipeline/css.html"
@@ -93,6 +114,10 @@ class StylesheetNode(PipelineMixin, template.Node):
     def render_individual_css(self, package, paths, **kwargs):
         tags = [self.render_css(package, path) for path in paths]
         return '\n'.join(tags)
+
+    def render_error_css(self, package_name, e):
+        return super(StylesheetNode, self).render_error(
+            'CSS', package_name, e)
 
 
 class JavascriptNode(PipelineMixin, template.Node):
@@ -108,7 +133,7 @@ class JavascriptNode(PipelineMixin, template.Node):
         except PackageNotFound:
             logger.warn("Package %r is unknown. Check PIPELINE_JS in your settings.", package_name)
             return ''  # fail silently, do not return anything if an invalid group is specified
-        return self.render_compressed(package, 'js')
+        return self.render_compressed(package, package_name, 'js')
 
     def render_js(self, package, path):
         template_name = package.template_name or "pipeline/js.html"
@@ -131,6 +156,10 @@ class JavascriptNode(PipelineMixin, template.Node):
         if templates:
             tags.append(self.render_inline(package, templates))
         return '\n'.join(tags)
+
+    def render_error_js(self, package_name, e):
+        return super(JavascriptNode, self).render_error(
+            'JavaScript', package_name, e)
 
 
 @register.tag
