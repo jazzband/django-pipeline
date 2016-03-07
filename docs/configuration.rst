@@ -145,6 +145,18 @@ Defaults to ``True``
 
   this only work when PIPELINE_ENABLED is False.
 
+``SHOW_ERRORS_INLINE``
+......................
+
+``True`` if errors compiling CSS/JavaScript files should be shown inline at
+the top of the browser window, or ``False`` if they should trigger exceptions
+(the older behavior).
+
+This only applies when compiling through the ``{% stylesheet %}`` or
+``{% javascript %}`` template tags. It won't impact ``collectstatic``.
+
+Defaults to ``settings.DEBUG``.
+
 ``CSS_COMPRESSOR``
 ..................
 
