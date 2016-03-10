@@ -150,11 +150,14 @@ ES6 compiler
 The ES6 compiler uses `Babel <https://babeljs.io>`_
 to convert ES6+ code into vanilla ES5.
 
+Note that for files to be transpiled properly they must have the file extension **.es6**
+
 To use it add this to your ``PIPELINE['COMPILERS']`` ::
 
   PIPELINE['COMPILERS'] = (
       'pipeline.compilers.es6.ES6Compiler',
   )
+  
 
 
 ``BABEL_BINARY``
