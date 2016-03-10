@@ -159,7 +159,6 @@ To use it add this to your ``PIPELINE['COMPILERS']`` ::
   )
   
 
-
 ``BABEL_BINARY``
 --------------------------
 
