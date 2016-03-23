@@ -79,11 +79,12 @@ class CompilerBase(object):
         return '.'.join((path[0], extension))
 
     def is_outdated(self, infile, outfile):
-        if not self.storage.exists(outfile):
+        if not os.path.exists(outfile):
             return True
+
         try:
-            return self.storage.modified_time(infile) > self.storage.modified_time(outfile)
-        except (OSError, NotImplementedError):
+            return os.path.getmtime(infile) > os.path.getmtime(outfile)
+        except OSError:
             return True
 
 
