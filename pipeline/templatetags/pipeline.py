@@ -54,29 +54,66 @@ class PipelineMixin(object):
             pass
 
     def render_compressed(self, package, package_name, package_type):
+        """Render HTML for the package.
+
+        If ``PIPELINE_ENABLED`` is ``True``, this will render the package's
+        output file (using :py:meth:`render_compressed_output`). Otherwise,
+        this will render the package's source files (using
+        :py:meth:`render_compressed_sources`).
+
+        Subclasses can override this method to provide custom behavior for
+        determining what to render.
+        """
         if settings.PIPELINE_ENABLED:
-            method = getattr(self, "render_{0}".format(package_type))
-            return method(package, package.output_filename)
+            return self.render_compressed_output(package, package_name,
+                                                 package_type)
         else:
-            if settings.PIPELINE_COLLECTOR_ENABLED:
-                default_collector.collect(self.request)
+            return self.render_compressed_sources(package, package_name,
+                                                  package_type)
 
-            packager = Packager()
-            method = getattr(self, "render_individual_{0}".format(package_type))
+    def render_compressed_output(self, package, package_name, package_type):
+        """Render HTML for using the package's output file.
 
-            try:
-                paths = packager.compile(package.paths)
-            except CompilerError as e:
-                if settings.SHOW_ERRORS_INLINE:
-                    method = getattr(self, 'render_error_{0}'.format(
-                        package_type))
+        Subclasses can override this method to provide custom behavior for
+        rendering the output file.
+        """
+        method = getattr(self, 'render_{0}'.format(package_type))
 
-                    return method(package_name, e)
-                else:
-                    raise
+        return method(package, package.output_filename)
 
-            templates = packager.pack_templates(package)
-            return method(package, paths, templates=templates)
+    def render_compressed_sources(self, package, package_name, package_type):
+        """Render HTML for using the package's list of source files.
+
+        Each source file will first be collected, if
+        ``PIPELINE_COLLECTOR_ENABLED`` is ``True``.
+
+        If there are any errors compiling any of the source files, an
+        ``SHOW_ERRORS_INLINE`` is ``True``, those errors will be shown at
+        the top of the page.
+
+        Subclasses can override this method to provide custom behavior for
+        rendering the source files.
+        """
+        if settings.PIPELINE_COLLECTOR_ENABLED:
+            default_collector.collect(self.request)
+
+        packager = Packager()
+        method = getattr(self, 'render_individual_{0}'.format(package_type))
+
+        try:
+            paths = packager.compile(package.paths)
+        except CompilerError as e:
+            if settings.SHOW_ERRORS_INLINE:
+                method = getattr(self, 'render_error_{0}'.format(
+                    package_type))
+
+                return method(package_name, e)
+            else:
+                raise
+
+        templates = packager.pack_templates(package)
+
+        return method(package, paths, templates=templates)
 
     def render_error(self, package_type, package_name, e):
         return render_to_string('pipeline/compile_error.html', Context({

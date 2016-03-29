@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.utils import six
 
 from pipeline.finders import PipelineFinder
 
@@ -26,7 +27,7 @@ class Collector(object):
         for d in dirs:
             self.clear(os.path.join(path, d))
 
-    def collect(self, request=None):
+    def collect(self, request=None, files=[]):
         if self.request and self.request is request:
             return
         self.request = request
@@ -41,9 +42,16 @@ class Collector(object):
                     prefixed_path = os.path.join(storage.prefix, path)
                 else:
                     prefixed_path = path
-                if prefixed_path not in found_files:
+
+                if (prefixed_path not in found_files and
+                    (not files or prefixed_path in files)):
                     found_files[prefixed_path] = (storage, path)
                     self.copy_file(path, prefixed_path, storage)
+
+                if files and len(files) == len(found_files):
+                    break
+
+        return six.iterkeys(found_files)
 
     def copy_file(self, path, prefixed_path, source_storage):
         # Delete the target file if needed or break
