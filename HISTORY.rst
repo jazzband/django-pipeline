@@ -3,6 +3,18 @@
 History
 =======
 
+1.6.8
+=====
+
+* Made templatetags easier to subclass for special rendering behavior. Thanks
+  to Christian Hammond.
+* Updated the link to readthedocs. Thanks to Corey Farwell.
+* Fixed some log messages to correctly refer to the new PIPELINE settings
+  tructure. Thanks to Alvin Mites.
+* Changed file outdated checks to use os.path methods directly, avoiding
+  potential SuspiciousFileOperation errors which could appear with some django
+  storage configurations.
+
 1.6.7
 =====
 
