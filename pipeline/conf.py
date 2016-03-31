@@ -77,8 +77,6 @@ DEFAULTS = {
     'LESS_BINARY': '/usr/bin/env lessc',
     'LESS_ARGUMENTS': '',
 
-    'DISABLE_WRAPPER': False,
-
     'MIMETYPES': (
         (b'text/coffeescript', '.coffee'),
         (b'text/less', '.less'),
