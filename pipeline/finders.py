@@ -4,6 +4,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.finders import BaseFinder, BaseStorageFinder, find, \
     AppDirectoriesFinder as DjangoAppDirectoriesFinder, FileSystemFinder as DjangoFileSystemFinder
 from django.utils._os import safe_join
+from os.path import normpath
 
 from pipeline.conf import settings
 
@@ -28,7 +29,7 @@ class ManifestFinder(BaseFinder):
         """
         matches = []
         for elem in chain(settings.STYLESHEETS.values(), settings.JAVASCRIPT.values()):
-            if elem['output_filename'] == path:
+            if normpath(elem['output_filename']) == normpath(path):
                 match = safe_join(settings.PIPELINE_ROOT, path)
                 if not all:
                     return match
