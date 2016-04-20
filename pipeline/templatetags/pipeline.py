@@ -41,8 +41,8 @@ class PipelineMixin(object):
             package = {package_name: package}
 
         packager = {
-            'js': Packager(css_packages={}, js_packages=package),
-            'css': Packager(css_packages=package, js_packages={}),
+            'js': Packager(css_packages={}, js_packages=package, verbose=settings.VERBOSE),
+            'css': Packager(css_packages=package, js_packages={}, verbose=settings.VERBOSE),
         }[package_type]
 
         return packager.package_for(package_type, package_name)
@@ -97,7 +97,7 @@ class PipelineMixin(object):
         if settings.PIPELINE_COLLECTOR_ENABLED:
             default_collector.collect(self.request)
 
-        packager = Packager()
+        packager = Packager(verbose=settings.VERBOSE)
         method = getattr(self, 'render_individual_{0}'.format(package_type))
 
         try:

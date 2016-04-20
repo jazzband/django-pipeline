@@ -233,6 +233,12 @@ Defaults to ::
   If you support Internet Explorer version 8 and below, you should
   declare javascript files as ``text/javascript``.
 
+``VERBOSE``
+.............
+
+``True`` if Pipeline should print some extra information for debugging.
+
+Defaults to ``settings.DEBUG``.
 
 Embedding fonts and images
 ==========================

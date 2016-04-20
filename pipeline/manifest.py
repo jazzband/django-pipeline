@@ -15,7 +15,7 @@ from pipeline.packager import Packager
 
 class PipelineManifest(Manifest):
     def __init__(self):
-        self.packager = Packager()
+        self.packager = Packager(verbose=settings.VERBOSE)
         self.packages = self.collect_packages()
         self.finders = get_finders()
         self.package_files = []
