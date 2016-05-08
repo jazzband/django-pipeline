@@ -25,3 +25,4 @@ __pycache__
 npm-debug.log
 tests/npm-cache
 django-pipeline-*/
+.tags
