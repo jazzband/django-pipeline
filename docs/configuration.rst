@@ -298,4 +298,7 @@ All javascript output is wrapped in an anonymous function : ::
 
 This safety wrapper, make it difficult to pollute the global namespace by accident and improve performance.
 
-You can override this behavior by setting ``DISABLE_WRAPPER`` to ``True``.
+You can override this behavior by setting ``DISABLE_WRAPPER`` to ``True``. If you want to use your own wrapper, change
+the ``JS_WRAPPER`` setting. For example: ::
+
+  JS_WRAPPER = "(function(){stuff();%s})();"
