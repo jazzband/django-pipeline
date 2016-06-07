@@ -62,7 +62,7 @@ class Compressor(object):
             js = js + self.compile_templates(templates)
 
         if not settings.DISABLE_WRAPPER:
-            js = "(function() {\n%s\n}).call(this);" % js
+            js = settings.JS_WRAPPER % js
 
         compressor = self.js_compressor
         if compressor:

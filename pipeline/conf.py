@@ -38,6 +38,7 @@ DEFAULTS = {
     'TEMPLATE_SEPARATOR': "_",
 
     'DISABLE_WRAPPER': False,
+    'JS_WRAPPER': "(function() {\n%s\n}).call(this);",
 
     'CSSTIDY_BINARY': '/usr/bin/env csstidy',
     'CSSTIDY_ARGUMENTS': '--template=highest',
