@@ -40,6 +40,9 @@ class Compiler(object):
                     compiler.compile_file(infile, outfile,
                                           outdated=outdated, force=force)
 
+                    if getattr(self.storage, 'file_permissions_mode', None) is not None:
+                        os.chmod(outfile, self.storage.file_permissions_mode)
+
                     return compiler.output_path(input_path, compiler.output_extension)
             else:
                 return input_path
