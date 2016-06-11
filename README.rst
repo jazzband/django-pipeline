@@ -26,4 +26,4 @@ Documentation
 -------------
 
 For documentation, usage, and examples, see :
-https://django-pipeline.readthedocs.org
+https://django-pipeline.readthedocs.io

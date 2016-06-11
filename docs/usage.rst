@@ -78,7 +78,7 @@ Cache manifest
 ==============
 
 Pipeline provide a way to add your javascripts and stylesheets files to a
-cache-manifest via `Manifesto <http://manifesto.readthedocs.org/>`_.
+cache-manifest via `Manifesto <https://manifesto.readthedocs.io/>`_.
 
 To do so, you just need to add manifesto app to your ``INSTALLED_APPS``.
 
