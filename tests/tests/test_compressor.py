@@ -208,13 +208,14 @@ class CompressorImplementationTest(TestCase):
     def _test_compressor(self, compressor_cls, compress_type, expected_file):
         override_settings = {
             ("%s_COMPRESSOR" % compress_type.upper()): compressor_cls,
+            'DISABLE_WRAPPER': True,
         }
         with pipeline_settings(**override_settings):
             if compress_type == 'js':
-                result = self.compressor.compress_js(
+                result, source_map = self.compressor.compress_js(
                     [_('pipeline/js/first.js'), _('pipeline/js/second.js')])
             else:
-                result = self.compressor.compress_css(
+                result, source_map = self.compressor.compress_css(
                     [_('pipeline/css/first.css'), _('pipeline/css/second.css')],
                     os.path.join('pipeline', 'css', os.path.basename(expected_file)))
         with self.compressor.storage.open(expected_file) as f:
@@ -250,6 +251,11 @@ class CompressorImplementationTest(TestCase):
             'css', 'pipeline/compressors/cssmin.css')
 
     @skipUnless(settings.HAS_NODE, "requires node")
+    def test_cssclean(self):
+        self._test_compressor('pipeline.compressors.cleancss.CleanCSSCompressor',
+            'css', 'pipeline/compressors/cleancss.css')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
     @skipUnless(settings.HAS_JAVA, "requires java")
     def test_closure(self):
         self._test_compressor('pipeline.compressors.closure.ClosureCompressor',
@@ -271,5 +277,4 @@ class CompressorImplementationTest(TestCase):
     def test_csstidy(self):
         self._test_compressor('pipeline.compressors.csstidy.CSSTidyCompressor',
             'css', 'pipeline/compressors/csstidy.css')
-
 

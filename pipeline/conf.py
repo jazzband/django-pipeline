@@ -40,6 +40,8 @@ DEFAULTS = {
     'DISABLE_WRAPPER': False,
     'JS_WRAPPER': "(function() {\n%s\n}).call(this);",
 
+    'OUTPUT_SOURCEMAPS': False,
+
     'CSSTIDY_BINARY': '/usr/bin/env csstidy',
     'CSSTIDY_ARGUMENTS': '--template=highest',
 
@@ -59,6 +61,9 @@ DEFAULTS = {
 
     'CSSMIN_BINARY': '/usr/bin/env cssmin',
     'CSSMIN_ARGUMENTS': '',
+
+    'CLEANCSS_BINARY': '/usr/bin/env cssclean',
+    'CLEANCSS_ARGUMENTS': '',
 
     'COFFEE_SCRIPT_BINARY': '/usr/bin/env coffee',
     'COFFEE_SCRIPT_ARGUMENTS': '',

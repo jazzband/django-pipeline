@@ -13,9 +13,15 @@ class StylusCompiler(SubProcessCompiler):
         return filename.endswith('.styl')
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
+        args = list(settings.STYLUS_ARGUMENTS)
+
+        sourcemap_flags = set(['-s', '--sourcemap'])
+        if settings.OUTPUT_SOURCEMAPS and not(set(args) & sourcemap_flags):
+            args += ['--sourcemap']
+
         command = (
             settings.STYLUS_BINARY,
-            settings.STYLUS_ARGUMENTS,
+            args,
             infile
         )
         return self.execute_command(command, cwd=dirname(infile))
