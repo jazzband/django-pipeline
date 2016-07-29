@@ -13,6 +13,8 @@ class StylusCompiler(SubProcessCompiler):
         return filename.endswith('.styl')
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
+        if not outdated and not force:
+            return
         command = (
             settings.STYLUS_BINARY,
             settings.STYLUS_ARGUMENTS,
