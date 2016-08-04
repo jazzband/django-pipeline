@@ -233,6 +233,21 @@ To use it, add this to your settings ::
   PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.NoopCompressor'
 
 
+rCSSmin compressor
+==================
+
+The rCSSmin compressor use the `rCSSmin <http://opensource.perlig.de/rcssmin/>`_ python library
+to compress stylesheets.
+
+To use it, add this to your ``PIPELINE_CSS_COMPRESSOR``::
+
+  PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.rcssmin.RCSSminCompressor'
+
+Install the rCSSmin library with your favorite Python package manager ::
+
+  pip install rcssmin
+
+
 Write your own compressor class
 ===============================
 
