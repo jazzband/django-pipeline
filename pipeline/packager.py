@@ -99,11 +99,11 @@ class Packager(object):
                          output_filename=package.output_filename,
                          variant=package.variant, **kwargs)
 
-    def compile(self, paths, compiler_options, force=False):
+    def compile(self, paths, compiler_options={}, force=False):
         return self.compiler.compile(
             paths,
-            force=force,
             compiler_options=compiler_options,
+            force=force,
         )
 
     def pack(self, package, compress, signal, **kwargs):
@@ -112,8 +112,8 @@ class Packager(object):
             print("Saving: %s" % output_filename)
         paths = self.compile(
             package.paths,
-            force=True,
             compiler_options=package.compiler_options,
+            force=True,
         )
         content = compress(paths, **kwargs)
         self.save_file(output_filename, content)
