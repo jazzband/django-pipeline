@@ -143,8 +143,6 @@ class SubProcessCompiler(CompilerBase):
             # Decide what to do with captured stdout.
             if stdout:
                 if stdout_captured:
-                    if os.path.isfile(os.path.join(cwd or os.curdir, stdout_captured)):
-                        os.remove(os.path.join(cwd or os.curdir, stdout_captured))
                     os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
                 else:
                     os.remove(stdout.name)
