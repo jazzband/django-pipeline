@@ -112,6 +112,8 @@ class SubProcessCompiler(CompilerBase):
             else:
                 argument_list.extend(flattening_arg)
 
+        # Filter out empty elements in argument_list
+        argument_list = filter(None, argument_list)
         stdout = None
         try:
             # We always catch stdout in a file, but we may not have a use for it.
