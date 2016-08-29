@@ -112,7 +112,8 @@ class SubProcessCompiler(CompilerBase):
             else:
                 argument_list.extend(flattening_arg)
 
-        # Filter out empty elements in argument_list
+        # The first element in argument_list is the program that will be executed; if it is '', then
+        # a PermissionError will be raised. Thus empty arguments are filtered out from argument_list
         argument_list = filter(None, argument_list)
         stdout = None
         try:
