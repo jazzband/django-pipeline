@@ -42,6 +42,18 @@ class InvalidCompiler(SubProcessCompiler):
         )
         return self.execute_command(command)
 
+class CompilerWithEmptyFirstArg(SubProcessCompiler):
+    output_extension = 'junk'
+
+    def match_file(self, path):
+        return path.endswith('.coffee')
+
+    def compile_file(self, infile, outfile, outdated=False, force=False):
+        command = (
+            ('', '/usr/bin/env', 'cat'),
+            infile,
+        )
+        return self.execute_command(command, stdout_captured=outfile)
 
 class CopyingCompiler(SubProcessCompiler):
     output_extension = 'junk'
@@ -149,6 +161,20 @@ class CompilerSelfWriterTest(TestCase):
         default_collector.clear()
 
 
+@pipeline_settings(COMPILERS=['tests.tests.test_compiler.CompilerWithEmptyFirstArg'])
+class CompilerWithEmptyFirstArgTest(TestCase):
+    def setUp(self):
+        default_collector.collect()
+        self.compiler = Compiler()
+
+    def test_compile(self):
+            paths = self.compiler.compile([_('pipeline/js/dummy.coffee')])
+            default_collector.collect()
+            self.assertEqual([_('pipeline/js/dummy.junk')], list(paths))
+
+    def tearDown(self):
+        default_collector.clear()
+
 @pipeline_settings(COMPILERS=['tests.tests.test_compiler.InvalidCompiler'])
 class InvalidCompilerTest(TestCase):
     def setUp(self):
@@ -158,7 +184,6 @@ class InvalidCompilerTest(TestCase):
     def test_compile(self):
         with self.assertRaises(CompilerError) as cm:
             self.compiler.compile([_('pipeline/js/dummy.coffee')])
-
             e = cm.exception
             self.assertEqual(
                 e.command,
