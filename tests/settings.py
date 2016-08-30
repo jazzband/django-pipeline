@@ -122,12 +122,12 @@ PIPELINE = {
     }
 }
 
-NODE_MODULES_PATH = local_path('node_modules')
+NODE_MODULES_PATH = local_path('../node_modules')
 NODE_BIN_PATH = os.path.join(NODE_MODULES_PATH, '.bin')
 NODE_EXE_PATH = distutils.spawn.find_executable('node')
 JAVA_EXE_PATH = distutils.spawn.find_executable('java')
 CSSTIDY_EXE_PATH = distutils.spawn.find_executable('csstidy')
-HAS_NODE = os.path.exists(NODE_BIN_PATH) and NODE_EXE_PATH
+HAS_NODE = bool(NODE_EXE_PATH)
 HAS_JAVA = bool(JAVA_EXE_PATH)
 HAS_CSSTIDY = bool(CSSTIDY_EXE_PATH)
 
