@@ -3,6 +3,13 @@
 History
 =======
 
+1.6.9
+=====
+
+* Various build improvements.
+* Improved setup.py classifiers. Thanks to Sobolev Nikita.
+* Documentation improvements. Thanks to Adam Chainz.
+
 1.6.8
 =====
 
