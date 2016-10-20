@@ -1,5 +1,6 @@
 import os
 
+import django
 from django.conf import settings
 from django.utils import six
 
@@ -17,6 +18,11 @@ def _(path):
 
 class pipeline_settings(override_settings):
     def __init__(self, **kwargs):
+        if django.VERSION[:2] >= (1, 10):
+            # Django 1.10's override_settings inherits from TestContextDecorator
+            # and its __init__ method calls its superclass' __init__ method too,
+            # so we must do the same.
+            super(pipeline_settings, self).__init__()
         self.options = {'PIPELINE': kwargs}
 
 
