@@ -16,6 +16,10 @@ env:
   - TOXENV=pypy-django19
   - TOXENV=py34-django19
   - TOXENV=py35-django19
+  - TOXENV=py27-django110
+  - TOXENV=pypy-django110
+  - TOXENV=py34-django110
+  - TOXENV=py35-django110
 docsinstall: pip install -q tox
 before_install:
   - nvm install node

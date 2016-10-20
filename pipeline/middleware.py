@@ -6,8 +6,14 @@ from django.utils.html import strip_spaces_between_tags as minify_html
 
 from pipeline.conf import settings
 
+try:
+    # Support for Django 1.10 new MIDDLEWARE setting
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:  # Django < 1.10
+    MiddlewareMixin = object
 
-class MinifyHTMLMiddleware(object):
+
+class MinifyHTMLMiddleware(MiddlewareMixin):
     def __init__(self):
         if not settings.PIPELINE_ENABLED:
             raise MiddlewareNotUsed
