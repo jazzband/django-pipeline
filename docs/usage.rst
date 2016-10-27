@@ -47,7 +47,7 @@ Pipeline integrates with staticfiles, you just need to setup ``STATICFILES_STORA
 
     STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 
-Then when you run ``collectstatic`` command, your CSS and your javascripts will be compressed in the same time ::
+Then when you run ``collectstatic`` command, your CSS and your javascripts will be compressed at the same time ::
 
     $ python manage.py collectstatic
 

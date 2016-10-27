@@ -143,7 +143,7 @@ Defaults to ``True``
 
 .. note::
 
-  this only work when PIPELINE_ENABLED is False.
+  This only applies when ``PIPELINE_ENABLED`` is ``False``.
 
 ``SHOW_ERRORS_INLINE``
 ......................
