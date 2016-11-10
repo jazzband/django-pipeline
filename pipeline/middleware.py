@@ -14,7 +14,8 @@ except ImportError:  # Django < 1.10
 
 
 class MinifyHTMLMiddleware(MiddlewareMixin):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(MinifyHTMLMiddleware, self).__init__(*args, **kwargs)
         if not settings.PIPELINE_ENABLED:
             raise MiddlewareNotUsed
 
