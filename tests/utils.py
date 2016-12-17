@@ -17,7 +17,7 @@ def _(path):
 
 class pipeline_settings(override_settings):
     def __init__(self, **kwargs):
-        self.options = {'PIPELINE': kwargs}
+        super(pipeline_settings, self).__init__(**{'PIPELINE': kwargs})
 
 
 # Django < 1.7 (copy-pasted from Django 1.7)
