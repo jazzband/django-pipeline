@@ -3,6 +3,12 @@
 History
 =======
 
+1.6.10
+======
+
+* Added Django 1.10 compatiblity issues. Thanks to Austin Pua and Silvan Spross.
+* Documentation improvements. Thanks to Chris Streeter.
+
 1.6.9
 =====
 
