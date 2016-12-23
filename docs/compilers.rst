@@ -229,3 +229,13 @@ Compass (standalone)
     django-pipeline-compass is a compiler for `django-pipeline <https://github.com/jazzband/django-pipeline>`_. Making it really easy to use scss and compass with out requiring the compass gem.
 :Link:
     `https://github.com/vbabiy/django-pipeline-compass`
+
+Libsass (standalone)
+--------------------
+
+:Creator:
+    `Johanderson Mogollon <https://github.com/sonic182>`_
+:Description:
+    libsasscompiler is a compiler for `django-pipeline <https://github.com/jazzband/django-pipeline>`_. Making it really easy to use scss/sass with the super fast libsass library.
+:Link:
+    `https://github.com/sonic182/libsasscompiler`
