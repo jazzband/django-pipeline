@@ -78,7 +78,7 @@ class Collector(object):
             else:
                 try:
                     # When was the source file modified last time?
-                    source_last_modified = self._get_modified_time(source_storage, prefixed_path)
+                    source_last_modified = self._get_modified_time(source_storage, path)
                 except (OSError, NotImplementedError, AttributeError):
                     pass
                 else:
