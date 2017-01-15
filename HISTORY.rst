@@ -3,6 +3,11 @@
 History
 =======
 
+1.6.11
+======
+
+* Fix performance regression. Thanks to Christian Hammond.
+
 1.6.10
 ======
 
