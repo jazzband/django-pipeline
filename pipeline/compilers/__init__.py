@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import os
+import shutil
 import subprocess
 from tempfile import NamedTemporaryFile
 
@@ -146,6 +147,6 @@ class SubProcessCompiler(CompilerBase):
             # Decide what to do with captured stdout.
             if stdout:
                 if stdout_captured:
-                    os.rename(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
+                    shutil.move(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
                 else:
                     os.remove(stdout.name)
