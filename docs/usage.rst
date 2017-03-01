@@ -40,6 +40,49 @@ with the name “scripts”, you would use the following code to output them all
    {% stylesheet 'stats' %}
    {% javascript 'scripts' %}
 
+
+Form Media
+==========
+
+Django forms and widgets can specify individual CSS or JavaScript files to
+include on a page by defining a ``Form.Media`` class with ``css`` and ``js``
+attributes.
+
+Pipeline builds upon this by allowing packages to be listed in
+``css_packages`` and ``js_packages``. This is equivalent to manually including
+these packages in a page's template using the template tags.
+
+To use these, just have your form or widget's ``Media`` class inherit from
+``pipeline.forms.PipelineFormMedia`` and define ``css_packages`` and
+``js_packages``. You can also continue to reference individual CSS/JavaScript
+files using the original ``css``/``js`` attributes, if needed.
+
+Note that unlike the template tags, you cannot customize the HTML for
+referencing these files. The ``pipeline/css.html`` and ``pipeline/js.html``
+files will not be used. Django takes care of generating the HTML for form and
+widget media.
+
+
+Example
+-------
+
+.. code-block:: python
+
+    from django import forms
+    from pipeline.forms import PipelineFormMedia
+
+
+    class MyForm(forms.Form):
+        ...
+
+        class Media(PipelineFormMedia):
+            css_packages = {
+                'all': ('my-styles',)
+            }
+            js_packages = ('my-scripts',)
+            js = ('https://cdn.example.com/some-script.js',)
+
+
 Collect static
 ==============
 
