@@ -116,12 +116,12 @@ class PipelineMixin(object):
         return method(package, paths, templates=templates)
 
     def render_error(self, package_type, package_name, e):
-        return render_to_string('pipeline/compile_error.html', Context({
+        return render_to_string('pipeline/compile_error.html', {
             'package_type': package_type,
             'package_name': package_name,
             'command': subprocess.list2cmdline(e.command),
             'errors': e.error_output,
-        }))
+        })
 
 
 class StylesheetNode(PipelineMixin, template.Node):
