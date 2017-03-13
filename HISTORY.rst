@@ -3,6 +3,12 @@
 History
 =======
 
+1.6.12
+======
+
+* Fix a bug with os.rename on windows. Thanks to @wismill
+* Fix to view compile error if happens. Thanks to @brawaga
+
 1.6.11
 ======
 

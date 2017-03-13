@@ -10,7 +10,7 @@ if (sys.version_info[0], sys.version_info[1]) < (3, 2):
 
 setup(
     name='django-pipeline',
-    version='1.6.11',
+    version='1.6.12',
     description='Pipeline is an asset packaging library for Django.',
     long_description=io.open('README.rst', encoding='utf-8').read() + '\n\n' +
         io.open('HISTORY.rst', encoding='utf-8').read(),
