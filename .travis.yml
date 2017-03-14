@@ -2,6 +2,8 @@ language: python
 python:
   - 3.5
 sudo: false
+install:
+- pip install tox coveralls
 env:
   - TOXENV=py27-django16
   - TOXENV=py34-django16
@@ -28,6 +30,7 @@ install:
   - pip install -r requirements.txt
   - npm install
 script: tox
+after_success: coveralls
 deploy:
   provider: pypi
   user: jazzband
