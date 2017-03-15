@@ -30,7 +30,6 @@ install:
   - pip install -r requirements.txt
   - npm install
 script: tox
-after_success: coveralls
 deploy:
   provider: pypi
   user: jazzband
@@ -43,3 +42,4 @@ deploy:
     condition: "$TOXENV = py27-django19"
 notifications:
   email: false
+after_success: coveralls
