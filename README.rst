@@ -1,7 +1,7 @@
 Pipeline
 ========
 
-.. image:: https://secure.travis-ci.org/jazzband/django-pipeline.png
+.. image:: https://travis-ci.org/jazzband/django-pipeline.svg?branch=master
     :alt: Build Status
     :target: http://travis-ci.org/jazzband/django-pipeline
 
