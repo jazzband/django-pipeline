@@ -16,7 +16,7 @@ from pipeline.conf import settings
 from pipeline.exceptions import CompressorError
 from pipeline.utils import to_class, relpath, set_std_streams_blocking
 
-URL_DETECTOR = r"""url\((['"]){0,1}\s*(.*?)["']{0,1}\)"""
+URL_DETECTOR = r"""url\((['"]?)\s*(.*?)\1\)"""
 URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""
 NON_REWRITABLE_URL = re.compile(r'^(#|http:|https:|data:|//)')
 
