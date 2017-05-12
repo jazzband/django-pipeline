@@ -55,7 +55,7 @@ class Compressor(object):
     def css_compressor(self):
         return to_class(settings.CSS_COMPRESSOR)
 
-    def compress_js(self, paths, templates=None, **kwargs):
+    def compress_js(self, paths, enable_min=True, templates=None, **kwargs):
         """Concatenate and compress JS files"""
         js = self.concatenate(paths)
         if templates:
@@ -65,16 +65,16 @@ class Compressor(object):
             js = settings.JS_WRAPPER % js
 
         compressor = self.js_compressor
-        if compressor:
+        if compressor and enable_min:
             js = getattr(compressor(verbose=self.verbose), 'compress_js')(js)
 
         return js
 
-    def compress_css(self, paths, output_filename, variant=None, **kwargs):
+    def compress_css(self, paths, output_filename, enable_min=True, variant=None, **kwargs):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, output_filename, variant)
         compressor = self.css_compressor
-        if compressor:
+        if compressor and enable_min:
             css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
         if not variant:
             return css
