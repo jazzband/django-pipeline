@@ -123,6 +123,15 @@ Indicate if you want this group to appear in your cache manifest.
 
 Defaults to ``True``.
 
+``compiler_options``
+............
+
+**Optional**
+
+A dictionary passed to compiler's ``compile_file`` method as kwargs. None of default compilers use it currently. It's to be used by custom compilers in case they need some special parameters.
+
+Defaults to ``True``.
+
 
 Other settings
 --------------
