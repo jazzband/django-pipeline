@@ -27,7 +27,7 @@ class Compiler(object):
     def compilers(self):
         return [to_class(compiler) for compiler in settings.COMPILERS]
 
-    def compile(self, paths, force=False):
+    def compile(self, paths, compiler_options={}, force=False):
         def _compile(input_path):
             for compiler in self.compilers:
                 compiler = compiler(verbose=self.verbose, storage=self.storage)
@@ -39,7 +39,8 @@ class Compiler(object):
                     outfile = compiler.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(infile, outfile)
                     compiler.compile_file(infile, outfile,
-                                          outdated=outdated, force=force)
+                                          outdated=outdated, force=force,
+                                          **compiler_options)
 
                     return compiler.output_path(input_path, compiler.output_extension)
             else:

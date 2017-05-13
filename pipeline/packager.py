@@ -59,6 +59,10 @@ class Package(object):
     def manifest(self):
         return self.config.get('manifest', True)
 
+    @property
+    def compiler_options(self):
+        return self.config.get('compiler_options', {})
+
 
 class Packager(object):
     def __init__(self, storage=None, verbose=False, css_packages=None, js_packages=None):
@@ -95,14 +99,22 @@ class Packager(object):
                          output_filename=package.output_filename,
                          variant=package.variant, **kwargs)
 
-    def compile(self, paths, force=False):
-        return self.compiler.compile(paths, force=force)
+    def compile(self, paths, compiler_options={}, force=False):
+        return self.compiler.compile(
+            paths,
+            compiler_options=compiler_options,
+            force=force,
+        )
 
     def pack(self, package, compress, signal, **kwargs):
         output_filename = package.output_filename
         if self.verbose:
             print("Saving: %s" % output_filename)
-        paths = self.compile(package.paths, force=True)
+        paths = self.compile(
+            package.paths,
+            compiler_options=package.compiler_options,
+            force=True,
+        )
         content = compress(paths, **kwargs)
         self.save_file(output_filename, content)
         signal.send(sender=self, package=package, **kwargs)
