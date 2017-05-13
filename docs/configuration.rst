@@ -130,7 +130,7 @@ Defaults to ``True``.
 
 A dictionary passed to compiler's ``compile_file`` method as kwargs. None of default compilers use it currently. It's to be used by custom compilers in case they need some special parameters.
 
-Defaults to ``True``.
+Defaults to ``{}``.
 
 
 Other settings
