@@ -79,8 +79,7 @@ You can also use your own custom storage, for example, if you want to use S3 for
   STATICFILES_STORAGE = 'your.app.S3PipelineManifestStorage'
 
 Your storage only needs to inherit from ``PipelineMixin`` and ``ManifestFilesMixin`` or ``CachedFilesMixin``.
-
-In Django 1.7+ you should use `ManifestFilesMixin <https://docs.djangoproject.com/en/1.7/ref/contrib/staticfiles/#manifeststaticfilesstorage>`_
+You should use `ManifestFilesMixin <https://docs.djangoproject.com/en/1.7/ref/contrib/staticfiles/#manifeststaticfilesstorage>`_
 unless you don't have access to the local filesystem in which case you should use ``CachedFilesMixin``. ::
 
   from django.contrib.staticfiles.storage import CachedFilesMixin, ManifestFilesMixin
