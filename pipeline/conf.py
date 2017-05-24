@@ -6,11 +6,7 @@ import collections
 import shlex
 
 from django.conf import settings as _settings
-try:
-    from django.core.signals import setting_changed
-except ImportError:
-    # Django < 1.8
-    from django.test.signals import setting_changed
+from django.core.signals import setting_changed
 from django.dispatch import receiver
 from django.utils.six import string_types
 
