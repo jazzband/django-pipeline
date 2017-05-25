@@ -22,6 +22,8 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     include_package_data=True,
+    keywords=('django pipeline asset compiling concatenation compression'
+              ' packaging'),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
