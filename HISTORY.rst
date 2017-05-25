@@ -3,11 +3,22 @@
 History
 =======
 
+1.6.13
+======
+
+* Fix forward-slashed paths on Windows. Thanks to @etiago
+* Fix CSS URL detector to match quotes correctly. Thanks to @vskh
+* Add a compiler_options dict to compile, to allow passing options to custom
+  compilers. Thanks to @sassanh
+* Verify support for Django 1.11. Thanks to @jwhitlock
+
 1.6.12
 ======
 
+* Supports Django 1.11
 * Fix a bug with os.rename on windows. Thanks to @wismill
 * Fix to view compile error if happens. Thanks to @brawaga
+* Add support for Pipeline CSS/JS packages in forms and widgets. Thanks to @chipx86
 
 1.6.11
 ======
