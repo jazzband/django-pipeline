@@ -1,3 +1,4 @@
+coveralls
+flake8
 tox
 wheel
-flake8

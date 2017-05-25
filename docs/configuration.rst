@@ -124,7 +124,7 @@ Indicate if you want this group to appear in your cache manifest.
 Defaults to ``True``.
 
 ``compiler_options``
-............
+....................
 
 **Optional**
 

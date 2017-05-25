@@ -41,6 +41,9 @@ class PipelineNoPathStorage(PipelineStorage):
     def open(self, *args):
         return StringIO()
 
+    def listdir(self, *args):
+        return []
+
 
 class DummyCSSCompiler(DummyCompiler):
     """ Handles css files """

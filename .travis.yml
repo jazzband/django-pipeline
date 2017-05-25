@@ -1,28 +1,63 @@
 language: python
-python:
-  - 3.5
 sudo: false
-install:
-- pip install tox coveralls
-env:
-  - TOXENV=py27-django16
-  - TOXENV=py34-django16
-  - TOXENV=pypy-django16
-  - TOXENV=py27-django17
-  - TOXENV=py34-django17
-  - TOXENV=pypy-django17
-  - TOXENV=py27-django18
-  - TOXENV=pypy-django18
-  - TOXENV=py34-django18
-  - TOXENV=py27-django19
-  - TOXENV=pypy-django19
-  - TOXENV=py34-django19
-  - TOXENV=py35-django19
-  - TOXENV=py27-django110
-  - TOXENV=pypy-django110
-  - TOXENV=py34-django110
-  - TOXENV=py35-django110
-docsinstall: pip install -q tox
+matrix:
+  include:
+    - env: TOXENV=py27-django16
+      python: "2.7"
+    - env: TOXENV=pypy-django16
+      python: "pypy"
+    - env: TOXENV=py34-django16
+      python: "3.4"
+    - env: TOXENV=py27-django17
+      python: "2.7"
+    - env: TOXENV=pypy-django17
+      python: "pypy"
+    - env: TOXENV=py34-django17
+      python: "3.4"
+    - env: TOXENV=py27-django18
+      python: "2.7"
+    - env: TOXENV=pypy-django18
+      python: "pypy"
+    - env: TOXENV=py34-django18
+      python: "3.4"
+    - env: TOXENV=py27-django19
+      python: "2.7"
+    - env: TOXENV=pypy-django19
+      python: "pypy"
+    - env: TOXENV=py34-django19
+      python: "3.4"
+    - env: TOXENV=py35-django19
+      python: "3.5"
+    - env: TOXENV=py27-django110
+      python: "2.7"
+    - env: TOXENV=pypy-django110
+      python: "pypy"
+    - env: TOXENV=py34-django110
+      python: "3.4"
+    - env: TOXENV=py35-django110
+      python: "3.5"
+    - env: TOXENV=py27-django111
+      python: "2.7"
+    - env: TOXENV=pypy-django111
+      python: "pypy"
+    - env: TOXENV=py34-django111
+      python: "3.4"
+    - env: TOXENV=py35-django111
+      python: "3.5"
+    - env: TOXENV=py36-django111
+      python: "3.6"
+    - env: TOXENV=py34-django-master
+      python: "3.4"
+    - env: TOXENV=py35-django-master
+      python: "3.5"
+    - env: TOXENV=py36-django-master
+      python: "3.6"
+    - env: TOXENV=docs
+      python: "2.7"
+  allow_failures:
+    - env: TOXENV=py34-django-master
+    - env: TOXENV=py35-django-master
+    - env: TOXENV=py36-django-master
 before_install:
   - nvm install node
   - nvm use node
@@ -40,6 +75,6 @@ deploy:
   on:
     tags: true
     repo: jazzband/django-pipeline
-    condition: "$TOXENV = py27-django19"
+    condition: "$TOXENV = py27-django111"
 notifications:
   email: false

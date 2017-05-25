@@ -164,20 +164,21 @@ if HAS_NODE and HAS_JAVA:
 if HAS_CSSTIDY:
     PIPELINE.update({'CSSTIDY_BINARY': CSSTIDY_EXE_PATH})
 
-TEMPLATE_DIRS = (
-    local_path('templates'),
-)
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
-        'DIRS': TEMPLATE_DIRS,
+        'DIRS': [local_path('templates')],
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+            ]
+        }
     },
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'APP_DIRS': True,
-        'DIRS': TEMPLATE_DIRS,
+        'DIRS': [local_path('templates')],
         'OPTIONS': {
             'extensions': ['pipeline.jinja2.PipelineExtension']
         }
