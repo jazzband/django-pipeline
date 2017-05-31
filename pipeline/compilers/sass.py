@@ -13,6 +13,8 @@ class SASSCompiler(SubProcessCompiler):
         return filename.endswith(('.scss', '.sass'))
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
+        if not outdated and not force:
+            return
         command = (
             settings.SASS_BINARY,
             settings.SASS_ARGUMENTS,
