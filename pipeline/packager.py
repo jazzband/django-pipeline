@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import os
+
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.finders import find
 from django.core.files.base import ContentFile
@@ -115,8 +117,11 @@ class Packager(object):
             compiler_options=package.compiler_options,
             force=True,
         )
-        content = compress(paths, **kwargs)
-        self.save_file(output_filename, content)
+        output_path = self.storage.path(output_filename)
+        output_mtime = os.path.getmtime(output_path) if os.path.exists(output_path) else 0
+        if any([os.path.getmtime(self.storage.path(path)) >= output_mtime for path in paths]):
+            content = compress(paths, **kwargs)
+            self.save_file(output_filename, content)
         signal.send(sender=self, package=package, **kwargs)
         return output_filename
 
