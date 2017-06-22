@@ -27,6 +27,11 @@ For their main and mobile website:
 * http://www.croisedanslemetro.com
 * http://m.croisedanslemetro.com
 
+Teachoo
+-----------------
+
+Teachoo uses pipeline for compressing all its static files - https://www.teachoo.com
+
 The Molly Project
 -----------------
 
