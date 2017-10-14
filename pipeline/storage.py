@@ -4,7 +4,7 @@ import gzip
 
 from io import BytesIO
 
-from django.contrib.staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
+from django.contrib.staticfiles.storage import CachedStaticFilesStorage, ManifestStaticFilesStorage, StaticFilesStorage
 from django.contrib.staticfiles.utils import matches_patterns
 
 from django.core.files.base import File
@@ -89,6 +89,14 @@ class PipelineStorage(PipelineMixin, StaticFilesStorage):
 
 
 class NonPackagingPipelineStorage(NonPackagingMixin, PipelineStorage):
+    pass
+
+
+class PipelineManifestStorage(PipelineMixin, ManifestStaticFilesStorage):
+    pass
+
+
+class NonPackagingPipelineManifestStorage(NonPackagingMixin, ManifestStaticFilesStorage):
     pass
 
 
