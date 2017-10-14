@@ -15,15 +15,20 @@ to use it configure ``STATICFILES_STORAGE`` like so ::
 
 And if you want versioning use ::
 
+  # Select one of the following
+  STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'  # Preferred
   STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
-There is also non-packing storage available, that allows you to run ``collectstatic`` command
+
+There are also non-packing storages available, that allows you to run ``collectstatic`` command
 without packaging your assets. Useful for production when you don't want to run compressor or compilers ::
 
   STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 Also available if you want versioning ::
 
+  # Select one of the following
+  STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineManifestStorage'  # Preferred
   STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineCachedStorage'
 
 If you use staticfiles with ``DEBUG = False`` (i.e. for integration tests
