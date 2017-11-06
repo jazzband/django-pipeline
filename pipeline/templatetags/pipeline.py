@@ -53,6 +53,12 @@ class PipelineMixin(object):
         except VariableDoesNotExist:
             pass
 
+        if self.inline_var:
+            try:
+                self.inline = template.Variable(self.inline_var).resolve(context)
+            except VariableDoesNotExist:
+                self.inline = True
+
     def render_compressed(self, package, package_name, package_type):
         """Render HTML for the package.
 
@@ -115,6 +121,13 @@ class PipelineMixin(object):
 
         return method(package, paths, templates=templates)
 
+    def render_inline(self, package, source, package_type):
+        context = package.extra_context
+        context.update({
+            'source': source
+        })
+        return render_to_string("pipeline/inline_%s.html" % package_type, context)
+
     def render_error(self, package_type, package_name, e):
         return render_to_string('pipeline/compile_error.html', {
             'package_type': package_type,
@@ -125,8 +138,12 @@ class PipelineMixin(object):
 
 
 class StylesheetNode(PipelineMixin, template.Node):
-    def __init__(self, name):
+    inline = False
+    inline_var = None
+
+    def __init__(self, name, inline):
         self.name = name
+        self.inline_var = inline
 
     def render(self, context):
         super(StylesheetNode, self).render(context)
@@ -137,9 +154,18 @@ class StylesheetNode(PipelineMixin, template.Node):
         except PackageNotFound:
             logger.warn("Package %r is unknown. Check PIPELINE['STYLESHEETS'] in your settings.", package_name)
             return ''  # fail silently, do not return anything if an invalid group is specified
+
         return self.render_compressed(package, package_name, 'css')
 
     def render_css(self, package, path):
+        if self.inline:
+            src = ""
+            with open (staticfiles_storage.path(path), "r") as resourse:
+                src = resourse.read()
+                src = src.replace('../', staticfiles_storage.url('/'.join(path.split('/')[:-2])+'/'))
+            if src:
+                return self.render_inline(package, src, 'css')
+
         template_name = package.template_name or "pipeline/css.html"
         context = package.extra_context
         context.update({
@@ -158,8 +184,12 @@ class StylesheetNode(PipelineMixin, template.Node):
 
 
 class JavascriptNode(PipelineMixin, template.Node):
-    def __init__(self, name):
+    inline = False
+    inline_var = None
+
+    def __init__(self, name, inline):
         self.name = name
+        self.inline_var = inline
 
     def render(self, context):
         super(JavascriptNode, self).render(context)
@@ -170,6 +200,7 @@ class JavascriptNode(PipelineMixin, template.Node):
         except PackageNotFound:
             logger.warn("Package %r is unknown. Check PIPELINE['JAVASCRIPT'] in your settings.", package_name)
             return ''  # fail silently, do not return anything if an invalid group is specified
+
         return self.render_compressed(package, package_name, 'js')
 
     def render_js(self, package, path):
@@ -179,19 +210,20 @@ class JavascriptNode(PipelineMixin, template.Node):
             'type': guess_type(path, 'text/javascript'),
             'url': mark_safe(staticfiles_storage.url(path))
         })
-        return render_to_string(template_name, context)
 
-    def render_inline(self, package, js):
-        context = package.extra_context
-        context.update({
-            'source': js
-        })
-        return render_to_string("pipeline/inline_js.html", context)
+        if self.inline:
+            src = ""
+            with open (staticfiles_storage.path(package.output_filename), "r") as resourse:
+                src = resourse.read()
+            if src:
+                return self.render_inline(package, src, 'js')
+
+        return render_to_string(template_name, context)
 
     def render_individual_js(self, package, paths, templates=None):
         tags = [self.render_js(package, js) for js in paths]
         if templates:
-            tags.append(self.render_inline(package, templates))
+            tags.append(self.render_inline(package, templates, 'js'))
         return '\n'.join(tags)
 
     def render_error_js(self, package_name, e):
@@ -202,16 +234,24 @@ class JavascriptNode(PipelineMixin, template.Node):
 @register.tag
 def stylesheet(parser, token):
     try:
-        tag_name, name = token.split_contents()
+        try:
+            tag_name, name, inline = token.split_contents()
+        except ValueError:
+            tag_name, name = token.split_contents()
+            inline = False
     except ValueError:
         raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.STYLESHEETS setting' % token.split_contents()[0])
-    return StylesheetNode(name)
+    return StylesheetNode(name, inline)
 
 
 @register.tag
 def javascript(parser, token):
     try:
-        tag_name, name = token.split_contents()
+        try:
+            tag_name, name, inline = token.split_contents()
+        except ValueError:
+            tag_name, name = token.split_contents()
+            inline = False
     except ValueError:
         raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.JAVASVRIPT setting' % token.split_contents()[0])
-    return JavascriptNode(name)
+    return JavascriptNode(name, inline)
