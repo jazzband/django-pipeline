@@ -8,7 +8,9 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django import template
 from django.template.base import Context, VariableDoesNotExist
 from django.template.loader import render_to_string
+from django.template import Template
 from django.utils.safestring import mark_safe
+from django.contrib.staticfiles import finders
 
 from ..collector import default_collector
 from ..conf import settings
@@ -24,6 +26,13 @@ register = template.Library()
 class PipelineMixin(object):
     request = None
     _request_var = None
+
+    inline = False
+    inline_var = None
+
+    def __init__(self, name, inline=False):
+        self.name = name
+        self.inline_var = inline
 
     @property
     def request_var(self):
@@ -57,7 +66,8 @@ class PipelineMixin(object):
             try:
                 self.inline = template.Variable(self.inline_var).resolve(context)
             except VariableDoesNotExist:
-                self.inline = True
+                if self.inline_var == 'inline':
+                    self.inline = True
 
     def render_compressed(self, package, package_name, package_type):
         """Render HTML for the package.
@@ -138,12 +148,6 @@ class PipelineMixin(object):
 
 
 class StylesheetNode(PipelineMixin, template.Node):
-    inline = False
-    inline_var = None
-
-    def __init__(self, name, inline):
-        self.name = name
-        self.inline_var = inline
 
     def render(self, context):
         super(StylesheetNode, self).render(context)
@@ -184,12 +188,6 @@ class StylesheetNode(PipelineMixin, template.Node):
 
 
 class JavascriptNode(PipelineMixin, template.Node):
-    inline = False
-    inline_var = None
-
-    def __init__(self, name, inline):
-        self.name = name
-        self.inline_var = inline
 
     def render(self, context):
         super(JavascriptNode, self).render(context)
@@ -213,7 +211,7 @@ class JavascriptNode(PipelineMixin, template.Node):
 
         if self.inline:
             src = ""
-            with open (staticfiles_storage.path(package.output_filename), "r") as resourse:
+            with open(staticfiles_storage.path(path), "r") as resourse:
                 src = resourse.read()
             if src:
                 return self.render_inline(package, src, 'js')
@@ -234,24 +232,16 @@ class JavascriptNode(PipelineMixin, template.Node):
 @register.tag
 def stylesheet(parser, token):
     try:
-        try:
-            tag_name, name, inline = token.split_contents()
-        except ValueError:
-            tag_name, name = token.split_contents()
-            inline = False
+        args = token.split_contents()[1:]
     except ValueError:
         raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.STYLESHEETS setting' % token.split_contents()[0])
-    return StylesheetNode(name, inline)
+    return StylesheetNode(*args)
 
 
 @register.tag
 def javascript(parser, token):
     try:
-        try:
-            tag_name, name, inline = token.split_contents()
-        except ValueError:
-            tag_name, name = token.split_contents()
-            inline = False
+        args = token.split_contents()[1:]
     except ValueError:
         raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.JAVASVRIPT setting' % token.split_contents()[0])
-    return JavascriptNode(name, inline)
+    return JavascriptNode(*args)
