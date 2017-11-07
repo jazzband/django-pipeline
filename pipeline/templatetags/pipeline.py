@@ -231,17 +231,15 @@ class JavascriptNode(PipelineMixin, template.Node):
 
 @register.tag
 def stylesheet(parser, token):
-    try:
-        args = token.split_contents()[1:]
-    except ValueError:
-        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.STYLESHEETS setting' % token.split_contents()[0])
-    return StylesheetNode(*args)
+    args = token.split_contents()
+    if len(args) < 2:
+        raise template.TemplateSyntaxError('%r requires first argument: the name of a group in the PIPELINE.STYLESHEETS setting' % args[0])
+    return StylesheetNode(*args[1:])
 
 
 @register.tag
 def javascript(parser, token):
-    try:
-        args = token.split_contents()[1:]
-    except ValueError:
-        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.JAVASVRIPT setting' % token.split_contents()[0])
-    return JavascriptNode(*args)
+    args = token.split_contents()
+    if len(args) < 2:
+        raise template.TemplateSyntaxError('%r requires first argument: the name of a group in the PIPELINE.JAVASVRIPT setting' % args[0])
+    return JavascriptNode(*args[1:])
