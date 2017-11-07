@@ -40,6 +40,14 @@ with the name “scripts”, you would use the following code to output them all
    {% stylesheet 'stats' %}
    {% javascript 'scripts' %}
 
+Also you can set second argument to specify inline output ::
+
+   {% stylesheet 'stats' inline %}
+   {% javascript 'scripts' inline %}
+
+.. note::
+  You can use reserved argument “inline” or other variable
+
 
 Form Media
 ==========
