@@ -164,7 +164,7 @@ class StylesheetNode(PipelineMixin, template.Node):
     def render_css(self, package, path):
         if self.inline:
             src = ""
-            with open (staticfiles_storage.path(path), "r") as resourse:
+            with open(staticfiles_storage.path(path), "r") as resourse:
                 src = resourse.read()
                 src = src.replace('../', staticfiles_storage.url('/'.join(path.split('/')[:-2])+'/'))
             if src:
