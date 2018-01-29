@@ -3,6 +3,11 @@
 History
 =======
 
+1.6.14
+======
+
+* Fix packaging issues.
+
 1.6.13
 ======
 
