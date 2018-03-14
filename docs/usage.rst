@@ -9,7 +9,7 @@ Describes how to use Pipeline when it is installed and configured.
 Templatetags
 ============
 
-Pipeline includes two template tags: ``stylesheet`` and ``javascript``,
+Pipeline includes two main template tags: ``stylesheet`` and ``javascript``,
 in a template library called ``pipeline``.
 
 They are used to output the ``<link>`` and ``<script>``-tags for the
@@ -39,6 +39,34 @@ with the name “scripts”, you would use the following code to output them all
    {% stylesheet 'colors' %}
    {% stylesheet 'stats' %}
    {% javascript 'scripts' %}
+
+
+Templatetags for prefetching
+============================
+
+In addition to the ``javascript`` and ``stylesheet``, django-pipeline provides
+four templatetags which are used to prefetch resources, they are:
+``javascript_prefetch``, ``stylesheet_prefetch``, ``javascript_prefetch_all``,
+``stylesheet_prefetch_all``.
+
+These tags are used to output <link rel="prefetch"> HTML tags. These tags will
+prefetch resources that you know you will need them in other pages. In
+Firefox, for instance, these resources will be loaded when the browser is idle.
+
+Example
+-------
+
+Prefetching specific packages ::
+
+   {% load pipeline %}
+   {% javascript_prefetch 'colors' %}
+   {% stylesheet_prefetch 'stats' %}
+
+Prefetching all packages ::
+
+   {% load pipeline %}
+   {% javascript_prefetch_all %}
+   {% stylesheet_prefetch_all %}
 
 
 Form Media
