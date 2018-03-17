@@ -122,7 +122,10 @@ class OptimizedPipelineStorage(PipelineMixin, StaticFilesStorage):
         mechanisms are naturally invalidated."""
         url = super(OptimizedPipelineStorage, self).url(name)
         _hash = self.get_compressed_files_hash()
-        return '{url}?{_hash}'.format(url=url, _hash=_hash) if _hash else url
+        if _hash and name:
+            return '{url}?{_hash}'.format(url=url, _hash=_hash)
+        else:
+            return url
 
     def post_process(self, paths, dry_run=False, **options):
         if dry_run:
