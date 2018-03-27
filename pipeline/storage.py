@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import gzip
 import hashlib
+import io
 import os
 
 from io import BytesIO
@@ -287,10 +288,10 @@ class OptimizedPipelineStorage(PipelineMixin, StaticFilesStorage):
         contents = []
         for output_filename in output_filenames:
             abs_path = os.path.join(settings.STATIC_ROOT, output_filename)
-            with open(abs_path) as output_file:
+            with io.open(abs_path, 'rb') as output_file:
                 contents.append(output_file.read())
 
-        digest = hashlib.md5(''.join(contents)).hexdigest()
+        digest = hashlib.md5(b''.join(contents)).hexdigest()
         print('New hash: {}'.format(digest))
         DEFAULT_CACHE.set(self.HASH_CACHE_KEY, digest, None)  # cache forever
 
