@@ -215,3 +215,53 @@ def javascript(parser, token):
     except ValueError:
         raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.JAVASVRIPT setting' % token.split_contents()[0])
     return JavascriptNode(name)
+
+
+@register.inclusion_tag('pipeline/prefetch.html')
+def javascript_prefetch(package_name):
+    urls = []
+    if settings.PIPELINE_ENABLED:
+        path = settings.JAVASCRIPT[package_name]['output_filename']
+        urls.append(staticfiles_storage.url(path))
+    else:
+        for path in settings.JAVASCRIPT[package_name]['source_filenames']:
+            urls.append(staticfiles_storage.url(path))
+    return {'urls': urls}
+
+
+@register.inclusion_tag('pipeline/prefetch.html')
+def stylesheet_prefetch(package_name):
+    urls = []
+    if settings.PIPELINE_ENABLED:
+        path = settings.STYLESHEETS[package_name]['output_filename']
+        urls.append(staticfiles_storage.url(path))
+    else:
+        for path in settings.STYLESHEETS[package_name]['source_filenames']:
+            urls.append(staticfiles_storage.url(path))
+    return {'urls': urls}
+
+
+@register.inclusion_tag('pipeline/prefetch.html')
+def javascript_prefetch_all():
+    urls = []
+    for package in getattr(settings, 'JAVASCRIPT', {}).values():
+        if settings.PIPELINE_ENABLED:
+            path = package['output_filename']
+            urls.append(staticfiles_storage.url(path))
+        else:
+            for path in package['source_filenames']:
+                urls.append(staticfiles_storage.url(path))
+    return {'urls': urls}
+
+
+@register.inclusion_tag('pipeline/prefetch.html')
+def stylesheet_prefetch_all():
+    urls = []
+    for package in getattr(settings, 'STYLESHEETS', {}).values():
+        if settings.PIPELINE_ENABLED:
+            path = package['output_filename']
+            urls.append(staticfiles_storage.url(path))
+        else:
+            for path in package['source_filenames']:
+                urls.append(staticfiles_storage.url(path))
+    return {'urls': urls}

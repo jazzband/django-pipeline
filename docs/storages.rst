@@ -26,6 +26,23 @@ Also available if you want versioning ::
 
   STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineCachedStorage'
 
+Optimized storage with cache invalidation
+-----------------------------------------
+
+There is also an optimized storage which compress only the packages with
+modifications. This speeds up the collectstatic process substantially when you
+have multiple packages in your pipeline configuration.
+
+In addition, this storage produces a hash from the compressed files which is
+appended to the resources' URL. Thus, whenever you modify your files and
+compress them, the cache registries (from cache server ou browser) will be
+automatically invalidated ::
+
+  STATICFILES_STORAGE = 'pipeline.storage.OptimizedPipelineStorage'
+
+File finders (staticfiles with DEBUG = False)
+=============================================
+
 If you use staticfiles with ``DEBUG = False`` (i.e. for integration tests
 with `Selenium <http://docs.seleniumhq.org/>`_) you should install the finder
 that allows staticfiles to locate your outputted assets : ::
