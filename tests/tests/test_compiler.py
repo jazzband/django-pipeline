@@ -90,6 +90,8 @@ class DummyCompiler(CompilerBase):
     def compile_file(self, infile, outfile, outdated=False, force=False):
         return
 
+    def sync_file(self, path, filename):
+        return
 
 @pipeline_settings(COMPILERS=['tests.tests.test_compiler.DummyCompiler'])
 class DummyCompilerTest(TestCase):
