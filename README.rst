@@ -17,6 +17,11 @@ Pipeline
     :alt: PYPI
     :target: https://badge.fury.io/py/django-pipeline
 
+.. image:: https://readthedocs.org/projects/django-pipeline/badge/?version=latest
+    :alt: Documentation Status
+    :target: https://django-pipeline.readthedocs.io/en/latest/?badge=latest
+
+
 Pipeline is an asset packaging library for Django, providing both CSS and
 JavaScript concatenation and compression, built-in JavaScript template support,
 and optional data-URI image and font embedding.
