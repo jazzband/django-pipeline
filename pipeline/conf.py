@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 import os
-import collections
+from collections import MutableMapping
 import shlex
 
 from django.conf import settings as _settings
@@ -91,7 +91,7 @@ DEFAULTS = {
 }
 
 
-class PipelineSettings(collections.MutableMapping):
+class PipelineSettings(MutableMapping):
     """
     Container object for pipeline settings
     """
