@@ -94,7 +94,7 @@ class PipelineMixin(object):
         Subclasses can override this method to provide custom behavior for
         rendering the source files.
         """
-        if settings.PIPELINE_COLLECTOR_ENABLED:
+        if settings.PIPELINE_ENABLED and settings.PIPELINE_COLLECTOR_ENABLED:
             default_collector.collect(self.request)
 
         packager = Packager()
