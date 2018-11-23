@@ -150,6 +150,6 @@ class SubProcessCompiler(CompilerBase):
                 if stdout_captured:
                     output_filename = os.path.join(cwd or os.curdir, stdout_captured)
                     shutil.move(stdout.name, output_filename)
-                    os.chmod(output_filename, 0644)
+                    os.chmod(output_filename, 420) # 644 in decimal
                 else:
                     os.remove(stdout.name)
