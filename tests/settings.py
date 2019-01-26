@@ -155,7 +155,7 @@ if HAS_NODE and HAS_JAVA:
     PIPELINE.update({
         'CLOSURE_BINARY': [
             JAVA_EXE_PATH, '-jar',
-            os.path.join(NODE_MODULES_PATH, 'google-closure-compiler', 'compiler.jar')],
+            os.path.join(NODE_MODULES_PATH, 'google-closure-compiler-java', 'compiler.jar')],
         'YUI_BINARY': [
             JAVA_EXE_PATH, '-jar',
             glob.glob(os.path.join(NODE_MODULES_PATH, 'yuicompressor', 'build', '*.jar'))[0]]
