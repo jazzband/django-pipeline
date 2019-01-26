@@ -116,7 +116,7 @@ class SubProcessCompiler(CompilerBase):
 
         # The first element in argument_list is the program that will be executed; if it is '', then
         # a PermissionError will be raised. Thus empty arguments are filtered out from argument_list
-        argument_list = list(filter(None, argument_list))
+        argument_list = filter(None, argument_list))
         stdout = None
         try:
             # We always catch stdout in a file, but we may not have a use for it.
