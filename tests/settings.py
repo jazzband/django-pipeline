@@ -70,6 +70,28 @@ PIPELINE = {
                 'pipeline/css/urls.css'
             ),
             'output_filename': 'screen.css'
+        },
+        'screen_media': {
+            'source_filenames': (
+                'pipeline/css/first.css',
+                'pipeline/css/second.css',
+                'pipeline/css/urls.css'
+            ),
+            'output_filename': 'screen_media.css',
+            'extra_context': {
+                'media': 'screen and (min-width:500px)',
+            },
+        },
+        'screen_title': {
+            'source_filenames': (
+                'pipeline/css/first.css',
+                'pipeline/css/second.css',
+                'pipeline/css/urls.css'
+            ),
+            'output_filename': 'screen_title.css',
+            'extra_context': {
+                'title': 'Default Style',
+            },
         }
     },
     'JAVASCRIPT': {
