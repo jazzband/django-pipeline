@@ -19,6 +19,7 @@ SITE_ID = 1
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
+    'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
@@ -28,16 +29,15 @@ INSTALLED_APPS = [
     'tests.tests'
 ]
 
-MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware'
-)
 
 ROOT_URLCONF = 'tests.urls'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware'
+    'django.middleware.csrf.CsrfViewMiddleware',
 )
 
 MEDIA_URL = '/media/'
@@ -172,6 +172,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ]
         }
     },
