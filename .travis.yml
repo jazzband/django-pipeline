@@ -1,6 +1,6 @@
 language: python
 sudo: True
-os: Xenial 
+dist: xenial
 matrix:
   include:
     - env: TOXENV=py27-django111
