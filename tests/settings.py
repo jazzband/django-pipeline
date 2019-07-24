@@ -32,13 +32,13 @@ INSTALLED_APPS = [
 
 ROOT_URLCONF = 'tests.urls'
 
-MIDDLEWARE = MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-)
+]
 
 MEDIA_URL = '/media/'
 
