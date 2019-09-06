@@ -1,58 +1,23 @@
 language: python
-sudo: false
+sudo: True
+dist: xenial
 matrix:
   include:
-    - env: TOXENV=py27-django16
-      python: "2.7"
-    - env: TOXENV=pypy-django16
-      python: "pypy"
-    - env: TOXENV=py34-django16
-      python: "3.4"
-    - env: TOXENV=py27-django17
-      python: "2.7"
-    - env: TOXENV=pypy-django17
-      python: "pypy"
-    - env: TOXENV=py34-django17
-      python: "3.4"
-    - env: TOXENV=py27-django18
-      python: "2.7"
-    - env: TOXENV=pypy-django18
-      python: "pypy"
-    - env: TOXENV=py34-django18
-      python: "3.4"
-    - env: TOXENV=py27-django19
-      python: "2.7"
-    - env: TOXENV=pypy-django19
-      python: "pypy"
-    - env: TOXENV=py34-django19
-      python: "3.4"
-    - env: TOXENV=py35-django19
-      python: "3.5"
-    - env: TOXENV=py27-django110
-      python: "2.7"
-    - env: TOXENV=pypy-django110
-      python: "pypy"
-    - env: TOXENV=py34-django110
-      python: "3.4"
-    - env: TOXENV=py35-django110
-      python: "3.5"
     - env: TOXENV=py27-django111
       python: "2.7"
     - env: TOXENV=pypy-django111
       python: "pypy"
-    - env: TOXENV=py34-django111
-      python: "3.4"
     - env: TOXENV=py35-django111
       python: "3.5"
     - env: TOXENV=py36-django111
       python: "3.6"
-    - env: TOXENV=py34-django20
-      python: "3.4"
-    - env: TOXENV=py35-django20
-      python: "3.5"
     - env: TOXENV=py36-django20
       python: "3.6"
-    - env: TOXENV=py37-django20
+    - env: TOXENV=py35-django22
+      python: "3.5"
+    - env: TOXENV=py36-django22
+      python: "3.6"
+    - env: TOXENV=py37-django22
       python: "3.7-dev"
     - env: TOXENV=py35-django-master
       python: "3.5"
@@ -63,10 +28,6 @@ matrix:
     - env: TOXENV=docs
       python: "2.7"
   allow_failures:
-    - env: TOXENV=py34-django20
-    - env: TOXENV=py35-django20
-    - env: TOXENV=py36-django20
-    - env: TOXENV=py37-django20
     - env: TOXENV=py35-django-master
     - env: TOXENV=py36-django-master
     - env: TOXENV=py37-django-master

@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from django.forms import Media
 from django.test import TestCase
-from django.utils import six
 
 from pipeline.forms import PipelineFormMedia
 from ..utils import pipeline_settings
@@ -76,21 +75,23 @@ class PipelineFormMediaTests(TestCase):
                 'print': ['/static/print.min.css'],
             })
         self.assertEqual(MyMedia.css, media._css)
-        self.assertEqual(
-            list(media.render_css()),
-            [
-                '<link href="%s" type="text/css" media="all" '
-                'rel="stylesheet" />' % path
-                for path in (
-                    '/static/extra1.css',
-                    '/static/extra2.css',
-                    '/static/styles1.min.css',
-                    '/static/styles2.min.css',
-                )
-            ] + [
-                '<link href="/static/print.min.css" type="text/css" '
-                'media="print" rel="stylesheet" />'
-            ])
+        expected_regex = [
+            r'<link href="%s" type="text/css" media="all" '
+            'rel="stylesheet"( /)?>' % path
+            for path in (
+                '/static/extra1.css',
+                '/static/extra2.css',
+                '/static/styles1.min.css',
+                '/static/styles2.min.css',
+            )
+        ] + [
+            r'<link href="/static/print.min.css" type="text/css" '
+            'media="print" rel="stylesheet"( /)?>'
+        ]
+        for rendered_node, expected_node in zip(
+            media.render_css(), expected_regex
+        ):
+            self.assertRegex(rendered_node, expected_node)
 
     @pipeline_settings(PIPELINE_ENABLED=False)
     def test_css_packages_with_pipeline_disabled(self):
@@ -120,22 +121,25 @@ class PipelineFormMediaTests(TestCase):
                 'print': ['pipeline/css/urls.css'],
             })
         self.assertEqual(MyMedia.css, media._css)
-        self.assertEqual(
-            list(media.render_css()),
-            [
-                '<link href="%s" type="text/css" media="all" '
-                'rel="stylesheet" />' % path
-                for path in (
-                    '/static/extra1.css',
-                    '/static/extra2.css',
-                    '/static/pipeline/css/first.css',
-                    '/static/pipeline/css/second.css',
-                    '/static/pipeline/css/unicode.css',
-                )
-            ] + [
-                '<link href="/static/pipeline/css/urls.css" type="text/css" '
-                'media="print" rel="stylesheet" />'
-            ])
+
+        expected_regex = [
+            '<link href="%s" type="text/css" media="all" '
+            'rel="stylesheet"( /)?>' % path
+            for path in (
+                '/static/extra1.css',
+                '/static/extra2.css',
+                '/static/pipeline/css/first.css',
+                '/static/pipeline/css/second.css',
+                '/static/pipeline/css/unicode.css',
+            )
+        ] + [
+            '<link href="/static/pipeline/css/urls.css" type="text/css" '
+            'media="print" rel="stylesheet"( /)?>'
+        ]
+        for rendered_node, expected_node in zip(
+            media.render_css(), expected_regex
+        ):
+            self.assertRegex(rendered_node, expected_node)
 
     @pipeline_settings(PIPELINE_ENABLED=True)
     def test_js_packages_with_pipeline_enabled(self):

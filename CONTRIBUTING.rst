@@ -17,3 +17,26 @@ Contribute
 
 Otherwise, if you simply wants to suggest a feature or report a bug, create an issue :
 https://github.com/jazzband/django-pipeline/issues
+
+
+Running tests
+=============
+
+We use tox to run the test suite on different versions locally (and travis-ci
+to automate the check for PRs).
+
+To tun the test suite locally, please make sure your python environment has
+tox and django installed::
+
+    python3.7 -m pip install tox
+
+Since we use a number of node.js tools, one should first install the node
+depencies. We reccomend using [nvm](https://github.com/nvm-sh/nvm#installation-and-update) , tl;dr::
+
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+    nvm install node
+    nvm use node
+
+And then simply execute tox to run the whole test matrix::
+
+    tox

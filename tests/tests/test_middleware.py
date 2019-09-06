@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+try:
+    from mock import patch
+except ImportError:
+    from unittest.mock import patch  # noqa
+
+from django.core.exceptions import MiddlewareNotUsed
 from django.test import TestCase
 from django.http import HttpRequest, HttpResponse
 
@@ -34,3 +40,9 @@ class MiddlewareTest(TestCase):
         response = MinifyHTMLMiddleware().process_response(self.req, self.resp)
         self.assertIn('text/plain', response['Content-Type'])
         self.assertIn(self.whitespace, response.content)
+
+    @patch('pipeline.middleware.settings.PIPELINE_ENABLED', False)
+    def test_middleware_not_used(self):
+        self.resp['Content-Type'] = 'text/plain; charset=UTF-8'
+
+        self.assertRaises(MiddlewareNotUsed, MinifyHTMLMiddleware)
