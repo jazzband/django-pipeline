@@ -240,7 +240,12 @@ class CompressorImplementationTest(TestCase):
     def test_uglifyjs(self):
         self._test_compressor('pipeline.compressors.uglifyjs.UglifyJSCompressor',
             'js', 'pipeline/compressors/uglifyjs.js')
-        
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    def test_terser(self):
+        self._test_compressor('pipeline.compressors.terser.TerserCompressor',
+            'js', 'pipeline/compressors/terser.js')
+
     @skipUnless(settings.HAS_NODE, "requires node")
     def test_yuglify(self):
         self._test_compressor('pipeline.compressors.yuglify.YuglifyCompressor',
