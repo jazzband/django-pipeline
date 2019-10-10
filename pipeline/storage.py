@@ -198,7 +198,7 @@ class OptimizedPipelineStorage(PipelineMixin, StaticFilesStorage):
         outfile_path = os.path.join(settings.STATIC_ROOT, path)
         infile_hash_path = outfile_path + '.hash'
 
-        with open(infile_path) as infile_file:
+        with open(infile_path, 'rb') as infile_file:
             current_hash = hashlib.md5(infile_file.read()).hexdigest()
 
         from django.core.cache import caches
