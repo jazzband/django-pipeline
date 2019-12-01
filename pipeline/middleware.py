@@ -18,7 +18,7 @@ class MinifyHTMLMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
         if response.has_header('Content-Type') and 'text/html' in response['Content-Type']:
             try:
-                response.content = minify_html(response.content.strip())
+                response.content = minify_html(response.content.decode().strip())
                 response['Content-Length'] = str(len(response.content))
             except DjangoUnicodeDecodeError:
                 pass
