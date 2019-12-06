@@ -7,7 +7,11 @@ from collections import OrderedDict
 import django
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.utils import six
+try:
+    from django.utils.six import iterkeys
+except ImportError:
+    iterkeys = iter
+
 
 from pipeline.finders import PipelineFinder
 
@@ -57,7 +61,7 @@ class Collector(object):
                 if files and len(files) == len(found_files):
                     break
 
-        return six.iterkeys(found_files)
+        return iterkeys(found_files)
 
     def copy_file(self, path, prefixed_path, source_storage):
         # Delete the target file if needed or break
