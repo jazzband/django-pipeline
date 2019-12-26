@@ -33,7 +33,7 @@ tox and django installed::
 Since we use a number of node.js tools, one should first install the node
 depencies. We reccomend using [nvm](https://github.com/nvm-sh/nvm#installation-and-update) , tl;dr::
 
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
     nvm install node
     nvm use node
 

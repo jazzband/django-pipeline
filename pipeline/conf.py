@@ -8,7 +8,10 @@ import shlex
 from django.conf import settings as _settings
 from django.core.signals import setting_changed
 from django.dispatch import receiver
-from django.utils.six import string_types
+try:
+    from django.utils.six import string_types
+except ImportError:
+    string_types = (str,)
 
 
 DEFAULTS = {

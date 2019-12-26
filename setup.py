@@ -6,7 +6,7 @@ import sys
 
 setup(
     name='django-pipeline',
-    version='1.6.14',
+    version='1.7.0',
     description='Pipeline is an asset packaging library for Django.',
     long_description=io.open('README.rst', encoding='utf-8').read() + '\n\n' +
         io.open('HISTORY.rst', encoding='utf-8').read(),
@@ -27,6 +27,7 @@ setup(
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.2',
+        'Framework :: Django :: 3.0',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
@@ -36,6 +37,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Utilities',
         'Topic :: Software Development :: Libraries :: Python Modules',

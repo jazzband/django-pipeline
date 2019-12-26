@@ -10,7 +10,10 @@ from itertools import takewhile
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import smart_bytes, force_text
-from django.utils.six import string_types
+try:
+    from django.utils.six import string_types
+except ImportError:
+    string_types = (str,)
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompressorError
