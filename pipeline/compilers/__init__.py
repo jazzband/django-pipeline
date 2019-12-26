@@ -36,9 +36,10 @@ class Compiler(object):
                         infile = self.storage.path(input_path)
                     except NotImplementedError:
                         infile = finders.find(input_path)
+                    project_infile = finders.find(input_path)
                     outfile = compiler.output_path(infile, compiler.output_extension)
-                    outdated = compiler.is_outdated(infile, outfile)
-                    compiler.compile_file(infile, outfile,
+                    outdated = compiler.is_outdated(project_infile, outfile)
+                    compiler.compile_file(project_infile, outfile,
                                           outdated=outdated, force=force,
                                           **compiler_options)
 
