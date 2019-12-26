@@ -16,7 +16,7 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['tests', 'tests.tests']),
     zip_safe=False,
-    extras_require={ ':python_version<"3"': ['futures>=2.1.3'] },
+    install_requires=['futures >= 2.1.3;python_version<"3"'],
     include_package_data=True,
     keywords=('django pipeline asset compiling concatenation compression'
               ' packaging'),
