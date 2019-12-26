@@ -10,10 +10,6 @@ from itertools import takewhile
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import smart_bytes, force_text
-try:
-    from django.utils.six import string_types
-except ImportError:
-    string_types = (str,)
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompressorError
@@ -241,7 +237,7 @@ class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         argument_list = []
         for flattening_arg in command:
-            if isinstance(flattening_arg, string_types):
+            if isinstance(flattening_arg, (str,)):
                 argument_list.append(flattening_arg)
             else:
                 argument_list.extend(flattening_arg)

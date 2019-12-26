@@ -8,10 +8,6 @@ import shlex
 from django.conf import settings as _settings
 from django.core.signals import setting_changed
 from django.dispatch import receiver
-try:
-    from django.utils.six import string_types
-except ImportError:
-    string_types = (str,)
 
 
 DEFAULTS = {
@@ -101,7 +97,7 @@ class PipelineSettings(MutableMapping):
     def __getitem__(self, key):
         value = self.settings[key]
         if key.endswith(("_BINARY", "_ARGUMENTS")):
-            if isinstance(value, string_types):
+            if isinstance(value, (str,)):
                 return tuple(shlex.split(value, posix=(os.name == 'posix')))
             return tuple(value)
         return value

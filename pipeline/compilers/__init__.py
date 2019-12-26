@@ -9,11 +9,6 @@ from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_bytes
-try:
-   from django.utils.six import string_types, text_type
-except ImportError:
-    string_types = (str,)
-    text_type = str
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
@@ -114,7 +109,7 @@ class SubProcessCompiler(CompilerBase):
         """
         argument_list = []
         for flattening_arg in command:
-            if isinstance(flattening_arg, string_types):
+            if isinstance(flattening_arg, (str,)):
                 argument_list.append(flattening_arg)
             else:
                 argument_list.extend(flattening_arg)
@@ -148,7 +143,7 @@ class SubProcessCompiler(CompilerBase):
         except OSError as e:
             stdout_captured = None  # Don't save erroneous result.
             raise CompilerError(e, command=argument_list,
-                                error_output=text_type(e))
+                                error_output=str(e))
         finally:
             # Decide what to do with captured stdout.
             if stdout:
