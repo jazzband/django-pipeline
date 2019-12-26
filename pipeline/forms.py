@@ -5,14 +5,14 @@ from __future__ import unicode_literals
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.functional import cached_property
 try:
-    from django.utils.six import iteritems
+    from django.utils.six import iteritems, add_metaclass
 except ImportError:
+    from .decorator import add_metaclass
     def iteritems(dictionary):
         return dictionary.items()
 
 from .collector import default_collector
 from .conf import settings
-from .decorator import add_metaclass
 from .packager import Packager
 
 
