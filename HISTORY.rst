@@ -6,7 +6,7 @@ History
 1.7.0
 =====
 
-Release the last major version of django-pipeline working on Python 2.
+* Release the last major version of django-pipeline working on Python 2.
 * Thank you for all the modifications made since version 1.6.14, which we cannot quote.
 * Apply an optimization to save time during development. Thank to @blankser
 * Edit setup.py to follow the recommendation of the documentation. Thank to @shaneikennedy
