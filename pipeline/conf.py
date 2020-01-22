@@ -2,7 +2,10 @@
 from __future__ import unicode_literals
 
 import os
-from collections.abc import MutableMapping
+try:
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import MutableMapping
 import shlex
 
 from django.conf import settings as _settings
