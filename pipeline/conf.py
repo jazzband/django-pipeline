@@ -71,11 +71,11 @@ DEFAULTS = {
     'LESS_ARGUMENTS': '',
 
     'MIMETYPES': (
-        (b'text/coffeescript', '.coffee'),
-        (b'text/less', '.less'),
-        (b'text/javascript', '.js'),
-        (b'text/x-sass', '.sass'),
-        (b'text/x-scss', '.scss')
+        (str('text/coffeescript'), str('.coffee')),
+        (str('text/less'), str('.less')),
+        (str('text/javascript'), str('.js')),
+        (str('text/x-sass'), str('.sass')),
+        (str('text/x-scss'), str('.scss'))
     ),
 
     'EMBED_MAX_IMAGE_SIZE': 32700,

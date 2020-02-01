@@ -231,11 +231,11 @@ Tuple that match file extension with their corresponding mimetypes.
 Defaults to ::
 
   (
-    (b'text/coffeescript', '.coffee'),
-    (b'text/less', '.less'),
-    (b'text/javascript', '.js'),
-    (b'text/x-sass', '.sass'),
-    (b'text/x-scss', '.scss')
+    ('text/coffeescript', '.coffee'),
+    ('text/less', '.less'),
+    ('text/javascript', '.js'),
+    ('text/x-sass', '.sass'),
+    ('text/x-scss', '.scss')
   )
 
 .. warning::
