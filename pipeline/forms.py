@@ -136,7 +136,7 @@ class PipelineFormMediaMetaClass(type):
         # If we define any packages, we'll need to use our special
         # PipelineFormMediaProperty class. We use this instead of intercepting
         # in __getattribute__ because Django does not access them through
-        # normal properpty access. Instead, grabs the Media class's __dict__
+        # normal property access. Instead, grabs the Media class's __dict__
         # and accesses them from there. By using these special properties, we
         # can handle direct access (Media.css) and dictionary-based access
         # (Media.__dict__['css']).
