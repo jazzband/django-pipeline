@@ -8,6 +8,7 @@ from tempfile import NamedTemporaryFile
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage
 from django.utils.encoding import smart_bytes
 try:
    from django.utils.six import string_types, text_type
@@ -46,8 +47,10 @@ class Compiler(object):
                     compiler.compile_file(project_infile, outfile,
                                           outdated=outdated, force=force,
                                           **compiler_options)
+                    output_path = compiler.output_path(input_path, compiler.output_extension)
+                    compiler.sync_file(output_path, outfile)
 
-                    return compiler.output_path(input_path, compiler.output_extension)
+                    return output_path
             else:
                 return input_path
 
@@ -71,6 +74,14 @@ class CompilerBase(object):
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         raise NotImplementedError
+
+    def sync_file(self, path, filename):
+        if isinstance(self.storage, FileSystemStorage):
+            return
+
+        with open(filename) as f:
+            print("Syncing '%s'" % filename)
+            self.save_file(path, f.read())
 
     def save_file(self, path, content):
         return self.storage.save(path, ContentFile(smart_bytes(content)))
