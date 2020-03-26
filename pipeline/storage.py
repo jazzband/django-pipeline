@@ -9,6 +9,8 @@ from django.contrib.staticfiles.utils import matches_patterns
 
 from django.core.files.base import File
 
+from pipeline.conf import settings
+
 
 class PipelineMixin(object):
     packing = True
@@ -18,7 +20,7 @@ class PipelineMixin(object):
             return
 
         from pipeline.packager import Packager
-        packager = Packager(storage=self)
+        packager = Packager(storage=self, verbose=settings.VERBOSE)
         for package_name in packager.packages['css']:
             package = packager.package_for('css', package_name)
             output_file = package.output_filename
