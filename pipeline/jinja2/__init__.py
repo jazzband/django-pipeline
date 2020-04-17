@@ -10,7 +10,7 @@ from ..utils import guess_type
 from ..templatetags.pipeline import PipelineMixin
 
 
-class PipelineExtension(PipelineMixin, Extension):
+class PipelineExtension(Extension, PipelineMixin):
     tags = set(['stylesheet', 'javascript'])
 
     def parse(self, parser):
