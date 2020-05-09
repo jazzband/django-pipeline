@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import logging
 import subprocess
 
@@ -77,7 +75,7 @@ class PipelineMixin(object):
         Subclasses can override this method to provide custom behavior for
         rendering the output file.
         """
-        method = getattr(self, 'render_{0}'.format(package_type))
+        method = getattr(self, f'render_{package_type}')
 
         return method(package, package.output_filename)
 
@@ -98,15 +96,13 @@ class PipelineMixin(object):
             default_collector.collect(self.request)
 
         packager = Packager()
-        method = getattr(self, 'render_individual_{0}'.format(package_type))
+        method = getattr(self, f'render_individual_{package_type}')
 
         try:
             paths = packager.compile(package.paths)
         except CompilerError as e:
             if settings.SHOW_ERRORS_INLINE:
-                method = getattr(self, 'render_error_{0}'.format(
-                    package_type))
-
+                method = getattr(self, f'render_error_{package_type}')
                 return method(package_name, e)
             else:
                 raise

@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404

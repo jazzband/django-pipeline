@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import base64
 import io
 import os
@@ -16,7 +13,6 @@ from unittest import skipIf, skipUnless
 from django.conf import settings
 from django.test import TestCase
 from django.test.client import RequestFactory
-from django.utils.encoding import smart_bytes
 
 from pipeline.compressors import (
     Compressor, TEMPLATE_FUNC, SubProcessCompressor)
@@ -35,6 +31,12 @@ class CompressorTest(TestCase):
         self.compressor = Compressor()
         default_collector.collect()
 
+    @staticmethod
+    def emulate_file_reading(text):
+        with io.StringIO(text, newline='\r\n') as f:
+            data = f.read()
+        return data
+
     def test_js_compressor_class(self):
         self.assertEqual(self.compressor.js_compressor, YuglifyCompressor)
 
@@ -46,14 +48,16 @@ class CompressorTest(TestCase):
             _('pipeline/css/first.css'),
             _('pipeline/css/second.css')
         ], 'css/screen.css')
-        self.assertEqual(""".concat {\n  display: none;\n}\n\n.concatenate {\n  display: block;\n}\n""", css)
+        expected = """.concat {\n  display: none;\n}\n\n.concatenate {\n  display: block;\n}\n"""
+        self.assertEqual(self.emulate_file_reading(expected), css)
 
     def test_concatenate(self):
         js = self.compressor.concatenate([
             _('pipeline/js/first.js'),
             _('pipeline/js/second.js')
         ])
-        self.assertEqual("""(function() {\n  window.concat = function() {\n    console.log(arguments);\n  }\n}()) // No semicolon\n\n;(function() {\n  window.cat = function() {\n    console.log("hello world");\n  }\n}());\n""", js)
+        expected = """(function() {\n  window.concat = function() {\n    console.log(arguments);\n  }\n}()) // No semicolon\n\n;(function() {\n  window.cat = function() {\n    console.log("hello world");\n  }\n}());\n"""
+        self.assertEqual(self.emulate_file_reading(expected), js)
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):
@@ -138,7 +142,7 @@ class CompressorTest(TestCase):
         output = self.compressor.concatenate_and_rewrite([
             _('pipeline/css/urls.css'),
         ], 'css/screen.css')
-        self.assertEqual(""".embedded-url-svg {
+        expected = """.embedded-url-svg {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath      stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%     3C/svg%3E");
 }
 @font-face {
@@ -168,19 +172,21 @@ class CompressorTest(TestCase):
   background-image: url(#image-gradient);
 }
 @font-face{src:url(../pipeline/fonts/pipeline.eot);src:url(../pipeline/fonts/pipeline.eot?#iefix) format('embedded-opentype'),url(../pipeline/fonts/pipeline.woff) format('woff'),url(../pipeline/fonts/pipeline.ttf) format('truetype');}
-""", output)
+"""
+        self.assertEqual(self.emulate_file_reading(expected), output)
 
     def test_url_rewrite_data_uri(self):
         output = self.compressor.concatenate_and_rewrite([
             _('pipeline/css/nested/nested.css'),
         ], 'pipeline/screen.css')
-        self.assertEqual(""".data-url {
+        expected = """.data-url {
   background-image: url(data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22iso-8859-1%22%3F%3E%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%20%20width%3D%2212px%22%20height%3D%2214px%22%20viewBox%3D%220%200%2012%2014%22%20style%3D%22enable-background%3Anew%200%200%2012%2014%3B%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpath%20d%3D%22M11%2C6V5c0-2.762-2.239-5-5-5S1%2C2.238%2C1%2C5v1H0v8h12V6H11z%20M6.5%2C9.847V12h-1V9.847C5.207%2C9.673%2C5%2C9.366%2C5%2C9%20c0-0.553%2C0.448-1%2C1-1s1%2C0.447%2C1%2C1C7%2C9.366%2C6.793%2C9.673%2C6.5%2C9.847z%20M9%2C6H3V5c0-1.657%2C1.343-3%2C3-3s3%2C1.343%2C3%2C3V6z%22%2F%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3C%2Fsvg%3E);
 }
 .data-url-quoted {
   background-image: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22iso-8859-1%22%3F%3E%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%20%20width%3D%2212px%22%20height%3D%2214px%22%20viewBox%3D%220%200%2012%2014%22%20style%3D%22enable-background%3Anew%200%200%2012%2014%3B%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpath%20d%3D%22M11%2C6V5c0-2.762-2.239-5-5-5S1%2C2.238%2C1%2C5v1H0v8h12V6H11z%20M6.5%2C9.847V12h-1V9.847C5.207%2C9.673%2C5%2C9.366%2C5%2C9%20c0-0.553%2C0.448-1%2C1-1s1%2C0.447%2C1%2C1C7%2C9.366%2C6.793%2C9.673%2C6.5%2C9.847z%20M9%2C6H3V5c0-1.657%2C1.343-3%2C3-3s3%2C1.343%2C3%2C3V6z%22%2F%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3C%2Fsvg%3E');
 }
-""", output)
+"""
+        self.assertEqual(self.emulate_file_reading(expected), output)
 
     @skipIf(sys.platform.startswith("win"), "requires posix platform")
     def test_compressor_subprocess_unicode(self):
@@ -220,9 +226,9 @@ class CompressorImplementationTest(TestCase):
                 result = self.compressor.compress_css(
                     [_('pipeline/css/first.css'), _('pipeline/css/second.css')],
                     os.path.join('pipeline', 'css', os.path.basename(expected_file)))
-        with self.compressor.storage.open(expected_file) as f:
+        with self.compressor.storage.open(expected_file, 'r') as f:
             expected = f.read()
-        self.assertEqual(smart_bytes(result), expected)
+        self.assertEqual(result, expected)
 
     def test_jsmin(self):
         self._test_compressor('pipeline.compressors.jsmin.JSMinCompressor',

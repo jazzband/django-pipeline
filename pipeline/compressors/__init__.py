@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import base64
 import os
 import posixpath
@@ -80,7 +78,7 @@ class Compressor(object):
         elif variant == "datauri":
             return self.with_data_uri(css)
         else:
-            raise CompressorError("\"%s\" is not a valid variant" % variant)
+            raise CompressorError(f"\"{variant}\" is not a valid variant")
 
     def compile_templates(self, paths):
         compiled = []
@@ -131,23 +129,23 @@ class Compressor(object):
                 quote = match.group(1) or ''
                 asset_path = match.group(2)
                 if NON_REWRITABLE_URL.match(asset_path):
-                    return "url(%s%s%s)" % (quote, asset_path, quote)
+                    return f"url({quote}{asset_path}{quote})"
                 asset_url = self.construct_asset_path(asset_path, path,
                                                       output_filename, variant)
-                return "url(%s)" % asset_url
+                return f"url({asset_url})"
             content = self.read_text(path)
             # content needs to be unicode to avoid explosions with non-ascii chars
             content = re.sub(URL_DETECTOR, reconstruct, content)
             stylesheets.append(content)
-        return '\n'.join(stylesheets)
+        return '\r\n'.join(stylesheets)
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
         # Note how a semicolon is added between the two files to make sure that
-        # their behavior is not changed. '(expression1)\n(expression2)' calls
+        # their behavior is not changed. '(expression1)\n\r(expression2)' calls
         # `expression1` with `expression2` as an argument! Superfluos semicolons
         # are valid in JavaScript and will be removed by the minifier.
-        return "\n;".join([self.read_text(path) for path in paths])
+        return "\r\n;".join([self.read_text(path) for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
@@ -177,7 +175,7 @@ class Compressor(object):
             path = match.group(1)
             mime_type = self.mime_type(path)
             data = self.encoded_content(path)
-            return "url(\"data:%s;charset=utf-8;base64,%s\")" % (mime_type, data)
+            return f"url(\"data:{mime_type};charset=utf-8;base64,{data}\")"
         return re.sub(URL_REPLACER, datauri, css)
 
     def encoded_content(self, path):

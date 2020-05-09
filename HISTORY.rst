@@ -3,6 +3,26 @@
 History
 =======
 
+2.0.0
+=====
+
+* **Definitely drop the support of Python 2**.
+* Drop support for Python 3.5 (not compatible with PEP 498).
+* Remove 'decorator.py' how was used for backward compatibility
+  between python 2 and 3 for metaclass inheritance on PipelineFormMedia.
+* Replace 'format' by 'fstring' (PEP 498: Literal String Interpolation).
+* Remove of old imports form 'django.utils.six' and these fixes (1.7.0).
+* Remove tests of uncovered versions of Python and Django.
+* Replace tests for Pypy by Pypy3.
+* Explicitly specify when files are read / writ in binary mode.
+* Deal with universal newlines of Python 3 for tests. When opening a file
+  as binary mode '\r\n' is used as linebreak instead of '\n'. Open file in
+  text mode for tests to let OS correctly interpret line breaks and remove
+  'smart_bytes' not anymore used.
+* Add method to simulate file reading for tests to correctly interpret
+  line breaks from given string.
+* Upgrade documentation version to 2.0.
+
 1.7.0
 =====
 

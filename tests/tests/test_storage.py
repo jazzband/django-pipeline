@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.management import call_command
@@ -14,10 +12,7 @@ from pipeline.storage import PipelineStorage
 from tests.tests.test_compiler import DummyCompiler
 from tests.utils import pipeline_settings
 
-try:
-    from io import StringIO
-except ImportError:
-    from StringIO import StringIO
+from io import StringIO
 
 
 class PipelineNoPathStorage(PipelineStorage):

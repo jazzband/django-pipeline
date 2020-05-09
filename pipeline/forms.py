@@ -1,7 +1,5 @@
 """Support for referencing Pipeline packages in forms and widgets."""
 
-from __future__ import unicode_literals
-
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.functional import cached_property
 
