@@ -1,7 +1,5 @@
-try:
-    from mock import patch
-except ImportError:
-    from unittest.mock import patch  # noqa
+
+from unittest.mock import patch
 
 from django.core.exceptions import MiddlewareNotUsed
 from django.test import TestCase

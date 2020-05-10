@@ -137,15 +137,15 @@ class Compressor(object):
             # content needs to be unicode to avoid explosions with non-ascii chars
             content = re.sub(URL_DETECTOR, reconstruct, content)
             stylesheets.append(content)
-        return '\r\n'.join(stylesheets)
+        return '\n'.join(stylesheets)
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
         # Note how a semicolon is added between the two files to make sure that
-        # their behavior is not changed. '(expression1)\n\r(expression2)' calls
+        # their behavior is not changed. '(expression1)\n(expression2)' calls
         # `expression1` with `expression2` as an argument! Superfluos semicolons
         # are valid in JavaScript and will be removed by the minifier.
-        return "\r\n;".join([self.read_text(path) for path in paths])
+        return "\n;".join([self.read_text(path) for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""

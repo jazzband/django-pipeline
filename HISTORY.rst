@@ -14,14 +14,9 @@ History
 * Remove of old imports form 'django.utils.six' and these fixes (1.7.0).
 * Remove tests of uncovered versions of Python and Django.
 * Replace tests for Pypy by Pypy3.
-* Explicitly specify when files are read / writ in binary mode.
-* Deal with universal newlines of Python 3 for tests. When opening a file
-  as binary mode '\r\n' is used as linebreak instead of '\n'. Open file in
-  text mode for tests to let OS correctly interpret line breaks and remove
-  'smart_bytes' not anymore used.
-* Add method to simulate file reading for tests to correctly interpret
-  line breaks from given string.
-* Upgrade documentation version to 2.0.
+* Explicitly specify when files are read / write in binary mode.
+* Set opening files for tests  to deal with universal newlines.
+* Upgrade documentation version to 2.0 to follow the project version.
 
 1.7.0
 =====
