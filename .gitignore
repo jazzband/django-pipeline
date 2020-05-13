@@ -18,6 +18,7 @@ tests/node_modules/
 .DS_Store
 .idea
 .venv
+.vscode
 .project
 .pydevproject
 .ropeproject

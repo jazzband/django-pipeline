@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import os
 import shutil
 import subprocess
@@ -8,12 +6,6 @@ from tempfile import NamedTemporaryFile
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
-from django.utils.encoding import smart_bytes
-try:
-   from django.utils.six import string_types, text_type
-except ImportError:
-    string_types = (str,)
-    text_type = str
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
@@ -73,7 +65,7 @@ class CompilerBase(object):
         raise NotImplementedError
 
     def save_file(self, path, content):
-        return self.storage.save(path, ContentFile(smart_bytes(content)))
+        return self.storage.save(path, ContentFile(content))
 
     def read_file(self, path):
         file = self.storage.open(path, 'rb')
@@ -114,7 +106,7 @@ class SubProcessCompiler(CompilerBase):
         """
         argument_list = []
         for flattening_arg in command:
-            if isinstance(flattening_arg, string_types):
+            if isinstance(flattening_arg, (str,)):
                 argument_list.append(flattening_arg)
             else:
                 argument_list.extend(flattening_arg)
@@ -126,7 +118,7 @@ class SubProcessCompiler(CompilerBase):
         try:
             # We always catch stdout in a file, but we may not have a use for it.
             temp_file_container = cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
-            with NamedTemporaryFile(delete=False, dir=temp_file_container) as stdout:
+            with NamedTemporaryFile('wb', delete=False, dir=temp_file_container) as stdout:
                 compiling = subprocess.Popen(argument_list, cwd=cwd,
                                              stdout=stdout,
                                              stderr=subprocess.PIPE)
@@ -136,19 +128,19 @@ class SubProcessCompiler(CompilerBase):
             if compiling.returncode != 0:
                 stdout_captured = None  # Don't save erroneous result.
                 raise CompilerError(
-                    "{0!r} exit code {1}\n{2}".format(argument_list, compiling.returncode, stderr),
+                    f"{argument_list!r} exit code {compiling.returncode}\n{stderr}",
                     command=argument_list,
                     error_output=stderr)
 
             # User wants to see everything that happened.
             if self.verbose:
-                with open(stdout.name) as out:
+                with open(stdout.name, 'rb') as out:
                     print(out.read())
                 print(stderr)
         except OSError as e:
             stdout_captured = None  # Don't save erroneous result.
             raise CompilerError(e, command=argument_list,
-                                error_output=text_type(e))
+                                error_output=str(e))
         finally:
             # Decide what to do with captured stdout.
             if stdout:

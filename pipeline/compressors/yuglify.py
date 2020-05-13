@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from pipeline.conf import settings
 from pipeline.compressors import SubProcessCompressor
 
@@ -8,7 +6,7 @@ class YuglifyCompressor(SubProcessCompressor):
     def compress_common(self, content, compress_type, arguments):
         command = (
             settings.YUGLIFY_BINARY,
-            "--type={}".format(compress_type),
+            f"--type={compress_type}",
             arguments
         )
         return self.execute_command(command, content)

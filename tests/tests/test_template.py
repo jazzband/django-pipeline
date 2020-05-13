@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from jinja2 import Environment, PackageLoader
 
 from django.template import Template, Context

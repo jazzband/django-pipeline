@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 try:
     import fcntl
 except ImportError:
@@ -12,10 +10,7 @@ import posixpath
 import os
 import sys
 
-try:
-    from urllib.parse import quote
-except ImportError:
-    from urllib import quote
+from urllib.parse import quote
 
 from django.utils.encoding import smart_text
 

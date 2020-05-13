@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from jinja2 import nodes, TemplateSyntaxError
 from jinja2.ext import Extension
 

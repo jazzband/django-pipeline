@@ -1,15 +1,7 @@
 """Support for referencing Pipeline packages in forms and widgets."""
 
-from __future__ import unicode_literals
-
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.functional import cached_property
-try:
-    from django.utils.six import iteritems, add_metaclass
-except ImportError:
-    from .decorator import add_metaclass
-    def iteritems(dictionary):
-        return dictionary.items()
 
 from .collector import default_collector
 from .conf import settings
@@ -173,7 +165,7 @@ class PipelineFormMediaMetaClass(type):
                                   media_type='css',
                                   extra_files=extra_files.get(media_target,
                                                               [])))
-            for media_target, media_packages in iteritems(css_packages)
+            for media_target, media_packages in css_packages.items()
         )
 
     def _get_js_files(cls, extra_files):
@@ -238,8 +230,7 @@ class PipelineFormMediaMetaClass(type):
         return source_files
 
 
-@add_metaclass(PipelineFormMediaMetaClass)
-class PipelineFormMedia(object):
+class PipelineFormMedia(object, metaclass=PipelineFormMediaMetaClass):
     """Base class for form or widget Media classes that use Pipeline packages.
 
     Forms or widgets that need custom CSS or JavaScript media on a page can

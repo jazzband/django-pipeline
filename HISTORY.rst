@@ -3,6 +3,21 @@
 History
 =======
 
+2.0.0
+=====
+
+* **Definitely drop the support of Python 2**.
+* Drop support for Python 3.5 (not compatible with PEP 498).
+* Remove 'decorator.py' how was used for backward compatibility
+  between python 2 and 3 for metaclass inheritance on PipelineFormMedia.
+* Replace 'format' by 'fstring' (PEP 498: Literal String Interpolation).
+* Remove of old imports form 'django.utils.six' and these fixes (1.7.0).
+* Remove tests of uncovered versions of Python and Django.
+* Replace tests for Pypy by Pypy3.
+* Explicitly specify when files are read / write in binary mode.
+* Set opening files for tests  to deal with universal newlines.
+* Upgrade documentation version to 2.0 to follow the project version.
+
 1.7.0
 =====
 

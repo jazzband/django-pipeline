@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import sys
 from unittest import skipIf, skipUnless
 
@@ -7,7 +5,6 @@ from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.test import TestCase
 from django.test.client import RequestFactory
-from django.utils.encoding import smart_bytes
 
 from pipeline.collector import default_collector
 from pipeline.compilers import Compiler, CompilerBase, SubProcessCompiler
@@ -231,11 +228,11 @@ class CompilerImplementation(TestCase):
         infile_path = staticfiles_storage.path(infile)
         outfile_path = compiler.output_path(infile_path, compiler.output_extension)
         compiler.compile_file(_(infile_path), _(outfile_path), force=True)
-        with open(outfile_path) as f:
+        with open(outfile_path, 'r') as f:
             result = f.read()
-        with staticfiles_storage.open(expected) as f:
+        with staticfiles_storage.open(expected, 'r') as f:
             expected = f.read()
-        self.assertEqual(smart_bytes(result), expected)
+        self.assertEqual(result, expected)
 
     def test_sass(self):
         self._test_compiler('pipeline.compilers.sass.SASSCompiler',

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import base64
 import io
 import os
@@ -16,7 +13,6 @@ from unittest import skipIf, skipUnless
 from django.conf import settings
 from django.test import TestCase
 from django.test.client import RequestFactory
-from django.utils.encoding import smart_bytes
 
 from pipeline.compressors import (
     Compressor, TEMPLATE_FUNC, SubProcessCompressor)
@@ -46,14 +42,16 @@ class CompressorTest(TestCase):
             _('pipeline/css/first.css'),
             _('pipeline/css/second.css')
         ], 'css/screen.css')
-        self.assertEqual(""".concat {\n  display: none;\n}\n\n.concatenate {\n  display: block;\n}\n""", css)
+        expected = """.concat {\n  display: none;\n}\n\n.concatenate {\n  display: block;\n}\n"""
+        self.assertEqual(expected, css)
 
     def test_concatenate(self):
         js = self.compressor.concatenate([
             _('pipeline/js/first.js'),
             _('pipeline/js/second.js')
         ])
-        self.assertEqual("""(function() {\n  window.concat = function() {\n    console.log(arguments);\n  }\n}()) // No semicolon\n\n;(function() {\n  window.cat = function() {\n    console.log("hello world");\n  }\n}());\n""", js)
+        expected = """(function() {\n  window.concat = function() {\n    console.log(arguments);\n  }\n}()) // No semicolon\n\n;(function() {\n  window.cat = function() {\n    console.log("hello world");\n  }\n}());\n"""
+        self.assertEqual(expected, js)
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):
@@ -220,9 +218,9 @@ class CompressorImplementationTest(TestCase):
                 result = self.compressor.compress_css(
                     [_('pipeline/css/first.css'), _('pipeline/css/second.css')],
                     os.path.join('pipeline', 'css', os.path.basename(expected_file)))
-        with self.compressor.storage.open(expected_file) as f:
+        with self.compressor.storage.open(expected_file, 'r') as f:
             expected = f.read()
-        self.assertEqual(smart_bytes(result), expected)
+        self.assertEqual(result, expected)
 
     def test_jsmin(self):
         self._test_compressor('pipeline.compressors.jsmin.JSMinCompressor',

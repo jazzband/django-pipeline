@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
 from django.views.static import serve

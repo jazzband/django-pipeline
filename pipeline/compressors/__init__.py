@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import base64
 import os
 import posixpath
@@ -10,10 +8,6 @@ from itertools import takewhile
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import smart_bytes, force_text
-try:
-    from django.utils.six import string_types
-except ImportError:
-    string_types = (str,)
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompressorError
@@ -84,7 +78,7 @@ class Compressor(object):
         elif variant == "datauri":
             return self.with_data_uri(css)
         else:
-            raise CompressorError("\"%s\" is not a valid variant" % variant)
+            raise CompressorError(f"\"{variant}\" is not a valid variant")
 
     def compile_templates(self, paths):
         compiled = []
@@ -135,10 +129,10 @@ class Compressor(object):
                 quote = match.group(1) or ''
                 asset_path = match.group(2)
                 if NON_REWRITABLE_URL.match(asset_path):
-                    return "url(%s%s%s)" % (quote, asset_path, quote)
+                    return f"url({quote}{asset_path}{quote})"
                 asset_url = self.construct_asset_path(asset_path, path,
                                                       output_filename, variant)
-                return "url(%s)" % asset_url
+                return f"url({asset_url})"
             content = self.read_text(path)
             # content needs to be unicode to avoid explosions with non-ascii chars
             content = re.sub(URL_DETECTOR, reconstruct, content)
@@ -181,7 +175,7 @@ class Compressor(object):
             path = match.group(1)
             mime_type = self.mime_type(path)
             data = self.encoded_content(path)
-            return "url(\"data:%s;charset=utf-8;base64,%s\")" % (mime_type, data)
+            return f"url(\"data:{mime_type};charset=utf-8;base64,{data}\")"
         return re.sub(URL_REPLACER, datauri, css)
 
     def encoded_content(self, path):
@@ -241,7 +235,7 @@ class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
         argument_list = []
         for flattening_arg in command:
-            if isinstance(flattening_arg, string_types):
+            if isinstance(flattening_arg, (str,)):
                 argument_list.append(flattening_arg)
             else:
                 argument_list.extend(flattening_arg)

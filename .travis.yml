@@ -3,22 +3,16 @@ sudo: True
 dist: xenial
 matrix:
   include:
-    - env: TOXENV=py27-django111
-      python: "2.7"
-    - env: TOXENV=pypy-django111
-      python: "pypy"
-    - env: TOXENV=py35-django111
-      python: "3.5"
-    - env: TOXENV=py36-django111
-      python: "3.6"
-    - env: TOXENV=py36-django20
-      python: "3.6"
-    - env: TOXENV=py35-django22
-      python: "3.5"
+    - env: TOXENV=pypy3-django22
+      python: "pypy3"
     - env: TOXENV=py36-django22
       python: "3.6"
     - env: TOXENV=py37-django22
       python: "3.7"
+    - env: TOXENV=py38-django22
+      python: "3.8"
+    - env: TOXENV=pypy3-django30
+      python: "pypy3"
     - env: TOXENV=py36-django30
       python: "3.6"
     - env: TOXENV=py37-django30
@@ -32,7 +26,7 @@ matrix:
     - env: TOXENV=py38-django-master
       python: "3.8-dev"
     - env: TOXENV=docs
-      python: "2.7"
+      python: "3.6"
   allow_failures:
     - env: TOXENV=py36-django-master
     - env: TOXENV=py37-django-master
@@ -54,6 +48,6 @@ deploy:
   on:
     tags: true
     repo: jazzband/django-pipeline
-    condition: "$TOXENV = py27-django111"
+    condition: "$TOXENV = py36-django30"
 notifications:
   email: false

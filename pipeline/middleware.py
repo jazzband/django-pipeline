@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.core.exceptions import MiddlewareNotUsed
 from django.utils.encoding import DjangoUnicodeDecodeError
 from django.utils.html import strip_spaces_between_tags as minify_html
