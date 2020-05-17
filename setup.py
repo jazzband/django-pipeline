@@ -6,7 +6,7 @@ import sys
 
 setup(
     name='django-pipeline',
-    version='2.0.0',
+    version='2.0.1',
     description='Pipeline is an asset packaging library for Django.',
     long_description=io.open('README.rst', encoding='utf-8').read() + '\n\n' +
         io.open('HISTORY.rst', encoding='utf-8').read(),

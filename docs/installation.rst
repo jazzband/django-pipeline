@@ -17,7 +17,7 @@ Installation
 
 3. Use a pipeline storage for ``STATICFILES_STORAGE`` ::
 
-        STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+        STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
 
 4. Add the ``PipelineFinder`` to ``STATICFILES_FINDERS`` ::
 

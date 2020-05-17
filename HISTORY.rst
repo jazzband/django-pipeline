@@ -3,6 +3,14 @@
 History
 =======
 
+2.0.1
+=====
+
+* Add subclass of ManifestStaticFilesStorage. Thank to @jhpinson
+* Change the documentation to use PipelineManifestStorage in configuration
+  instead of PipelineCachedStorage now deprecated.
+* Change import MutableMapping from collections.abc. Thank to @colons
+
 2.0.0
 =====
 
