@@ -15,7 +15,7 @@ to use it configure ``STATICFILES_STORAGE`` like so ::
 
 And if you want versioning use ::
 
-  STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+  STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
 
 There is also non-packing storage available, that allows you to run ``collectstatic`` command
 without packaging your assets. Useful for production when you don't want to run compressor or compilers ::
@@ -24,7 +24,7 @@ without packaging your assets. Useful for production when you don't want to run 
 
 Also available if you want versioning ::
 
-  STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineCachedStorage'
+  STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineManifestStorage'
 
 If you use staticfiles with ``DEBUG = False`` (i.e. for integration tests
 with `Selenium <http://docs.seleniumhq.org/>`_) you should install the finder

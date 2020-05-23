@@ -6,7 +6,7 @@ import sys
 
 setup(
     name='django-pipeline',
-    version='2.0.1',
+    version='2.0.2',
     description='Pipeline is an asset packaging library for Django.',
     long_description=io.open('README.rst', encoding='utf-8').read() + '\n\n' +
         io.open('HISTORY.rst', encoding='utf-8').read(),
@@ -16,7 +16,7 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['tests', 'tests.tests']),
     zip_safe=False,
-    install_requires=['futures >= 2.1.3;python_version<"3.6"'],
+    install_requires=['python_version<"3.6"'],
     include_package_data=True,
     keywords=('django pipeline asset compiling concatenation compression'
               ' packaging'),

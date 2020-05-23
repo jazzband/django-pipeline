@@ -91,6 +91,12 @@ class NonPackagingPipelineStorage(NonPackagingMixin, PipelineStorage):
 
 
 class PipelineCachedStorage(PipelineMixin, CachedStaticFilesStorage):
+    # Deprecated since Django 2.2
+    pass
+
+
+class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
+    # Deprecated since Django 2.2
     pass
 
 
@@ -98,5 +104,5 @@ class PipelineManifestStorage(PipelineMixin, ManifestStaticFilesStorage):
     pass
 
 
-class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
+class NonPackagingPipelineManifestStorage(NonPackagingMixin, ManifestStaticFilesStorage):
     pass

@@ -3,6 +3,15 @@
 History
 =======
 
+2.0.2
+=====
+
+* Fix Middleware to properly decode HTML. Thank to @gatsinski
+* Keep mimetypes as str. Thank to @benspaulding
+* Based on #642 add 'NonPackagingPipelineManifestStorage' and update
+  the documentation: **storages.rst**. Thank to @kronion
+* Remove futures from pipeline **setup.py** requirements.
+
 2.0.1
 =====
 
