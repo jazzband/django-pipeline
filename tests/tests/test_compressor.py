@@ -235,6 +235,11 @@ class CompressorImplementationTest(TestCase):
             'css', 'pipeline/compressors/csshtmljsminify.css')
         self._test_compressor('pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
             'js', 'pipeline/compressors/csshtmljsminify.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    def test_uglifyjs(self):
+        self._test_compressor('pipeline.compressors.uglifyjs.UglifyJSCompressor',
+            'js', 'pipeline/compressors/uglifyjs.js')
         
     @skipUnless(settings.HAS_NODE, "requires node")
     def test_yuglify(self):
