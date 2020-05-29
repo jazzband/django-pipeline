@@ -230,20 +230,18 @@ class CompressorImplementationTest(TestCase):
         self._test_compressor('pipeline.compressors.slimit.SlimItCompressor',
             'js', 'pipeline/compressors/slimit.js')
 
+    def test_csshtmljsminify(self):
+        self._test_compressor('pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
+            'css', 'pipeline/compressors/csshtmljsminify.css')
+        self._test_compressor('pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
+            'js', 'pipeline/compressors/csshtmljsminify.js')
+        
     @skipUnless(settings.HAS_NODE, "requires node")
-    def test_uglifyjs(self):
-        self._test_compressor('pipeline.compressors.uglifyjs.UglifyJSCompressor',
-            'js', 'pipeline/compressors/uglifyjs.js')
-
-    @skipUnless(settings.HAS_NODE, "requires node")
-    def test_yuglify_js(self):
-        self._test_compressor('pipeline.compressors.yuglify.YuglifyCompressor',
-            'js', 'pipeline/compressors/yuglify.js')
-
-    @skipUnless(settings.HAS_NODE, "requires node")
-    def test_yuglify_css(self):
+    def test_yuglify(self):
         self._test_compressor('pipeline.compressors.yuglify.YuglifyCompressor',
             'css', 'pipeline/compressors/yuglify.css')
+        self._test_compressor('pipeline.compressors.yuglify.YuglifyCompressor',
+            'js', 'pipeline/compressors/yuglify.js')
 
     @skipUnless(settings.HAS_NODE, "requires node")
     def test_cssmin(self):

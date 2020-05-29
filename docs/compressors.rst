@@ -198,6 +198,7 @@ To us it for your stylesheets add this to your ``PIPELINE['CSS_COMPRESSOR']`` ::
 
   Default to ``'--template=highest'``
 
+
 CSSMin compressor
 =================
 
@@ -220,6 +221,26 @@ command to compress stylesheets. To use it, add this to your ``PIPELINE['CSS_COM
   Additional arguments to use when cssmin is called.
 
   Default to ``''``
+
+
+css-html-js-minify compressor
+=============================
+
+The css-html-js-minify is full Python compressor using `css-html-js-minify <https://github.com/ciotto/css-html-js-minify>`_
+for compressing javascript and stylesheets.
+
+To use it for your stylesheets add this to your ``PIPELINE['CSS_COMPRESSOR']`` ::
+
+  PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor'
+
+To use it for your javascripts add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
+
+  PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor'
+
+Install the css-html-js-minify library with your favorite Python package manager ::
+
+  pip install css-html-js-minify
+
 
 No-Op Compressors
 =================
