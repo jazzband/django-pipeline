@@ -3,6 +3,14 @@
 History
 =======
 
+2.0.4
+======
+
+* Adding **css-html-js-minify** support to compress JS and CSS.
+* Update compressors documentation with css-html-js-minify.
+* Create tests for css-html-js-minify compressor.
+* Optimization by grouping the tests yuglify compressor.
+
 2.0.3
 ======
 
@@ -36,7 +44,7 @@ History
 * Remove tests of uncovered versions of Python and Django.
 * Replace tests for Pypy by Pypy3.
 * Explicitly specify when files are read / write in binary mode.
-* Set opening files for tests  to deal with universal newlines.
+* Set opening files for tests to deal with universal newlines.
 * Upgrade documentation version to 2.0 to follow the project version.
 
 1.7.0
