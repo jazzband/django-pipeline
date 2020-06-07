@@ -1,50 +1,51 @@
 language: python
-sudo: True
+sudo: true
 dist: xenial
 matrix:
   include:
-    - env: TOXENV=pypy3-django22
-      python: "pypy3"
-    - env: TOXENV=py36-django22
-      python: "3.6"
-    - env: TOXENV=py37-django22
-      python: "3.7"
-    - env: TOXENV=py38-django22
-      python: "3.8"
-    - env: TOXENV=pypy3-django30
-      python: "pypy3"
-    - env: TOXENV=py36-django30
-      python: "3.6"
-    - env: TOXENV=py37-django30
-      python: "3.7"
-    - env: TOXENV=py38-django30
-      python: "3.8"
-    - env: TOXENV=py36-django-master
-      python: "3.6"
-    - env: TOXENV=py37-django-master
-      python: "3.7"
-    - env: TOXENV=py38-django-master
-      python: "3.8-dev"
-    - env: TOXENV=docs
-      python: "3.6"
+  - env: TOXENV=pypy3-django22
+    python: pypy3
+  - env: TOXENV=py36-django22
+    python: '3.6'
+  - env: TOXENV=py37-django22
+    python: '3.7'
+  - env: TOXENV=py38-django22
+    python: '3.8'
+  - env: TOXENV=pypy3-django30
+    python: pypy3
+  - env: TOXENV=py36-django30
+    python: '3.6'
+  - env: TOXENV=py37-django30
+    python: '3.7'
+  - env: TOXENV=py38-django30
+    python: '3.8'
+  - env: TOXENV=py36-django-master
+    python: '3.6'
+  - env: TOXENV=py37-django-master
+    python: '3.7'
+  - env: TOXENV=py38-django-master
+    python: 3.8-dev
+  - env: TOXENV=docs
+    python: '3.6'
   allow_failures:
-    - env: TOXENV=py36-django-master
-    - env: TOXENV=py37-django-master
-    - env: TOXENV=py38-django-master
+  - env: TOXENV=py36-django-master
+  - env: TOXENV=py37-django-master
+  - env: TOXENV=py38-django-master
 before_install:
-  - nvm install node
-  - nvm use node
+- nvm install node
+- nvm use node
 install:
-  - pip install -r requirements.txt
-  - npm install
+- pip install -r requirements.txt
+- npm install
 script: tox
 after_success: coveralls
 deploy:
   provider: pypi
   user: jazzband
-  distributions: "sdist bdist_wheel"
+  server: https://jazzband.co/projects/django-pipeline/upload
+  distributions: sdist bdist_wheel
   password:
-    secure: rECBwGxp/D0BcaNe6lW0XSjLOMkQLXm/Etft+l+wxhZZxkoaS5t38pWb1/wvWBuPa9I0GagRPbqap72PYJeEgS4BIgsIP8YRTxkggDJ6+CtecyMBxWWSKc94QW/x2HETQ1cYGsLwXgMEGV4WkjzKUUM3SYTjfz0jkMfMv0szufQ=
+    secure: dAk5Q0cXl4ZRr9sRvd8ycfbnjA8ME68N07bpu8fY0tdfRRsc0tShc/o3OWTKiEdedkkml7ocgy2L5dEs311a/lPuk2MebIUCsevGHdOsp1ufVvIvFR4f3nVjwGQsy8x1tvpBr2wOyPazKoFc5Zf4ayYmPyv2lDXphlRnKkWv1xo=
   on:
     tags: true
     repo: jazzband/django-pipeline
