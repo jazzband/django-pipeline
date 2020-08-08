@@ -2,7 +2,13 @@ import gzip
 
 from io import BytesIO
 
-from django.contrib.staticfiles.storage import CachedStaticFilesStorage, ManifestStaticFilesStorage, StaticFilesStorage
+import django
+
+_CACHED_STATIC_FILES_STORAGE_AVAILABLE = django.VERSION[0] <= 3 and django.VERSION[1] < 1
+
+if _CACHED_STATIC_FILES_STORAGE_AVAILABLE:
+    from django.contrib.staticfiles.storage import CachedStaticFilesStorage
+from django.contrib.staticfiles.storage import ManifestStaticFilesStorage, StaticFilesStorage
 from django.contrib.staticfiles.utils import matches_patterns
 
 from django.core.files.base import File
@@ -90,14 +96,17 @@ class NonPackagingPipelineStorage(NonPackagingMixin, PipelineStorage):
     pass
 
 
-class PipelineCachedStorage(PipelineMixin, CachedStaticFilesStorage):
-    # Deprecated since Django 2.2
-    pass
+if _CACHED_STATIC_FILES_STORAGE_AVAILABLE:
+    class PipelineCachedStorage(PipelineMixin, CachedStaticFilesStorage):
+        # Deprecated since Django 2.2
+        # Removed in Django 3.1
+        pass
 
 
-class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
-    # Deprecated since Django 2.2
-    pass
+    class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
+        # Deprecated since Django 2.2
+        # Removed in Django 3.1
+        pass
 
 
 class PipelineManifestStorage(PipelineMixin, ManifestStaticFilesStorage):
