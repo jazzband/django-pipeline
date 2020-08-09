@@ -4,7 +4,8 @@ import subprocess
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django import template
-from django.template.base import Context, VariableDoesNotExist
+from django.template.context import Context
+from django.template.base import VariableDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
