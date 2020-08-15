@@ -3,6 +3,15 @@
 History
 =======
 
+2.0.5
+======
+
+* Adding **Django 3.1** compatibility.
+* CachedStaticFilesStorage is removed from Django. Add a check
+  of the current version to prevent error while importing. Thank to @vmsp
+* Context in django.template.base is removed from Django and
+  not used anymore in django-pipeline.
+
 2.0.4
 ======
 
