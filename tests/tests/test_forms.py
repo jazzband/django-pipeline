@@ -1,3 +1,4 @@
+from django import get_version as django_version
 from django.forms import Media
 from django.test import TestCase
 
@@ -147,6 +148,7 @@ class PipelineFormMediaTests(TestCase):
             js = ('extra1.js', 'extra2.js')
 
         media = Media(MyMedia)
+        script_tag = '<script type="text/javascript" src="%s"></script>' if django_version() < '3.1' else '<script src="%s"></script>'
 
         self.assertEqual(
             MyMedia.js,
@@ -160,7 +162,7 @@ class PipelineFormMediaTests(TestCase):
         self.assertEqual(
             media.render_js(),
             [
-                '<script type="text/javascript" src="%s"></script>' % path
+                script_tag % path
                 for path in (
                     '/static/extra1.js',
                     '/static/extra2.js',
@@ -177,6 +179,7 @@ class PipelineFormMediaTests(TestCase):
             js = ('extra1.js', 'extra2.js')
 
         media = Media(MyMedia)
+        script_tag = '<script type="text/javascript" src="%s"></script>' if django_version() < '3.1' else '<script src="%s"></script>'
 
         self.assertEqual(
             MyMedia.js,
@@ -191,7 +194,7 @@ class PipelineFormMediaTests(TestCase):
         self.assertEqual(
             media.render_js(),
             [
-                '<script type="text/javascript" src="%s"></script>' % path
+                script_tag % path
                 for path in (
                     '/static/extra1.js',
                     '/static/extra2.js',
