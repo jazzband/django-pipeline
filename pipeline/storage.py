@@ -2,9 +2,9 @@ import gzip
 
 from io import BytesIO
 
-import django
+from django import get_version as django_version
 
-_CACHED_STATIC_FILES_STORAGE_AVAILABLE = django.VERSION[0] <= 3 and django.VERSION[1] < 1
+_CACHED_STATIC_FILES_STORAGE_AVAILABLE = django_version() < '3.1'
 
 if _CACHED_STATIC_FILES_STORAGE_AVAILABLE:
     from django.contrib.staticfiles.storage import CachedStaticFilesStorage
