@@ -2,7 +2,6 @@
 import io
 
 from setuptools import setup, find_packages
-import sys
 
 setup(
     name='django-pipeline',
