@@ -1,5 +1,8 @@
+import base64
+import hashlib
 import logging
 import subprocess
+from functools import lru_cache
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 
@@ -173,9 +176,21 @@ class JavascriptNode(PipelineMixin, template.Node):
         context = package.extra_context
         context.update({
             'type': guess_type(path, 'text/javascript'),
-            'url': mark_safe(staticfiles_storage.url(path))
+            'url': mark_safe(staticfiles_storage.url(path)),
+            "crossorigin": package.config.get("crossorigin"),
+            "integrity": self.get_sri(path, method=package.config.get("integrity")),
         })
         return render_to_string(template_name, context)
+
+    @lru_cache()
+    def get_sri(self, path, method=None):
+        if method in {"sha256", "sha384", "sha512"} and staticfiles_storage.exists(path):
+            with staticfiles_storage.open(path) as fd:
+                h = getattr(hashlib, method)()
+                for data in iter(lambda: fd.read(16384), b''):
+                    h.update(data)
+            return "%s-%s" % (method, base64.b64encode(h.digest()).decode())
+        return None
 
     def render_inline(self, package, js):
         context = package.extra_context
