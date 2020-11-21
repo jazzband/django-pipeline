@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
 
@@ -13,10 +11,11 @@ class ES6Compiler(SubProcessCompiler):
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:
             return  # File doesn't need to be recompiled
-        command = "%s %s %s -o %s" % (
-            settings.PIPELINE_BABEL_BINARY,
-            settings.PIPELINE_BABEL_ARGUMENTS,
+        command = (
+            settings.BABEL_BINARY,
+            settings.BABEL_ARGUMENTS,
             infile,
+            "-o",
             outfile
         )
         return self.execute_command(command)

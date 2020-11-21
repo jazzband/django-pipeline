@@ -1,9 +1,8 @@
-from __future__ import unicode_literals
-
 import base64
 import os
 import posixpath
 import re
+import subprocess
 
 from itertools import takewhile
 
@@ -11,10 +10,10 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import smart_bytes, force_text
 
 from pipeline.conf import settings
-from pipeline.utils import to_class, relpath
 from pipeline.exceptions import CompressorError
+from pipeline.utils import to_class, relpath, set_std_streams_blocking
 
-URL_DETECTOR = r"""url\((['"]){0,1}\s*(.*?)["']{0,1}\)"""
+URL_DETECTOR = r"""url\((['"]?)\s*(.*?)\1\)"""
 URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""
 NON_REWRITABLE_URL = re.compile(r'^(#|http:|https:|data:|//)')
 
@@ -47,11 +46,11 @@ class Compressor(object):
 
     @property
     def js_compressor(self):
-        return to_class(settings.PIPELINE_JS_COMPRESSOR)
+        return to_class(settings.JS_COMPRESSOR)
 
     @property
     def css_compressor(self):
-        return to_class(settings.PIPELINE_CSS_COMPRESSOR)
+        return to_class(settings.CSS_COMPRESSOR)
 
     def compress_js(self, paths, templates=None, **kwargs):
         """Concatenate and compress JS files"""
@@ -59,8 +58,8 @@ class Compressor(object):
         if templates:
             js = js + self.compile_templates(templates)
 
-        if not settings.PIPELINE_DISABLE_WRAPPER:
-            js = "(function() { %s }).call(this);" % js
+        if not settings.DISABLE_WRAPPER:
+            js = settings.JS_WRAPPER % js
 
         compressor = self.js_compressor
         if compressor:
@@ -79,13 +78,13 @@ class Compressor(object):
         elif variant == "datauri":
             return self.with_data_uri(css)
         else:
-            raise CompressorError("\"%s\" is not a valid variant" % variant)
+            raise CompressorError(f"\"{variant}\" is not a valid variant")
 
     def compile_templates(self, paths):
         compiled = []
         if not paths:
             return ''
-        namespace = settings.PIPELINE_TEMPLATE_NAMESPACE
+        namespace = settings.TEMPLATE_NAMESPACE
         base_path = self.base_path(paths)
         for path in paths:
             contents = self.read_text(path)
@@ -95,10 +94,10 @@ class Compressor(object):
             compiled.append("%s['%s'] = %s('%s');\n" % (
                 namespace,
                 name,
-                settings.PIPELINE_TEMPLATE_FUNC,
+                settings.TEMPLATE_FUNC,
                 contents
             ))
-        compiler = TEMPLATE_FUNC if settings.PIPELINE_TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC else ""
+        compiler = TEMPLATE_FUNC if settings.TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC else ""
         return "\n".join([
             "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
             compiler,
@@ -118,9 +117,9 @@ class Compressor(object):
         if path == base:
             base = os.path.dirname(path)
         name = re.sub(r"^%s[\/\\]?(.*)%s$" % (
-            re.escape(base), re.escape(settings.PIPELINE_TEMPLATE_EXT)
+            re.escape(base), re.escape(settings.TEMPLATE_EXT)
         ), r"\1", path)
-        return re.sub(r"[\/\\]", settings.PIPELINE_TEMPLATE_SEPARATOR, name)
+        return re.sub(r"[\/\\]", settings.TEMPLATE_SEPARATOR, name)
 
     def concatenate_and_rewrite(self, paths, output_filename, variant=None):
         """Concatenate together files and rewrite urls"""
@@ -130,10 +129,10 @@ class Compressor(object):
                 quote = match.group(1) or ''
                 asset_path = match.group(2)
                 if NON_REWRITABLE_URL.match(asset_path):
-                    return "url(%s%s%s)" % (quote, asset_path, quote)
+                    return f"url({quote}{asset_path}{quote})"
                 asset_url = self.construct_asset_path(asset_path, path,
                                                       output_filename, variant)
-                return "url(%s)" % asset_url
+                return f"url({asset_url})"
             content = self.read_text(path)
             # content needs to be unicode to avoid explosions with non-ascii chars
             content = re.sub(URL_DETECTOR, reconstruct, content)
@@ -142,7 +141,11 @@ class Compressor(object):
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
-        return "\n".join([self.read_text(path) for path in paths])
+        # Note how a semicolon is added between the two files to make sure that
+        # their behavior is not changed. '(expression1)\n(expression2)' calls
+        # `expression1` with `expression2` as an argument! Superfluos semicolons
+        # are valid in JavaScript and will be removed by the minifier.
+        return "\n;".join([self.read_text(path) for path in paths])
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
@@ -159,11 +162,11 @@ class Compressor(object):
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not (re.search(settings.PIPELINE_EMBED_PATH, path.replace('\\', '/')) and self.storage.exists(path)):
+        if not (re.search(settings.EMBED_PATH, path.replace('\\', '/')) and self.storage.exists(path)):
             return False
         if ext not in EMBED_EXTS:
             return False
-        if not (font or len(self.encoded_content(path)) < settings.PIPELINE_EMBED_MAX_IMAGE_SIZE):
+        if not (font or len(self.encoded_content(path)) < settings.EMBED_MAX_IMAGE_SIZE):
             return False
         return True
 
@@ -172,7 +175,7 @@ class Compressor(object):
             path = match.group(1)
             mime_type = self.mime_type(path)
             data = self.encoded_content(path)
-            return "url(\"data:%s;charset=utf-8;base64,%s\")" % (mime_type, data)
+            return f"url(\"data:{mime_type};charset=utf-8;base64,{data}\")"
         return re.sub(URL_REPLACER, datauri, css)
 
     def encoded_content(self, path):
@@ -230,12 +233,19 @@ class CompressorBase(object):
 
 class SubProcessCompressor(CompressorBase):
     def execute_command(self, command, content):
-        import subprocess
-        pipe = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
+        argument_list = []
+        for flattening_arg in command:
+            if isinstance(flattening_arg, (str,)):
+                argument_list.append(flattening_arg)
+            else:
+                argument_list.extend(flattening_arg)
+
+        pipe = subprocess.Popen(argument_list, stdout=subprocess.PIPE,
                                 stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         if content:
             content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)
+        set_std_streams_blocking()
         if stderr.strip() and pipe.returncode != 0:
             raise CompressorError(stderr)
         elif self.verbose:

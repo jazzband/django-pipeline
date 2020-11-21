@@ -1,9 +1,8 @@
-from __future__ import unicode_literals
-
 import os
 
 from collections import OrderedDict
 
+import django
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 
@@ -18,6 +17,11 @@ class Collector(object):
             storage = staticfiles_storage
         self.storage = storage
 
+    def _get_modified_time(self, storage, prefixed_path):
+        if django.VERSION[:2] >= (1, 10):
+            return storage.get_modified_time(prefixed_path)
+        return storage.modified_time(prefixed_path)
+
     def clear(self, path=""):
         dirs, files = self.storage.listdir(path)
         for f in files:
@@ -26,7 +30,7 @@ class Collector(object):
         for d in dirs:
             self.clear(os.path.join(path, d))
 
-    def collect(self, request=None):
+    def collect(self, request=None, files=[]):
         if self.request and self.request is request:
             return
         self.request = request
@@ -41,9 +45,16 @@ class Collector(object):
                     prefixed_path = os.path.join(storage.prefix, path)
                 else:
                     prefixed_path = path
-                if prefixed_path not in found_files:
+
+                if (prefixed_path not in found_files and
+                    (not files or prefixed_path in files)):
                     found_files[prefixed_path] = (storage, path)
                     self.copy_file(path, prefixed_path, storage)
+
+                if files and len(files) == len(found_files):
+                    break
+
+        return found_files.keys()
 
     def copy_file(self, path, prefixed_path, source_storage):
         # Delete the target file if needed or break
@@ -57,14 +68,14 @@ class Collector(object):
         if self.storage.exists(prefixed_path):
             try:
                 # When was the target file modified last time?
-                target_last_modified = self.storage.modified_time(prefixed_path)
+                target_last_modified = self._get_modified_time(self.storage, prefixed_path)
             except (OSError, NotImplementedError, AttributeError):
                 # The storage doesn't support ``modified_time`` or failed
                 pass
             else:
                 try:
                     # When was the source file modified last time?
-                    source_last_modified = source_storage.modified_time(path)
+                    source_last_modified = self._get_modified_time(source_storage, path)
                 except (OSError, NotImplementedError, AttributeError):
                     pass
                 else:

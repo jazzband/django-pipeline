@@ -5,7 +5,22 @@ Configuration
 =============
 
 
-Configuration and list of available settings for Pipeline
+Configuration and list of available settings for Pipeline. Pipeline settings are namespaced in a PIPELINE dictionary in your project settings, e.g.: ::
+
+  PIPELINE = {
+      'PIPELINE_ENABLED': True,
+      'JAVASCRIPT': {
+          'stats': {
+              'source_filenames': (
+                'js/jquery.js',
+                'js/d3.js',
+                'js/collections/*.js',
+                'js/application.js',
+              ),
+              'output_filename': 'js/stats.js',
+          }
+      }
+  }
 
 
 Specifying files
@@ -16,29 +31,30 @@ syntax to select multiples files.
 
 The basic syntax for specifying CSS/JavaScript groups files is ::
 
-  PIPELINE_CSS = {
-      'colors': {
-          'source_filenames': (
-            'css/core.css',
-            'css/colors/*.css',
-            'css/layers.css'
-          ),
-          'output_filename': 'css/colors.css',
-          'extra_context': {
-              'media': 'screen,projection',
+  PIPELINE = {
+      'STYLESHEETS': {
+          'colors': {
+              'source_filenames': (
+                'css/core.css',
+                'css/colors/*.css',
+                'css/layers.css'
+              ),
+              'output_filename': 'css/colors.css',
+              'extra_context': {
+                  'media': 'screen,projection',
+              },
           },
       },
-  }
-
-  PIPELINE_JS = {
-      'stats': {
-          'source_filenames': (
-            'js/jquery.js',
-            'js/d3.js',
-            'js/collections/*.js',
-            'js/application.js',
-          ),
-          'output_filename': 'js/stats.js',
+      'JAVASCRIPT': {
+          'stats': {
+              'source_filenames': (
+                'js/jquery.js',
+                'js/d3.js',
+                'js/collections/*.js',
+                'js/application.js',
+              ),
+              'output_filename': 'js/stats.js',
+          }
       }
   }
 
@@ -48,64 +64,73 @@ Group options
 ``source_filenames``
 ....................
 
-  **Required**
+**Required**
 
-  Is a tuple with the source files to be compressed.
-  The files are concatenated in the order specified in the tuple.
+Is a tuple with the source files to be compressed.
+The files are concatenated in the order specified in the tuple.
 
 
 ``output_filename``
 ...................
 
-  **Required**
+**Required**
 
-  Is the filename of the (to be) compressed file.
+Is the filename of the (to be) compressed file.
 
 ``variant``
 ...........
 
-  **Optional**
+**Optional**
 
-  Is the variant you want to apply to your CSS. This allow you to embed images
-  and fonts in CSS with data-URI.
-  Allowed values are : ``None`` and ``datauri``.
+Is the variant you want to apply to your CSS. This allow you to embed images
+and fonts in CSS with data-URI.
+Allowed values are : ``None`` and ``datauri``.
 
-  Defaults to ``None``.
+Defaults to ``None``.
 
 ``template_name``
 .................
 
-  **Optional**
+**Optional**
 
-  Name of the template used to render ``<script>`` for js package or ``<link>`` for css package.
+Name of the template used to render ``<script>`` for js package or ``<link>`` for css package.
 
-  Defaults to ``None``.
+Defaults to ``None``.
 
 ``extra_context``
 .................
 
-  **Optional**
+**Optional**
 
-  Is a dictionary of values to add to the template context,
-  when generating the HTML for the HTML-tags with the templatetags.
+Is a dictionary of values to add to the template context,
+when generating the HTML for the HTML-tags with the templatetags.
 
-  For CSS, if you do not specify ``extra_context``/``media``, the default media in
-  the ``<link>`` output will be ``media="all"``.
+For CSS, if you do not specify ``extra_context``/``media``, the default media in
+the ``<link>`` output will be ``media="all"``.
 
-  For JS, the default templates support the ``async`` and ``defer`` tag attributes which are controlled via ``extra_context``: ::
+For JS, the default templates support the ``async`` and ``defer`` tag attributes which are controlled via ``extra_context``: ::
 
-    'extra_context': {
-        'async': True,
-    },
+  'extra_context': {
+      'async': True,
+  },
 
 ``manifest``
 ............
 
-  **Optional**
+**Optional**
 
-  Indicate if you want this group to appear in your cache manifest.
+Indicate if you want this group to appear in your cache manifest.
 
-  Defaults to ``True``.
+Defaults to ``True``.
+
+``compiler_options``
+....................
+
+**Optional**
+
+A dictionary passed to compiler's ``compile_file`` method as kwargs. None of default compilers use it currently. It's to be used by custom compilers in case they need some special parameters.
+
+Defaults to ``{}``.
 
 
 Other settings
@@ -114,81 +139,104 @@ Other settings
 ``PIPELINE_ENABLED``
 ....................
 
-  ``True`` if assets should be compressed, ``False`` if not.
+``True`` if assets should be compressed, ``False`` if not.
 
-  Defaults to ``not settings.DEBUG``.
+Defaults to ``not settings.DEBUG``.
 
-``PIPELINE_CSS_COMPRESSOR``
-............................
+``PIPELINE_COLLECTOR_ENABLED``
+..............................
 
-  Compressor class to be applied to CSS files.
+``True`` if assets should be collected in develop , ``False`` if not.
 
-  If empty or ``None``, CSS files won't be compressed.
+Defaults to ``True``
 
-  Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``.
+.. note::
 
-``PIPELINE_JS_COMPRESSOR``
-...........................
+  This only applies when ``PIPELINE_ENABLED`` is ``False``.
 
-  Compressor class to be applied to JavaScript files.
+``SHOW_ERRORS_INLINE``
+......................
 
-  If empty or ``None``, JavaScript files won't be compressed.
+``True`` if errors compiling CSS/JavaScript files should be shown inline at
+the top of the browser window, or ``False`` if they should trigger exceptions
+(the older behavior).
 
-  Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``
+This only applies when compiling through the ``{% stylesheet %}`` or
+``{% javascript %}`` template tags. It won't impact ``collectstatic``.
+
+Defaults to ``settings.DEBUG``.
+
+``CSS_COMPRESSOR``
+..................
+
+Compressor class to be applied to CSS files.
+
+If empty or ``None``, CSS files won't be compressed.
+
+Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``.
+
+``JS_COMPRESSOR``
+.................
+
+Compressor class to be applied to JavaScript files.
+
+If empty or ``None``, JavaScript files won't be compressed.
+
+Defaults to ``'pipeline.compressors.yuglify.YuglifyCompressor'``
 
 .. note::
 
   Please note that in order to use Yuglify compressor, you need to install Yuglify (see :doc:`installation` for more details).
 
-``PIPELINE_TEMPLATE_NAMESPACE``
-...............................
-
-  Object name where all of your compiled templates will be added, from within your browser.
-  To access them with your own JavaScript namespace, change it to the object of your choice.
-
-  Defaults to ``"window.JST"``
-
-
-``PIPELINE_TEMPLATE_EXT``
-.........................
-
-  The extension for which Pipeline will consider the file as a Javascript template.
-  To use a different extension, like ``.mustache``, set this settings to ``.mustache``.
-
-  Defaults to ``".jst"``
-
-``PIPELINE_TEMPLATE_FUNC``
-..........................
-
-  JavaScript function that compiles your JavaScript templates.
-  Pipeline doesn't bundle a javascript template library, but the default
-  setting is to use the
-  `underscore <http://documentcloud.github.com/underscore/>`_ template function.
-
-  Defaults to ``"_.template"``
-
-``PIPELINE_TEMPLATE_SEPARATOR``
-...............................
-
-  Character chain used by Pipeline as replacement for directory separator.
-
-  Defaults to ``"_"``
-
-
-``PIPELINE_MIMETYPES``
+``TEMPLATE_NAMESPACE``
 ......................
 
-  Tuple that match file extension with their corresponding mimetypes.
+Object name where all of your compiled templates will be added, from within your browser.
+To access them with your own JavaScript namespace, change it to the object of your choice.
 
-  Defaults to ::
+Defaults to ``"window.JST"``
 
-    (
-      (b'text/coffeescript', '.coffee'),
-      (b'text/less', '.less'),
-      (b'text/javascript', '.js'),
-      (b'text/x-sass', '.sass'),
-      (b'text/x-scss', '.scss')
-    )
+
+``TEMPLATE_EXT``
+................
+
+The extension for which Pipeline will consider the file as a Javascript template.
+To use a different extension, like ``.mustache``, set this settings to ``.mustache``.
+
+Defaults to ``".jst"``
+
+``TEMPLATE_FUNC``
+.................
+
+JavaScript function that compiles your JavaScript templates.
+Pipeline doesn't bundle a javascript template library, but the default
+setting is to use the
+`underscore <http://documentcloud.github.com/underscore/>`_ template function.
+
+Defaults to ``"_.template"``
+
+``TEMPLATE_SEPARATOR``
+......................
+
+Character chain used by Pipeline as replacement for directory separator.
+
+Defaults to ``"_"``
+
+
+``MIMETYPES``
+.............
+
+Tuple that match file extension with their corresponding mimetypes.
+
+Defaults to ::
+
+  (
+    ('text/coffeescript', '.coffee'),
+    ('text/less', '.less'),
+    ('text/javascript', '.js'),
+    ('text/x-sass', '.sass'),
+    ('text/x-scss', '.scss')
+  )
 
 .. warning::
   If you support Internet Explorer version 8 and below, you should
@@ -203,7 +251,7 @@ modern browsers.
 
 To do so, setup variant group options to the method you wish to use : ::
 
-  PIPELINE_CSS = {
+  'STYLESHEETS' = {
       'master': {
           'source_filenames': (
             'css/core.css',
@@ -225,20 +273,20 @@ Overriding embedding settings
 
 You can override these rules using the following settings:
 
-``PIPELINE_EMBED_MAX_IMAGE_SIZE``
-.................................
+``EMBED_MAX_IMAGE_SIZE``
+........................
 
-  Setting that controls the maximum image size (in bytes) to embed in CSS using Data-URIs.
-  Internet Explorer 8 has issues with assets over 32 kilobytes.
+Setting that controls the maximum image size (in bytes) to embed in CSS using Data-URIs.
+Internet Explorer 8 has issues with assets over 32 kilobytes.
 
-  Defaults to ``32700``
+Defaults to ``32700``
 
-``PIPELINE_EMBED_PATH``
-.......................
+``EMBED_PATH``
+..............
 
-  Setting the directory that an asset needs to be in so that it is embedded
+Setting the directory that an asset needs to be in so that it is embedded
 
-  Defaults to ``r'[/]?embed/'``
+Defaults to ``r'[/]?embed/'``
 
 
 Rewriting CSS urls
@@ -253,8 +301,13 @@ Wrapped javascript output
 
 All javascript output is wrapped in an anonymous function : ::
 
-  (function(){ ... })();
+  (function(){
+    //JS output...
+  })();
 
 This safety wrapper, make it difficult to pollute the global namespace by accident and improve performance.
 
-You can override this behavior by setting ``PIPELINE_DISABLE_WRAPPER`` to ``True``.
+You can override this behavior by setting ``DISABLE_WRAPPER`` to ``True``. If you want to use your own wrapper, change
+the ``JS_WRAPPER`` setting. For example: ::
+
+  JS_WRAPPER = "(function(){stuff();%s})();"

@@ -1,0 +1,27 @@
+{
+  "name": "django-pipeline-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pipeline is an asset packaging library for Django.",
+  "author": "Timothée Peignier <timothee.peignier@tryphon.org>",
+  "license": "MIT",
+  "readmeFilename": "../README.rst",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jazzband/django-pipeline.git"
+  },
+  "dependencies": {
+    "babel-cli": "latest",
+    "babel-preset-es2015": "latest",
+    "coffee-script": "latest",
+    "less": "latest",
+    "livescript": "latest",
+    "node-sass": "latest",
+    "stylus": "latest",
+    "cssmin": "latest",
+    "google-closure-compiler": "latest",
+    "uglify-js": "latest",
+    "yuglify": "1.0.x",
+    "yuicompressor": "latest"
+  }
+}

@@ -1,7 +1,8 @@
-import contextlib
 import os
 
-from pipeline.conf import settings
+import django
+
+from django.test import override_settings
 
 
 def _(path):
@@ -9,14 +10,11 @@ def _(path):
     return path.replace('/', os.sep).replace('\\', os.sep)
 
 
-@contextlib.contextmanager
-def pipeline_settings(**kwargs):
-    try:
-        saved = {}
-        for name, value in kwargs.items():
-            saved[name] = getattr(settings, name)
-            setattr(settings, name, value)
-        yield
-    finally:
-        for name, value in saved.items():
-            setattr(settings, name, value)
+class pipeline_settings(override_settings):
+    def __init__(self, **kwargs):
+        if django.VERSION[:2] >= (1, 10):
+            # Django 1.10's override_settings inherits from TestContextDecorator
+            # and its __init__ method calls its superclass' __init__ method too,
+            # so we must do the same.
+            super(pipeline_settings, self).__init__()
+        self.options = {'PIPELINE': kwargs}

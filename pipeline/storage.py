@@ -1,10 +1,14 @@
-from __future__ import unicode_literals
-
 import gzip
 
 from io import BytesIO
 
-from django.contrib.staticfiles.storage import CachedStaticFilesStorage, StaticFilesStorage
+from django import get_version as django_version
+
+_CACHED_STATIC_FILES_STORAGE_AVAILABLE = django_version() < '3.1'
+
+if _CACHED_STATIC_FILES_STORAGE_AVAILABLE:
+    from django.contrib.staticfiles.storage import CachedStaticFilesStorage
+from django.contrib.staticfiles.storage import ManifestStaticFilesStorage, StaticFilesStorage
 from django.contrib.staticfiles.utils import matches_patterns
 
 from django.core.files.base import File
@@ -72,18 +76,12 @@ class GZIPMixin(object):
                 if not matches_patterns(path, self.gzip_patterns):
                     continue
                 original_file = self.open(path)
-                gzipped_path = "{0}.gz".format(path)
+                gzipped_path = f"{path}.gz"
                 if self.exists(gzipped_path):
                     self.delete(gzipped_path)
                 gzipped_file = self._compress(original_file)
                 gzipped_path = self.save(gzipped_path, gzipped_file)
                 yield gzipped_path, gzipped_path, True
-
-    def url(self, name, force=False):
-        url = super(GZIPMixin, self).url(name, force)
-        if matches_patterns(name, self.gzip_patterns):
-            return "{0}.gz".format(url)
-        return url
 
 
 class NonPackagingMixin(object):
@@ -98,9 +96,22 @@ class NonPackagingPipelineStorage(NonPackagingMixin, PipelineStorage):
     pass
 
 
-class PipelineCachedStorage(PipelineMixin, CachedStaticFilesStorage):
+if _CACHED_STATIC_FILES_STORAGE_AVAILABLE:
+    class PipelineCachedStorage(PipelineMixin, CachedStaticFilesStorage):
+        # Deprecated since Django 2.2
+        # Removed in Django 3.1
+        pass
+
+
+    class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
+        # Deprecated since Django 2.2
+        # Removed in Django 3.1
+        pass
+
+
+class PipelineManifestStorage(PipelineMixin, ManifestStaticFilesStorage):
     pass
 
 
-class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
+class NonPackagingPipelineManifestStorage(NonPackagingMixin, ManifestStaticFilesStorage):
     pass

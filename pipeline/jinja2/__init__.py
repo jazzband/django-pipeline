@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from jinja2 import nodes, TemplateSyntaxError
 from jinja2.ext import Extension
 
@@ -7,7 +5,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 
 from ..packager import PackageNotFound
 from ..utils import guess_type
-from .pipeline import PipelineMixin
+from ..templatetags.pipeline import PipelineMixin
 
 
 class PipelineExtension(PipelineMixin, Extension):
@@ -34,7 +32,7 @@ class PipelineExtension(PipelineMixin, Extension):
             package = self.package_for(package_name, 'css')
         except PackageNotFound:
             return ''  # fail silently, do not return anything if an invalid group is specified
-        return self.render_compressed(package, 'css')
+        return self.render_compressed(package, package_name, 'css')
 
     def render_css(self, package, path):
         template_name = package.template_name or "pipeline/css.jinja"
@@ -55,7 +53,7 @@ class PipelineExtension(PipelineMixin, Extension):
             package = self.package_for(package_name, 'js')
         except PackageNotFound:
             return ''  # fail silently, do not return anything if an invalid group is specified
-        return self.render_compressed(package, 'js')
+        return self.render_compressed(package, package_name, 'js')
 
     def render_js(self, package, path):
         template_name = package.template_name or "pipeline/js.jinja"

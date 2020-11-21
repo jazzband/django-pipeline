@@ -1,94 +1,124 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+import os
+from collections.abc import MutableMapping
+import shlex
 
 from django.conf import settings as _settings
+from django.core.signals import setting_changed
+from django.dispatch import receiver
+
 
 DEFAULTS = {
-    'DEBUG': False,
-
     'PIPELINE_ENABLED': not _settings.DEBUG,
+
+    'PIPELINE_COLLECTOR_ENABLED': True,
 
     'PIPELINE_ROOT': _settings.STATIC_ROOT,
     'PIPELINE_URL': _settings.STATIC_URL,
 
-    'PIPELINE_CSS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
-    'PIPELINE_JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
-    'PIPELINE_COMPILERS': [],
+    'SHOW_ERRORS_INLINE': _settings.DEBUG,
 
-    'PIPELINE_CSS': {},
-    'PIPELINE_JS': {},
+    'CSS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
+    'JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
+    'COMPILERS': [],
 
-    'PIPELINE_TEMPLATE_NAMESPACE': "window.JST",
-    'PIPELINE_TEMPLATE_EXT': ".jst",
-    'PIPELINE_TEMPLATE_FUNC': "template",
-    'PIPELINE_TEMPLATE_SEPARATOR': "_",
+    'STYLESHEETS': {},
+    'JAVASCRIPT': {},
 
-    'PIPELINE_DISABLE_WRAPPER': False,
+    'TEMPLATE_NAMESPACE': "window.JST",
+    'TEMPLATE_EXT': ".jst",
+    'TEMPLATE_FUNC': "template",
+    'TEMPLATE_SEPARATOR': "_",
 
-    'PIPELINE_CSSTIDY_BINARY': '/usr/bin/env csstidy',
-    'PIPELINE_CSSTIDY_ARGUMENTS': '--template=highest',
+    'DISABLE_WRAPPER': False,
+    'JS_WRAPPER': "(function() {\n%s\n}).call(this);",
 
-    'PIPELINE_YUGLIFY_BINARY': '/usr/bin/env yuglify',
-    'PIPELINE_YUGLIFY_CSS_ARGUMENTS': '--terminal',
-    'PIPELINE_YUGLIFY_JS_ARGUMENTS': '--terminal',
+    'CSSTIDY_BINARY': '/usr/bin/env csstidy',
+    'CSSTIDY_ARGUMENTS': '--template=highest',
 
-    'PIPELINE_YUI_BINARY': '/usr/bin/env yuicompressor',
-    'PIPELINE_YUI_CSS_ARGUMENTS': '',
-    'PIPELINE_YUI_JS_ARGUMENTS': '',
+    'YUGLIFY_BINARY': '/usr/bin/env yuglify',
+    'YUGLIFY_CSS_ARGUMENTS': '--terminal',
+    'YUGLIFY_JS_ARGUMENTS': '--terminal',
 
-    'PIPELINE_CLOSURE_BINARY': '/usr/bin/env closure',
-    'PIPELINE_CLOSURE_ARGUMENTS': '',
+    'YUI_BINARY': '/usr/bin/env yuicompressor',
+    'YUI_CSS_ARGUMENTS': '',
+    'YUI_JS_ARGUMENTS': '',
 
-    'PIPELINE_UGLIFYJS_BINARY': '/usr/bin/env uglifyjs',
-    'PIPELINE_UGLIFYJS_ARGUMENTS': '',
+    'CLOSURE_BINARY': '/usr/bin/env closure',
+    'CLOSURE_ARGUMENTS': '',
 
-    'PIPELINE_CSSMIN_BINARY': '/usr/bin/env cssmin',
-    'PIPELINE_CSSMIN_ARGUMENTS': '',
+    'UGLIFYJS_BINARY': '/usr/bin/env uglifyjs',
+    'UGLIFYJS_ARGUMENTS': '',
 
-    'PIPELINE_COFFEE_SCRIPT_BINARY': '/usr/bin/env coffee',
-    'PIPELINE_COFFEE_SCRIPT_ARGUMENTS': '',
+    'CSSMIN_BINARY': '/usr/bin/env cssmin',
+    'CSSMIN_ARGUMENTS': '',
 
-    'PIPELINE_BABEL_BINARY': '/usr/bin/env babel',
-    'PIPELINE_BABEL_ARGUMENTS': '',
+    'COFFEE_SCRIPT_BINARY': '/usr/bin/env coffee',
+    'COFFEE_SCRIPT_ARGUMENTS': '',
 
-    'PIPELINE_LIVE_SCRIPT_BINARY': '/usr/bin/env lsc',
-    'PIPELINE_LIVE_SCRIPT_ARGUMENTS': '',
+    'BABEL_BINARY': '/usr/bin/env babel',
+    'BABEL_ARGUMENTS': '',
 
-    'PIPELINE_SASS_BINARY': '/usr/bin/env sass',
-    'PIPELINE_SASS_ARGUMENTS': '',
+    'LIVE_SCRIPT_BINARY': '/usr/bin/env lsc',
+    'LIVE_SCRIPT_ARGUMENTS': '',
 
-    'PIPELINE_STYLUS_BINARY': '/usr/bin/env stylus',
-    'PIPELINE_STYLUS_ARGUMENTS': '',
+    'SASS_BINARY': '/usr/bin/env sass',
+    'SASS_ARGUMENTS': '',
 
-    'PIPELINE_LESS_BINARY': '/usr/bin/env lessc',
-    'PIPELINE_LESS_ARGUMENTS': '',
+    'STYLUS_BINARY': '/usr/bin/env stylus',
+    'STYLUS_ARGUMENTS': '',
 
-    'PIPELINE_MIMETYPES': (
-        (b'text/coffeescript', '.coffee'),
-        (b'text/less', '.less'),
-        (b'text/javascript', '.js'),
-        (b'text/x-sass', '.sass'),
-        (b'text/x-scss', '.scss')
+    'LESS_BINARY': '/usr/bin/env lessc',
+    'LESS_ARGUMENTS': '',
+
+    'MIMETYPES': (
+        (('text/coffeescript'), ('.coffee')),
+        (('text/less'), ('.less')),
+        (('text/javascript'), ('.js')),
+        (('text/x-sass'), ('.sass')),
+        (('text/x-scss'), ('.scss'))
     ),
 
-    'PIPELINE_EMBED_MAX_IMAGE_SIZE': 32700,
-    'PIPELINE_EMBED_PATH': r'[/]?embed/',
+    'EMBED_MAX_IMAGE_SIZE': 32700,
+    'EMBED_PATH': r'[/]?embed/',
 }
 
 
-class PipelineSettings(object):
-    '''
-    Lazy Django settings wrapper for Django Pipeline
-    '''
+class PipelineSettings(MutableMapping):
+    """
+    Container object for pipeline settings
+    """
     def __init__(self, wrapped_settings):
-        self.wrapped_settings = wrapped_settings
+        self.settings = DEFAULTS.copy()
+        self.settings.update(wrapped_settings)
+
+    def __getitem__(self, key):
+        value = self.settings[key]
+        if key.endswith(("_BINARY", "_ARGUMENTS")):
+            if isinstance(value, (str,)):
+                return tuple(shlex.split(value, posix=(os.name == 'posix')))
+            return tuple(value)
+        return value
+
+    def __setitem__(self, key, value):
+        self.settings[key] = value
+
+    def __delitem__(self, key):
+        del self.store[key]
+
+    def __iter__(self):
+        return iter(self.settings)
+
+    def __len__(self):
+        return len(self.settings)
 
     def __getattr__(self, name):
-        if hasattr(self.wrapped_settings, name):
-            return getattr(self.wrapped_settings, name)
-        elif name in DEFAULTS:
-            return DEFAULTS[name]
-        else:
-            raise AttributeError("'%s' setting not found" % name)
+        return self.__getitem__(name)
 
-settings = PipelineSettings(_settings)
+
+settings = PipelineSettings(_settings.PIPELINE)
+
+
+@receiver(setting_changed)
+def reload_settings(**kwargs):
+    if kwargs['setting'] == 'PIPELINE':
+        settings.update(kwargs['value'])

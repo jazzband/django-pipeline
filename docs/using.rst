@@ -27,6 +27,11 @@ For their main and mobile website:
 * http://www.croisedanslemetro.com
 * http://m.croisedanslemetro.com
 
+Teachoo
+-----------------
+
+Teachoo uses pipeline for compressing all its static files - https://www.teachoo.com
+
 The Molly Project
 -----------------
 
@@ -38,10 +43,8 @@ It powers the University of Oxford's mobile portal: http://m.ox.ac.uk/
 Mozilla
 -------
 
-Powering mozilla.org:
- 
-* https://www.mozilla.org
-* https://github.com/mozilla/bedrock
+* `mozilla.org <https://mozilla.org>`_ (https://github.com/mozilla/bedrock)
+* `Mozilla Developer Network <https://developer.mozilla.org>`_ (https://github.com/mozilla/kuma)
 
 Novapost
 --------

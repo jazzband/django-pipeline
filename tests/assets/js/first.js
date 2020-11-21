@@ -1,3 +1,5 @@
-function concat() {
-  console.log(arguments);
-}
+(function() {
+  window.concat = function() {
+    console.log(arguments);
+  }
+}()) // No semicolon

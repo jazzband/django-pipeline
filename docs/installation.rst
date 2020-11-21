@@ -17,7 +17,7 @@ Installation
 
 3. Use a pipeline storage for ``STATICFILES_STORAGE`` ::
 
-        STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+        STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
 
 4. Add the ``PipelineFinder`` to ``STATICFILES_FINDERS`` ::
 
@@ -29,15 +29,15 @@ Installation
 
 
 .. note::
-  You need to use ``Django>=1.7`` to be able to use this version of pipeline.
+  You need to use ``Django>=1.11`` to be able to use this version of pipeline.
 
-.. _GitHub: http://github.com/cyberdelia/django-pipeline
+.. _GitHub: http://github.com/jazzband/django-pipeline
 .. _PyPI: http://pypi.python.org/pypi/django-pipeline
 
 Upgrading from 1.3
-================
+==================
 
-To upgrade from pipeline 1.3, you will need to follow theses steps:
+To upgrade from pipeline 1.3, you will need to follow these steps:
 
 1. Update templates to use the new syntax
 
@@ -63,6 +63,13 @@ To upgrade from pipeline 1.3, you will need to follow theses steps:
             'pipeline.finders.PipelineFinder',
         )
 
+
+Upgrading from 1.5
+==================
+
+To upgrade from pipeline 1.5, you will need update all your ``PIPELINE_*``
+settings and move them under the new ``PIPELINE`` setting.
+See :ref:`ref-configuration`.
 
 Recommendations
 ===============

@@ -1,27 +1,30 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import base64
-import os
 import io
+import os
+import sys
 
 try:
     from mock import patch
 except ImportError:
     from unittest.mock import patch  # noqa
 
-from django.test import TestCase
-from django.test.utils import override_settings
+from unittest import skipIf, skipUnless
 
-from pipeline.compressors import Compressor, TEMPLATE_FUNC, \
-    SubProcessCompressor
+from django.conf import settings
+from django.test import TestCase
+from django.test.client import RequestFactory
+
+from pipeline.compressors import (
+    Compressor, TEMPLATE_FUNC, SubProcessCompressor)
 from pipeline.compressors.yuglify import YuglifyCompressor
 from pipeline.collector import default_collector
 
+from tests.utils import _, pipeline_settings
 
-from tests.utils import _
 
-
+@pipeline_settings(
+    CSS_COMPRESSOR='pipeline.compressors.yuglify.YuglifyCompressor',
+    JS_COMPRESSOR='pipeline.compressors.yuglify.YuglifyCompressor')
 class CompressorTest(TestCase):
     def setUp(self):
         self.maxDiff = None
@@ -39,14 +42,16 @@ class CompressorTest(TestCase):
             _('pipeline/css/first.css'),
             _('pipeline/css/second.css')
         ], 'css/screen.css')
-        self.assertEqual(""".concat {\n  display: none;\n}\n\n.concatenate {\n  display: block;\n}\n""", css)
+        expected = """.concat {\n  display: none;\n}\n\n.concatenate {\n  display: block;\n}\n"""
+        self.assertEqual(expected, css)
 
     def test_concatenate(self):
         js = self.compressor.concatenate([
             _('pipeline/js/first.js'),
             _('pipeline/js/second.js')
         ])
-        self.assertEqual("""function concat() {\n  console.log(arguments);\n}\n\nfunction cat() {\n  console.log("hello world");\n}\n""", js)
+        expected = """(function() {\n  window.concat = function() {\n    console.log(arguments);\n  }\n}()) // No semicolon\n\n;(function() {\n  window.cat = function() {\n    console.log("hello world");\n  }\n}());\n"""
+        self.assertEqual(expected, js)
 
     @patch.object(base64, 'b64encode')
     def test_encoded_content(self, mock):
@@ -76,32 +81,32 @@ class CompressorTest(TestCase):
         self.assertEqual(base_path, _('js/templates'))
 
     def test_absolute_path(self):
-        absolute_path = self.compressor.absolute_path('../../images/sprite.png',
-            'css/plugins/')
+        absolute_path = self.compressor.absolute_path(
+            '../../images/sprite.png', 'css/plugins/')
         self.assertEqual(absolute_path, 'images/sprite.png')
-        absolute_path = self.compressor.absolute_path('/images/sprite.png',
-            'css/plugins/')
+        absolute_path = self.compressor.absolute_path(
+            '/images/sprite.png', 'css/plugins/')
         self.assertEqual(absolute_path, '/images/sprite.png')
 
     def test_template_name(self):
-        name = self.compressor.template_name('templates/photo/detail.jst',
-            'templates/')
+        name = self.compressor.template_name(
+            'templates/photo/detail.jst', 'templates/')
         self.assertEqual(name, 'photo_detail')
         name = self.compressor.template_name('templates/photo_edit.jst', '')
         self.assertEqual(name, 'photo_edit')
-        name = self.compressor.template_name('templates\photo\detail.jst',
-            'templates\\')
+        name = self.compressor.template_name(
+            'templates\photo\detail.jst', 'templates\\')
         self.assertEqual(name, 'photo_detail')
 
-    @override_settings(PIPELINE_TEMPLATE_SEPARATOR='/')
+    @pipeline_settings(TEMPLATE_SEPARATOR='/')
     def test_template_name_separator(self):
-        name = self.compressor.template_name('templates/photo/detail.jst',
-            'templates/')
+        name = self.compressor.template_name(
+            'templates/photo/detail.jst', 'templates/')
         self.assertEqual(name, 'photo/detail')
         name = self.compressor.template_name('templates/photo_edit.jst', '')
         self.assertEqual(name, 'photo_edit')
-        name = self.compressor.template_name('templates\photo\detail.jst',
-            'templates\\')
+        name = self.compressor.template_name(
+            'templates\photo\detail.jst', 'templates\\')
         self.assertEqual(name, 'photo/detail')
 
     def test_compile_templates(self):
@@ -120,18 +125,21 @@ class CompressorTest(TestCase):
         self.assertFalse(self.compressor.embeddable(_('pipeline/images/arrow.dat'), 'datauri'))
 
     def test_construct_asset_path(self):
-        asset_path = self.compressor.construct_asset_path("../../images/sprite.png",
-            "css/plugins/gallery.css", "css/gallery.css")
+        asset_path = self.compressor.construct_asset_path(
+            "../../images/sprite.png", "css/plugins/gallery.css", "css/gallery.css")
         self.assertEqual(asset_path, "../images/sprite.png")
-        asset_path = self.compressor.construct_asset_path("/images/sprite.png",
-            "css/plugins/gallery.css", "css/gallery.css")
+        asset_path = self.compressor.construct_asset_path(
+            "/images/sprite.png", "css/plugins/gallery.css", "css/gallery.css")
         self.assertEqual(asset_path, "/images/sprite.png")
 
     def test_url_rewrite(self):
         output = self.compressor.concatenate_and_rewrite([
             _('pipeline/css/urls.css'),
         ], 'css/screen.css')
-        self.assertEqual("""@font-face {
+        self.assertEqual(""".embedded-url-svg {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath      stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%     3C/svg%3E");
+}
+@font-face {
   font-family: 'Pipeline';
   src: url(../pipeline/fonts/pipeline.eot);
   src: url(../pipeline/fonts/pipeline.eot?#iefix) format('embedded-opentype');
@@ -172,11 +180,11 @@ class CompressorTest(TestCase):
 }
 """, output)
 
+    @skipIf(sys.platform.startswith("win"), "requires posix platform")
     def test_compressor_subprocess_unicode(self):
-        tests_path = os.path.dirname(os.path.dirname(__file__))
-        output = SubProcessCompressor(False).execute_command(
-            '/usr/bin/env cat',
-            io.open(tests_path + '/assets/css/unicode.css', encoding="utf-8").read())
+        path = os.path.dirname(os.path.dirname(__file__))
+        content = io.open(path + '/assets/css/unicode.css', encoding="utf-8").read()
+        output = SubProcessCompressor(False).execute_command(('cat',), content)
         self.assertEqual(""".some_class {
   // Some unicode
   content: "áéíóú";
@@ -185,3 +193,87 @@ class CompressorTest(TestCase):
 
     def tearDown(self):
         default_collector.clear()
+
+
+class CompressorImplementationTest(TestCase):
+
+    maxDiff = None
+
+    def setUp(self):
+        self.compressor = Compressor()
+        default_collector.collect(RequestFactory().get('/'))
+
+    def tearDown(self):
+        default_collector.clear()
+
+    def _test_compressor(self, compressor_cls, compress_type, expected_file):
+        override_settings = {
+            ("%s_COMPRESSOR" % compress_type.upper()): compressor_cls,
+        }
+        with pipeline_settings(**override_settings):
+            if compress_type == 'js':
+                result = self.compressor.compress_js(
+                    [_('pipeline/js/first.js'), _('pipeline/js/second.js')])
+            else:
+                result = self.compressor.compress_css(
+                    [_('pipeline/css/first.css'), _('pipeline/css/second.css')],
+                    os.path.join('pipeline', 'css', os.path.basename(expected_file)))
+        with self.compressor.storage.open(expected_file, 'r') as f:
+            expected = f.read()
+        self.assertEqual(result, expected)
+
+    def test_jsmin(self):
+        self._test_compressor('pipeline.compressors.jsmin.JSMinCompressor',
+            'js', 'pipeline/compressors/jsmin.js')
+
+    def test_slimit(self):
+        self._test_compressor('pipeline.compressors.slimit.SlimItCompressor',
+            'js', 'pipeline/compressors/slimit.js')
+
+    def test_csshtmljsminify(self):
+        self._test_compressor('pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
+            'css', 'pipeline/compressors/csshtmljsminify.css')
+        self._test_compressor('pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
+            'js', 'pipeline/compressors/csshtmljsminify.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    def test_uglifyjs(self):
+        self._test_compressor('pipeline.compressors.uglifyjs.UglifyJSCompressor',
+            'js', 'pipeline/compressors/uglifyjs.js')
+        
+    @skipUnless(settings.HAS_NODE, "requires node")
+    def test_yuglify(self):
+        self._test_compressor('pipeline.compressors.yuglify.YuglifyCompressor',
+            'css', 'pipeline/compressors/yuglify.css')
+        self._test_compressor('pipeline.compressors.yuglify.YuglifyCompressor',
+            'js', 'pipeline/compressors/yuglify.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    def test_cssmin(self):
+        self._test_compressor('pipeline.compressors.cssmin.CSSMinCompressor',
+            'css', 'pipeline/compressors/cssmin.css')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    @skipUnless(settings.HAS_JAVA, "requires java")
+    def test_closure(self):
+        self._test_compressor('pipeline.compressors.closure.ClosureCompressor',
+            'js', 'pipeline/compressors/closure.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    @skipUnless(settings.HAS_JAVA, "requires java")
+    def test_yui_js(self):
+        self._test_compressor('pipeline.compressors.yui.YUICompressor',
+            'js', 'pipeline/compressors/yui.js')
+
+    @skipUnless(settings.HAS_NODE, "requires node")
+    @skipUnless(settings.HAS_JAVA, "requires java")
+    def test_yui_css(self):
+        self._test_compressor('pipeline.compressors.yui.YUICompressor',
+            'css', 'pipeline/compressors/yui.css')
+
+    @skipUnless(settings.HAS_CSSTIDY, "requires csstidy")
+    def test_csstidy(self):
+        self._test_compressor('pipeline.compressors.csstidy.CSSTidyCompressor',
+            'css', 'pipeline/compressors/csstidy.css')
+
+

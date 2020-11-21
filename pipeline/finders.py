@@ -1,8 +1,10 @@
 from itertools import chain
 
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.contrib.staticfiles.finders import BaseFinder, BaseStorageFinder, AppDirectoriesFinder, FileSystemFinder, find
+from django.contrib.staticfiles.finders import BaseFinder, BaseStorageFinder, find, \
+    AppDirectoriesFinder as DjangoAppDirectoriesFinder, FileSystemFinder as DjangoFileSystemFinder
 from django.utils._os import safe_join
+from os.path import normpath
 
 from pipeline.conf import settings
 
@@ -23,11 +25,11 @@ class PipelineFinder(BaseStorageFinder):
 class ManifestFinder(BaseFinder):
     def find(self, path, all=False):
         """
-        Looks for files in PIPELINE_CSS and PIPELINE_JS
+        Looks for files in PIPELINE.STYLESHEETS and PIPELINE.JAVASCRIPT
         """
         matches = []
-        for elem in chain(settings.PIPELINE_CSS.values(), settings.PIPELINE_JS.values()):
-            if elem['output_filename'] == path:
+        for elem in chain(settings.STYLESHEETS.values(), settings.JAVASCRIPT.values()):
+            if normpath(elem['output_filename']) == normpath(path):
                 match = safe_join(settings.PIPELINE_ROOT, path)
                 if not all:
                     return match
@@ -66,7 +68,7 @@ class PatternFilterMixin(object):
         return super(PatternFilterMixin, self).list(ignore_patterns)
 
 
-class AppDirectoriesFinder(PatternFilterMixin, AppDirectoriesFinder):
+class AppDirectoriesFinder(PatternFilterMixin, DjangoAppDirectoriesFinder):
     """
     Like AppDirectoriesFinder, but doesn't return any additional ignored
     patterns.
@@ -83,7 +85,7 @@ class AppDirectoriesFinder(PatternFilterMixin, AppDirectoriesFinder):
     ]
 
 
-class FileSystemFinder(PatternFilterMixin, FileSystemFinder):
+class FileSystemFinder(PatternFilterMixin, DjangoFileSystemFinder):
     """
     Like FileSystemFinder, but doesn't return any additional ignored patterns
 

@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from jinja2 import Environment, PackageLoader
 
 from django.template import Template, Context
 from django.test import TestCase
 
-from pipeline.templatetags.ext import PipelineExtension
+from pipeline.jinja2 import PipelineExtension
 
 from tests.utils import pipeline_settings
 
@@ -14,7 +11,7 @@ from tests.utils import pipeline_settings
 class JinjaTest(TestCase):
     def setUp(self):
         self.env = Environment(extensions=[PipelineExtension],
-            loader=PackageLoader('pipeline', 'templates'))
+                               loader=PackageLoader('pipeline', 'templates'))
 
     def test_no_package(self):
         template = self.env.from_string(u"""{% stylesheet "unknow" %}""")
@@ -26,10 +23,10 @@ class JinjaTest(TestCase):
         template = self.env.from_string(u"""{% stylesheet "screen" %}""")
         self.assertEqual(u'<link href="/static/screen.css" rel="stylesheet" type="text/css" />', template.render())
 
+    @pipeline_settings(PIPELINE_ENABLED=False)
     def test_package_css_disabled(self):
-        with pipeline_settings(PIPELINE_ENABLED=False):
-            template = self.env.from_string(u"""{% stylesheet "screen" %}""")
-            self.assertEqual(u'''<link href="/static/pipeline/css/first.css" rel="stylesheet" type="text/css" />
+        template = self.env.from_string(u"""{% stylesheet "screen" %}""")
+        self.assertEqual(u'''<link href="/static/pipeline/css/first.css" rel="stylesheet" type="text/css" />
 <link href="/static/pipeline/css/second.css" rel="stylesheet" type="text/css" />
 <link href="/static/pipeline/css/urls.css" rel="stylesheet" type="text/css" />''', template.render())
 
@@ -56,11 +53,19 @@ class DjangoTest(TestCase):
 
     def test_compressed_empty(self):
         rendered = self.render_template(u"""{% load pipeline %}{% stylesheet "unknow" %}""")
-        self.assertEqual(u"", rendered)
+        self.assertEqual(u'', rendered)
 
     def test_compressed_css(self):
         rendered = self.render_template(u"""{% load pipeline %}{% stylesheet "screen" %}""")
-        self.assertEqual(u'<link href="/static/screen.css" rel="stylesheet" type="text/css" />', rendered)
+        self.assertEqual(u'<link href="/static/screen.css" rel="stylesheet" type="text/css" media="all" />', rendered)
+
+    def test_compressed_css_media(self):
+        rendered = self.render_template(u"""{% load pipeline %}{% stylesheet "screen_media" %}""")
+        self.assertEqual(u'<link href="/static/screen_media.css" rel="stylesheet" type="text/css" media="screen and (min-width:500px)" />', rendered)
+
+    def test_compressed_css_title(self):
+        rendered = self.render_template(u"""{% load pipeline %}{% stylesheet "screen_title" %}""")
+        self.assertEqual(u'<link href="/static/screen_title.css" rel="stylesheet" type="text/css" media="all" title="Default Style" />', rendered)
 
     def test_compressed_js(self):
         rendered = self.render_template(u"""{% load pipeline %}{% javascript "scripts" %}""")

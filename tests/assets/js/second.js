@@ -1,3 +1,5 @@
-function cat() {
-  console.log("hello world");
-}
+(function() {
+  window.cat = function() {
+    console.log("hello world");
+  }
+}());

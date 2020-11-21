@@ -20,7 +20,7 @@ When ``settings.DEBUG`` is set to ``True`` the use of these template tags will
 result in a separate tag for each resource in a given group (i.e., the
 combined, compressed files will not be used), in order to make local debugging
 easy. When ``settings.DEBUG`` is set to ``False`` the opposite is true. You can
-override the default behavior by setting ``settings.PIPELINE_ENABLED``
+override the default behavior by setting ``settings.PIPELINE['PIPELINE_ENABLED']``
 manually. When set to ``True`` or ``False`` this enables or disables,
 respectively, the usage of the combined, compressed file for each resource
 group. This can be useful, if you encounter errors in your compressed code that
@@ -40,6 +40,49 @@ with the name “scripts”, you would use the following code to output them all
    {% stylesheet 'stats' %}
    {% javascript 'scripts' %}
 
+
+Form Media
+==========
+
+Django forms and widgets can specify individual CSS or JavaScript files to
+include on a page by defining a ``Form.Media`` class with ``css`` and ``js``
+attributes.
+
+Pipeline builds upon this by allowing packages to be listed in
+``css_packages`` and ``js_packages``. This is equivalent to manually including
+these packages in a page's template using the template tags.
+
+To use these, just have your form or widget's ``Media`` class inherit from
+``pipeline.forms.PipelineFormMedia`` and define ``css_packages`` and
+``js_packages``. You can also continue to reference individual CSS/JavaScript
+files using the original ``css``/``js`` attributes, if needed.
+
+Note that unlike the template tags, you cannot customize the HTML for
+referencing these files. The ``pipeline/css.html`` and ``pipeline/js.html``
+files will not be used. Django takes care of generating the HTML for form and
+widget media.
+
+
+Example
+-------
+
+.. code-block:: python
+
+    from django import forms
+    from pipeline.forms import PipelineFormMedia
+
+
+    class MyForm(forms.Form):
+        ...
+
+        class Media(PipelineFormMedia):
+            css_packages = {
+                'all': ('my-styles',)
+            }
+            js_packages = ('my-scripts',)
+            js = ('https://cdn.example.com/some-script.js',)
+
+
 Collect static
 ==============
 
@@ -47,7 +90,7 @@ Pipeline integrates with staticfiles, you just need to setup ``STATICFILES_STORA
 
     STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 
-Then when you run ``collectstatic`` command, your CSS and your javascripts will be compressed in the same time ::
+Then when you run ``collectstatic`` command, your CSS and your javascripts will be compressed at the same time ::
 
     $ python manage.py collectstatic
 
@@ -78,7 +121,7 @@ Cache manifest
 ==============
 
 Pipeline provide a way to add your javascripts and stylesheets files to a
-cache-manifest via `Manifesto <http://manifesto.readthedocs.org/>`_.
+cache-manifest via `Manifesto <https://manifesto.readthedocs.io/>`_.
 
 To do so, you just need to add manifesto app to your ``INSTALLED_APPS``.
 
@@ -87,7 +130,19 @@ Jinja
 =====
 
 Pipeline also includes Jinja2 support and is used almost identically to the Django Template tags implementation.
-You just need to pass ``pipeline.templatetags.ext.PipelineExtension`` to your Jinja2 environment.
+You just need to pass ``pipeline.jinja2.PipelineExtension`` to your Jinja2 environment::
+
+
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'myproject.jinja2.environment',
+            'extensions': ['pipeline.jinja2.PipelineExtension']
+        }
+    }
+
 
 Templates
 ---------

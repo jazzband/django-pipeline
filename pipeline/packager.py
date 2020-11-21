@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.finders import find
 from django.core.files.base import ContentFile
@@ -32,12 +30,12 @@ class Package(object):
     @property
     def paths(self):
         return [path for path in self.sources
-                if not path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+                if not path.endswith(settings.TEMPLATE_EXT)]
 
     @property
     def templates(self):
         return [path for path in self.sources
-                if path.endswith(settings.PIPELINE_TEMPLATE_EXT)]
+                if path.endswith(settings.TEMPLATE_EXT)]
 
     @property
     def output_filename(self):
@@ -59,6 +57,10 @@ class Package(object):
     def manifest(self):
         return self.config.get('manifest', True)
 
+    @property
+    def compiler_options(self):
+        return self.config.get('compiler_options', {})
+
 
 class Packager(object):
     def __init__(self, storage=None, verbose=False, css_packages=None, js_packages=None):
@@ -69,9 +71,9 @@ class Packager(object):
         self.compressor = Compressor(storage=storage, verbose=verbose)
         self.compiler = Compiler(storage=storage, verbose=verbose)
         if css_packages is None:
-            css_packages = settings.PIPELINE_CSS
+            css_packages = settings.STYLESHEETS
         if js_packages is None:
-            js_packages = settings.PIPELINE_JS
+            js_packages = settings.JAVASCRIPT
         self.packages = {
             'css': self.create_packages(css_packages),
             'js': self.create_packages(js_packages),
@@ -95,14 +97,22 @@ class Packager(object):
                          output_filename=package.output_filename,
                          variant=package.variant, **kwargs)
 
-    def compile(self, paths, force=False):
-        return self.compiler.compile(paths, force=force)
+    def compile(self, paths, compiler_options={}, force=False):
+        return self.compiler.compile(
+            paths,
+            compiler_options=compiler_options,
+            force=force,
+        )
 
     def pack(self, package, compress, signal, **kwargs):
         output_filename = package.output_filename
         if self.verbose:
-            print("Saving: %s" % output_filename)
-        paths = self.compile(package.paths, force=True)
+            print(f"Saving: {output_filename}")
+        paths = self.compile(
+            package.paths,
+            compiler_options=package.compiler_options,
+            force=True,
+        )
         content = compress(paths, **kwargs)
         self.save_file(output_filename, content)
         signal.send(sender=self, package=package, **kwargs)
