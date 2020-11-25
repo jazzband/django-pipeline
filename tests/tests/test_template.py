@@ -1,4 +1,6 @@
+import base64
 import copy
+import hashlib
 from unittest.mock import patch
 
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -64,15 +66,24 @@ class JinjaTest(TestCase):
 
     def test_sri_sha256(self):
         template = self.env.from_string("""{% javascript "scripts_sri_sha256" %}""")
-        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha256.js" charset="utf-8" integrity="sha256-sO+6B+wKBraSBcdPSa3kkvmFKTmwk0vHUik+t4j2gcM="></script>', template.render())
+        hash_ = self.get_integrity("scripts_sha256.js", "sha256")
+        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha256.js" charset="utf-8" integrity="%s"></script>' % hash_, template.render())
 
     def test_sri_sha384(self):
         template = self.env.from_string("""{% javascript "scripts_sri_sha384" %}""")
-        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha384.js" charset="utf-8" integrity="sha384-qaJwWufiQ3S+T22m9nG6NuUfXwuaqC056iKaXozyyB+9Jf4dhFIoujkDskHSMTsw"></script>', template.render())
+        hash_ = self.get_integrity("scripts_sha384.js", "sha384")
+        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha384.js" charset="utf-8" integrity="%s"></script>' % hash_, template.render())
 
     def test_sri_sha512(self):
         template = self.env.from_string("""{% javascript "scripts_sri_sha512" %}""")
-        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha512.js" charset="utf-8" integrity="sha512-YYPVp/KIfwuwsWUDqsrevzsx+YbXAeGVUVH3SDDAAByNlVnptKDCnM+9ECVriVFK2R2dTvBE9Bpy1oBQCvU4RA=="></script>', template.render())
+        hash_ = self.get_integrity("scripts_sha512.js", "sha512")
+        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha512.js" charset="utf-8" integrity="%s"></script>' % hash_, template.render())
+
+    @staticmethod
+    def get_integrity(path, method):
+        with staticfiles_storage.open(path) as fd:
+            h = getattr(hashlib, method)(fd.read())
+        return "%s-%s" % (method, base64.b64encode(h.digest()).decode())
 
 
 class DjangoTest(TestCase):
@@ -124,16 +135,15 @@ class DjangoTest(TestCase):
 
     def test_sri_sha256(self):
         rendered = self.render_template("""{% load pipeline %}{% javascript "scripts_sri_sha256" %}""")
-        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha256.js" charset="utf-8" integrity="sha256-sO+6B+wKBraSBcdPSa3kkvmFKTmwk0vHUik+t4j2gcM="></script>', rendered)
+        hash_ = JinjaTest.get_integrity("scripts_sha256.js", "sha256")
+        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha256.js" charset="utf-8" integrity="%s"></script>' % hash_, rendered)
 
     def test_sri_sha384(self):
-        staticfiles_storage._setup()
-        call_command('collectstatic', verbosity=0, interactive=False)
         rendered = self.render_template("""{% load pipeline %}{% javascript "scripts_sri_sha384" %}""")
-        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha384.js" charset="utf-8" integrity="sha384-qaJwWufiQ3S+T22m9nG6NuUfXwuaqC056iKaXozyyB+9Jf4dhFIoujkDskHSMTsw"></script>', rendered)
+        hash_ = JinjaTest.get_integrity("scripts_sha384.js", "sha384")
+        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha384.js" charset="utf-8" integrity="%s"></script>' % hash_, rendered)
 
     def test_sri_sha512(self):
-        staticfiles_storage._setup()
-        call_command('collectstatic', verbosity=0, interactive=False)
         rendered = self.render_template("""{% load pipeline %}{% javascript "scripts_sri_sha512" %}""")
-        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha512.js" charset="utf-8" integrity="sha512-YYPVp/KIfwuwsWUDqsrevzsx+YbXAeGVUVH3SDDAAByNlVnptKDCnM+9ECVriVFK2R2dTvBE9Bpy1oBQCvU4RA=="></script>', rendered)
+        hash_ = JinjaTest.get_integrity("scripts_sha512.js", "sha512")
+        self.assertEqual('<script type="text/javascript" src="/static/scripts_sha512.js" charset="utf-8" integrity="%s"></script>' % hash_, rendered)
