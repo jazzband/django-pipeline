@@ -11,6 +11,7 @@ docs/_build/
 *.egg-info
 .coverage
 coverage/
+coverage.xml
 tests/static/
 tests/assets/js/dummy.js
 tests/node_modules/
