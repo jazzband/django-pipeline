@@ -3,6 +3,11 @@
 History
 =======
 
+Unreleased
+==========
+
+* Moving tests to GitHub Actions: https://github.com/jazzband/django-pipeline/actions
+
 2.0.5
 ======
 

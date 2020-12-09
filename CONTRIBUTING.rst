@@ -22,7 +22,7 @@ https://github.com/jazzband/django-pipeline/issues
 Running tests
 =============
 
-We use tox to run the test suite on different versions locally (and travis-ci
+We use tox to run the test suite on different versions locally (and GitHub Actions
 to automate the check for PRs).
 
 To tun the test suite locally, please make sure your python environment has
