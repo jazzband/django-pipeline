@@ -20,6 +20,7 @@
     "stylus": "latest",
     "cssmin": "latest",
     "google-closure-compiler": "latest",
+    "terser": "latest",
     "uglify-js": "latest",
     "yuglify": "1.0.x",
     "yuicompressor": "latest"

@@ -48,6 +48,9 @@ DEFAULTS = {
 
     'UGLIFYJS_BINARY': '/usr/bin/env uglifyjs',
     'UGLIFYJS_ARGUMENTS': '',
+    
+    'TERSER_BINARY': '/usr/bin/env terser',
+    'TERSER_ARGUMENTS': '--compress',
 
     'CSSMIN_BINARY': '/usr/bin/env cssmin',
     'CSSMIN_ARGUMENTS': '',

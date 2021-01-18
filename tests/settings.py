@@ -170,6 +170,7 @@ if HAS_NODE:
         'LIVE_SCRIPT_ARGUMENTS': ['--no-header'],
         'YUGLIFY_BINARY': node_exe_path('yuglify'),
         'UGLIFYJS_BINARY': node_exe_path('uglifyjs'),
+        'TERSER_BINARY': node_exe_path('terser'),
         'CSSMIN_BINARY': node_exe_path('cssmin'),
     })
 
