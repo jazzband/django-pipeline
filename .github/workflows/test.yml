@@ -4,12 +4,13 @@ on: [push, pull_request]
 
 jobs:
   build:
+    name: build (Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 5
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9', 'pypy3']
+        django-version: ['2.2', '3.0', '3.1', 'dev']
 
     steps:
     - uses: actions/checkout@v2
@@ -49,6 +50,8 @@ jobs:
     - name: Tox tests
       run: |
         tox -v
+      env:
+        DJANGO: ${{ matrix.django-version }}
 
     - name: Upload coverage
       uses: codecov/codecov-action@v1
