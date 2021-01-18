@@ -12,7 +12,7 @@ import sys
 
 from urllib.parse import quote
 
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 
 from pipeline.conf import settings
 
@@ -30,7 +30,7 @@ def to_class(class_str):
 def filepath_to_uri(path):
     if path is None:
         return path
-    return quote(smart_text(path).replace("\\", "/"), safe="/~!*()'#?")
+    return quote(smart_str(path).replace("\\", "/"), safe="/~!*()'#?")
 
 
 def guess_type(path, default=None):
@@ -39,7 +39,7 @@ def guess_type(path, default=None):
     mimetype, _ = mimetypes.guess_type(path)
     if not mimetype:
         return default
-    return smart_text(mimetype)
+    return smart_str(mimetype)
 
 
 def relpath(path, start=posixpath.curdir):
