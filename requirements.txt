@@ -3,3 +3,4 @@ flake8
 tox
 wheel
 django
+minify_html~=0.4.10
