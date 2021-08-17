@@ -32,10 +32,12 @@ class Compiler(object):
                         infile = self.storage.path(input_path)
                     except NotImplementedError:
                         infile = finders.find(input_path)
-                    project_infile = finders.find(input_path)
                     outfile = compiler.output_path(infile, compiler.output_extension)
-                    outdated = compiler.is_outdated(project_infile, outfile)
-                    compiler.compile_file(project_infile, outfile,
+                    if not settings.PIPELINE_COLLECTOR_ENABLED:
+                        # override the input file with the original source from the project
+                        infile = finders.find(input_path)
+                    outdated = compiler.is_outdated(infile, outfile)
+                    compiler.compile_file(infile, outfile,
                                           outdated=outdated, force=force,
                                           **compiler_options)
 
