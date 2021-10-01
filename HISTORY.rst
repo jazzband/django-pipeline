@@ -6,7 +6,14 @@ History
 Unreleased
 ==========
 
-* Moving tests to GitHub Actions: https://github.com/jazzband/django-pipeline/actions
+* Added **Django 3.2** compatibility (Thanks to @jramnai in #751)
+
+2.0.6
+======
+
+* Added terser (JS compressor for ES5 and ES6) (Thanks to @felix-last in #696)
+* Moved tests to GitHub Actions: https://github.com/jazzband/django-pipeline/actions (#738)
+* Fixed deprecation warnings from Django (Thanks to @edelvalle in #731)
 
 2.0.5
 ======
