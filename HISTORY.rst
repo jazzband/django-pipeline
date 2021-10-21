@@ -6,6 +6,9 @@ History
 Unreleased
 ==========
 
+2.0.7
+=====
+
 * Added **Django 3.2** compatibility (Thanks to @jramnai in #751)
 
 2.0.6
