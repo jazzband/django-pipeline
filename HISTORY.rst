@@ -6,6 +6,18 @@ History
 Unreleased
 ==========
 
+2.0.8
+=====
+
+* Add tests for **Django 4.0**,  **Python 3.9** and **Python 3.10**.
+  Thank to @kevinmarsh (#739)
+* Introduce CODE_OF_CONDUCT.md for the project. Thank to @hugovk (#758)
+* Add precision in the documentation for PipelineCachedStorage.
+  Thank to @gatsinski (#739)
+* Edit github actions matrix: django 3.2.9 support python 3.10, remove
+  python 4.0 (doesn't exist) and exclude pypy-3.8 for django-main.
+* Update setup.py with Django 4.0 and Python 3.10
+
 2.0.7
 =====
 
