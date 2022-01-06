@@ -13,7 +13,7 @@
   "dependencies": {
     "babel-cli": "latest",
     "babel-preset-es2015": "latest",
-    "coffee-script": "latest",
+    "coffeescript": "latest",
     "less": "latest",
     "livescript": "latest",
     "node-sass": "latest",

@@ -16,6 +16,7 @@ Unreleased
   Thank to @gatsinski (#739)
 * Edit github actions matrix: django 3.2.9 support python 3.10, remove
   python 4.0 (doesn't exist) and exclude pypy-3.8 for django-main.
+* Update package.json due to CoffeeScript on NPM has moved to "coffeescript" 
 * Update setup.py with Django 4.0 and Python 3.10
 
 2.0.7
