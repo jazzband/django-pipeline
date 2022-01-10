@@ -9,13 +9,17 @@ Unreleased
 2.0.8
 =====
 
+* Added **Django 4.0** compatibility. Thanks to @kevinmarsh (#760)
 * Add tests for **Django 4.0**,  **Python 3.9** and **Python 3.10**.
   Thank to @kevinmarsh (#739)
 * Introduce CODE_OF_CONDUCT.md for the project. Thank to @hugovk (#758)
 * Add precision in the documentation for PipelineCachedStorage.
   Thank to @gatsinski (#739)
+* Drop support for slimit compressor (#765) due to package not released
+  an official version for Python 3 and not any new package release from 2013.
 * Edit github actions matrix: django 3.2.9 support python 3.10, remove
   python 4.0 (doesn't exist) and exclude pypy-3.8 for django-main.
+* Add .pre-commit-config.yaml. Thanks to @hugovk (#762)
 * Update package.json due to CoffeeScript on NPM has moved to "coffeescript" 
 * Update setup.py with Django 4.0 and Python 3.10
 

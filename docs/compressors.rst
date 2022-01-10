@@ -158,21 +158,6 @@ Install the jsmin library with your favorite Python package manager ::
   pip install jsmin
 
 
-SlimIt compressor
-=================
-
-The slimit compressor uses `SlimIt <https://slimit.readthedocs.io>`_ to
-compress javascripts.
-
-To use it add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
-
-  PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.slimit.SlimItCompressor'
-
-Install the slimit library with your favorite Python package manager ::
-
-  pip install slimit
-
-
 Terser compressor
 ===================
 

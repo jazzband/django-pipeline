@@ -226,10 +226,6 @@ class CompressorImplementationTest(TestCase):
         self._test_compressor('pipeline.compressors.jsmin.JSMinCompressor',
             'js', 'pipeline/compressors/jsmin.js')
 
-    def test_slimit(self):
-        self._test_compressor('pipeline.compressors.slimit.SlimItCompressor',
-            'js', 'pipeline/compressors/slimit.js')
-
     def test_csshtmljsminify(self):
         self._test_compressor('pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
             'css', 'pipeline/compressors/csshtmljsminify.css')
