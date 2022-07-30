@@ -16,7 +16,7 @@ For their internal tools: http://www.20minutes.fr
 Borsala
 -------
 
-Borsala is the social investment plaform. You can follow stock markets that are traded in Turkey: http://borsala.com
+Borsala is the social investment platform. You can follow stock markets that are traded in Turkey: http://borsala.com
 
 
 Croisé dans le Métro
