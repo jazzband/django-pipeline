@@ -6,6 +6,8 @@ History
 Unreleased
 ==========
 
+* Added **Django 4.1** compatibility
+
 2.0.8
 =====
 

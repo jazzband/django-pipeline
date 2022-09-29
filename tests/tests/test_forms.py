@@ -75,7 +75,7 @@ class PipelineFormMediaTests(TestCase):
             })
         self.assertEqual(MyMedia.css, media._css)
         expected_regex = [
-            r'<link href="%s" type="text/css" media="all" '
+            r'<link href="%s" (type="text/css" )?media="all" '
             'rel="stylesheet"( /)?>' % path
             for path in (
                 '/static/extra1.css',
@@ -84,7 +84,7 @@ class PipelineFormMediaTests(TestCase):
                 '/static/styles2.min.css',
             )
         ] + [
-            r'<link href="/static/print.min.css" type="text/css" '
+            r'<link href="/static/print.min.css" (type="text/css" )?'
             'media="print" rel="stylesheet"( /)?>'
         ]
         for rendered_node, expected_node in zip(
@@ -122,7 +122,7 @@ class PipelineFormMediaTests(TestCase):
         self.assertEqual(MyMedia.css, media._css)
 
         expected_regex = [
-            '<link href="%s" type="text/css" media="all" '
+            '<link href="%s" (type="text/css" )?media="all" '
             'rel="stylesheet"( /)?>' % path
             for path in (
                 '/static/extra1.css',
@@ -132,7 +132,7 @@ class PipelineFormMediaTests(TestCase):
                 '/static/pipeline/css/unicode.css',
             )
         ] + [
-            '<link href="/static/pipeline/css/urls.css" type="text/css" '
+            '<link href="/static/pipeline/css/urls.css" (type="text/css" )?'
             'media="print" rel="stylesheet"( /)?>'
         ]
         for rendered_node, expected_node in zip(
