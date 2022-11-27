@@ -42,7 +42,7 @@ jobs:
       with:
         node-version: '12'
 
-    - name: Instal Node dependencies
+    - name: Install Node dependencies
       run: npm install
 
     - name: Get pip cache dir
