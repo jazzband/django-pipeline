@@ -6,6 +6,18 @@ History
 Unreleased
 ==========
 
+2.0.9
+=====
+
+* Fixed some typos in the docs.
+* Fixed string type of errors reported from compilers and compressors.
+* Updated github actions matrix for host and django support.
+* Updated github actions configuration to use modern versions of third-party
+  actions.
+* Improved the packager to copy files to (S3) storage if it does not exist
+  (#502).
+
+
 2.0.8
 =====
 
