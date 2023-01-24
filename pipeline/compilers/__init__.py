@@ -6,6 +6,7 @@ from tempfile import NamedTemporaryFile
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
+from django.utils.encoding import force_str
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
@@ -119,7 +120,8 @@ class SubProcessCompiler(CompilerBase):
             # We always catch stdout in a file, but we may not have a use for it.
             temp_file_container = cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
             with NamedTemporaryFile('wb', delete=False, dir=temp_file_container) as stdout:
-                compiling = subprocess.Popen(argument_list, cwd=cwd,
+                compiling = subprocess.Popen(argument_list,
+                                             cwd=cwd,
                                              stdout=stdout,
                                              stderr=subprocess.PIPE)
                 _, stderr = compiling.communicate()
@@ -130,7 +132,7 @@ class SubProcessCompiler(CompilerBase):
                 raise CompilerError(
                     f"{argument_list!r} exit code {compiling.returncode}\n{stderr}",
                     command=argument_list,
-                    error_output=stderr)
+                    error_output=force_str(stderr))
 
             # User wants to see everything that happened.
             if self.verbose:

@@ -240,16 +240,18 @@ class SubProcessCompressor(CompressorBase):
             else:
                 argument_list.extend(flattening_arg)
 
-        pipe = subprocess.Popen(argument_list, stdout=subprocess.PIPE,
-                                stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        pipe = subprocess.Popen(argument_list,
+                                stdout=subprocess.PIPE,
+                                stdin=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         if content:
             content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)
         set_std_streams_blocking()
         if stderr.strip() and pipe.returncode != 0:
-            raise CompressorError(stderr)
+            raise CompressorError(force_str(stderr))
         elif self.verbose:
-            print(stderr)
+            print(force_str(stderr))
         return force_str(stdout)
 
 
