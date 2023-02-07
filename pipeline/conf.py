@@ -1,11 +1,10 @@
 import os
-from collections.abc import MutableMapping
 import shlex
+from collections.abc import MutableMapping
 
 from django.conf import settings as _settings
 from django.core.signals import setting_changed
 from django.dispatch import receiver
-
 
 DEFAULTS = {
     'PIPELINE_ENABLED': not _settings.DEBUG,

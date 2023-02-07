@@ -1,11 +1,10 @@
-from jinja2 import nodes, TemplateSyntaxError
+from django.contrib.staticfiles.storage import staticfiles_storage
+from jinja2 import TemplateSyntaxError, nodes
 from jinja2.ext import Extension
 
-from django.contrib.staticfiles.storage import staticfiles_storage
-
 from ..packager import PackageNotFound
-from ..utils import guess_type
 from ..templatetags.pipeline import PipelineMixin
+from ..utils import guess_type
 
 
 class PipelineExtension(PipelineMixin, Extension):

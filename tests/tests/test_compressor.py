@@ -14,11 +14,10 @@ from django.conf import settings
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from pipeline.compressors import (
-    Compressor, TEMPLATE_FUNC, SubProcessCompressor)
-from pipeline.compressors.yuglify import YuglifyCompressor
 from pipeline.collector import default_collector
-
+from pipeline.compressors import (TEMPLATE_FUNC, Compressor,
+                                  SubProcessCompressor)
+from pipeline.compressors.yuglify import YuglifyCompressor
 from tests.utils import _, pipeline_settings
 
 

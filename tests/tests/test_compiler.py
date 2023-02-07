@@ -10,7 +10,6 @@ from pipeline.collector import default_collector
 from pipeline.compilers import Compiler, CompilerBase, SubProcessCompiler
 from pipeline.exceptions import CompilerError
 from pipeline.utils import to_class
-
 from tests.utils import _, pipeline_settings
 
 

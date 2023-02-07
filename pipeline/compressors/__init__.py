@@ -3,15 +3,14 @@ import os
 import posixpath
 import re
 import subprocess
-
 from itertools import takewhile
 
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.utils.encoding import smart_bytes, force_str
+from django.utils.encoding import force_str, smart_bytes
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompressorError
-from pipeline.utils import to_class, relpath, set_std_streams_blocking
+from pipeline.utils import relpath, set_std_streams_blocking, to_class
 
 URL_DETECTOR = r"""url\((['"]?)\s*(.*?)\1\)"""
 URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""

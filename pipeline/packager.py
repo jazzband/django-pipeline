@@ -1,5 +1,5 @@
+from django.contrib.staticfiles.finders import find, get_finders
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.contrib.staticfiles.finders import get_finders, find
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_bytes
 

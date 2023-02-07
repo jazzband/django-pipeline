@@ -6,10 +6,9 @@ except ImportError:
 
 import importlib
 import mimetypes
-import posixpath
 import os
+import posixpath
 import sys
-
 from urllib.parse import quote
 
 from django.utils.encoding import smart_str

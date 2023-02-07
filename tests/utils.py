@@ -1,7 +1,6 @@
 import os
 
 import django
-
 from django.test import override_settings
 
 

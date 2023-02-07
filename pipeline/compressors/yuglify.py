@@ -1,5 +1,5 @@
-from pipeline.conf import settings
 from pipeline.compressors import SubProcessCompressor
+from pipeline.conf import settings
 
 
 class YuglifyCompressor(SubProcessCompressor):
