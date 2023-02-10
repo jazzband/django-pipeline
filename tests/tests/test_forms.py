@@ -3,6 +3,7 @@ from django.forms import Media
 from django.test import TestCase
 
 from pipeline.forms import PipelineFormMedia
+
 from ..utils import pipeline_settings
 
 

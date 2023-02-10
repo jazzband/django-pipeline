@@ -1,8 +1,7 @@
 from django.test import TestCase
 
 from pipeline.collector import default_collector
-from pipeline.packager import Packager, PackageNotFound
-
+from pipeline.packager import PackageNotFound, Packager
 from tests.utils import _
 
 

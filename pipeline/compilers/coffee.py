@@ -1,5 +1,5 @@
-from pipeline.conf import settings
 from pipeline.compilers import SubProcessCompiler
+from pipeline.conf import settings
 
 
 class CoffeeScriptCompiler(SubProcessCompiler):

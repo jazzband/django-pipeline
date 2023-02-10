@@ -2,8 +2,8 @@
 from unittest.mock import patch
 
 from django.core.exceptions import MiddlewareNotUsed
-from django.test import TestCase
 from django.http import HttpRequest, HttpResponse
+from django.test import TestCase
 
 from pipeline.middleware import MinifyHTMLMiddleware
 

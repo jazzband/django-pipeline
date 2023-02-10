@@ -1,7 +1,7 @@
 from django.core.files import temp as tempfile
 
-from pipeline.conf import settings
 from pipeline.compressors import SubProcessCompressor
+from pipeline.conf import settings
 
 
 class CSSTidyCompressor(SubProcessCompressor):

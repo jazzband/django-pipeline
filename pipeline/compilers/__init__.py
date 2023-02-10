@@ -10,7 +10,7 @@ from django.utils.encoding import force_str
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
-from pipeline.utils import to_class, set_std_streams_blocking
+from pipeline.utils import set_std_streams_blocking, to_class
 
 
 class Compiler(object):

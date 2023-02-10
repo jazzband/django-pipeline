@@ -1,9 +1,8 @@
 import logging
 import subprocess
 
-from django.contrib.staticfiles.storage import staticfiles_storage
-
 from django import template
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.template.base import VariableDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
@@ -11,7 +10,7 @@ from django.utils.safestring import mark_safe
 from ..collector import default_collector
 from ..conf import settings
 from ..exceptions import CompilerError
-from ..packager import Packager, PackageNotFound
+from ..packager import PackageNotFound, Packager
 from ..utils import guess_type
 
 logger = logging.getLogger(__name__)

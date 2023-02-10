@@ -1,10 +1,14 @@
 from itertools import chain
-
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.contrib.staticfiles.finders import BaseFinder, BaseStorageFinder, find, \
-    AppDirectoriesFinder as DjangoAppDirectoriesFinder, FileSystemFinder as DjangoFileSystemFinder
-from django.utils._os import safe_join
 from os.path import normpath
+
+from django.contrib.staticfiles.finders import \
+    AppDirectoriesFinder as DjangoAppDirectoriesFinder
+from django.contrib.staticfiles.finders import BaseFinder, BaseStorageFinder
+from django.contrib.staticfiles.finders import \
+    FileSystemFinder as DjangoFileSystemFinder
+from django.contrib.staticfiles.finders import find
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.utils._os import safe_join
 
 from pipeline.conf import settings
 

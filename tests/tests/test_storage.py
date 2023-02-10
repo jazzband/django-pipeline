@@ -1,18 +1,15 @@
+from io import StringIO
+
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.management import call_command
 from django.test import TestCase
-from django.test.utils import override_settings
-
-from django.test.utils import modify_settings
+from django.test.utils import modify_settings, override_settings
 
 from pipeline.collector import default_collector
 from pipeline.storage import PipelineStorage
-
 from tests.tests.test_compiler import DummyCompiler
 from tests.utils import pipeline_settings
-
-from io import StringIO
 
 
 class PipelineNoPathStorage(PipelineStorage):

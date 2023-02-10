@@ -1,6 +1,6 @@
+import distutils.spawn
 import glob
 import os
-import distutils.spawn
 
 
 def local_path(path):
