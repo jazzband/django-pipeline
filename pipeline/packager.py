@@ -63,7 +63,13 @@ class Package(object):
 
 
 class Packager(object):
-    def __init__(self, storage=None, verbose=False, css_packages=None, js_packages=None):
+    def __init__(
+        self,
+        storage=None,
+        verbose=False,
+        css_packages=None,
+        js_packages=None,
+    ):
         if storage is None:
             storage = staticfiles_storage
         self.storage = storage
@@ -106,7 +112,11 @@ class Packager(object):
         for path in paths:
             if not self.storage.exists(path):
                 if self.verbose:
-                    print("Compiled file '%s' cannot be found with packager's storage. Locating it." % path)
+                    e = (
+                        "Compiled file '%s' cannot be "
+                        "found with packager's storage. Locating it."
+                    )
+                    print(e % path)
 
                 source_storage = self.find_source_storage(path)
                 if source_storage is not None:
@@ -133,7 +143,13 @@ class Packager(object):
         return output_filename
 
     def pack_javascripts(self, package, **kwargs):
-        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package.templates, **kwargs)
+        return self.pack(
+            package,
+            self.compressor.compress_js,
+            js_compressed,
+            templates=package.templates,
+            **kwargs,
+        )
 
     def pack_templates(self, package):
         return self.compressor.compile_templates(package.templates)

@@ -149,7 +149,11 @@ class PipelineFormMediaTests(TestCase):
             js = ('extra1.js', 'extra2.js')
 
         media = Media(MyMedia)
-        script_tag = '<script type="text/javascript" src="%s"></script>' if django_version() < '3.1' else '<script src="%s"></script>'
+
+        if django_version() < '3.1':
+            script_tag = '<script type="text/javascript" src="%s"></script>'
+        else:
+            script_tag = '<script src="%s"></script>'
 
         self.assertEqual(
             MyMedia.js,
@@ -180,7 +184,11 @@ class PipelineFormMediaTests(TestCase):
             js = ('extra1.js', 'extra2.js')
 
         media = Media(MyMedia)
-        script_tag = '<script type="text/javascript" src="%s"></script>' if django_version() < '3.1' else '<script src="%s"></script>'
+
+        if django_version() < '3.1':
+            script_tag = '<script type="text/javascript" src="%s"></script>'
+        else:
+            script_tag = '<script src="%s"></script>'
 
         self.assertEqual(
             MyMedia.js,

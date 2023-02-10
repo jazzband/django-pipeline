@@ -38,6 +38,7 @@ class InvalidCompiler(SubProcessCompiler):
         )
         return self.execute_command(command)
 
+
 class CompilerWithEmptyFirstArg(SubProcessCompiler):
     output_extension = 'junk'
 
@@ -50,6 +51,7 @@ class CompilerWithEmptyFirstArg(SubProcessCompiler):
             infile,
         )
         return self.execute_command(command, stdout_captured=outfile)
+
 
 class CopyingCompiler(SubProcessCompiler):
     output_extension = 'junk'
@@ -95,7 +97,10 @@ class DummyCompilerTest(TestCase):
 
     def test_output_path(self):
         compiler_class = self.compiler.compilers[0]
-        compiler = compiler_class(verbose=self.compiler.verbose, storage=self.compiler.storage)
+        compiler = compiler_class(
+            verbose=self.compiler.verbose,
+            storage=self.compiler.storage,
+        )
         output_path = compiler.output_path("js/helpers.coffee", "js")
         self.assertEqual(output_path, "js/helpers.js")
 
@@ -108,7 +113,10 @@ class DummyCompilerTest(TestCase):
             _('pipeline/js/dummy.coffee'),
             _('pipeline/js/application.js'),
         ])
-        self.assertEqual([_('pipeline/js/dummy.js'), _('pipeline/js/application.js')], list(paths))
+        self.assertEqual(
+            [_('pipeline/js/dummy.js'), _('pipeline/js/application.js')],
+            list(paths),
+        )
 
     def tearDown(self):
         default_collector.clear()
@@ -123,7 +131,10 @@ class CompilerStdoutTest(TestCase):
 
     def test_output_path(self):
         compiler_class = self.compiler.compilers[0]
-        compiler = compiler_class(verbose=self.compiler.verbose, storage=self.compiler.storage)
+        compiler = compiler_class(
+            verbose=self.compiler.verbose,
+            storage=self.compiler.storage,
+        )
         output_path = compiler.output_path("js/helpers.coffee", "js")
         self.assertEqual(output_path, "js/helpers.js")
 
@@ -144,7 +155,10 @@ class CompilerSelfWriterTest(TestCase):
 
     def test_output_path(self):
         compiler_class = self.compiler.compilers[0]
-        compiler = compiler_class(verbose=self.compiler.verbose, storage=self.compiler.storage)
+        compiler = compiler_class(
+            verbose=self.compiler.verbose,
+            storage=self.compiler.storage,
+        )
         output_path = compiler.output_path("js/helpers.coffee", "js")
         self.assertEqual(output_path, "js/helpers.js")
 
@@ -164,12 +178,13 @@ class CompilerWithEmptyFirstArgTest(TestCase):
         self.compiler = Compiler()
 
     def test_compile(self):
-            paths = self.compiler.compile([_('pipeline/js/dummy.coffee')])
-            default_collector.collect()
-            self.assertEqual([_('pipeline/js/dummy.junk')], list(paths))
+        paths = self.compiler.compile([_('pipeline/js/dummy.coffee')])
+        default_collector.collect()
+        self.assertEqual([_('pipeline/js/dummy.junk')], list(paths))
 
     def tearDown(self):
         default_collector.clear()
+
 
 @pipeline_settings(COMPILERS=['tests.tests.test_compiler.InvalidCompiler'])
 class InvalidCompilerTest(TestCase):
@@ -234,31 +249,43 @@ class CompilerImplementation(TestCase):
         self.assertEqual(result, expected)
 
     def test_sass(self):
-        self._test_compiler('pipeline.compilers.sass.SASSCompiler',
+        self._test_compiler(
+            'pipeline.compilers.sass.SASSCompiler',
             'pipeline/compilers/scss/input.scss',
-            'pipeline/compilers/scss/expected.css')
+            'pipeline/compilers/scss/expected.css',
+        )
 
     def test_coffeescript(self):
-        self._test_compiler('pipeline.compilers.coffee.CoffeeScriptCompiler',
+        self._test_compiler(
+            'pipeline.compilers.coffee.CoffeeScriptCompiler',
             'pipeline/compilers/coffee/input.coffee',
-            'pipeline/compilers/coffee/expected.js')
+            'pipeline/compilers/coffee/expected.js',
+        )
 
     def test_less(self):
-        self._test_compiler('pipeline.compilers.less.LessCompiler',
+        self._test_compiler(
+            'pipeline.compilers.less.LessCompiler',
             'pipeline/compilers/less/input.less',
-            'pipeline/compilers/less/expected.css')
+            'pipeline/compilers/less/expected.css',
+        )
 
     def test_es6(self):
-        self._test_compiler('pipeline.compilers.es6.ES6Compiler',
+        self._test_compiler(
+            'pipeline.compilers.es6.ES6Compiler',
             'pipeline/compilers/es6/input.es6',
-            'pipeline/compilers/es6/expected.js')
+            'pipeline/compilers/es6/expected.js',
+        )
 
     def test_stylus(self):
-        self._test_compiler('pipeline.compilers.stylus.StylusCompiler',
+        self._test_compiler(
+            'pipeline.compilers.stylus.StylusCompiler',
             'pipeline/compilers/stylus/input.styl',
-            'pipeline/compilers/stylus/expected.css')
+            'pipeline/compilers/stylus/expected.css',
+        )
 
     def test_livescript(self):
-        self._test_compiler('pipeline.compilers.livescript.LiveScriptCompiler',
+        self._test_compiler(
+            'pipeline.compilers.livescript.LiveScriptCompiler',
             'pipeline/compilers/livescript/input.ls',
-            'pipeline/compilers/livescript/expected.js')
+            'pipeline/compilers/livescript/expected.js',
+        )

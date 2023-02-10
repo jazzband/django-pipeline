@@ -1,4 +1,3 @@
-
 from unittest.mock import patch
 
 from django.core.exceptions import MiddlewareNotUsed
@@ -29,14 +28,16 @@ class MiddlewareTest(TestCase):
     def test_middleware_html(self):
         self.resp['Content-Type'] = 'text/html; charset=UTF-8'
 
-        response = MinifyHTMLMiddleware(dummy_get_response).process_response(self.req, self.resp)
+        response = MinifyHTMLMiddleware(dummy_get_response).process_response(
+            self.req, self.resp)
         self.assertIn('text/html', response['Content-Type'])
         self.assertNotIn(self.whitespace, response.content)
 
     def test_middleware_text(self):
         self.resp['Content-Type'] = 'text/plain; charset=UTF-8'
 
-        response = MinifyHTMLMiddleware(dummy_get_response).process_response(self.req, self.resp)
+        response = MinifyHTMLMiddleware(dummy_get_response).process_response(
+            self.req, self.resp)
         self.assertIn('text/plain', response['Content-Type'])
         self.assertIn(self.whitespace, response.content)
 

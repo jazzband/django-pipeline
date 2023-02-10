@@ -39,7 +39,10 @@ class PackagerTest(TestCase):
                 'output_filename': 'templates.js',
             }
         })
-        self.assertEqual(packages['templates'].templates, [_('pipeline/templates/photo/list.jst')])
+        self.assertEqual(
+            packages['templates'].templates,
+            [_('pipeline/templates/photo/list.jst')],
+        )
 
     def tearDown(self):
         default_collector.clear()

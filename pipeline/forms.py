@@ -214,8 +214,7 @@ class PipelineFormMediaMetaClass(type):
         """
         source_files = list(extra_files)
 
-        if (not settings.PIPELINE_ENABLED and
-            settings.PIPELINE_COLLECTOR_ENABLED):
+        if (not settings.PIPELINE_ENABLED and settings.PIPELINE_COLLECTOR_ENABLED):
             default_collector.collect()
 
         for media_package in media_packages:

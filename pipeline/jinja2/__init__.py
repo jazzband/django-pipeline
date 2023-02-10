@@ -19,10 +19,14 @@ class PipelineExtension(PipelineMixin, Extension):
 
         args = [package_name]
         if tag.value == "stylesheet":
-            return nodes.CallBlock(self.call_method('package_css', args), [], [], []).set_lineno(tag.lineno)
+            return nodes.CallBlock(
+                self.call_method('package_css', args), [], [], []
+            ).set_lineno(tag.lineno)
 
         if tag.value == "javascript":
-            return nodes.CallBlock(self.call_method('package_js', args), [], [], []).set_lineno(tag.lineno)
+            return nodes.CallBlock(
+                self.call_method('package_js', args), [], [], []
+            ).set_lineno(tag.lineno)
 
         return []
 
@@ -30,7 +34,8 @@ class PipelineExtension(PipelineMixin, Extension):
         try:
             package = self.package_for(package_name, 'css')
         except PackageNotFound:
-            return ''  # fail silently, do not return anything if an invalid group is specified
+            # fail silently, do not return anything if an invalid group is specified
+            return ''
         return self.render_compressed(package, package_name, 'css')
 
     def render_css(self, package, path):
@@ -51,7 +56,8 @@ class PipelineExtension(PipelineMixin, Extension):
         try:
             package = self.package_for(package_name, 'js')
         except PackageNotFound:
-            return ''  # fail silently, do not return anything if an invalid group is specified
+            # fail silently, do not return anything if an invalid group is specified
+            return ''
         return self.render_compressed(package, package_name, 'js')
 
     def render_js(self, package, path):
