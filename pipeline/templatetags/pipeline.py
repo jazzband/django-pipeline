@@ -130,8 +130,10 @@ class StylesheetNode(PipelineMixin, template.Node):
         try:
             package = self.package_for(package_name, 'css')
         except PackageNotFound:
-            logger.warn("Package %r is unknown. Check PIPELINE['STYLESHEETS'] in your settings.", package_name)
-            return ''  # fail silently, do not return anything if an invalid group is specified
+            w = "Package %r is unknown. Check PIPELINE['STYLESHEETS'] in your settings."
+            logger.warn(w, package_name)
+            # fail silently, do not return anything if an invalid group is specified
+            return ''
         return self.render_compressed(package, package_name, 'css')
 
     def render_css(self, package, path):
@@ -163,8 +165,10 @@ class JavascriptNode(PipelineMixin, template.Node):
         try:
             package = self.package_for(package_name, 'js')
         except PackageNotFound:
-            logger.warn("Package %r is unknown. Check PIPELINE['JAVASCRIPT'] in your settings.", package_name)
-            return ''  # fail silently, do not return anything if an invalid group is specified
+            w = "Package %r is unknown. Check PIPELINE['JAVASCRIPT'] in your settings."
+            logger.warn(w, package_name)
+            # fail silently, do not return anything if an invalid group is specified
+            return ''
         return self.render_compressed(package, package_name, 'js')
 
     def render_js(self, package, path):
@@ -199,7 +203,11 @@ def stylesheet(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.STYLESHEETS setting' % token.split_contents()[0])
+        e = (
+            '%r requires exactly one argument: the name '
+            'of a group in the PIPELINE.STYLESHEETS setting'
+        )
+        raise template.TemplateSyntaxError(e % token.split_contents()[0])
     return StylesheetNode(name)
 
 
@@ -208,5 +216,9 @@ def javascript(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.JAVASVRIPT setting' % token.split_contents()[0])
+        e = (
+            '%r requires exactly one argument: the name '
+            'of a group in the PIPELINE.JAVASVRIPT setting'
+        )
+        raise template.TemplateSyntaxError(e % token.split_contents()[0])
     return JavascriptNode(name)

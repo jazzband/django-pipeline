@@ -2,16 +2,15 @@ import gzip
 from io import BytesIO
 
 from django import get_version as django_version
+from django.contrib.staticfiles.storage import (ManifestStaticFilesStorage,
+                                                StaticFilesStorage)
+from django.contrib.staticfiles.utils import matches_patterns
+from django.core.files.base import File
 
 _CACHED_STATIC_FILES_STORAGE_AVAILABLE = django_version() < '3.1'
 
 if _CACHED_STATIC_FILES_STORAGE_AVAILABLE:
     from django.contrib.staticfiles.storage import CachedStaticFilesStorage
-
-from django.contrib.staticfiles.storage import (ManifestStaticFilesStorage,
-                                                StaticFilesStorage)
-from django.contrib.staticfiles.utils import matches_patterns
-from django.core.files.base import File
 
 
 class PipelineMixin(object):
@@ -40,7 +39,9 @@ class PipelineMixin(object):
 
         super_class = super(PipelineMixin, self)
         if hasattr(super_class, 'post_process'):
-            for name, hashed_name, processed in super_class.post_process(paths.copy(), dry_run, **options):
+            for name, hashed_name, processed in super_class.post_process(
+                paths.copy(), dry_run, **options
+            ):
                 yield name, hashed_name, processed
 
     def get_available_name(self, name, max_length=None):
@@ -63,7 +64,9 @@ class GZIPMixin(object):
     def post_process(self, paths, dry_run=False, **options):
         super_class = super(GZIPMixin, self)
         if hasattr(super_class, 'post_process'):
-            for name, hashed_name, processed in super_class.post_process(paths.copy(), dry_run, **options):
+            for name, hashed_name, processed in super_class.post_process(
+                paths.copy(), dry_run, **options
+            ):
                 if hashed_name != name:
                     paths[hashed_name] = (self, hashed_name)
                 yield name, hashed_name, processed
@@ -102,8 +105,9 @@ if _CACHED_STATIC_FILES_STORAGE_AVAILABLE:
         # Removed in Django 3.1
         pass
 
-
-    class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
+    class NonPackagingPipelineCachedStorage(
+        NonPackagingMixin, PipelineCachedStorage
+    ):
         # Deprecated since Django 2.2
         # Removed in Django 3.1
         pass
@@ -113,5 +117,7 @@ class PipelineManifestStorage(PipelineMixin, ManifestStaticFilesStorage):
     pass
 
 
-class NonPackagingPipelineManifestStorage(NonPackagingMixin, ManifestStaticFilesStorage):
+class NonPackagingPipelineManifestStorage(
+    NonPackagingMixin, ManifestStaticFilesStorage
+):
     pass

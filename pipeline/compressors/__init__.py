@@ -17,7 +17,7 @@ URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""
 NON_REWRITABLE_URL = re.compile(r'^(#|http:|https:|data:|//)')
 
 DEFAULT_TEMPLATE_FUNC = "template"
-TEMPLATE_FUNC = r"""var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};"""
+TEMPLATE_FUNC = r"""var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};""" # noqa
 
 MIME_TYPES = {
     '.png': 'image/png',
@@ -96,7 +96,10 @@ class Compressor(object):
                 settings.TEMPLATE_FUNC,
                 contents
             ))
-        compiler = TEMPLATE_FUNC if settings.TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC else ""
+        if settings.TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC:
+            compiler = TEMPLATE_FUNC
+        else:
+            compiler = ""
         return "\n".join([
             "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
             compiler,
@@ -148,7 +151,10 @@ class Compressor(object):
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
-        public_path = self.absolute_path(asset_path, os.path.dirname(css_path).replace('\\', '/'))
+        public_path = self.absolute_path(
+            asset_path,
+            os.path.dirname(css_path).replace('\\', '/'),
+        )
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
         if not posixpath.isabs(asset_path):
@@ -161,11 +167,13 @@ class Compressor(object):
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not (re.search(settings.EMBED_PATH, path.replace('\\', '/')) and self.storage.exists(path)):
+        if not (re.search(settings.EMBED_PATH, path.replace('\\', '/'))
+                and self.storage.exists(path)):
             return False
         if ext not in EMBED_EXTS:
             return False
-        if not (font or len(self.encoded_content(path)) < settings.EMBED_MAX_IMAGE_SIZE):
+        if not (font or
+                len(self.encoded_content(path)) < settings.EMBED_MAX_IMAGE_SIZE):
             return False
         return True
 
@@ -204,7 +212,8 @@ class Compressor(object):
     def relative_path(self, absolute_path, output_filename):
         """Rewrite paths relative to the output stylesheet path"""
         absolute_path = posixpath.join(settings.PIPELINE_ROOT, absolute_path)
-        output_path = posixpath.join(settings.PIPELINE_ROOT, posixpath.dirname(output_filename))
+        output_path = posixpath.join(
+            settings.PIPELINE_ROOT, posixpath.dirname(output_filename))
         return relpath(absolute_path, output_path)
 
     def read_bytes(self, path):

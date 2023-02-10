@@ -6,6 +6,7 @@ import os
 def local_path(path):
     return os.path.join(os.path.dirname(__file__), path)
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -177,11 +178,21 @@ if HAS_NODE:
 if HAS_NODE and HAS_JAVA:
     PIPELINE.update({
         'CLOSURE_BINARY': [
-            JAVA_EXE_PATH, '-jar',
-            os.path.join(NODE_MODULES_PATH, 'google-closure-compiler-java', 'compiler.jar')],
+            JAVA_EXE_PATH,
+            '-jar',
+            os.path.join(
+                NODE_MODULES_PATH,
+                'google-closure-compiler-java',
+                'compiler.jar',
+            ),
+        ],
         'YUI_BINARY': [
-            JAVA_EXE_PATH, '-jar',
-            glob.glob(os.path.join(NODE_MODULES_PATH, 'yuicompressor', 'build', '*.jar'))[0]]
+            JAVA_EXE_PATH,
+            '-jar',
+            glob.glob(
+                os.path.join(NODE_MODULES_PATH, 'yuicompressor', 'build', '*.jar')
+            )[0],
+        ]
     })
 
 if HAS_CSSTIDY:

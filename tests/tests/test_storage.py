@@ -51,7 +51,11 @@ class StorageTest(TestCase):
         processed_files = PipelineStorage().post_process({}, True)
         self.assertEqual(list(processed_files), [])
 
-    @pipeline_settings(JS_COMPRESSOR=None, CSS_COMPRESSOR=None, COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'])
+    @pipeline_settings(
+        JS_COMPRESSOR=None,
+        CSS_COMPRESSOR=None,
+        COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'],
+    )
     def test_post_process(self):
         default_collector.collect()
         storage = PipelineStorage()
@@ -59,8 +63,14 @@ class StorageTest(TestCase):
         self.assertTrue(('screen.css', 'screen.css', True) in processed_files)
         self.assertTrue(('scripts.js', 'scripts.js', True) in processed_files)
 
-    @override_settings(STATICFILES_STORAGE='tests.tests.test_storage.PipelineNoPathStorage')
-    @pipeline_settings(JS_COMPRESSOR=None, CSS_COMPRESSOR=None, COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'])
+    @override_settings(
+        STATICFILES_STORAGE='tests.tests.test_storage.PipelineNoPathStorage',
+    )
+    @pipeline_settings(
+        JS_COMPRESSOR=None,
+        CSS_COMPRESSOR=None,
+        COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'],
+    )
     def test_post_process_no_path(self):
         """
         Test post_process with a storage that doesn't implement the path method.

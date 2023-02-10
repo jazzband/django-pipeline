@@ -8,8 +8,10 @@ setup(
     use_scm_version={"version_scheme": "post-release"},
     setup_requires=["setuptools_scm"],
     description='Pipeline is an asset packaging library for Django.',
-    long_description=io.open('README.rst', encoding='utf-8').read() + '\n\n' +
-        io.open('HISTORY.rst', encoding='utf-8').read(),
+    long_description=(
+        io.open('README.rst', encoding='utf-8').read() + '\n\n' +
+        io.open('HISTORY.rst', encoding='utf-8').read()
+    ),
     author='Timothée Peignier',
     author_email='timothee.peignier@tryphon.org',
     url='https://github.com/jazzband/django-pipeline',
