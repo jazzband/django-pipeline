@@ -29,3 +29,4 @@ tests/npm-cache
 django-pipeline-*/
 .tags
 node_modules/
+package-lock.json
