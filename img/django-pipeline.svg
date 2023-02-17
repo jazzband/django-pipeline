@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="604" height="182" style="background-color:#fff" viewBox="-0.5 -0.5 604 182">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="604" height="182" viewBox="-0.5 -0.5 604 182">
   <path fill="none" stroke="#007fff" stroke-dasharray="2 8" stroke-width="2" d="M188.6 1H519v180H188.6z" pointer-events="all"/>
   <path fill="none" stroke="#007fff" stroke-miterlimit="10" stroke-width="2" d="M354.6 65H477l20 25-20 25H354.6l20-25Z" pointer-events="all"/>
   <path fill="#b0e3e6" stroke="#0e8088" stroke-miterlimit="10" d="M161.91 29.57V141H40.07V11H144.5Z" pointer-events="all"/>
