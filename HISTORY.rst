@@ -6,6 +6,9 @@ History
 Unreleased
 ==========
 
+* Update README.rst and add Pipeline overview image
+
+
 2.0.9
 =====
 
