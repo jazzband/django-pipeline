@@ -276,6 +276,13 @@ class CompilerImplementation(TestCase):
             'pipeline/compilers/es6/expected.js',
         )
 
+    def test_typescript(self):
+        self._test_compiler(
+            'pipeline.compilers.typescript.TypeScriptCompiler',
+            'pipeline/compilers/typescript/input.ts',
+            'pipeline/compilers/typescript/expected.js',
+        )
+
     def test_stylus(self):
         self._test_compiler(
             'pipeline.compilers.stylus.StylusCompiler',

@@ -173,6 +173,7 @@ if HAS_NODE:
         'UGLIFYJS_BINARY': node_exe_path('uglifyjs'),
         'TERSER_BINARY': node_exe_path('terser'),
         'CSSMIN_BINARY': node_exe_path('cssmin'),
+        'TYPE_SCRIPT_BINARY': node_exe_path('tsc'),
     })
 
 if HAS_NODE and HAS_JAVA:

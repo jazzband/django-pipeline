@@ -63,6 +63,9 @@ DEFAULTS = {
     'LIVE_SCRIPT_BINARY': '/usr/bin/env lsc',
     'LIVE_SCRIPT_ARGUMENTS': '',
 
+    'TYPE_SCRIPT_BINARY': '/usr/bin/env tsc',
+    'TYPE_SCRIPT_ARGUMENTS': '',
+
     'SASS_BINARY': '/usr/bin/env sass',
     'SASS_ARGUMENTS': '',
 
@@ -76,6 +79,7 @@ DEFAULTS = {
         (('text/coffeescript'), ('.coffee')),
         (('text/less'), ('.less')),
         (('text/javascript'), ('.js')),
+        (('text/typescript'), ('.ts')),
         (('text/x-sass'), ('.sass')),
         (('text/x-scss'), ('.scss'))
     ),

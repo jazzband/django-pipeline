@@ -23,6 +23,7 @@
     "terser": "latest",
     "uglify-js": "latest",
     "yuglify": "1.0.x",
-    "yuicompressor": "latest"
+    "yuicompressor": "latest",
+    "typescript": "latest"
   }
 }
