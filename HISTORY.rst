@@ -7,6 +7,7 @@ Unreleased
 ==========
 
 * Update README.rst and add Pipeline overview image
+* Add TypeScript compiler support
 
 
 2.0.9
