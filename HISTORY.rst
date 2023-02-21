@@ -6,8 +6,9 @@ History
 Unreleased
 ==========
 
-* Update README.rst and add Pipeline overview image
-* Add TypeScript compiler support
+* Update README.rst and add Pipeline overview image.
+* Add TypeScript compiler support.
+* Drop support for ``manifesto`` package.
 
 
 2.0.9
