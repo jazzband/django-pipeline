@@ -9,6 +9,7 @@ Unreleased
 * Update README.rst and add Pipeline overview image.
 * Add TypeScript compiler support.
 * Drop support for ``manifesto`` package.
+* Add support for Python 3.11 and Django 4.1
 
 
 2.0.9
