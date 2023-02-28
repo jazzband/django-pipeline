@@ -8,7 +8,7 @@ from pipeline.conf import settings
 
 class MinifyHTMLMiddleware(MiddlewareMixin):
     def __init__(self, *args, **kwargs):
-        super(MinifyHTMLMiddleware, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if not settings.PIPELINE_ENABLED:
             raise MiddlewareNotUsed
 

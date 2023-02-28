@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import mimetypes
 
 from django.test import TestCase

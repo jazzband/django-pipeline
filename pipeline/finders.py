@@ -18,7 +18,7 @@ class PipelineFinder(BaseStorageFinder):
 
     def find(self, path, all=False):
         if not settings.PIPELINE_ENABLED:
-            return super(PipelineFinder, self).find(path, all)
+            return super().find(path, all)
         else:
             return []
 
@@ -60,7 +60,7 @@ class CachedFileFinder(BaseFinder):
         return []
 
 
-class PatternFilterMixin(object):
+class PatternFilterMixin:
     ignore_patterns = []
 
     def get_ignored_patterns(self):
@@ -69,7 +69,7 @@ class PatternFilterMixin(object):
     def list(self, ignore_patterns):
         if ignore_patterns:
             ignore_patterns = ignore_patterns + self.get_ignored_patterns()
-        return super(PatternFilterMixin, self).list(ignore_patterns)
+        return super().list(ignore_patterns)
 
 
 class AppDirectoriesFinder(PatternFilterMixin, DjangoAppDirectoriesFinder):

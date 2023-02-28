@@ -15,5 +15,5 @@ class pipeline_settings(override_settings):
             # Django 1.10's override_settings inherits from TestContextDecorator
             # and its __init__ method calls its superclass' __init__ method too,
             # so we must do the same.
-            super(pipeline_settings, self).__init__()
+            super().__init__()
         self.options = {'PIPELINE': kwargs}

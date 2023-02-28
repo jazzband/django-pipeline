@@ -11,7 +11,7 @@ from pipeline.glob import glob
 from pipeline.signals import css_compressed, js_compressed
 
 
-class Package(object):
+class Package:
     def __init__(self, config):
         self.config = config
         self._sources = []
@@ -62,7 +62,7 @@ class Package(object):
         return self.config.get('compiler_options', {})
 
 
-class Packager(object):
+class Packager:
     def __init__(
         self,
         storage=None,
@@ -90,7 +90,7 @@ class Packager(object):
             return self.packages[kind][package_name]
         except KeyError:
             raise PackageNotFound(
-                "No corresponding package for %s package name : %s" % (
+                "No corresponding package for {} package name : {}".format(
                     kind, package_name
                 )
             )
@@ -125,7 +125,7 @@ class Packager(object):
                             print("Saving: %s" % path)
                         self.storage.save(path, source_file)
                 else:
-                    raise IOError("File does not exist: %s" % path)
+                    raise OSError("File does not exist: %s" % path)
         return paths
 
     def pack(self, package, compress, signal, **kwargs):

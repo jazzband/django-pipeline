@@ -13,7 +13,7 @@ from tests.utils import pipeline_settings
 @pipeline_settings(PIPELINE_COLLECTOR_ENABLED=True, PIPELINE_ENABLED=False)
 class ServeStaticViewsTest(TestCase):
     def setUp(self):
-        super(ServeStaticViewsTest, self).setUp()
+        super().setUp()
 
         self.filename = 'pipeline/js/first.js'
         self.storage = staticfiles_storage
@@ -22,7 +22,7 @@ class ServeStaticViewsTest(TestCase):
         default_collector.clear()
 
     def tearDown(self):
-        super(ServeStaticViewsTest, self).tearDown()
+        super().tearDown()
 
         default_collector.clear()
         staticfiles_storage._setup()

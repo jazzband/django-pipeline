@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 
 
-class PipelineMixin(object):
+class PipelineMixin:
     request = None
     _request_var = None
 
@@ -124,7 +124,7 @@ class StylesheetNode(PipelineMixin, template.Node):
         self.name = name
 
     def render(self, context):
-        super(StylesheetNode, self).render(context)
+        super().render(context)
         package_name = template.Variable(self.name).resolve(context)
 
         try:
@@ -150,7 +150,7 @@ class StylesheetNode(PipelineMixin, template.Node):
         return '\n'.join(tags)
 
     def render_error_css(self, package_name, e):
-        return super(StylesheetNode, self).render_error(
+        return super().render_error(
             'CSS', package_name, e)
 
 
@@ -159,7 +159,7 @@ class JavascriptNode(PipelineMixin, template.Node):
         self.name = name
 
     def render(self, context):
-        super(JavascriptNode, self).render(context)
+        super().render(context)
         package_name = template.Variable(self.name).resolve(context)
 
         try:
@@ -194,7 +194,7 @@ class JavascriptNode(PipelineMixin, template.Node):
         return '\n'.join(tags)
 
     def render_error_js(self, package_name, e):
-        return super(JavascriptNode, self).render_error(
+        return super().render_error(
             'JavaScript', package_name, e)
 
 

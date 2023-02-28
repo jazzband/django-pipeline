@@ -1,10 +1,9 @@
 import base64
-import io
 import os
 import sys
 
 try:
-    from mock import patch
+    from unittest.mock import patch
 except ImportError:
     from unittest.mock import patch  # noqa
 
@@ -97,7 +96,7 @@ class CompressorTest(TestCase):
         name = self.compressor.template_name('templates/photo_edit.jst', '')
         self.assertEqual(name, 'photo_edit')
         name = self.compressor.template_name(
-            'templates\photo\detail.jst', # noqa
+            r'templates\photo\detail.jst', # noqa
             'templates\\',
         )
         self.assertEqual(name, 'photo_detail')
@@ -110,7 +109,7 @@ class CompressorTest(TestCase):
         name = self.compressor.template_name('templates/photo_edit.jst', '')
         self.assertEqual(name, 'photo_edit')
         name = self.compressor.template_name(
-            'templates\photo\detail.jst', # noqa
+            r'templates\photo\detail.jst', # noqa
             'templates\\',
         )
         self.assertEqual(name, 'photo/detail')
@@ -201,7 +200,7 @@ class CompressorTest(TestCase):
     @skipIf(sys.platform.startswith("win"), "requires posix platform")
     def test_compressor_subprocess_unicode(self):
         path = os.path.dirname(os.path.dirname(__file__))
-        content = io.open(path + '/assets/css/unicode.css', encoding="utf-8").read()
+        content = open(path + '/assets/css/unicode.css', encoding="utf-8").read()
         output = SubProcessCompressor(False).execute_command(('cat',), content)
         self.assertEqual(""".some_class {
   // Some unicode

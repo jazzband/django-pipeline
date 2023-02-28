@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-import io
-
 from setuptools import find_packages, setup
 
 setup(
@@ -9,8 +6,8 @@ setup(
     setup_requires=["setuptools_scm"],
     description='Pipeline is an asset packaging library for Django.',
     long_description=(
-        io.open('README.rst', encoding='utf-8').read() + '\n\n' +
-        io.open('HISTORY.rst', encoding='utf-8').read()
+        open('README.rst', encoding='utf-8').read() + '\n\n' +
+        open('HISTORY.rst', encoding='utf-8').read()
     ),
     author='Timothée Peignier',
     author_email='timothee.peignier@tryphon.org',
