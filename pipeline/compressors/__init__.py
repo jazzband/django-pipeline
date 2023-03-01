@@ -34,7 +34,7 @@ EMBED_EXTS = MIME_TYPES.keys()
 FONT_EXTS = ['.ttf', '.otf', '.woff']
 
 
-class Compressor(object):
+class Compressor:
     asset_contents = {}
 
     def __init__(self, storage=None, verbose=False):
@@ -90,7 +90,7 @@ class Compressor(object):
             contents = re.sub("\r?\n", "\\\\n", contents)
             contents = re.sub("'", "\\'", contents)
             name = self.template_name(path, base_path)
-            compiled.append("%s['%s'] = %s('%s');\n" % (
+            compiled.append("{}['{}'] = {}('{}');\n".format(
                 namespace,
                 name,
                 settings.TEMPLATE_FUNC,
@@ -101,7 +101,7 @@ class Compressor(object):
         else:
             compiler = ""
         return "\n".join([
-            "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
+            "{namespace} = {namespace} || {{}};".format(namespace=namespace),
             compiler,
             ''.join(compiled)
         ])
@@ -118,7 +118,7 @@ class Compressor(object):
             path = os.path.basename(path)
         if path == base:
             base = os.path.dirname(path)
-        name = re.sub(r"^%s[\/\\]?(.*)%s$" % (
+        name = re.sub(r"^{}[\/\\]?(.*){}$".format(
             re.escape(base), re.escape(settings.TEMPLATE_EXT)
         ), r"\1", path)
         return re.sub(r"[\/\\]", settings.TEMPLATE_SEPARATOR, name)
@@ -228,7 +228,7 @@ class Compressor(object):
         return force_str(content)
 
 
-class CompressorBase(object):
+class CompressorBase:
     def __init__(self, verbose):
         self.verbose = verbose
 

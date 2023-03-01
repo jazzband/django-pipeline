@@ -157,7 +157,7 @@ HAS_CSSTIDY = bool(CSSTIDY_EXE_PATH)
 if HAS_NODE:
     def node_exe_path(command):
         exe_ext = '.cmd' if os.name == 'nt' else ''
-        return os.path.join(NODE_BIN_PATH, "%s%s" % (command, exe_ext))
+        return os.path.join(NODE_BIN_PATH, "{}{}".format(command, exe_ext))
 
     PIPELINE.update({
         'SASS_BINARY': node_exe_path('node-sass'),

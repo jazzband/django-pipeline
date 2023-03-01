@@ -242,7 +242,7 @@ class CompilerImplementation(TestCase):
         infile_path = staticfiles_storage.path(infile)
         outfile_path = compiler.output_path(infile_path, compiler.output_extension)
         compiler.compile_file(_(infile_path), _(outfile_path), force=True)
-        with open(outfile_path, 'r') as f:
+        with open(outfile_path) as f:
             result = f.read()
         with staticfiles_storage.open(expected, 'r') as f:
             expected = f.read()

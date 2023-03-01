@@ -37,8 +37,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-pipeline'
-copyright = u'2011-2014, Timothée Peignier'
+project = 'django-pipeline'
+copyright = '2011-2014, Timothée Peignier'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -175,8 +175,8 @@ htmlhelp_basename = 'django-pipelinedoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-pipeline.tex', u'Pipeline Documentation',
-   u'Timothée Peignier', 'manual'),
+  ('index', 'django-pipeline.tex', 'Pipeline Documentation',
+   'Timothée Peignier', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -208,6 +208,6 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-pipeline', u'Pipeline Documentation',
-     [u'Timothée Peignier'], 1)
+    ('index', 'django-pipeline', 'Pipeline Documentation',
+     ['Timothée Peignier'], 1)
 ]

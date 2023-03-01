@@ -8,7 +8,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from pipeline.finders import PipelineFinder
 
 
-class Collector(object):
+class Collector:
     request = None
 
     def __init__(self, storage=None):

@@ -8,7 +8,7 @@ from ..utils import guess_type
 
 
 class PipelineExtension(PipelineMixin, Extension):
-    tags = set(['stylesheet', 'javascript'])
+    tags = {'stylesheet', 'javascript'}
 
     def parse(self, parser):
         tag = next(parser.stream)

@@ -13,7 +13,7 @@ from pipeline.exceptions import CompilerError
 from pipeline.utils import set_std_streams_blocking, to_class
 
 
-class Compiler(object):
+class Compiler:
     def __init__(self, storage=None, verbose=False):
         if storage is None:
             storage = staticfiles_storage
@@ -56,7 +56,7 @@ class Compiler(object):
                 return list(executor.map(_compile, paths))
 
 
-class CompilerBase(object):
+class CompilerBase:
     def __init__(self, verbose, storage):
         self.verbose = verbose
         self.storage = storage
