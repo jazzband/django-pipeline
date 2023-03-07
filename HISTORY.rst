@@ -3,7 +3,7 @@
 History
 =======
 
-Unreleased
+2.1.0
 ==========
 
 * Update README.rst and add Pipeline overview image.
