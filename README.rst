@@ -37,7 +37,7 @@ To install it, simply:
 
 
 Quickstart
--------
+----------
 
 Pipeline compiles and compress your assets files from
 ``STATICFILES_DIRS`` to your ``STATIC_ROOT`` when you run Django's
