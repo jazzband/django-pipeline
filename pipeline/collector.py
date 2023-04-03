@@ -1,5 +1,4 @@
 import os
-from collections import OrderedDict
 
 import django
 from django.contrib.staticfiles import finders
@@ -33,7 +32,7 @@ class Collector:
         if self.request and self.request is request:
             return
         self.request = request
-        found_files = OrderedDict()
+        found_files = {}
         for finder in finders.get_finders():
             # Ignore our finder to avoid looping
             if isinstance(finder, PipelineFinder):
