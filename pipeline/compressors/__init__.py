@@ -24,6 +24,7 @@ MIME_TYPES = {
     '.jpg': 'image/jpeg',
     '.jpeg': 'image/jpeg',
     '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
     '.tif': 'image/tiff',
     '.tiff': 'image/tiff',
     '.ttf': 'font/truetype',
