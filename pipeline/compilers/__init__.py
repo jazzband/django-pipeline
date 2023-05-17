@@ -40,7 +40,11 @@ class Compiler:
                                           outdated=outdated, force=force,
                                           **compiler_options)
 
-                    return compiler.output_path(input_path, compiler.output_extension)
+                    output_path = compiler.output_path(input_path, compiler.output_extension)
+                    content = compiler.read_file(outfile)
+                    compiler.save_file(output_path, content)
+                    
+                    return output_path
             else:
                 return input_path
 
@@ -159,3 +163,8 @@ class SubProcessCompiler(CompilerBase):
                     )
                 else:
                     os.remove(stdout.name)
+
+    def read_file(self, path):
+        system_path = self.output_path(path, self.output_extension)
+        with open(system_path) as fid:
+            return fid.read()
