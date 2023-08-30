@@ -28,15 +28,15 @@ class GlobTest(TestCase):
         self.assertEqual(set(l1), set(l2))
 
     def setUp(self):
-        self.storage = FileSystemStorage(local_path('glob_dir'))
+        self.storage = FileSystemStorage(local_path("glob_dir"))
         self.old_storage = glob.staticfiles_storage
         glob.staticfiles_storage = self.storage
-        self.mktemp('a', 'D')
-        self.mktemp('aab', 'F')
-        self.mktemp('aaa', 'zzzF')
-        self.mktemp('ZZZ')
-        self.mktemp('a', 'bcd', 'EF')
-        self.mktemp('a', 'bcd', 'efg', 'ha')
+        self.mktemp("a", "D")
+        self.mktemp("aab", "F")
+        self.mktemp("aaa", "zzzF")
+        self.mktemp("ZZZ")
+        self.mktemp("a", "bcd", "EF")
+        self.mktemp("a", "bcd", "efg", "ha")
 
     def glob(self, *parts):
         if len(parts) == 1:
@@ -50,50 +50,51 @@ class GlobTest(TestCase):
         glob.staticfiles_storage = self.old_storage
 
     def test_glob_literal(self):
-        self.assertSequenceEqual(self.glob('a'), [self.normpath('a')])
-        self.assertSequenceEqual(self.glob('a', 'D'), [self.normpath('a', 'D')])
-        self.assertSequenceEqual(self.glob('aab'), [self.normpath('aab')])
+        self.assertSequenceEqual(self.glob("a"), [self.normpath("a")])
+        self.assertSequenceEqual(self.glob("a", "D"), [self.normpath("a", "D")])
+        self.assertSequenceEqual(self.glob("aab"), [self.normpath("aab")])
 
     def test_glob_one_directory(self):
         self.assertSequenceEqual(
-            self.glob('a*'), map(self.normpath, ['a', 'aab', 'aaa']))
+            self.glob("a*"), map(self.normpath, ["a", "aab", "aaa"])
+        )
+        self.assertSequenceEqual(self.glob("*a"), map(self.normpath, ["a", "aaa"]))
+        self.assertSequenceEqual(self.glob("aa?"), map(self.normpath, ["aaa", "aab"]))
         self.assertSequenceEqual(
-            self.glob('*a'), map(self.normpath, ['a', 'aaa']))
-        self.assertSequenceEqual(
-            self.glob('aa?'), map(self.normpath, ['aaa', 'aab']))
-        self.assertSequenceEqual(
-            self.glob('aa[ab]'), map(self.normpath, ['aaa', 'aab']))
-        self.assertSequenceEqual(self.glob('*q'), [])
+            self.glob("aa[ab]"), map(self.normpath, ["aaa", "aab"])
+        )
+        self.assertSequenceEqual(self.glob("*q"), [])
 
     def test_glob_nested_directory(self):
         if os.path.normcase("abCD") == "abCD":
             # case-sensitive filesystem
             self.assertSequenceEqual(
-                self.glob('a', 'bcd', 'E*'), [self.normpath('a', 'bcd', 'EF')])
+                self.glob("a", "bcd", "E*"), [self.normpath("a", "bcd", "EF")]
+            )
         else:
             # case insensitive filesystem
-            self.assertSequenceEqual(self.glob('a', 'bcd', 'E*'), [
-                self.normpath('a', 'bcd', 'EF'),
-                self.normpath('a', 'bcd', 'efg')
-            ])
+            self.assertSequenceEqual(
+                self.glob("a", "bcd", "E*"),
+                [self.normpath("a", "bcd", "EF"), self.normpath("a", "bcd", "efg")],
+            )
         self.assertSequenceEqual(
-            self.glob('a', 'bcd', '*g'), [self.normpath('a', 'bcd', 'efg')])
+            self.glob("a", "bcd", "*g"), [self.normpath("a", "bcd", "efg")]
+        )
 
     def test_glob_directory_names(self):
+        self.assertSequenceEqual(self.glob("*", "D"), [self.normpath("a", "D")])
+        self.assertSequenceEqual(self.glob("*", "*a"), [])
         self.assertSequenceEqual(
-            self.glob('*', 'D'), [self.normpath('a', 'D')])
-        self.assertSequenceEqual(self.glob('*', '*a'), [])
+            self.glob("a", "*", "*", "*a"), [self.normpath("a", "bcd", "efg", "ha")]
+        )
         self.assertSequenceEqual(
-            self.glob('a', '*', '*', '*a'),
-            [self.normpath('a', 'bcd', 'efg', 'ha')])
-        self.assertSequenceEqual(
-            self.glob('?a?', '*F'),
-            map(self.normpath, [os.path.join('aaa', 'zzzF'),
-                os.path.join('aab', 'F')]))
+            self.glob("?a?", "*F"),
+            map(self.normpath, [os.path.join("aaa", "zzzF"), os.path.join("aab", "F")]),
+        )
 
     def test_glob_directory_with_trailing_slash(self):
         # We are verifying that when there is wildcard pattern which
         # ends with os.sep doesn't blow up.
-        paths = glob.glob('*' + os.sep)
+        paths = glob.glob("*" + os.sep)
         self.assertEqual(len(paths), 4)
-        self.assertTrue(all([os.sep in path for path in paths]))
+        self.assertTrue(all(os.sep in path for path in paths))

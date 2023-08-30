@@ -1,8 +1,8 @@
 import os
 import sys
 
-if sys.platform.startswith('win'):
-    os.environ.setdefault('NUMBER_OF_PROCESSORS', '1')
+if sys.platform.startswith("win"):
+    os.environ.setdefault("NUMBER_OF_PROCESSORS", "1")
 
 
 from .test_collector import *  # noqa

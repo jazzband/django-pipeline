@@ -15,9 +15,9 @@ class ServeStaticViewsTest(TestCase):
     def setUp(self):
         super().setUp()
 
-        self.filename = 'pipeline/js/first.js'
+        self.filename = "pipeline/js/first.js"
         self.storage = staticfiles_storage
-        self.request = RequestFactory().get('/static/%s' % self.filename)
+        self.request = RequestFactory().get("/static/%s" % self.filename)
 
         default_collector.clear()
 
@@ -31,7 +31,7 @@ class ServeStaticViewsTest(TestCase):
         self._test_found()
 
     def test_not_found(self):
-        self._test_not_found('missing-file')
+        self._test_not_found("missing-file")
 
     @override_settings(DEBUG=False)
     def test_debug_false(self):
@@ -62,9 +62,9 @@ class ServeStaticViewsTest(TestCase):
     def test_collector_disabled_and_not_found(self):
         self._test_not_found(self.filename)
 
-    def _write_content(self, content='abc123'):
+    def _write_content(self, content="abc123"):
         """Write sample content to the test static file."""
-        with self.storage.open(self.filename, 'w') as f:
+        with self.storage.open(self.filename, "w") as f:
             f.write(content)
 
     def _test_found(self, **kwargs):
@@ -73,8 +73,8 @@ class ServeStaticViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(self.storage.exists(self.filename))
 
-        if hasattr(response, 'streaming_content'):
-            content = b''.join(response.streaming_content)
+        if hasattr(response, "streaming_content"):
+            content = b"".join(response.streaming_content)
         else:
             content = response.content
 

@@ -5,10 +5,10 @@ from pipeline.conf import settings
 
 
 class LessCompiler(SubProcessCompiler):
-    output_extension = 'css'
+    output_extension = "css"
 
     def match_file(self, filename):
-        return filename.endswith('.less')
+        return filename.endswith(".less")
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         # Pipe to file rather than provide outfile arg due to a bug in lessc

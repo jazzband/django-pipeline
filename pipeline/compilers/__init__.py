@@ -36,9 +36,13 @@ class Compiler:
                     project_infile = finders.find(input_path)
                     outfile = compiler.output_path(infile, compiler.output_extension)
                     outdated = compiler.is_outdated(project_infile, outfile)
-                    compiler.compile_file(project_infile, outfile,
-                                          outdated=outdated, force=force,
-                                          **compiler_options)
+                    compiler.compile_file(
+                        project_infile,
+                        outfile,
+                        outdated=outdated,
+                        force=force,
+                        **compiler_options,
+                    )
 
                     return compiler.output_path(input_path, compiler.output_extension)
             else:
@@ -71,14 +75,14 @@ class CompilerBase:
         return self.storage.save(path, ContentFile(content))
 
     def read_file(self, path):
-        file = self.storage.open(path, 'rb')
+        file = self.storage.open(path, "rb")
         content = file.read()
         file.close()
         return content
 
     def output_path(self, path, extension):
         path = os.path.splitext(path)
-        return '.'.join((path[0], extension))
+        return ".".join((path[0], extension))
 
     def is_outdated(self, infile, outfile):
         if not os.path.exists(outfile):
@@ -125,12 +129,11 @@ class SubProcessCompiler(CompilerBase):
                 cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
             )
             with NamedTemporaryFile(
-                'wb', delete=False, dir=temp_file_container
+                "wb", delete=False, dir=temp_file_container
             ) as stdout:
-                compiling = subprocess.Popen(argument_list,
-                                             cwd=cwd,
-                                             stdout=stdout,
-                                             stderr=subprocess.PIPE)
+                compiling = subprocess.Popen(
+                    argument_list, cwd=cwd, stdout=stdout, stderr=subprocess.PIPE
+                )
                 _, stderr = compiling.communicate()
                 set_std_streams_blocking()
 
@@ -139,17 +142,17 @@ class SubProcessCompiler(CompilerBase):
                 raise CompilerError(
                     f"{argument_list!r} exit code {compiling.returncode}\n{stderr}",
                     command=argument_list,
-                    error_output=force_str(stderr))
+                    error_output=force_str(stderr),
+                )
 
             # User wants to see everything that happened.
             if self.verbose:
-                with open(stdout.name, 'rb') as out:
+                with open(stdout.name, "rb") as out:
                     print(out.read())
                 print(stderr)
         except OSError as e:
             stdout_captured = None  # Don't save erroneous result.
-            raise CompilerError(e, command=argument_list,
-                                error_output=str(e))
+            raise CompilerError(e, command=argument_list, error_output=str(e))
         finally:
             # Decide what to do with captured stdout.
             if stdout:

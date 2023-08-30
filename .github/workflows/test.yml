@@ -95,5 +95,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: pip install --user ruff
-    - run: ruff --extend-select=C4,C9,I,PLC,PLE,PLR,U --format=github
-                --ignore=C414,I001,UP032 --target-version=py37 .
+    - run: ruff --extend-select=C4,C9,I,PLC,PLE,PLR,U --ignore=C414,I001,UP032 --target-version=py37 .

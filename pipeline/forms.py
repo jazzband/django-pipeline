@@ -122,8 +122,7 @@ class PipelineFormMediaMetaClass(type):
             type:
             The new class.
         """
-        new_class = super().__new__(
-            cls, name, bases, attrs)
+        new_class = super().__new__(cls, name, bases, attrs)
 
         # If we define any packages, we'll need to use our special
         # PipelineFormMediaProperty class. We use this instead of intercepting
@@ -132,13 +131,15 @@ class PipelineFormMediaMetaClass(type):
         # and accesses them from there. By using these special properties, we
         # can handle direct access (Media.css) and dictionary-based access
         # (Media.__dict__['css']).
-        if 'css_packages' in attrs:
+        if "css_packages" in attrs:
             new_class.css = PipelineFormMediaProperty(
-                cls._get_css_files, new_class, attrs.get('css') or {})
+                cls._get_css_files, new_class, attrs.get("css") or {}
+            )
 
-        if 'js_packages' in attrs:
+        if "js_packages" in attrs:
             new_class.js = PipelineFormMediaProperty(
-                cls._get_js_files, new_class, attrs.get('js') or [])
+                cls._get_js_files, new_class, attrs.get("js") or []
+            )
 
         return new_class
 
@@ -156,13 +157,13 @@ class PipelineFormMediaMetaClass(type):
             attribute.
         """
         packager = Packager()
-        css_packages = getattr(cls, 'css_packages', {})
+        css_packages = getattr(cls, "css_packages", {})
 
         return {
             media_target: cls._get_media_files(
                 packager=packager,
                 media_packages=media_packages,
-                media_type='css',
+                media_type="css",
                 extra_files=extra_files.get(media_target, []),
             )
             for media_target, media_packages in css_packages.items()
@@ -182,12 +183,12 @@ class PipelineFormMediaMetaClass(type):
         """
         return cls._get_media_files(
             packager=Packager(),
-            media_packages=getattr(cls, 'js_packages', {}),
-            media_type='js',
-            extra_files=extra_files)
+            media_packages=getattr(cls, "js_packages", {}),
+            media_type="js",
+            extra_files=extra_files,
+        )
 
-    def _get_media_files(cls, packager, media_packages, media_type,
-                         extra_files):
+    def _get_media_files(cls, packager, media_packages, media_type, extra_files):
         """Return source or output media files for a list of packages.
 
         This will go through the media files belonging to the provided list
@@ -214,15 +215,14 @@ class PipelineFormMediaMetaClass(type):
         """
         source_files = list(extra_files)
 
-        if (not settings.PIPELINE_ENABLED and settings.PIPELINE_COLLECTOR_ENABLED):
+        if not settings.PIPELINE_ENABLED and settings.PIPELINE_COLLECTOR_ENABLED:
             default_collector.collect()
 
         for media_package in media_packages:
             package = packager.package_for(media_type, media_package)
 
             if settings.PIPELINE_ENABLED:
-                source_files.append(
-                    staticfiles_storage.url(package.output_filename))
+                source_files.append(staticfiles_storage.url(package.output_filename))
             else:
                 source_files += packager.compile(package.paths)
 

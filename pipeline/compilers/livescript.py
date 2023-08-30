@@ -3,10 +3,10 @@ from pipeline.conf import settings
 
 
 class LiveScriptCompiler(SubProcessCompiler):
-    output_extension = 'js'
+    output_extension = "js"
 
     def match_file(self, path):
-        return path.endswith('.ls')
+        return path.endswith(".ls")
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:

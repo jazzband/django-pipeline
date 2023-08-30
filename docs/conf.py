@@ -25,20 +25,20 @@ from pkg_resources import get_distribution
 extensions = []
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = ".rst"
 
 # The encoding of source files.
 # source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = "index"
 
 # General information about the project.
-project = 'django-pipeline'
-copyright = '2011-2014, Timothée Peignier'
+project = "django-pipeline"
+copyright = "2011-2014, Timothée Peignier"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -61,7 +61,7 @@ version = ".".join(release.split(".")[:2])
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ["_build"]
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 # default_role = None
@@ -78,7 +78,7 @@ exclude_patterns = ['_build']
 # show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
@@ -88,7 +88,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = "default"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -161,7 +161,7 @@ html_theme = 'default'
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'django-pipelinedoc'
+htmlhelp_basename = "django-pipelinedoc"
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -175,8 +175,13 @@ htmlhelp_basename = 'django-pipelinedoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-pipeline.tex', 'Pipeline Documentation',
-   'Timothée Peignier', 'manual'),
+    (
+        "index",
+        "django-pipeline.tex",
+        "Pipeline Documentation",
+        "Timothée Peignier",
+        "manual",
+    ),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -208,6 +213,5 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-pipeline', 'Pipeline Documentation',
-     ['Timothée Peignier'], 1)
+    ("index", "django-pipeline", "Pipeline Documentation", ["Timothée Peignier"], 1)
 ]
