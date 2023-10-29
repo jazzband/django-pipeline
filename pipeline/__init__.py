@@ -1,20 +1,20 @@
 PackageNotFoundError = None
 try:
-    from importlib.metadata import PackageNotFoundError, version as get_version
+    from importlib.metadata import PackageNotFoundError
+    from importlib.metadata import version as get_version
 except ImportError:
     get_version = None
+try:
+    from pkg_resources import DistributionNotFound as PackageNotFoundError
+    from pkg_resources import get_distribution
 
-if get_version is None:
-    try:
-        from pkg_resources import DistributionNotFound as PackageNotFoundError, get_distribution
 
-
-        def get_version(x):
-            return get_distribution(x).version
-    except ImportError:
-        get_version = None
-        PackageNotFoundError = None
-        get_distribution = None
+    def get_version(x):
+        return get_distribution(x).version
+except ImportError:
+    get_version = None
+    PackageNotFoundError = None
+    get_distribution = None
 
 __version__ = None
 if get_version is not None:
