@@ -3,6 +3,12 @@
 History
 =======
 
+Unreleased
+==========
+* Use Pypy 3.10
+* Drop support for Python 3.7
+* Drop support for Django 2
+
 2.1.0
 =====
 
