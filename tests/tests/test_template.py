@@ -2,6 +2,7 @@ import base64
 import hashlib
 
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.management import call_command
 from django.template import Context, Template
 from django.test import TestCase
 from jinja2 import Environment, PackageLoader
@@ -12,6 +13,8 @@ from tests.utils import pipeline_settings
 
 class JinjaTest(TestCase):
     def setUp(self):
+        staticfiles_storage._setup()
+        call_command('collectstatic', verbosity=0, interactive=False)
         self.env = Environment(extensions=[PipelineExtension],
                                loader=PackageLoader('pipeline', 'templates'))
 
@@ -90,6 +93,13 @@ class JinjaTest(TestCase):
 
 
 class DjangoTest(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        staticfiles_storage._setup()
+        call_command('collectstatic', verbosity=0, interactive=False)
+
     def render_template(self, template):
         return Template(template).render(Context())
 
