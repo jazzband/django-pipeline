@@ -1,20 +1,19 @@
 import gzip
-
 from io import BytesIO
 
 from django import get_version as django_version
+from django.contrib.staticfiles.storage import (ManifestStaticFilesStorage,
+                                                StaticFilesStorage)
+from django.contrib.staticfiles.utils import matches_patterns
+from django.core.files.base import File
 
 _CACHED_STATIC_FILES_STORAGE_AVAILABLE = django_version() < '3.1'
 
 if _CACHED_STATIC_FILES_STORAGE_AVAILABLE:
     from django.contrib.staticfiles.storage import CachedStaticFilesStorage
-from django.contrib.staticfiles.storage import ManifestStaticFilesStorage, StaticFilesStorage
-from django.contrib.staticfiles.utils import matches_patterns
-
-from django.core.files.base import File
 
 
-class PipelineMixin(object):
+class PipelineMixin:
     packing = True
 
     def post_process(self, paths, dry_run=False, **options):
@@ -38,10 +37,11 @@ class PipelineMixin(object):
             paths[output_file] = (self, output_file)
             yield output_file, output_file, True
 
-        super_class = super(PipelineMixin, self)
+        super_class = super()
         if hasattr(super_class, 'post_process'):
-            for name, hashed_name, processed in super_class.post_process(paths.copy(), dry_run, **options):
-                yield name, hashed_name, processed
+            yield from super_class.post_process(
+                paths.copy(), dry_run, **options
+            )
 
     def get_available_name(self, name, max_length=None):
         if self.exists(name):
@@ -49,7 +49,7 @@ class PipelineMixin(object):
         return name
 
 
-class GZIPMixin(object):
+class GZIPMixin:
     gzip_patterns = ("*.css", "*.js")
 
     def _compress(self, original_file):
@@ -61,9 +61,11 @@ class GZIPMixin(object):
         return File(content)
 
     def post_process(self, paths, dry_run=False, **options):
-        super_class = super(GZIPMixin, self)
+        super_class = super()
         if hasattr(super_class, 'post_process'):
-            for name, hashed_name, processed in super_class.post_process(paths.copy(), dry_run, **options):
+            for name, hashed_name, processed in super_class.post_process(
+                paths.copy(), dry_run, **options
+            ):
                 if hashed_name != name:
                     paths[hashed_name] = (self, hashed_name)
                 yield name, hashed_name, processed
@@ -84,7 +86,7 @@ class GZIPMixin(object):
                 yield gzipped_path, gzipped_path, True
 
 
-class NonPackagingMixin(object):
+class NonPackagingMixin:
     packing = False
 
 
@@ -102,8 +104,9 @@ if _CACHED_STATIC_FILES_STORAGE_AVAILABLE:
         # Removed in Django 3.1
         pass
 
-
-    class NonPackagingPipelineCachedStorage(NonPackagingMixin, PipelineCachedStorage):
+    class NonPackagingPipelineCachedStorage(
+        NonPackagingMixin, PipelineCachedStorage
+    ):
         # Deprecated since Django 2.2
         # Removed in Django 3.1
         pass
@@ -113,5 +116,7 @@ class PipelineManifestStorage(PipelineMixin, ManifestStaticFilesStorage):
     pass
 
 
-class NonPackagingPipelineManifestStorage(NonPackagingMixin, ManifestStaticFilesStorage):
+class NonPackagingPipelineManifestStorage(
+    NonPackagingMixin, ManifestStaticFilesStorage
+):
     pass

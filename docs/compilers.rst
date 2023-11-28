@@ -4,6 +4,32 @@
 Compilers
 =========
 
+TypeScript compiler
+======================
+
+The TypeScript compiler uses `TypeScript <https://www.typescriptlang.org/>`_
+to compile your TypeScript code to JavaScript.
+
+To use it add this to your ``PIPELINE['COMPILERS']`` ::
+
+  PIPELINE['COMPILERS'] = (
+    'pipeline.compilers.typescript.TypeScriptCompiler',
+  )
+
+``TYPE_SCRIPT_BINARY``
+---------------------------------
+
+  Command line to execute for TypeScript program.
+  You will most likely change this to the location of ``tsc`` on your system.
+
+  Defaults to ``'/usr/bin/env tsc'``.
+
+``TYPE_SCRIPT_ARGUMENTS``
+------------------------------------
+
+  Additional arguments to use when ``tsc`` is called.
+
+  Defaults to ``''``.
 
 Coffee Script compiler
 ======================

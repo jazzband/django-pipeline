@@ -6,13 +6,14 @@ from tempfile import NamedTemporaryFile
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.files.base import ContentFile
+from django.utils.encoding import force_str
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompilerError
-from pipeline.utils import to_class, set_std_streams_blocking
+from pipeline.utils import set_std_streams_blocking, to_class
 
 
-class Compiler(object):
+class Compiler:
     def __init__(self, storage=None, verbose=False):
         if storage is None:
             storage = staticfiles_storage
@@ -49,11 +50,13 @@ class Compiler(object):
         except ImportError:
             return list(map(_compile, paths))
         else:
-            with futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+            with futures.ThreadPoolExecutor(
+                max_workers=multiprocessing.cpu_count()
+            ) as executor:
                 return list(executor.map(_compile, paths))
 
 
-class CompilerBase(object):
+class CompilerBase:
     def __init__(self, verbose, storage):
         self.verbose = verbose
         self.storage = storage
@@ -111,15 +114,21 @@ class SubProcessCompiler(CompilerBase):
             else:
                 argument_list.extend(flattening_arg)
 
-        # The first element in argument_list is the program that will be executed; if it is '', then
-        # a PermissionError will be raised. Thus empty arguments are filtered out from argument_list
+        # The first element in argument_list is the program that will be
+        # executed; if it is '', then a PermissionError will be raised.
+        # Thus empty arguments are filtered out from argument_list
         argument_list = list(filter(None, argument_list))
         stdout = None
         try:
             # We always catch stdout in a file, but we may not have a use for it.
-            temp_file_container = cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
-            with NamedTemporaryFile('wb', delete=False, dir=temp_file_container) as stdout:
-                compiling = subprocess.Popen(argument_list, cwd=cwd,
+            temp_file_container = (
+                cwd or os.path.dirname(stdout_captured or "") or os.getcwd()
+            )
+            with NamedTemporaryFile(
+                'wb', delete=False, dir=temp_file_container
+            ) as stdout:
+                compiling = subprocess.Popen(argument_list,
+                                             cwd=cwd,
                                              stdout=stdout,
                                              stderr=subprocess.PIPE)
                 _, stderr = compiling.communicate()
@@ -130,7 +139,7 @@ class SubProcessCompiler(CompilerBase):
                 raise CompilerError(
                     f"{argument_list!r} exit code {compiling.returncode}\n{stderr}",
                     command=argument_list,
-                    error_output=stderr)
+                    error_output=force_str(stderr))
 
             # User wants to see everything that happened.
             if self.verbose:
@@ -145,6 +154,8 @@ class SubProcessCompiler(CompilerBase):
             # Decide what to do with captured stdout.
             if stdout:
                 if stdout_captured:
-                    shutil.move(stdout.name, os.path.join(cwd or os.curdir, stdout_captured))
+                    shutil.move(
+                        stdout.name, os.path.join(cwd or os.curdir, stdout_captured)
+                    )
                 else:
                     os.remove(stdout.name)

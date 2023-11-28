@@ -1,9 +1,8 @@
 import logging
 import subprocess
 
-from django.contrib.staticfiles.storage import staticfiles_storage
-
 from django import template
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.template.base import VariableDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
@@ -11,7 +10,7 @@ from django.utils.safestring import mark_safe
 from ..collector import default_collector
 from ..conf import settings
 from ..exceptions import CompilerError
-from ..packager import Packager, PackageNotFound
+from ..packager import PackageNotFound, Packager
 from ..utils import guess_type
 
 logger = logging.getLogger(__name__)
@@ -19,7 +18,7 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 
 
-class PipelineMixin(object):
+class PipelineMixin:
     request = None
     _request_var = None
 
@@ -125,14 +124,16 @@ class StylesheetNode(PipelineMixin, template.Node):
         self.name = name
 
     def render(self, context):
-        super(StylesheetNode, self).render(context)
+        super().render(context)
         package_name = template.Variable(self.name).resolve(context)
 
         try:
             package = self.package_for(package_name, 'css')
         except PackageNotFound:
-            logger.warn("Package %r is unknown. Check PIPELINE['STYLESHEETS'] in your settings.", package_name)
-            return ''  # fail silently, do not return anything if an invalid group is specified
+            w = "Package %r is unknown. Check PIPELINE['STYLESHEETS'] in your settings."
+            logger.warn(w, package_name)
+            # fail silently, do not return anything if an invalid group is specified
+            return ''
         return self.render_compressed(package, package_name, 'css')
 
     def render_css(self, package, path):
@@ -149,7 +150,7 @@ class StylesheetNode(PipelineMixin, template.Node):
         return '\n'.join(tags)
 
     def render_error_css(self, package_name, e):
-        return super(StylesheetNode, self).render_error(
+        return super().render_error(
             'CSS', package_name, e)
 
 
@@ -158,14 +159,16 @@ class JavascriptNode(PipelineMixin, template.Node):
         self.name = name
 
     def render(self, context):
-        super(JavascriptNode, self).render(context)
+        super().render(context)
         package_name = template.Variable(self.name).resolve(context)
 
         try:
             package = self.package_for(package_name, 'js')
         except PackageNotFound:
-            logger.warn("Package %r is unknown. Check PIPELINE['JAVASCRIPT'] in your settings.", package_name)
-            return ''  # fail silently, do not return anything if an invalid group is specified
+            w = "Package %r is unknown. Check PIPELINE['JAVASCRIPT'] in your settings."
+            logger.warn(w, package_name)
+            # fail silently, do not return anything if an invalid group is specified
+            return ''
         return self.render_compressed(package, package_name, 'js')
 
     def render_js(self, package, path):
@@ -193,7 +196,7 @@ class JavascriptNode(PipelineMixin, template.Node):
         return '\n'.join(tags)
 
     def render_error_js(self, package_name, e):
-        return super(JavascriptNode, self).render_error(
+        return super().render_error(
             'JavaScript', package_name, e)
 
 
@@ -202,7 +205,11 @@ def stylesheet(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.STYLESHEETS setting' % token.split_contents()[0])
+        e = (
+            '%r requires exactly one argument: the name '
+            'of a group in the PIPELINE.STYLESHEETS setting'
+        )
+        raise template.TemplateSyntaxError(e % token.split_contents()[0])
     return StylesheetNode(name)
 
 
@@ -211,5 +218,9 @@ def javascript(parser, token):
     try:
         tag_name, name = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError('%r requires exactly one argument: the name of a group in the PIPELINE.JAVASVRIPT setting' % token.split_contents()[0])
+        e = (
+            '%r requires exactly one argument: the name '
+            'of a group in the PIPELINE.JAVASVRIPT setting'
+        )
+        raise template.TemplateSyntaxError(e % token.split_contents()[0])
     return JavascriptNode(name)

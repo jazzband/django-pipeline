@@ -12,7 +12,7 @@ class TestSettings(TestCase):
         self.assertEqual(s.FOO_BINARY, ('env', 'actualprogram'))
 
     def test_2unicode(self):
-        s = PipelineSettings({"FOO_BINARY": u"env actualprogram"})
+        s = PipelineSettings({"FOO_BINARY": "env actualprogram"})
         self.assertEqual(s.FOO_BINARY, ('env', 'actualprogram'))
 
     def test_2bytes(self):

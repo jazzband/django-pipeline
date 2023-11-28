@@ -1,8 +1,7 @@
 from django.test import TestCase
 
 from pipeline.collector import default_collector
-from pipeline.packager import Packager, PackageNotFound
-
+from pipeline.packager import PackageNotFound, Packager
 from tests.utils import _
 
 
@@ -40,7 +39,10 @@ class PackagerTest(TestCase):
                 'output_filename': 'templates.js',
             }
         })
-        self.assertEqual(packages['templates'].templates, [_('pipeline/templates/photo/list.jst')])
+        self.assertEqual(
+            packages['templates'].templates,
+            [_('pipeline/templates/photo/list.jst')],
+        )
 
     def tearDown(self):
         default_collector.clear()

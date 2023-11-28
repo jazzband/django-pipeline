@@ -2,8 +2,8 @@ import base64
 import hashlib
 from functools import lru_cache
 
+from django.contrib.staticfiles.finders import find, get_finders
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.contrib.staticfiles.finders import find
 from django.core.files.base import ContentFile
 from django.utils.encoding import smart_bytes
 
@@ -15,7 +15,7 @@ from pipeline.glob import glob
 from pipeline.signals import css_compressed, js_compressed
 
 
-class Package(object):
+class Package:
     def __init__(self, config):
         self.config = config
         self._sources = []
@@ -68,7 +68,9 @@ class Package(object):
     @lru_cache()
     def get_sri(self, path):
         method = self.config.get("integrity")
-        if method in {"sha256", "sha384", "sha512"} and staticfiles_storage.exists(path):
+        if method not in {"sha256", "sha384", "sha512"}:
+            return None
+        if staticfiles_storage.exists(path):
             with staticfiles_storage.open(path) as fd:
                 h = getattr(hashlib, method)()
                 for data in iter(lambda: fd.read(16384), b''):
@@ -77,8 +79,14 @@ class Package(object):
         return None
 
 
-class Packager(object):
-    def __init__(self, storage=None, verbose=False, css_packages=None, js_packages=None):
+class Packager:
+    def __init__(
+        self,
+        storage=None,
+        verbose=False,
+        css_packages=None,
+        js_packages=None,
+    ):
         if storage is None:
             storage = staticfiles_storage
         self.storage = storage
@@ -99,7 +107,7 @@ class Packager(object):
             return self.packages[kind][package_name]
         except KeyError:
             raise PackageNotFound(
-                "No corresponding package for %s package name : %s" % (
+                "No corresponding package for {} package name : {}".format(
                     kind, package_name
                 )
             )
@@ -113,11 +121,29 @@ class Packager(object):
                          variant=package.variant, **kwargs)
 
     def compile(self, paths, compiler_options={}, force=False):
-        return self.compiler.compile(
+        paths = self.compiler.compile(
             paths,
             compiler_options=compiler_options,
             force=force,
         )
+        for path in paths:
+            if not self.storage.exists(path):
+                if self.verbose:
+                    e = (
+                        "Compiled file '%s' cannot be "
+                        "found with packager's storage. Locating it."
+                    )
+                    print(e % path)
+
+                source_storage = self.find_source_storage(path)
+                if source_storage is not None:
+                    with source_storage.open(path) as source_file:
+                        if self.verbose:
+                            print("Saving: %s" % path)
+                        self.storage.save(path, source_file)
+                else:
+                    raise OSError("File does not exist: %s" % path)
+        return paths
 
     def pack(self, package, compress, signal, **kwargs):
         output_filename = package.output_filename
@@ -134,13 +160,28 @@ class Packager(object):
         return output_filename
 
     def pack_javascripts(self, package, **kwargs):
-        return self.pack(package, self.compressor.compress_js, js_compressed, templates=package.templates, **kwargs)
+        return self.pack(
+            package,
+            self.compressor.compress_js,
+            js_compressed,
+            templates=package.templates,
+            **kwargs,
+        )
 
     def pack_templates(self, package):
         return self.compressor.compile_templates(package.templates)
 
     def save_file(self, path, content):
         return self.storage.save(path, ContentFile(smart_bytes(content)))
+
+    def find_source_storage(self, path):
+        for finder in get_finders():
+            for short_path, storage in finder.list(''):
+                if short_path == path:
+                    if self.verbose:
+                        print("Found storage: %s" % str(self.storage))
+                    return storage
+        return None
 
     def create_packages(self, config):
         packages = {}

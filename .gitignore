@@ -11,6 +11,7 @@ docs/_build/
 *.egg-info
 .coverage
 coverage/
+coverage.xml
 tests/static/
 tests/assets/js/dummy.js
 tests/node_modules/
@@ -28,3 +29,4 @@ tests/npm-cache
 django-pipeline-*/
 .tags
 node_modules/
+package-lock.json

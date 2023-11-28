@@ -1,18 +1,15 @@
+from io import StringIO
+
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.management import call_command
 from django.test import TestCase
-from django.test.utils import override_settings
-
-from django.test.utils import modify_settings
+from django.test.utils import modify_settings, override_settings
 
 from pipeline.collector import default_collector
 from pipeline.storage import PipelineStorage
-
 from tests.tests.test_compiler import DummyCompiler
 from tests.utils import pipeline_settings
-
-from io import StringIO
 
 
 class PipelineNoPathStorage(PipelineStorage):
@@ -54,7 +51,11 @@ class StorageTest(TestCase):
         processed_files = PipelineStorage().post_process({}, True)
         self.assertEqual(list(processed_files), [])
 
-    @pipeline_settings(JS_COMPRESSOR=None, CSS_COMPRESSOR=None, COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'])
+    @pipeline_settings(
+        JS_COMPRESSOR=None,
+        CSS_COMPRESSOR=None,
+        COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'],
+    )
     def test_post_process(self):
         default_collector.collect()
         storage = PipelineStorage()
@@ -62,8 +63,14 @@ class StorageTest(TestCase):
         self.assertTrue(('screen.css', 'screen.css', True) in processed_files)
         self.assertTrue(('scripts.js', 'scripts.js', True) in processed_files)
 
-    @override_settings(STATICFILES_STORAGE='tests.tests.test_storage.PipelineNoPathStorage')
-    @pipeline_settings(JS_COMPRESSOR=None, CSS_COMPRESSOR=None, COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'])
+    @override_settings(
+        STATICFILES_STORAGE='tests.tests.test_storage.PipelineNoPathStorage',
+    )
+    @pipeline_settings(
+        JS_COMPRESSOR=None,
+        CSS_COMPRESSOR=None,
+        COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'],
+    )
     def test_post_process_no_path(self):
         """
         Test post_process with a storage that doesn't implement the path method.

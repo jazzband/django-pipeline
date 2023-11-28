@@ -2,20 +2,20 @@ from pipeline.compilers import SubProcessCompiler
 from pipeline.conf import settings
 
 
-class ES6Compiler(SubProcessCompiler):
+class TypeScriptCompiler(SubProcessCompiler):
     output_extension = 'js'
 
     def match_file(self, path):
-        return path.endswith('.es6')
+        return path.endswith('.ts')
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:
-            return  # File doesn't need to be recompiled
+            return
         command = (
-            settings.BABEL_BINARY,
-            settings.BABEL_ARGUMENTS,
+            settings.TYPE_SCRIPT_BINARY,
+            settings.TYPE_SCRIPT_ARGUMENTS,
             infile,
-            "-o",
-            outfile
+            '--outFile',
+            outfile,
         )
         return self.execute_command(command)

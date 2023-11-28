@@ -8,7 +8,7 @@ from .conf import settings
 from .packager import Packager
 
 
-class PipelineFormMediaProperty(object):
+class PipelineFormMediaProperty:
     """A property that converts Pipeline packages to lists of files.
 
     This is used behind the scenes for any Media classes that subclass
@@ -122,7 +122,7 @@ class PipelineFormMediaMetaClass(type):
             type:
             The new class.
         """
-        new_class = super(PipelineFormMediaMetaClass, cls).__new__(
+        new_class = super().__new__(
             cls, name, bases, attrs)
 
         # If we define any packages, we'll need to use our special
@@ -158,15 +158,15 @@ class PipelineFormMediaMetaClass(type):
         packager = Packager()
         css_packages = getattr(cls, 'css_packages', {})
 
-        return dict(
-            (media_target,
-             cls._get_media_files(packager=packager,
-                                  media_packages=media_packages,
-                                  media_type='css',
-                                  extra_files=extra_files.get(media_target,
-                                                              [])))
+        return {
+            media_target: cls._get_media_files(
+                packager=packager,
+                media_packages=media_packages,
+                media_type='css',
+                extra_files=extra_files.get(media_target, []),
+            )
             for media_target, media_packages in css_packages.items()
-        )
+        }
 
     def _get_js_files(cls, extra_files):
         """Return all JavaScript files from the Media class.
@@ -214,8 +214,7 @@ class PipelineFormMediaMetaClass(type):
         """
         source_files = list(extra_files)
 
-        if (not settings.PIPELINE_ENABLED and
-            settings.PIPELINE_COLLECTOR_ENABLED):
+        if (not settings.PIPELINE_ENABLED and settings.PIPELINE_COLLECTOR_ENABLED):
             default_collector.collect()
 
         for media_package in media_packages:
@@ -230,7 +229,7 @@ class PipelineFormMediaMetaClass(type):
         return source_files
 
 
-class PipelineFormMedia(object, metaclass=PipelineFormMediaMetaClass):
+class PipelineFormMedia(metaclass=PipelineFormMediaMetaClass):
     """Base class for form or widget Media classes that use Pipeline packages.
 
     Forms or widgets that need custom CSS or JavaScript media on a page can

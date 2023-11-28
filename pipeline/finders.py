@@ -1,10 +1,14 @@
 from itertools import chain
-
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.contrib.staticfiles.finders import BaseFinder, BaseStorageFinder, find, \
-    AppDirectoriesFinder as DjangoAppDirectoriesFinder, FileSystemFinder as DjangoFileSystemFinder
-from django.utils._os import safe_join
 from os.path import normpath
+
+from django.contrib.staticfiles.finders import \
+    AppDirectoriesFinder as DjangoAppDirectoriesFinder
+from django.contrib.staticfiles.finders import BaseFinder, BaseStorageFinder
+from django.contrib.staticfiles.finders import \
+    FileSystemFinder as DjangoFileSystemFinder
+from django.contrib.staticfiles.finders import find
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.utils._os import safe_join
 
 from pipeline.conf import settings
 
@@ -14,7 +18,7 @@ class PipelineFinder(BaseStorageFinder):
 
     def find(self, path, all=False):
         if not settings.PIPELINE_ENABLED:
-            return super(PipelineFinder, self).find(path, all)
+            return super().find(path, all)
         else:
             return []
 
@@ -56,7 +60,7 @@ class CachedFileFinder(BaseFinder):
         return []
 
 
-class PatternFilterMixin(object):
+class PatternFilterMixin:
     ignore_patterns = []
 
     def get_ignored_patterns(self):
@@ -65,7 +69,7 @@ class PatternFilterMixin(object):
     def list(self, ignore_patterns):
         if ignore_patterns:
             ignore_patterns = ignore_patterns + self.get_ignored_patterns()
-        return super(PatternFilterMixin, self).list(ignore_patterns)
+        return super().list(ignore_patterns)
 
 
 class AppDirectoriesFinder(PatternFilterMixin, DjangoAppDirectoriesFinder):

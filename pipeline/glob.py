@@ -1,6 +1,6 @@
+import fnmatch
 import os
 import re
-import fnmatch
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 

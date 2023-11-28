@@ -14,7 +14,7 @@ def local_path(path):
 
 class CollectorTest(TestCase):
     def tearDown(self):
-        super(CollectorTest, self).tearDown()
+        super().tearDown()
 
         default_collector.clear()
 
@@ -29,10 +29,10 @@ class CollectorTest(TestCase):
                 'pipeline/js/first.js',
                 'pipeline/js/second.js',
             ])),
-            set([
+            {
                 'pipeline/js/first.js',
                 'pipeline/js/second.js',
-            ]))
+            })
 
     def test_delete_file_with_modified(self):
         list(default_collector.collect())

@@ -3,6 +3,56 @@
 History
 =======
 
+2.1.0
+=====
+
+* Update README.rst and add Pipeline overview image.
+* Add TypeScript compiler support.
+* Drop support for ``manifesto`` package.
+* Add support for Python 3.11 and Django 4.1
+
+
+2.0.9
+=====
+
+* Fixed some typos in the docs.
+* Fixed string type of errors reported from compilers and compressors.
+* Updated github actions matrix for host and django support.
+* Updated github actions configuration to use modern versions of third-party
+  actions.
+* Improved the packager to copy files to (S3) storage if it does not exist
+  (#502).
+
+
+2.0.8
+=====
+
+* Added **Django 4.0** compatibility. Thanks to @kevinmarsh (#760)
+* Add tests for **Django 4.0**,  **Python 3.9** and **Python 3.10**.
+  Thank to @kevinmarsh (#739)
+* Introduce CODE_OF_CONDUCT.md for the project. Thank to @hugovk (#758)
+* Add precision in the documentation for PipelineCachedStorage.
+  Thank to @gatsinski (#739)
+* Drop support for slimit compressor (#765) due to package not released
+  an official version for Python 3 and not any new package release from 2013.
+* Edit github actions matrix: django 3.2.9 support python 3.10, remove
+  python 4.0 (doesn't exist) and exclude pypy-3.8 for django-main.
+* Add .pre-commit-config.yaml. Thanks to @hugovk (#762)
+* Update package.json due to CoffeeScript on NPM has moved to "coffeescript" 
+* Update setup.py with Django 4.0 and Python 3.10
+
+2.0.7
+=====
+
+* Added **Django 3.2** compatibility (Thanks to @jramnai in #751)
+
+2.0.6
+======
+
+* Added terser (JS compressor for ES5 and ES6) (Thanks to @felix-last in #696)
+* Moved tests to GitHub Actions: https://github.com/jazzband/django-pipeline/actions (#738)
+* Fixed deprecation warnings from Django (Thanks to @edelvalle in #731)
+
 2.0.5
 ======
 

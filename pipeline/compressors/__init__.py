@@ -3,22 +3,21 @@ import os
 import posixpath
 import re
 import subprocess
-
 from itertools import takewhile
 
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.utils.encoding import smart_bytes, force_text
+from django.utils.encoding import force_str, smart_bytes
 
 from pipeline.conf import settings
 from pipeline.exceptions import CompressorError
-from pipeline.utils import to_class, relpath, set_std_streams_blocking
+from pipeline.utils import relpath, set_std_streams_blocking, to_class
 
 URL_DETECTOR = r"""url\((['"]?)\s*(.*?)\1\)"""
 URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""
 NON_REWRITABLE_URL = re.compile(r'^(#|http:|https:|data:|//)')
 
 DEFAULT_TEMPLATE_FUNC = "template"
-TEMPLATE_FUNC = r"""var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};"""
+TEMPLATE_FUNC = r"""var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};""" # noqa
 
 MIME_TYPES = {
     '.png': 'image/png',
@@ -35,7 +34,7 @@ EMBED_EXTS = MIME_TYPES.keys()
 FONT_EXTS = ['.ttf', '.otf', '.woff']
 
 
-class Compressor(object):
+class Compressor:
     asset_contents = {}
 
     def __init__(self, storage=None, verbose=False):
@@ -91,15 +90,18 @@ class Compressor(object):
             contents = re.sub("\r?\n", "\\\\n", contents)
             contents = re.sub("'", "\\'", contents)
             name = self.template_name(path, base_path)
-            compiled.append("%s['%s'] = %s('%s');\n" % (
+            compiled.append("{}['{}'] = {}('{}');\n".format(
                 namespace,
                 name,
                 settings.TEMPLATE_FUNC,
                 contents
             ))
-        compiler = TEMPLATE_FUNC if settings.TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC else ""
+        if settings.TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC:
+            compiler = TEMPLATE_FUNC
+        else:
+            compiler = ""
         return "\n".join([
-            "%(namespace)s = %(namespace)s || {};" % {'namespace': namespace},
+            "{namespace} = {namespace} || {{}};".format(namespace=namespace),
             compiler,
             ''.join(compiled)
         ])
@@ -116,7 +118,7 @@ class Compressor(object):
             path = os.path.basename(path)
         if path == base:
             base = os.path.dirname(path)
-        name = re.sub(r"^%s[\/\\]?(.*)%s$" % (
+        name = re.sub(r"^{}[\/\\]?(.*){}$".format(
             re.escape(base), re.escape(settings.TEMPLATE_EXT)
         ), r"\1", path)
         return re.sub(r"[\/\\]", settings.TEMPLATE_SEPARATOR, name)
@@ -149,7 +151,10 @@ class Compressor(object):
 
     def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
         """Return a rewritten asset URL for a stylesheet"""
-        public_path = self.absolute_path(asset_path, os.path.dirname(css_path).replace('\\', '/'))
+        public_path = self.absolute_path(
+            asset_path,
+            os.path.dirname(css_path).replace('\\', '/'),
+        )
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
         if not posixpath.isabs(asset_path):
@@ -162,11 +167,13 @@ class Compressor(object):
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not (re.search(settings.EMBED_PATH, path.replace('\\', '/')) and self.storage.exists(path)):
+        if not (re.search(settings.EMBED_PATH, path.replace('\\', '/'))
+                and self.storage.exists(path)):
             return False
         if ext not in EMBED_EXTS:
             return False
-        if not (font or len(self.encoded_content(path)) < settings.EMBED_MAX_IMAGE_SIZE):
+        if not (font or
+                len(self.encoded_content(path)) < settings.EMBED_MAX_IMAGE_SIZE):
             return False
         return True
 
@@ -183,7 +190,7 @@ class Compressor(object):
         if path in self.__class__.asset_contents:
             return self.__class__.asset_contents[path]
         data = self.read_bytes(path)
-        self.__class__.asset_contents[path] = force_text(base64.b64encode(data))
+        self.__class__.asset_contents[path] = force_str(base64.b64encode(data))
         return self.__class__.asset_contents[path]
 
     def mime_type(self, path):
@@ -205,7 +212,8 @@ class Compressor(object):
     def relative_path(self, absolute_path, output_filename):
         """Rewrite paths relative to the output stylesheet path"""
         absolute_path = posixpath.join(settings.PIPELINE_ROOT, absolute_path)
-        output_path = posixpath.join(settings.PIPELINE_ROOT, posixpath.dirname(output_filename))
+        output_path = posixpath.join(
+            settings.PIPELINE_ROOT, posixpath.dirname(output_filename))
         return relpath(absolute_path, output_path)
 
     def read_bytes(self, path):
@@ -217,10 +225,10 @@ class Compressor(object):
 
     def read_text(self, path):
         content = self.read_bytes(path)
-        return force_text(content)
+        return force_str(content)
 
 
-class CompressorBase(object):
+class CompressorBase:
     def __init__(self, verbose):
         self.verbose = verbose
 
@@ -240,17 +248,19 @@ class SubProcessCompressor(CompressorBase):
             else:
                 argument_list.extend(flattening_arg)
 
-        pipe = subprocess.Popen(argument_list, stdout=subprocess.PIPE,
-                                stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        pipe = subprocess.Popen(argument_list,
+                                stdout=subprocess.PIPE,
+                                stdin=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         if content:
             content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)
         set_std_streams_blocking()
         if stderr.strip() and pipe.returncode != 0:
-            raise CompressorError(stderr)
+            raise CompressorError(force_str(stderr))
         elif self.verbose:
-            print(stderr)
-        return force_text(stdout)
+            print(force_str(stderr))
+        return force_str(stdout)
 
 
 class NoopCompressor(CompressorBase):

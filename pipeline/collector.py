@@ -1,7 +1,5 @@
 import os
 
-from collections import OrderedDict
-
 import django
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -9,7 +7,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from pipeline.finders import PipelineFinder
 
 
-class Collector(object):
+class Collector:
     request = None
 
     def __init__(self, storage=None):
@@ -34,7 +32,7 @@ class Collector(object):
         if self.request and self.request is request:
             return
         self.request = request
-        found_files = OrderedDict()
+        found_files = {}
         for finder in finders.get_finders():
             # Ignore our finder to avoid looping
             if isinstance(finder, PipelineFinder):
@@ -47,7 +45,7 @@ class Collector(object):
                     prefixed_path = path
 
                 if (prefixed_path not in found_files and
-                    (not files or prefixed_path in files)):
+                   (not files or prefixed_path in files)):
                     found_files[prefixed_path] = (storage, path)
                     self.copy_file(path, prefixed_path, storage)
 
@@ -68,7 +66,10 @@ class Collector(object):
         if self.storage.exists(prefixed_path):
             try:
                 # When was the target file modified last time?
-                target_last_modified = self._get_modified_time(self.storage, prefixed_path)
+                target_last_modified = self._get_modified_time(
+                    self.storage,
+                    prefixed_path,
+                )
             except (OSError, NotImplementedError, AttributeError):
                 # The storage doesn't support ``modified_time`` or failed
                 pass
@@ -83,9 +84,10 @@ class Collector(object):
                     # Avoid sub-second precision
                     if (target_last_modified.replace(microsecond=0)
                             >= source_last_modified.replace(microsecond=0)):
-                            return False
+                        return False
             # Then delete the existing file if really needed
             self.storage.delete(prefixed_path)
         return True
+
 
 default_collector = Collector()

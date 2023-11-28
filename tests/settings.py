@@ -1,10 +1,11 @@
+import distutils.spawn
 import glob
 import os
-import distutils.spawn
 
 
 def local_path(path):
     return os.path.join(os.path.dirname(__file__), path)
+
 
 DATABASES = {
     'default': {
@@ -196,7 +197,7 @@ HAS_CSSTIDY = bool(CSSTIDY_EXE_PATH)
 if HAS_NODE:
     def node_exe_path(command):
         exe_ext = '.cmd' if os.name == 'nt' else ''
-        return os.path.join(NODE_BIN_PATH, "%s%s" % (command, exe_ext))
+        return os.path.join(NODE_BIN_PATH, "{}{}".format(command, exe_ext))
 
     PIPELINE.update({
         'SASS_BINARY': node_exe_path('node-sass'),
@@ -210,17 +211,29 @@ if HAS_NODE:
         'LIVE_SCRIPT_ARGUMENTS': ['--no-header'],
         'YUGLIFY_BINARY': node_exe_path('yuglify'),
         'UGLIFYJS_BINARY': node_exe_path('uglifyjs'),
+        'TERSER_BINARY': node_exe_path('terser'),
         'CSSMIN_BINARY': node_exe_path('cssmin'),
+        'TYPE_SCRIPT_BINARY': node_exe_path('tsc'),
     })
 
 if HAS_NODE and HAS_JAVA:
     PIPELINE.update({
         'CLOSURE_BINARY': [
-            JAVA_EXE_PATH, '-jar',
-            os.path.join(NODE_MODULES_PATH, 'google-closure-compiler-java', 'compiler.jar')],
+            JAVA_EXE_PATH,
+            '-jar',
+            os.path.join(
+                NODE_MODULES_PATH,
+                'google-closure-compiler-java',
+                'compiler.jar',
+            ),
+        ],
         'YUI_BINARY': [
-            JAVA_EXE_PATH, '-jar',
-            glob.glob(os.path.join(NODE_MODULES_PATH, 'yuicompressor', 'build', '*.jar'))[0]]
+            JAVA_EXE_PATH,
+            '-jar',
+            glob.glob(
+                os.path.join(NODE_MODULES_PATH, 'yuicompressor', 'build', '*.jar')
+            )[0],
+        ]
     })
 
 if HAS_CSSTIDY:
@@ -233,6 +246,7 @@ TEMPLATES = [
         'DIRS': [local_path('templates')],
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ]

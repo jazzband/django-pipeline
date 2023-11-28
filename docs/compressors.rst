@@ -158,19 +158,33 @@ Install the jsmin library with your favorite Python package manager ::
   pip install jsmin
 
 
-SlimIt compressor
-=================
+Terser compressor
+===================
 
-The slimit compressor uses `SlimIt <https://slimit.readthedocs.io>`_ to
-compress javascripts.
+`Terser <https://github.com/terser/terser>`_ is a JavaScript parser and 
+mangler/compressor toolkit for ES6+. It has been designed as a successor of
+``uglify-es`` and ``uglify-js``. The compressor works with ES5 and ES6 and 
+regular ``.js`` file endings.
 
 To use it add this to your ``PIPELINE['JS_COMPRESSOR']`` ::
 
-  PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.slimit.SlimItCompressor'
+  PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.terser.TerserCompressor'
 
-Install the slimit library with your favorite Python package manager ::
 
-  pip install slimit
+``TERSER_BINARY``
+----------------------------
+
+  Command line to execute for the terser program.
+  You will most likely change this to the location of terser on your system.
+
+  Defaults to ``'/usr/bin/env terser'``.
+
+``TERSER_ARGUMENTS``
+-------------------------------
+
+  Additional arguments to use when terser is called.
+
+  Default to ``'--compress'``
 
 
 CSSTidy compressor
