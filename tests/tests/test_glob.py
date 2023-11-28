@@ -96,4 +96,4 @@ class GlobTest(TestCase):
         # ends with os.sep doesn't blow up.
         paths = glob.glob('*' + os.sep)
         self.assertEqual(len(paths), 4)
-        self.assertTrue(all([os.sep in path for path in paths]))
+        self.assertTrue(all(os.sep in path for path in paths))
