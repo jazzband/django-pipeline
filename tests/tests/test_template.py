@@ -32,9 +32,9 @@ class JinjaTest(TestCase):
         self.assertEqual(
             """<link href="/static/pipeline/css/first.css" rel="stylesheet" type="text/css" />
 <link href="/static/pipeline/css/second.css" rel="stylesheet" type="text/css" />
-<link href="/static/pipeline/css/urls.css" rel="stylesheet" type="text/css" />""",
+<link href="/static/pipeline/css/urls.css" rel="stylesheet" type="text/css" />""",  # noqa
             template.render(),
-        )  # noqa
+        )
 
     def test_package_js(self):
         template = self.env.from_string("""{% javascript "scripts" %}""")
