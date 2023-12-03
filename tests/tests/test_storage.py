@@ -14,6 +14,7 @@ from tests.utils import pipeline_settings
 
 class PipelineNoPathStorage(PipelineStorage):
     """Storage without an implemented path method"""
+
     def path(self, *args):
         raise NotImplementedError()
 
@@ -34,11 +35,12 @@ class PipelineNoPathStorage(PipelineStorage):
 
 
 class DummyCSSCompiler(DummyCompiler):
-    """ Handles css files """
-    output_extension = 'css'
+    """Handles css files"""
+
+    output_extension = "css"
 
     def match_file(self, path):
-        return path.endswith('.css')
+        return path.endswith(".css")
 
 
 class StorageTest(TestCase):
@@ -54,22 +56,22 @@ class StorageTest(TestCase):
     @pipeline_settings(
         JS_COMPRESSOR=None,
         CSS_COMPRESSOR=None,
-        COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'],
+        COMPILERS=["tests.tests.test_storage.DummyCSSCompiler"],
     )
     def test_post_process(self):
         default_collector.collect()
         storage = PipelineStorage()
         processed_files = storage.post_process({})
-        self.assertTrue(('screen.css', 'screen.css', True) in processed_files)
-        self.assertTrue(('scripts.js', 'scripts.js', True) in processed_files)
+        self.assertTrue(("screen.css", "screen.css", True) in processed_files)
+        self.assertTrue(("scripts.js", "scripts.js", True) in processed_files)
 
     @override_settings(
-        STATICFILES_STORAGE='tests.tests.test_storage.PipelineNoPathStorage',
+        STATICFILES_STORAGE="tests.tests.test_storage.PipelineNoPathStorage",
     )
     @pipeline_settings(
         JS_COMPRESSOR=None,
         CSS_COMPRESSOR=None,
-        COMPILERS=['tests.tests.test_storage.DummyCSSCompiler'],
+        COMPILERS=["tests.tests.test_storage.DummyCSSCompiler"],
     )
     def test_post_process_no_path(self):
         """
@@ -77,34 +79,30 @@ class StorageTest(TestCase):
         """
         staticfiles_storage._setup()
         try:
-            call_command('collectstatic', verbosity=0, interactive=False)
+            call_command("collectstatic", verbosity=0, interactive=False)
         except NotImplementedError:
-            self.fail('Received an error running collectstatic')
+            self.fail("Received an error running collectstatic")
 
-    @modify_settings(STATICFILES_FINDERS={
-        'append': 'pipeline.finders.PipelineFinder'
-    })
+    @modify_settings(STATICFILES_FINDERS={"append": "pipeline.finders.PipelineFinder"})
     def test_nonexistent_file_pipeline_finder(self):
-        path = finders.find('nothing.css')
+        path = finders.find("nothing.css")
         self.assertIsNone(path)
 
-    @modify_settings(STATICFILES_FINDERS={
-        'append': 'pipeline.finders.CachedFileFinder'
-    })
+    @modify_settings(
+        STATICFILES_FINDERS={"append": "pipeline.finders.CachedFileFinder"}
+    )
     def test_nonexistent_file_cached_finder(self):
-        path = finders.find('nothing.css')
+        path = finders.find("nothing.css")
         self.assertIsNone(path)
 
-    @modify_settings(STATICFILES_FINDERS={
-        'append': 'pipeline.finders.PipelineFinder'
-    })
+    @modify_settings(STATICFILES_FINDERS={"append": "pipeline.finders.PipelineFinder"})
     def test_nonexistent_double_extension_file_pipeline_finder(self):
-        path = finders.find('app.css.map')
+        path = finders.find("app.css.map")
         self.assertIsNone(path)
 
-    @modify_settings(STATICFILES_FINDERS={
-        'append': 'pipeline.finders.CachedFileFinder'
-    })
+    @modify_settings(
+        STATICFILES_FINDERS={"append": "pipeline.finders.CachedFileFinder"}
+    )
     def test_nonexistent_double_extension_file_cached_finder(self):
-        path = finders.find('app.css.map')
+        path = finders.find("app.css.map")
         self.assertIsNone(path)

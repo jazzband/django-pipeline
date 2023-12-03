@@ -20,7 +20,7 @@ class Package:
     def sources(self):
         if not self._sources:
             paths = []
-            for pattern in self.config.get('source_filenames', []):
+            for pattern in self.config.get("source_filenames", []):
                 for path in glob(pattern):
                     if path not in paths and find(path):
                         paths.append(str(path))
@@ -29,37 +29,37 @@ class Package:
 
     @property
     def paths(self):
-        return [path for path in self.sources
-                if not path.endswith(settings.TEMPLATE_EXT)]
+        return [
+            path for path in self.sources if not path.endswith(settings.TEMPLATE_EXT)
+        ]
 
     @property
     def templates(self):
-        return [path for path in self.sources
-                if path.endswith(settings.TEMPLATE_EXT)]
+        return [path for path in self.sources if path.endswith(settings.TEMPLATE_EXT)]
 
     @property
     def output_filename(self):
-        return self.config.get('output_filename')
+        return self.config.get("output_filename")
 
     @property
     def extra_context(self):
-        return self.config.get('extra_context', {})
+        return self.config.get("extra_context", {})
 
     @property
     def template_name(self):
-        return self.config.get('template_name')
+        return self.config.get("template_name")
 
     @property
     def variant(self):
-        return self.config.get('variant')
+        return self.config.get("variant")
 
     @property
     def manifest(self):
-        return self.config.get('manifest', True)
+        return self.config.get("manifest", True)
 
     @property
     def compiler_options(self):
-        return self.config.get('compiler_options', {})
+        return self.config.get("compiler_options", {})
 
 
 class Packager:
@@ -81,8 +81,8 @@ class Packager:
         if js_packages is None:
             js_packages = settings.JAVASCRIPT
         self.packages = {
-            'css': self.create_packages(css_packages),
-            'js': self.create_packages(js_packages),
+            "css": self.create_packages(css_packages),
+            "js": self.create_packages(js_packages),
         }
 
     def package_for(self, kind, package_name):
@@ -99,9 +99,14 @@ class Packager:
         return self.storage.url(filename)
 
     def pack_stylesheets(self, package, **kwargs):
-        return self.pack(package, self.compressor.compress_css, css_compressed,
-                         output_filename=package.output_filename,
-                         variant=package.variant, **kwargs)
+        return self.pack(
+            package,
+            self.compressor.compress_css,
+            css_compressed,
+            output_filename=package.output_filename,
+            variant=package.variant,
+            **kwargs,
+        )
 
     def compile(self, paths, compiler_options={}, force=False):
         paths = self.compiler.compile(
@@ -159,7 +164,7 @@ class Packager:
 
     def find_source_storage(self, path):
         for finder in get_finders():
-            for short_path, storage in finder.list(''):
+            for short_path, storage in finder.list(""):
                 if short_path == path:
                     if self.verbose:
                         print("Found storage: %s" % str(self.storage))

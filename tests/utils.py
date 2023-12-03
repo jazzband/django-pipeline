@@ -6,7 +6,7 @@ from django.test import override_settings
 
 def _(path):
     # Make sure the path contains only the correct separator
-    return path.replace('/', os.sep).replace('\\', os.sep)
+    return path.replace("/", os.sep).replace("\\", os.sep)
 
 
 class pipeline_settings(override_settings):
@@ -16,4 +16,4 @@ class pipeline_settings(override_settings):
             # and its __init__ method calls its superclass' __init__ method too,
             # so we must do the same.
             super().__init__()
-        self.options = {'PIPELINE': kwargs}
+        self.options = {"PIPELINE": kwargs}

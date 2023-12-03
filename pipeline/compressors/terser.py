@@ -6,5 +6,5 @@ class TerserCompressor(SubProcessCompressor):
     def compress_js(self, js):
         command = (settings.TERSER_BINARY, settings.TERSER_ARGUMENTS)
         if self.verbose:
-            command += ' --verbose'
+            command += " --verbose"
         return self.execute_command(command, js)

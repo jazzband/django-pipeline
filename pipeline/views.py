@@ -22,9 +22,11 @@ def serve_static(request, path, insecure=False, **kwargs):
     # Follow the same logic Django uses for determining access to the
     # static-serving view.
     if not django_settings.DEBUG and not insecure:
-        raise ImproperlyConfigured("The staticfiles view can only be used in "
-                                   "debug mode or if the --insecure "
-                                   "option of 'runserver' is used")
+        raise ImproperlyConfigured(
+            "The staticfiles view can only be used in "
+            "debug mode or if the --insecure "
+            "option of 'runserver' is used"
+        )
 
     if not settings.PIPELINE_ENABLED and settings.PIPELINE_COLLECTOR_ENABLED:
         # Collect only the requested file, in order to serve the result as
@@ -32,5 +34,4 @@ def serve_static(request, path, insecure=False, **kwargs):
         # way, as those will still cause Django to collect all media.
         default_collector.collect(request, files=[path])
 
-    return serve(request, path, document_root=django_settings.STATIC_ROOT,
-                 **kwargs)
+    return serve(request, path, document_root=django_settings.STATIC_ROOT, **kwargs)
