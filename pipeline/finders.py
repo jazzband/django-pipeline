@@ -1,11 +1,13 @@
 from itertools import chain
 from os.path import normpath
 
-from django.contrib.staticfiles.finders import \
-    AppDirectoriesFinder as DjangoAppDirectoriesFinder
+from django.contrib.staticfiles.finders import (
+    AppDirectoriesFinder as DjangoAppDirectoriesFinder,
+)
 from django.contrib.staticfiles.finders import BaseFinder, BaseStorageFinder
-from django.contrib.staticfiles.finders import \
-    FileSystemFinder as DjangoFileSystemFinder
+from django.contrib.staticfiles.finders import (
+    FileSystemFinder as DjangoFileSystemFinder,
+)
 from django.contrib.staticfiles.finders import find
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils._os import safe_join
@@ -33,7 +35,7 @@ class ManifestFinder(BaseFinder):
         """
         matches = []
         for elem in chain(settings.STYLESHEETS.values(), settings.JAVASCRIPT.values()):
-            if normpath(elem['output_filename']) == normpath(path):
+            if normpath(elem["output_filename"]) == normpath(path):
                 match = safe_join(settings.PIPELINE_ROOT, path)
                 if not all:
                     return match
@@ -50,10 +52,10 @@ class CachedFileFinder(BaseFinder):
         Work out the uncached name of the file and look that up instead
         """
         try:
-            start, _, extn = path.rsplit('.', 2)
+            start, _, extn = path.rsplit(".", 2)
         except ValueError:
             return []
-        path = '.'.join((start, extn))
+        path = ".".join((start, extn))
         return find(path, all=all) or []
 
     def list(self, *args):
@@ -80,12 +82,13 @@ class AppDirectoriesFinder(PatternFilterMixin, DjangoAppDirectoriesFinder):
     This allows us to concentrate/compress our components without dragging
     the raw versions in via collectstatic.
     """
+
     ignore_patterns = [
-        '*.js',
-        '*.css',
-        '*.less',
-        '*.scss',
-        '*.styl',
+        "*.js",
+        "*.css",
+        "*.less",
+        "*.scss",
+        "*.styl",
     ]
 
 
@@ -96,28 +99,29 @@ class FileSystemFinder(PatternFilterMixin, DjangoFileSystemFinder):
     This allows us to concentrate/compress our components without dragging
     the raw versions in too.
     """
+
     ignore_patterns = [
-        '*.js',
-        '*.css',
-        '*.less',
-        '*.scss',
-        '*.styl',
-        '*.sh',
-        '*.html',
-        '*.md',
-        '*.markdown',
-        '*.php',
-        '*.txt',
-        'README*',
-        'LICENSE*',
-        '*examples*',
-        '*test*',
-        '*bin*',
-        '*samples*',
-        '*docs*',
-        '*build*',
-        '*demo*',
-        'Makefile*',
-        'Gemfile*',
-        'node_modules',
+        "*.js",
+        "*.css",
+        "*.less",
+        "*.scss",
+        "*.styl",
+        "*.sh",
+        "*.html",
+        "*.md",
+        "*.markdown",
+        "*.php",
+        "*.txt",
+        "README*",
+        "LICENSE*",
+        "*examples*",
+        "*test*",
+        "*bin*",
+        "*samples*",
+        "*docs*",
+        "*build*",
+        "*demo*",
+        "Makefile*",
+        "Gemfile*",
+        "node_modules",
     ]

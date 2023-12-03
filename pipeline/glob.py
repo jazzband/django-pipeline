@@ -42,6 +42,7 @@ def iglob(pathname):
         for name in glob_in_dir(dirname, basename):
             yield os.path.join(dirname, name)
 
+
 # These 2 helper functions non-recursively glob inside a literal directory.
 # They return a list of basenames. `glob1` accepts a pattern while `glob0`
 # takes a literal basename (so it only has to check for its existence).
@@ -55,8 +56,8 @@ def glob1(dirname, pattern):
         # We are not sure that dirname is a real directory
         # and storage implementations are really exotic.
         return []
-    if pattern[0] != '.':
-        names = [x for x in names if x[0] != '.']
+    if pattern[0] != ".":
+        names = [x for x in names if x[0] != "."]
     return fnmatch.filter(names, pattern)
 
 
@@ -66,7 +67,7 @@ def glob0(dirname, basename):
     return []
 
 
-magic_check = re.compile('[*?[]')
+magic_check = re.compile("[*?[]")
 
 
 def has_magic(s):

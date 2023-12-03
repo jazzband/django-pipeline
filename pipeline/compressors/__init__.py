@@ -14,24 +14,24 @@ from pipeline.utils import relpath, set_std_streams_blocking, to_class
 
 URL_DETECTOR = r"""url\((['"]?)\s*(.*?)\1\)"""
 URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""
-NON_REWRITABLE_URL = re.compile(r'^(#|http:|https:|data:|//)')
+NON_REWRITABLE_URL = re.compile(r"^(#|http:|https:|data:|//)")
 
 DEFAULT_TEMPLATE_FUNC = "template"
-TEMPLATE_FUNC = r"""var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};""" # noqa
+TEMPLATE_FUNC = r"""var template = function(str){var fn = new Function('obj', 'var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push(\''+str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/<%=([\s\S]+?)%>/g,function(match,code){return "',"+code.replace(/\\'/g, "'")+",'";}).replace(/<%([\s\S]+?)%>/g,function(match,code){return "');"+code.replace(/\\'/g, "'").replace(/[\r\n\t]/g,' ')+"__p.push('";}).replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t')+"');}return __p.join('');");return fn;};"""  # noqa
 
 MIME_TYPES = {
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.gif': 'image/gif',
-    '.tif': 'image/tiff',
-    '.tiff': 'image/tiff',
-    '.ttf': 'font/truetype',
-    '.otf': 'font/opentype',
-    '.woff': 'font/woff'
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".tif": "image/tiff",
+    ".tiff": "image/tiff",
+    ".ttf": "font/truetype",
+    ".otf": "font/opentype",
+    ".woff": "font/woff",
 }
 EMBED_EXTS = MIME_TYPES.keys()
-FONT_EXTS = ['.ttf', '.otf', '.woff']
+FONT_EXTS = [".ttf", ".otf", ".woff"]
 
 
 class Compressor:
@@ -62,7 +62,7 @@ class Compressor:
 
         compressor = self.js_compressor
         if compressor:
-            js = getattr(compressor(verbose=self.verbose), 'compress_js')(js)
+            js = getattr(compressor(verbose=self.verbose), "compress_js")(js)
 
         return js
 
@@ -71,18 +71,18 @@ class Compressor:
         css = self.concatenate_and_rewrite(paths, output_filename, variant)
         compressor = self.css_compressor
         if compressor:
-            css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
+            css = getattr(compressor(verbose=self.verbose), "compress_css")(css)
         if not variant:
             return css
         elif variant == "datauri":
             return self.with_data_uri(css)
         else:
-            raise CompressorError(f"\"{variant}\" is not a valid variant")
+            raise CompressorError(f'"{variant}" is not a valid variant')
 
     def compile_templates(self, paths):
         compiled = []
         if not paths:
-            return ''
+            return ""
         namespace = settings.TEMPLATE_NAMESPACE
         base_path = self.base_path(paths)
         for path in paths:
@@ -90,25 +90,27 @@ class Compressor:
             contents = re.sub("\r?\n", "\\\\n", contents)
             contents = re.sub("'", "\\'", contents)
             name = self.template_name(path, base_path)
-            compiled.append("{}['{}'] = {}('{}');\n".format(
-                namespace,
-                name,
-                settings.TEMPLATE_FUNC,
-                contents
-            ))
+            compiled.append(
+                "{}['{}'] = {}('{}');\n".format(
+                    namespace, name, settings.TEMPLATE_FUNC, contents
+                )
+            )
         if settings.TEMPLATE_FUNC == DEFAULT_TEMPLATE_FUNC:
             compiler = TEMPLATE_FUNC
         else:
             compiler = ""
-        return "\n".join([
-            "{namespace} = {namespace} || {{}};".format(namespace=namespace),
-            compiler,
-            ''.join(compiled)
-        ])
+        return "\n".join(
+            [
+                "{namespace} = {namespace} || {{}};".format(namespace=namespace),
+                compiler,
+                "".join(compiled),
+            ]
+        )
 
     def base_path(self, paths):
         def names_equal(name):
             return all(n == name[0] for n in name[1:])
+
         directory_levels = zip(*[p.split(os.sep) for p in paths])
         return os.sep.join(x[0] for x in takewhile(names_equal, directory_levels))
 
@@ -118,28 +120,35 @@ class Compressor:
             path = os.path.basename(path)
         if path == base:
             base = os.path.dirname(path)
-        name = re.sub(r"^{}[\/\\]?(.*){}$".format(
-            re.escape(base), re.escape(settings.TEMPLATE_EXT)
-        ), r"\1", path)
+        name = re.sub(
+            r"^{}[\/\\]?(.*){}$".format(
+                re.escape(base), re.escape(settings.TEMPLATE_EXT)
+            ),
+            r"\1",
+            path,
+        )
         return re.sub(r"[\/\\]", settings.TEMPLATE_SEPARATOR, name)
 
     def concatenate_and_rewrite(self, paths, output_filename, variant=None):
         """Concatenate together files and rewrite urls"""
         stylesheets = []
         for path in paths:
+
             def reconstruct(match):
-                quote = match.group(1) or ''
+                quote = match.group(1) or ""
                 asset_path = match.group(2)
                 if NON_REWRITABLE_URL.match(asset_path):
                     return f"url({quote}{asset_path}{quote})"
-                asset_url = self.construct_asset_path(asset_path, path,
-                                                      output_filename, variant)
+                asset_url = self.construct_asset_path(
+                    asset_path, path, output_filename, variant
+                )
                 return f"url({asset_url})"
+
             content = self.read_text(path)
             # content needs to be unicode to avoid explosions with non-ascii chars
             content = re.sub(URL_DETECTOR, reconstruct, content)
             stylesheets.append(content)
-        return '\n'.join(stylesheets)
+        return "\n".join(stylesheets)
 
     def concatenate(self, paths):
         """Concatenate together a list of files"""
@@ -153,7 +162,7 @@ class Compressor:
         """Return a rewritten asset URL for a stylesheet"""
         public_path = self.absolute_path(
             asset_path,
-            os.path.dirname(css_path).replace('\\', '/'),
+            os.path.dirname(css_path).replace("\\", "/"),
         )
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
@@ -167,13 +176,16 @@ class Compressor:
         font = ext in FONT_EXTS
         if not variant:
             return False
-        if not (re.search(settings.EMBED_PATH, path.replace('\\', '/'))
-                and self.storage.exists(path)):
+        if not (
+            re.search(settings.EMBED_PATH, path.replace("\\", "/"))
+            and self.storage.exists(path)
+        ):
             return False
         if ext not in EMBED_EXTS:
             return False
-        if not (font or
-                len(self.encoded_content(path)) < settings.EMBED_MAX_IMAGE_SIZE):
+        if not (
+            font or len(self.encoded_content(path)) < settings.EMBED_MAX_IMAGE_SIZE
+        ):
             return False
         return True
 
@@ -182,7 +194,8 @@ class Compressor:
             path = match.group(1)
             mime_type = self.mime_type(path)
             data = self.encoded_content(path)
-            return f"url(\"data:{mime_type};charset=utf-8;base64,{data}\")"
+            return f'url("data:{mime_type};charset=utf-8;base64,{data}")'
+
         return re.sub(URL_REPLACER, datauri, css)
 
     def encoded_content(self, path):
@@ -213,7 +226,8 @@ class Compressor:
         """Rewrite paths relative to the output stylesheet path"""
         absolute_path = posixpath.join(settings.PIPELINE_ROOT, absolute_path)
         output_path = posixpath.join(
-            settings.PIPELINE_ROOT, posixpath.dirname(output_filename))
+            settings.PIPELINE_ROOT, posixpath.dirname(output_filename)
+        )
         return relpath(absolute_path, output_path)
 
     def read_bytes(self, path):
@@ -248,10 +262,12 @@ class SubProcessCompressor(CompressorBase):
             else:
                 argument_list.extend(flattening_arg)
 
-        pipe = subprocess.Popen(argument_list,
-                                stdout=subprocess.PIPE,
-                                stdin=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
+        pipe = subprocess.Popen(
+            argument_list,
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
         if content:
             content = smart_bytes(content)
         stdout, stderr = pipe.communicate(content)
