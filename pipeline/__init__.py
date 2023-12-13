@@ -12,6 +12,7 @@ if get_version is None:
 
         def get_version(x):
             return get_distribution(x).version
+
     except ImportError:
         get_version = None
         DistributionNotFound = None
