@@ -9,6 +9,7 @@ Unreleased
 * Drop support for Python 3.7
 * Drop support for Django 2
 * Add Python 3.12 support
+* Add Django 5.0 support
 
 2.1.0
 =====
