@@ -3,10 +3,10 @@ from pipeline.conf import settings
 
 
 class TypeScriptCompiler(SubProcessCompiler):
-    output_extension = 'js'
+    output_extension = "js"
 
     def match_file(self, path):
-        return path.endswith('.ts')
+        return path.endswith(".ts")
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         if not outdated and not force:
@@ -15,7 +15,7 @@ class TypeScriptCompiler(SubProcessCompiler):
             settings.TYPE_SCRIPT_BINARY,
             settings.TYPE_SCRIPT_ARGUMENTS,
             infile,
-            '--outFile',
+            "--outFile",
             outfile,
         )
         return self.execute_command(command)

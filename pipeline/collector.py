@@ -37,15 +37,16 @@ class Collector:
             # Ignore our finder to avoid looping
             if isinstance(finder, PipelineFinder):
                 continue
-            for path, storage in finder.list(['CVS', '.*', '*~']):
+            for path, storage in finder.list(["CVS", ".*", "*~"]):
                 # Prefix the relative path if the source storage contains it
-                if getattr(storage, 'prefix', None):
+                if getattr(storage, "prefix", None):
                     prefixed_path = os.path.join(storage.prefix, path)
                 else:
                     prefixed_path = path
 
-                if (prefixed_path not in found_files and
-                   (not files or prefixed_path in files)):
+                if prefixed_path not in found_files and (
+                    not files or prefixed_path in files
+                ):
                     found_files[prefixed_path] = (storage, path)
                     self.copy_file(path, prefixed_path, storage)
 
@@ -82,8 +83,9 @@ class Collector:
                 else:
                     # Skip the file if the source file is younger
                     # Avoid sub-second precision
-                    if (target_last_modified.replace(microsecond=0)
-                            >= source_last_modified.replace(microsecond=0)):
+                    if target_last_modified.replace(
+                        microsecond=0
+                    ) >= source_last_modified.replace(microsecond=0):
                         return False
             # Then delete the existing file if really needed
             self.storage.delete(prefixed_path)

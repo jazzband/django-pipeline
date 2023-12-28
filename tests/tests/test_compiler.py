@@ -14,82 +14,87 @@ from tests.utils import _, pipeline_settings
 
 
 class FailingCompiler(SubProcessCompiler):
-    output_extension = 'junk'
+    output_extension = "junk"
 
     def match_file(self, path):
-        return path.endswith('.coffee')
+        return path.endswith(".coffee")
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = (("/usr/bin/env", "false",),)
+        command = (
+            (
+                "/usr/bin/env",
+                "false",
+            ),
+        )
         return self.execute_command(command)
 
 
 class InvalidCompiler(SubProcessCompiler):
-    output_extension = 'junk'
+    output_extension = "junk"
 
     def match_file(self, path):
-        return path.endswith('.coffee')
+        return path.endswith(".coffee")
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         command = (
             ("this-exists-nowhere-as-a-command-and-should-fail",),
             infile,
-            outfile
+            outfile,
         )
         return self.execute_command(command)
 
 
 class CompilerWithEmptyFirstArg(SubProcessCompiler):
-    output_extension = 'junk'
+    output_extension = "junk"
 
     def match_file(self, path):
-        return path.endswith('.coffee')
+        return path.endswith(".coffee")
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         command = (
-            ('', '/usr/bin/env', 'cat'),
+            ("", "/usr/bin/env", "cat"),
             infile,
         )
         return self.execute_command(command, stdout_captured=outfile)
 
 
 class CopyingCompiler(SubProcessCompiler):
-    output_extension = 'junk'
+    output_extension = "junk"
 
     def match_file(self, path):
-        return path.endswith('.coffee')
+        return path.endswith(".coffee")
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = (
-            "cp",
-            infile,
-            outfile
-        )
+        command = ("cp", infile, outfile)
         return self.execute_command(command)
 
 
 class LineNumberingCompiler(SubProcessCompiler):
-    output_extension = 'junk'
+    output_extension = "junk"
 
     def match_file(self, path):
-        return path.endswith('.coffee')
+        return path.endswith(".coffee")
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
-        command = (("/usr/bin/env", "cat"), ("-n",), infile,)
+        command = (
+            ("/usr/bin/env", "cat"),
+            ("-n",),
+            infile,
+        )
         return self.execute_command(command, stdout_captured=outfile)
 
 
 class DummyCompiler(CompilerBase):
-    output_extension = 'js'
+    output_extension = "js"
 
     def match_file(self, path):
-        return path.endswith('.coffee')
+        return path.endswith(".coffee")
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         return
 
 
-@pipeline_settings(COMPILERS=['tests.tests.test_compiler.DummyCompiler'])
+@pipeline_settings(COMPILERS=["tests.tests.test_compiler.DummyCompiler"])
 class DummyCompilerTest(TestCase):
     def setUp(self):
         default_collector.collect()
@@ -109,12 +114,14 @@ class DummyCompilerTest(TestCase):
         self.assertEqual(compilers_class[0], DummyCompiler)
 
     def test_compile(self):
-        paths = self.compiler.compile([
-            _('pipeline/js/dummy.coffee'),
-            _('pipeline/js/application.js'),
-        ])
+        paths = self.compiler.compile(
+            [
+                _("pipeline/js/dummy.coffee"),
+                _("pipeline/js/application.js"),
+            ]
+        )
         self.assertEqual(
-            [_('pipeline/js/dummy.js'), _('pipeline/js/application.js')],
+            [_("pipeline/js/dummy.js"), _("pipeline/js/application.js")],
             list(paths),
         )
 
@@ -123,7 +130,7 @@ class DummyCompilerTest(TestCase):
 
 
 @skipIf(sys.platform.startswith("win"), "requires posix platform")
-@pipeline_settings(COMPILERS=['tests.tests.test_compiler.LineNumberingCompiler'])
+@pipeline_settings(COMPILERS=["tests.tests.test_compiler.LineNumberingCompiler"])
 class CompilerStdoutTest(TestCase):
     def setUp(self):
         default_collector.collect()
@@ -139,15 +146,15 @@ class CompilerStdoutTest(TestCase):
         self.assertEqual(output_path, "js/helpers.js")
 
     def test_compile(self):
-        paths = self.compiler.compile([_('pipeline/js/dummy.coffee')])
-        self.assertEqual([_('pipeline/js/dummy.junk')], list(paths))
+        paths = self.compiler.compile([_("pipeline/js/dummy.coffee")])
+        self.assertEqual([_("pipeline/js/dummy.junk")], list(paths))
 
     def tearDown(self):
         default_collector.clear()
 
 
 @skipIf(sys.platform.startswith("win"), "requires posix platform")
-@pipeline_settings(COMPILERS=['tests.tests.test_compiler.CopyingCompiler'])
+@pipeline_settings(COMPILERS=["tests.tests.test_compiler.CopyingCompiler"])
 class CompilerSelfWriterTest(TestCase):
     def setUp(self):
         default_collector.collect()
@@ -163,30 +170,30 @@ class CompilerSelfWriterTest(TestCase):
         self.assertEqual(output_path, "js/helpers.js")
 
     def test_compile(self):
-        paths = self.compiler.compile([_('pipeline/js/dummy.coffee')])
+        paths = self.compiler.compile([_("pipeline/js/dummy.coffee")])
         default_collector.collect()
-        self.assertEqual([_('pipeline/js/dummy.junk')], list(paths))
+        self.assertEqual([_("pipeline/js/dummy.junk")], list(paths))
 
     def tearDown(self):
         default_collector.clear()
 
 
-@pipeline_settings(COMPILERS=['tests.tests.test_compiler.CompilerWithEmptyFirstArg'])
+@pipeline_settings(COMPILERS=["tests.tests.test_compiler.CompilerWithEmptyFirstArg"])
 class CompilerWithEmptyFirstArgTest(TestCase):
     def setUp(self):
         default_collector.collect()
         self.compiler = Compiler()
 
     def test_compile(self):
-        paths = self.compiler.compile([_('pipeline/js/dummy.coffee')])
+        paths = self.compiler.compile([_("pipeline/js/dummy.coffee")])
         default_collector.collect()
-        self.assertEqual([_('pipeline/js/dummy.junk')], list(paths))
+        self.assertEqual([_("pipeline/js/dummy.junk")], list(paths))
 
     def tearDown(self):
         default_collector.clear()
 
 
-@pipeline_settings(COMPILERS=['tests.tests.test_compiler.InvalidCompiler'])
+@pipeline_settings(COMPILERS=["tests.tests.test_compiler.InvalidCompiler"])
 class InvalidCompilerTest(TestCase):
     def setUp(self):
         default_collector.collect()
@@ -194,21 +201,24 @@ class InvalidCompilerTest(TestCase):
 
     def test_compile(self):
         with self.assertRaises(CompilerError) as cm:
-            self.compiler.compile([_('pipeline/js/dummy.coffee')])
+            self.compiler.compile([_("pipeline/js/dummy.coffee")])
             e = cm.exception
             self.assertEqual(
                 e.command,
-                ['this-exists-nowhere-as-a-command-and-should-fail',
-                 'pipeline/js/dummy.coffee',
-                 'pipeline/js/dummy.junk'])
-            self.assertEqual(e.error_output, '')
+                [
+                    "this-exists-nowhere-as-a-command-and-should-fail",
+                    "pipeline/js/dummy.coffee",
+                    "pipeline/js/dummy.junk",
+                ],
+            )
+            self.assertEqual(e.error_output, "")
 
     def tearDown(self):
         default_collector.clear()
 
 
 @skipIf(sys.platform.startswith("win"), "requires posix platform")
-@pipeline_settings(COMPILERS=['tests.tests.test_compiler.FailingCompiler'])
+@pipeline_settings(COMPILERS=["tests.tests.test_compiler.FailingCompiler"])
 class FailingCompilerTest(TestCase):
     def setUp(self):
         default_collector.collect()
@@ -216,11 +226,11 @@ class FailingCompilerTest(TestCase):
 
     def test_compile(self):
         with self.assertRaises(CompilerError) as cm:
-            self.compiler.compile([_('pipeline/js/dummy.coffee')])
+            self.compiler.compile([_("pipeline/js/dummy.coffee")])
 
             e = cm.exception
-            self.assertEqual(e.command, ['/usr/bin/env', 'false'])
-            self.assertEqual(e.error_output, '')
+            self.assertEqual(e.command, ["/usr/bin/env", "false"])
+            self.assertEqual(e.error_output, "")
 
     def tearDown(self):
         default_collector.clear()
@@ -228,10 +238,9 @@ class FailingCompilerTest(TestCase):
 
 @skipUnless(settings.HAS_NODE, "requires node")
 class CompilerImplementation(TestCase):
-
     def setUp(self):
         self.compiler = Compiler()
-        default_collector.collect(RequestFactory().get('/'))
+        default_collector.collect(RequestFactory().get("/"))
 
     def tearDown(self):
         default_collector.clear()
@@ -244,55 +253,55 @@ class CompilerImplementation(TestCase):
         compiler.compile_file(_(infile_path), _(outfile_path), force=True)
         with open(outfile_path) as f:
             result = f.read()
-        with staticfiles_storage.open(expected, 'r') as f:
+        with staticfiles_storage.open(expected, "r") as f:
             expected = f.read()
         self.assertEqual(result, expected)
 
     def test_sass(self):
         self._test_compiler(
-            'pipeline.compilers.sass.SASSCompiler',
-            'pipeline/compilers/scss/input.scss',
-            'pipeline/compilers/scss/expected.css',
+            "pipeline.compilers.sass.SASSCompiler",
+            "pipeline/compilers/scss/input.scss",
+            "pipeline/compilers/scss/expected.css",
         )
 
     def test_coffeescript(self):
         self._test_compiler(
-            'pipeline.compilers.coffee.CoffeeScriptCompiler',
-            'pipeline/compilers/coffee/input.coffee',
-            'pipeline/compilers/coffee/expected.js',
+            "pipeline.compilers.coffee.CoffeeScriptCompiler",
+            "pipeline/compilers/coffee/input.coffee",
+            "pipeline/compilers/coffee/expected.js",
         )
 
     def test_less(self):
         self._test_compiler(
-            'pipeline.compilers.less.LessCompiler',
-            'pipeline/compilers/less/input.less',
-            'pipeline/compilers/less/expected.css',
+            "pipeline.compilers.less.LessCompiler",
+            "pipeline/compilers/less/input.less",
+            "pipeline/compilers/less/expected.css",
         )
 
     def test_es6(self):
         self._test_compiler(
-            'pipeline.compilers.es6.ES6Compiler',
-            'pipeline/compilers/es6/input.es6',
-            'pipeline/compilers/es6/expected.js',
+            "pipeline.compilers.es6.ES6Compiler",
+            "pipeline/compilers/es6/input.es6",
+            "pipeline/compilers/es6/expected.js",
         )
 
     def test_typescript(self):
         self._test_compiler(
-            'pipeline.compilers.typescript.TypeScriptCompiler',
-            'pipeline/compilers/typescript/input.ts',
-            'pipeline/compilers/typescript/expected.js',
+            "pipeline.compilers.typescript.TypeScriptCompiler",
+            "pipeline/compilers/typescript/input.ts",
+            "pipeline/compilers/typescript/expected.js",
         )
 
     def test_stylus(self):
         self._test_compiler(
-            'pipeline.compilers.stylus.StylusCompiler',
-            'pipeline/compilers/stylus/input.styl',
-            'pipeline/compilers/stylus/expected.css',
+            "pipeline.compilers.stylus.StylusCompiler",
+            "pipeline/compilers/stylus/input.styl",
+            "pipeline/compilers/stylus/expected.css",
         )
 
     def test_livescript(self):
         self._test_compiler(
-            'pipeline.compilers.livescript.LiveScriptCompiler',
-            'pipeline/compilers/livescript/input.ls',
-            'pipeline/compilers/livescript/expected.js',
+            "pipeline.compilers.livescript.LiveScriptCompiler",
+            "pipeline/compilers/livescript/input.ls",
+            "pipeline/compilers/livescript/expected.js",
         )
