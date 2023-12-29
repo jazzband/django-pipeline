@@ -1,3 +1,8 @@
+import base64
+import hashlib
+
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.management import call_command
 from django.template import Context, Template
 from django.test import TestCase
 from jinja2 import Environment, PackageLoader
@@ -8,6 +13,8 @@ from tests.utils import pipeline_settings
 
 class JinjaTest(TestCase):
     def setUp(self):
+        staticfiles_storage._setup()
+        call_command("collectstatic", verbosity=0, interactive=False)
         self.env = Environment(
             extensions=[PipelineExtension],
             loader=PackageLoader("pipeline", "templates"),
@@ -64,8 +71,66 @@ class JinjaTest(TestCase):
             template.render(),
         )
 
+    def test_crossorigin(self):
+        template = self.env.from_string("""{% javascript "scripts_crossorigin" %}""")
+        self.assertEqual(
+            (
+                '<script type="text/javascript" src="/static/scripts_crossorigin.js" '
+                'charset="utf-8" crossorigin="anonymous"></script>'
+            ),
+            template.render(),
+        )  # noqa
+
+    def test_sri_sha256(self):
+        template = self.env.from_string("""{% javascript "scripts_sri_sha256" %}""")
+        hash_ = self.get_integrity("scripts_sha256.js", "sha256")
+        self.assertEqual(
+            (
+                '<script type="text/javascript" src="/static/scripts_sha256.js" '
+                'charset="utf-8" integrity="%s"></script>'
+            )
+            % hash_,
+            template.render(),
+        )  # noqa
+
+    def test_sri_sha384(self):
+        template = self.env.from_string("""{% javascript "scripts_sri_sha384" %}""")
+        hash_ = self.get_integrity("scripts_sha384.js", "sha384")
+        self.assertEqual(
+            (
+                '<script type="text/javascript" src="/static/scripts_sha384.js" '
+                'charset="utf-8" integrity="%s"></script>'
+            )
+            % hash_,
+            template.render(),
+        )  # noqa
+
+    def test_sri_sha512(self):
+        template = self.env.from_string("""{% javascript "scripts_sri_sha512" %}""")
+        hash_ = self.get_integrity("scripts_sha512.js", "sha512")
+        self.assertEqual(
+            (
+                '<script type="text/javascript" src="/static/scripts_sha512.js" '
+                'charset="utf-8" integrity="%s"></script>'
+            )
+            % hash_,
+            template.render(),
+        )  # noqa
+
+    @staticmethod
+    def get_integrity(path, method):
+        with staticfiles_storage.open(path) as fd:
+            h = getattr(hashlib, method)(fd.read())
+        return "%s-%s" % (method, base64.b64encode(h.digest()).decode())
+
 
 class DjangoTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        staticfiles_storage._setup()
+        call_command("collectstatic", verbosity=0, interactive=False)
+
     def render_template(self, template):
         return Template(template).render(Context())
 
@@ -137,3 +202,57 @@ class DjangoTest(TestCase):
             '<script async defer type="text/javascript" src="/static/scripts_async_defer.js" charset="utf-8"></script>',  # noqa
             rendered,
         )
+
+    def test_crossorigin(self):
+        rendered = self.render_template(
+            """{% load pipeline %}{% javascript "scripts_crossorigin" %}"""
+        )  # noqa
+        self.assertEqual(
+            (
+                '<script type="text/javascript" src="/static/scripts_crossorigin.js" '
+                'charset="utf-8" crossorigin="anonymous"></script>'
+            ),
+            rendered,
+        )  # noqa
+
+    def test_sri_sha256(self):
+        rendered = self.render_template(
+            """{% load pipeline %}{% javascript "scripts_sri_sha256" %}"""
+        )  # noqa
+        hash_ = JinjaTest.get_integrity("scripts_sha256.js", "sha256")
+        self.assertEqual(
+            (
+                '<script type="text/javascript" src="/static/scripts_sha256.js" '
+                'charset="utf-8" integrity="%s"></script>'
+            )
+            % hash_,
+            rendered,
+        )  # noqa
+
+    def test_sri_sha384(self):
+        rendered = self.render_template(
+            """{% load pipeline %}{% javascript "scripts_sri_sha384" %}"""
+        )  # noqa
+        hash_ = JinjaTest.get_integrity("scripts_sha384.js", "sha384")
+        self.assertEqual(
+            (
+                '<script type="text/javascript" src="/static/scripts_sha384.js" '
+                'charset="utf-8" integrity="%s"></script>'
+            )
+            % hash_,
+            rendered,
+        )  # noqa
+
+    def test_sri_sha512(self):
+        rendered = self.render_template(
+            """{% load pipeline %}{% javascript "scripts_sri_sha512" %}"""
+        )  # noqa
+        hash_ = JinjaTest.get_integrity("scripts_sha512.js", "sha512")
+        self.assertEqual(
+            (
+                '<script type="text/javascript" src="/static/scripts_sha512.js" '
+                'charset="utf-8" integrity="%s"></script>'
+            )
+            % hash_,
+            rendered,
+        )  # noqa
