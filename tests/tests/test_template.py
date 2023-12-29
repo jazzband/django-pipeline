@@ -121,7 +121,8 @@ class JinjaTest(TestCase):
     def get_integrity(path, method):
         with staticfiles_storage.open(path) as fd:
             h = getattr(hashlib, method)(fd.read())
-        return "%s-%s" % (method, base64.b64encode(h.digest()).decode())
+        digest = base64.b64encode(h.digest()).decode()
+        return f"{method}-{digest}"
 
 
 class DjangoTest(TestCase):

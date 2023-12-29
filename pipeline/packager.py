@@ -65,7 +65,7 @@ class Package:
     def compiler_options(self):
         return self.config.get("compiler_options", {})
 
-    @lru_cache()
+    @lru_cache
     def get_sri(self, path):
         method = self.config.get("integrity")
         if method not in {"sha256", "sha384", "sha512"}:
@@ -75,7 +75,8 @@ class Package:
                 h = getattr(hashlib, method)()
                 for data in iter(lambda: fd.read(16384), b""):
                     h.update(data)
-            return "%s-%s" % (method, base64.b64encode(h.digest()).decode())
+            digest = base64.b64encode(h.digest()).decode()
+            return f"{method}-{digest}"
         return None
 
 
