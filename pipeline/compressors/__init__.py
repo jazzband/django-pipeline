@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import base64
 import os
 import posixpath
 import re
 import subprocess
+import warnings
 from itertools import takewhile
+from typing import Iterator, Optional, Sequence
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import force_str, smart_bytes
@@ -12,8 +16,58 @@ from pipeline.conf import settings
 from pipeline.exceptions import CompressorError
 from pipeline.utils import relpath, set_std_streams_blocking, to_class
 
-URL_DETECTOR = r"""url\((['"]?)\s*(.*?)\1\)"""
-URL_REPLACER = r"""url\(__EMBED__(.+?)(\?\d+)?\)"""
+
+# Regex matching url(...), url('...'), and url("...") patterns.
+#
+# Replacements will preserve the quotes and any whitespace contained within
+# the pattern, transforming only the filename.
+#
+# Verbose and documented, to ease future maintenance.
+_CSS_URL_REWRITE_PATH_RE_STR = r"""
+    (?P<url_prefix>
+      url\(                 # The opening `url(`.
+      (?P<url_quote>['"]?)  # Optional quote (' or ").
+      \s*
+    )
+    (?P<url_path>.*?)       # The path to capture.
+    (?P<url_suffix>
+      (?P=url_quote)        # The quote found earlier, if any.
+      \s*
+      \)                    # The end `)`, completing `url(...)`.
+    )
+"""
+
+
+# Regex matching `//@ sourceMappingURL=...` and variants.
+#
+# This will capture sourceMappingURL and sourceURL keywords, both
+# `//@` and `//#` variants, and both `//` and `/* ... */` comment types.
+#
+# Verbose and documented, to ease future maintenance.
+_SOURCEMAP_REWRITE_PATH_RE_STR = r"""
+    (?P<sourcemap_prefix>
+      /(?:/|(?P<sourcemap_mlcomment>\*))  # Opening comment (`//#`, `//@`,
+      [#@]\s+                             # `/*@`, `/*#`).
+      source(?:Mapping)?URL=              # The sourcemap indicator.
+      \s*
+    )
+    (?P<sourcemap_path>.*?)               # The path to capture.
+    (?P<sourcemap_suffix>
+      \s*
+      (?(sourcemap_mlcomment)\*/\s*)      # End comment (`*/`)
+    )
+    $                                     # The line should now end.
+"""
+
+
+# Implementation of the above regexes, for CSS and JavaScript.
+CSS_REWRITE_PATH_RE = re.compile(
+    f"{_CSS_URL_REWRITE_PATH_RE_STR}|{_SOURCEMAP_REWRITE_PATH_RE_STR}", re.X | re.M
+)
+JS_REWRITE_PATH_RE = re.compile(_SOURCEMAP_REWRITE_PATH_RE_STR, re.X | re.M)
+
+
+URL_REPLACER = re.compile(r"""url\(__EMBED__(.+?)(\?\d+)?\)""")
 NON_REWRITABLE_URL = re.compile(r"^(#|http:|https:|data:|//)")
 
 DEFAULT_TEMPLATE_FUNC = "template"
@@ -51,9 +105,27 @@ class Compressor:
     def css_compressor(self):
         return to_class(settings.CSS_COMPRESSOR)
 
-    def compress_js(self, paths, templates=None, **kwargs):
+    def compress_js(
+        self,
+        paths: Sequence[str],
+        templates: Optional[Sequence[str]] = None,
+        *,
+        output_filename: Optional[str] = None,
+        **kwargs,
+    ) -> str:
         """Concatenate and compress JS files"""
-        js = self.concatenate(paths)
+        # Note how a semicolon is added between the two files to make sure that
+        # their behavior is not changed. '(expression1)\n(expression2)' calls
+        # `expression1` with `expression2` as an argument! Superfluous
+        # semicolons are valid in JavaScript and will be removed by the
+        # minifier.
+        js = self.concatenate(
+            paths,
+            file_sep=";",
+            output_filename=output_filename,
+            rewrite_path_re=JS_REWRITE_PATH_RE,
+        )
+
         if templates:
             js = js + self.compile_templates(templates)
 
@@ -68,7 +140,13 @@ class Compressor:
 
     def compress_css(self, paths, output_filename, variant=None, **kwargs):
         """Concatenate and compress CSS files"""
-        css = self.concatenate_and_rewrite(paths, output_filename, variant)
+        css = self.concatenate(
+            paths,
+            file_sep="",
+            rewrite_path_re=CSS_REWRITE_PATH_RE,
+            output_filename=output_filename,
+            variant=variant,
+        )
         compressor = self.css_compressor
         if compressor:
             css = getattr(compressor(verbose=self.verbose), "compress_css")(css)
@@ -131,38 +209,116 @@ class Compressor:
 
     def concatenate_and_rewrite(self, paths, output_filename, variant=None):
         """Concatenate together files and rewrite urls"""
-        stylesheets = []
-        for path in paths:
+        warnings.warn(
+            "Compressor.concatenate_and_rewrite() is deprecated. Please "
+            "call concatenate() instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
 
-            def reconstruct(match):
-                quote = match.group(1) or ""
-                asset_path = match.group(2)
-                if NON_REWRITABLE_URL.match(asset_path):
-                    return f"url({quote}{asset_path}{quote})"
-                asset_url = self.construct_asset_path(
-                    asset_path, path, output_filename, variant
+        return self.concatenate(
+            paths=paths,
+            file_sep="",
+            rewrite_path_re=CSS_REWRITE_PATH_RE,
+            output_filename=output_filename,
+            variant=variant,
+        )
+
+    def concatenate(
+        self,
+        paths: Sequence[str],
+        *,
+        file_sep: Optional[str] = None,
+        output_filename: Optional[str] = None,
+        rewrite_path_re: Optional[re.Pattern] = None,
+        variant: Optional[str] = None,
+    ) -> str:
+        """Concatenate together a list of files.
+
+        The caller can specify a delimiter between files and any regexes
+        used to normalize relative paths. Path normalization is important for
+        ensuring that local resources or sourcemaps can be updated in time
+        for Django's static media post-processing phase.
+        """
+
+        def _reconstruct(
+            m: re.Match,
+            source_path: str,
+        ) -> str:
+            groups = m.groupdict()
+            asset_path: Optional[str] = None
+            prefix = ""
+            suffix = ""
+
+            for prefix in ("sourcemap", "url"):
+                asset_path = groups.get(f"{prefix}_path")
+
+                if asset_path is not None:
+                    asset_path = asset_path.strip()
+                    prefix, suffix = m.group(f"{prefix}_prefix", f"{prefix}_suffix")
+                    break
+
+            if asset_path is None:
+                # This is empty. Return the whole match as-is.
+                return m.group()
+
+            if asset_path and not NON_REWRITABLE_URL.match(asset_path):
+                asset_path = self.construct_asset_path(
+                    asset_path=asset_path,
+                    source_path=source_path,
+                    output_filename=output_filename,
+                    variant=variant,
                 )
-                return f"url({asset_url})"
 
-            content = self.read_text(path)
-            # content needs to be unicode to avoid explosions with non-ascii chars
-            content = re.sub(URL_DETECTOR, reconstruct, content)
-            stylesheets.append(content)
-        return "\n".join(stylesheets)
+            return f"{prefix}{asset_path}{suffix}"
 
-    def concatenate(self, paths):
-        """Concatenate together a list of files"""
-        # Note how a semicolon is added between the two files to make sure that
-        # their behavior is not changed. '(expression1)\n(expression2)' calls
-        # `expression1` with `expression2` as an argument! Superfluos semicolons
-        # are valid in JavaScript and will be removed by the minifier.
-        return "\n;".join([self.read_text(path) for path in paths])
+        def _iter_files() -> Iterator[str]:
+            if not output_filename or not rewrite_path_re:
+                # This is legacy call, which does not support sourcemap-aware
+                # asset rewriting. Pipeline itself won't invoke this outside
+                # of tests, but it maybe important for third-parties who
+                # are specializing these classes.
+                warnings.warn(
+                    "Compressor.concatenate() was called without passing "
+                    "rewrite_path_re_= or output_filename=. If you are "
+                    "specializing Compressor, please update your call "
+                    "to remain compatible with future changes.",
+                    DeprecationWarning,
+                    stacklevel=3,
+                )
 
-    def construct_asset_path(self, asset_path, css_path, output_filename, variant=None):
-        """Return a rewritten asset URL for a stylesheet"""
+                return (self.read_text(path) for path in paths)
+
+            # Now that we can attempt the modern support for concatenating
+            # files, handling rewriting of relative assets in the process.
+            return (
+                rewrite_path_re.sub(
+                    lambda m: _reconstruct(m, path), self.read_text(path)
+                )
+                for path in paths
+            )
+
+        if file_sep is None:
+            warnings.warn(
+                "Compressor.concatenate() was called without passing "
+                "file_sep=. If you are specializing Compressor, please "
+                "update your call to remain compatible with future changes. "
+                "Defaulting to JavaScript behavior for "
+                "backwards-compatibility.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            file_sep = ";"
+
+        return f"\n{file_sep}".join(_iter_files())
+
+    def construct_asset_path(
+        self, asset_path, source_path, output_filename, variant=None
+    ):
+        """Return a rewritten asset URL for a stylesheet or JavaScript file."""
         public_path = self.absolute_path(
             asset_path,
-            os.path.dirname(css_path).replace("\\", "/"),
+            os.path.dirname(source_path).replace("\\", "/"),
         )
         if self.embeddable(public_path, variant):
             return "__EMBED__%s" % public_path
@@ -196,7 +352,7 @@ class Compressor:
             data = self.encoded_content(path)
             return f'url("data:{mime_type};charset=utf-8;base64,{data}")'
 
-        return re.sub(URL_REPLACER, datauri, css)
+        return URL_REPLACER.sub(datauri, css)
 
     def encoded_content(self, path):
         """Return the base64 encoded contents"""

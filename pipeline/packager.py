@@ -152,6 +152,7 @@ class Packager:
             package,
             self.compressor.compress_js,
             js_compressed,
+            output_filename=package.output_filename,
             templates=package.templates,
             **kwargs,
         )
