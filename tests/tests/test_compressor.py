@@ -16,10 +16,10 @@ from django.test.client import RequestFactory
 from pipeline.collector import default_collector
 from pipeline.compressors import (
     CSS_REWRITE_PATH_RE,
-    Compressor,
     JS_REWRITE_PATH_RE,
-    SubProcessCompressor,
     TEMPLATE_FUNC,
+    Compressor,
+    SubProcessCompressor,
 )
 from pipeline.compressors.yuglify import YuglifyCompressor
 from tests.utils import _, pipeline_settings

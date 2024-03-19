@@ -16,7 +16,6 @@ from pipeline.conf import settings
 from pipeline.exceptions import CompressorError
 from pipeline.utils import relpath, set_std_streams_blocking, to_class
 
-
 # Regex matching url(...), url('...'), and url("...") patterns.
 #
 # Replacements will preserve the quotes and any whitespace contained within
