@@ -114,7 +114,8 @@ class PipelineMixin:
         error_output = re.sub(
             re.compile(r"(?:\x1B[@-_]|[\x80-\x9F])[0-?]*[ -/]*[@-~]"),
             "",
-            e.error_output)
+            e.error_output,
+        )
 
         return render_to_string(
             "pipeline/compile_error.html",
