@@ -3,6 +3,17 @@
 History
 =======
 
+3.1.0
+=====
+
+* Fixed concatenation to update relative sourceMappingURL paths (#808). This
+  was effectively breaking pipeline usage on Django 4+.
+* Fixed the django-pipeline-error box that gets injected into HTML pages to
+  hard-code a text color in addition to a background color. This ensures that
+  the text is readable, even on pages that are rendered with light text colors.
+* Added filtering for the django-pipeline-error box to remove ANSI color codes,
+  which are included by some tools.
+
 3.0.0
 =====
 
