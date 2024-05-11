@@ -2,6 +2,12 @@
 
 History
 =======
+3.1.0
+=====
+
+* Replace deprecated .warn method with .warning
+* Update sourcemap paths when concatenating source files
+* Ensure correct compiler error styling and strip ANSI escape sequences
 
 3.0.0
 =====
