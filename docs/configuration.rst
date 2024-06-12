@@ -123,6 +123,25 @@ Indicate if you want this group to appear in your cache manifest.
 
 Defaults to ``True``.
 
+``crossorigin``
+............
+
+**Optional**
+
+Indicate if you want to add to the group this attribute that provides support for CORS, defining how the element handles cross-origin requests, thereby enabling the configuration of the CORS requests for the element's fetched data. .
+
+Missing by default (the attribute is not added), the only valid values currently are ``anonymous`` and ``use-credentials``.
+
+``integrity``
+............
+
+**Optional**
+
+Indicate if you want to add the sub-resource integrity (SRI) attribute to the group.
+This attribute contains inline metadata that a user agent can use to verify that a fetched resource has been delivered free of unexpected manipulation
+
+Missing by default, and only valid values are ``"sha256"``, ``"sha384"`` and ``"sha512"``.
+
 ``compiler_options``
 ....................
 
