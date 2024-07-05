@@ -47,7 +47,7 @@ class PipelineExtension(PipelineMixin, Extension):
                 "url": staticfiles_storage.url(path),
                 "crossorigin": package.config.get("crossorigin"),
                 "integrity": package.get_sri(path),
-             }
+            }
         )
         template = self.environment.get_template(template_name)
         return template.render(context)
