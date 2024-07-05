@@ -89,6 +89,42 @@ PIPELINE = {
                 "title": "Default Style",
             },
         },
+        "screen_crossorigin": {
+            "source_filenames": (
+                "pipeline/css/first.css",
+                "pipeline/css/second.css",
+                "pipeline/css/urls.css",
+            ),
+            "output_filename": "screen_crossorigin.css",
+            "crossorigin": "anonymous",
+        },
+        "screen_sri_sha256": {
+            "source_filenames": (
+                "pipeline/css/first.css",
+                "pipeline/css/second.css",
+                "pipeline/css/urls.css",
+            ),
+            "output_filename": "screen_sri_sha256.css",
+            "integrity": "sha256",
+        },
+        "screen_sri_sha384": {
+            "source_filenames": (
+                "pipeline/css/first.css",
+                "pipeline/css/second.css",
+                "pipeline/css/urls.css",
+            ),
+            "output_filename": "screen_sri_sha384.css",
+            "integrity": "sha384",
+        },
+        "screen_sri_sha512": {
+            "source_filenames": (
+                "pipeline/css/first.css",
+                "pipeline/css/second.css",
+                "pipeline/css/urls.css",
+            ),
+            "output_filename": "screen_sri_sha512.css",
+            "integrity": "sha512",
+        },
     },
     "JAVASCRIPT": {
         "scripts": {
@@ -136,6 +172,46 @@ PIPELINE = {
                 "async": True,
                 "defer": True,
             },
+        },
+        "scripts_crossorigin": {
+            "source_filenames": (
+                "pipeline/js/first.js",
+                "pipeline/js/second.js",
+                "pipeline/js/application.js",
+                "pipeline/templates/**/*.jst",
+            ),
+            "output_filename": "scripts_crossorigin.js",
+            "crossorigin": "anonymous",
+        },
+        "scripts_sri_sha256": {
+            "source_filenames": (
+                "pipeline/js/first.js",
+                "pipeline/js/second.js",
+                "pipeline/js/application.js",
+                "pipeline/templates/**/*.jst",
+            ),
+            "output_filename": "scripts_sha256.js",
+            "integrity": "sha256",
+        },
+        "scripts_sri_sha384": {
+            "source_filenames": (
+                "pipeline/js/first.js",
+                "pipeline/js/second.js",
+                "pipeline/js/application.js",
+                "pipeline/templates/**/*.jst",
+            ),
+            "output_filename": "scripts_sha384.js",
+            "integrity": "sha384",
+        },
+        "scripts_sri_sha512": {
+            "source_filenames": (
+                "pipeline/js/first.js",
+                "pipeline/js/second.js",
+                "pipeline/js/application.js",
+                "pipeline/templates/**/*.jst",
+            ),
+            "output_filename": "scripts_sha512.js",
+            "integrity": "sha512",
         },
     },
 }
