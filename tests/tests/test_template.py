@@ -83,7 +83,8 @@ class JinjaTest(TestCase):
         template = self.env.from_string("""{% stylesheet "screen_crossorigin" %}""")
         self.assertEqual(
             (
-                '<link href="/static/screen_crossorigin.css" rel="stylesheet" type="text/css" crossorigin="anonymous" />'
+                '<link href="/static/screen_crossorigin.css" rel="stylesheet" '
+                'type="text/css" crossorigin="anonymous" />'
             ),
             template.render(),
         )  # noqa
@@ -102,7 +103,8 @@ class JinjaTest(TestCase):
         hash_ = self.get_integrity("screen_sri_sha256.css", "sha256")
         self.assertEqual(
             (
-                f'<link href="/static/screen_sri_sha256.css" rel="stylesheet" type="text/css" integrity="{hash_}" />'
+                f'<link href="/static/screen_sri_sha256.css" rel="stylesheet" '
+                f'type="text/css" integrity="{hash_}" />'
             ),
             template.render(),
         )  # noqa
@@ -122,7 +124,8 @@ class JinjaTest(TestCase):
         hash_ = self.get_integrity("screen_sri_sha384.css", "sha384")
         self.assertEqual(
             (
-                f'<link href="/static/screen_sri_sha384.css" rel="stylesheet" type="text/css" integrity="{hash_}" />'
+                f'<link href="/static/screen_sri_sha384.css" rel="stylesheet" '
+                f'type="text/css" integrity="{hash_}" />'
             ),
             template.render(),
         )  # noqa
@@ -142,7 +145,8 @@ class JinjaTest(TestCase):
         hash_ = self.get_integrity("screen_sri_sha512.css", "sha512")
         self.assertEqual(
             (
-                f'<link href="/static/screen_sri_sha512.css" rel="stylesheet" type="text/css" integrity="{hash_}" />'
+                f'<link href="/static/screen_sri_sha512.css" rel="stylesheet" '
+                f'type="text/css" integrity="{hash_}" />'
             ),
             template.render(),
         )  # noqa
@@ -250,7 +254,8 @@ class DjangoTest(TestCase):
         )  # noqa
         self.assertEqual(
             (
-                '<link href="/static/screen_crossorigin.css" rel="stylesheet" type="text/css" media="all" crossorigin="anonymous" />'
+                '<link href="/static/screen_crossorigin.css" rel="stylesheet" '
+                'type="text/css" media="all" crossorigin="anonymous" />'
             ),
             rendered,
         )  # noqa
@@ -274,7 +279,8 @@ class DjangoTest(TestCase):
         hash_ = JinjaTest.get_integrity("screen_sri_sha256.css", "sha256")
         self.assertEqual(
             (
-                f'<link href="/static/screen_sri_sha256.css" rel="stylesheet" type="text/css" media="all" integrity="{hash_}" />'
+                f'<link href="/static/screen_sri_sha256.css" rel="stylesheet" '
+                f'type="text/css" media="all" integrity="{hash_}" />'
             ),
             rendered,
         )  # noqa
@@ -298,7 +304,8 @@ class DjangoTest(TestCase):
         hash_ = JinjaTest.get_integrity("screen_sri_sha384.css", "sha384")
         self.assertEqual(
             (
-                f'<link href="/static/screen_sri_sha384.css" rel="stylesheet" type="text/css" media="all" integrity="{hash_}" />'
+                f'<link href="/static/screen_sri_sha384.css" rel="stylesheet" '
+                f'type="text/css" media="all" integrity="{hash_}" />'
             ),
             rendered,
         )  # noqa
@@ -322,7 +329,8 @@ class DjangoTest(TestCase):
         hash_ = JinjaTest.get_integrity("screen_sri_sha512.css", "sha512")
         self.assertEqual(
             (
-                f'<link href="/static/screen_sri_sha512.css" rel="stylesheet" type="text/css" media="all" integrity="{hash_}" />'
+                f'<link href="/static/screen_sri_sha512.css" rel="stylesheet" '
+                f'type="text/css" media="all" integrity="{hash_}" />'
             ),
             rendered,
         )  # noqa
