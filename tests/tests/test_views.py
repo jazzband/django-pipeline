@@ -17,7 +17,7 @@ class ServeStaticViewsTest(TestCase):
 
         self.filename = "pipeline/js/first.js"
         self.storage = staticfiles_storage
-        self.request = RequestFactory().get("/static/%s" % self.filename)
+        self.request = RequestFactory().get(f"/static/{self.filename}")
 
         default_collector.clear()
 

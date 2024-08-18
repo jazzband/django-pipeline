@@ -518,7 +518,7 @@ class CompressorImplementationTest(TestCase):
 
     def _test_compressor(self, compressor_cls, compress_type, expected_file):
         override_settings = {
-            ("%s_COMPRESSOR" % compress_type.upper()): compressor_cls,
+            (f"{compress_type.upper()}_COMPRESSOR"): compressor_cls,
         }
         with pipeline_settings(**override_settings):
             if compress_type == "js":
