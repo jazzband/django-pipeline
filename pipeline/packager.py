@@ -127,10 +127,10 @@ class Packager:
                 if source_storage is not None:
                     with source_storage.open(path) as source_file:
                         if self.verbose:
-                            print("Saving: %s" % path)
+                            print(f"Saving: {path}")
                         self.storage.save(path, source_file)
                 else:
-                    raise OSError("File does not exist: %s" % path)
+                    raise OSError(f"File does not exist: {path}")
         return paths
 
     def pack(self, package, compress, signal, **kwargs):
@@ -168,7 +168,7 @@ class Packager:
             for short_path, storage in finder.list(""):
                 if short_path == path:
                     if self.verbose:
-                        print("Found storage: %s" % str(self.storage))
+                        print(f"Found storage: {str(self.storage)}")
                     return storage
         return None
 

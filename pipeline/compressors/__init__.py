@@ -320,7 +320,7 @@ class Compressor:
             os.path.dirname(source_path).replace("\\", "/"),
         )
         if self.embeddable(public_path, variant):
-            return "__EMBED__%s" % public_path
+            return f"__EMBED__{public_path}"
         if not posixpath.isabs(asset_path):
             asset_path = self.relative_path(public_path, output_filename)
         return asset_path
