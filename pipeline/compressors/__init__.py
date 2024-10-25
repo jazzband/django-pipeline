@@ -6,8 +6,9 @@ import posixpath
 import re
 import subprocess
 import warnings
+from collections.abc import Iterator, Sequence
 from itertools import takewhile
-from typing import Iterator, Optional, Sequence
+from typing import Optional
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import force_str, smart_bytes
