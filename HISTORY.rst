@@ -2,6 +2,11 @@
 
 History
 =======
+
+Unreleased
+==========
+* Drop support for Python 3.8
+
 3.1.0
 =====
 

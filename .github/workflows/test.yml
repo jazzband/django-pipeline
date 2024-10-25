@@ -9,17 +9,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', 'pypy-3.10']
+        python-version: ['3.9', '3.10', '3.11', '3.12', 'pypy-3.10']
         django-version: ['3.2', '4.1', '4.2', '5.0', 'main']
         exclude:
-          - python-version: '3.8'
-            django-version: '4.1'
-          - python-version: '3.8'
-            django-version: '4.2'
-          - python-version: '3.8'
-            django-version: '5.0'
-          - python-version: '3.8'
-            django-version: 'main'
           - python-version: '3.9'
             django-version: '5.0'
           - python-version: '3.9'
@@ -91,4 +83,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: pip install --user ruff
-    - run: ruff check . --extend-select=C4,C9,I,PLC,PLE,PLR,U --ignore=C414,I001,PLR0913,UP007,UP032 --target-version=py38
+    - run: ruff check . --extend-select=C4,C9,I,PLC,PLE,PLR,U --ignore=C414,I001,PLR0913,UP007,UP032 --target-version=py39
