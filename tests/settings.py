@@ -157,7 +157,7 @@ if HAS_NODE:
 
     PIPELINE.update(
         {
-            "SASS_BINARY": node_exe_path("node-sass"),
+            "SASS_BINARY": node_exe_path("sass"),
             "COFFEE_SCRIPT_BINARY": node_exe_path("coffee"),
             "COFFEE_SCRIPT_ARGUMENTS": ["--no-header"],
             "LESS_BINARY": node_exe_path("lessc"),
