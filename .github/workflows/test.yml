@@ -25,6 +25,8 @@ jobs:
           - python-version: 'pypy-3.10'
             django-version: '5.0'
           - python-version: 'pypy-3.10'
+            django-version: '5.1'
+          - python-version: 'pypy-3.10'
             django-version: 'main'
           - python-version: '3.12'
             django-version: '4.1'
