@@ -1,5 +1,0 @@
-coveralls
-flake8
-tox
-wheel
-django
