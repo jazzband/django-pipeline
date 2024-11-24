@@ -45,10 +45,9 @@ keywords = [
     "packaging",
 ]
 dependencies = [
-  # indirect dependencies
-  "setuptools", # typically needed when pip-tools invokes setup.py
-  "wheel", # pip plugin needed by pip-tools
-
+    # indirect dependencies
+    "setuptools",
+    "wheel",
 ]
 
 [project.optional-dependencies]
