@@ -16,7 +16,7 @@
     "coffeescript": "latest",
     "less": "latest",
     "livescript": "latest",
-    "node-sass": "latest",
+    "sass": "latest",
     "stylus": "latest",
     "cssmin": "latest",
     "google-closure-compiler": "latest",

@@ -1,4 +1,5 @@
 import logging
+import re
 import subprocess
 
 from django import template
@@ -109,13 +110,20 @@ class PipelineMixin:
         return method(package, paths, templates=templates)
 
     def render_error(self, package_type, package_name, e):
+        # Remove any ANSI escape sequences in the output.
+        error_output = re.sub(
+            re.compile(r"(?:\x1B[@-_]|[\x80-\x9F])[0-?]*[ -/]*[@-~]"),
+            "",
+            e.error_output,
+        )
+
         return render_to_string(
             "pipeline/compile_error.html",
             {
                 "package_type": package_type,
                 "package_name": package_name,
                 "command": subprocess.list2cmdline(e.command),
-                "errors": e.error_output,
+                "errors": error_output,
             },
         )
 
@@ -132,7 +140,7 @@ class StylesheetNode(PipelineMixin, template.Node):
             package = self.package_for(package_name, "css")
         except PackageNotFound:
             w = "Package %r is unknown. Check PIPELINE['STYLESHEETS'] in your settings."
-            logger.warn(w, package_name)
+            logger.warning(w, package_name)
             # fail silently, do not return anything if an invalid group is specified
             return ""
         return self.render_compressed(package, package_name, "css")
@@ -168,7 +176,7 @@ class JavascriptNode(PipelineMixin, template.Node):
             package = self.package_for(package_name, "js")
         except PackageNotFound:
             w = "Package %r is unknown. Check PIPELINE['JAVASCRIPT'] in your settings."
-            logger.warn(w, package_name)
+            logger.warning(w, package_name)
             # fail silently, do not return anything if an invalid group is specified
             return ""
         return self.render_compressed(package, package_name, "js")
