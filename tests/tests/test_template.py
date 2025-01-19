@@ -115,8 +115,8 @@ class JinjaTest(TestCase):
         self.assertEqual(
             (
                 '<script type="text/javascript" src="/static/scripts_sha384.js" '
-                'charset="utf-8" integrity="%s"></script>'
-            ).format(*hash_),
+                f'charset="utf-8" integrity="{hash_}"></script>'
+            ),
             template.render(),
         )  # noqa
         template = self.env.from_string("""{% stylesheet "screen_sri_sha384" %}""")
@@ -135,8 +135,8 @@ class JinjaTest(TestCase):
         self.assertEqual(
             (
                 '<script type="text/javascript" src="/static/scripts_sha512.js" '
-                'charset="utf-8" integrity="%s"></script>'
-            ).format(*hash_),
+                f'charset="utf-8" integrity="{hash_}"></script>'
+            ),
             template.render(),
         )  # noqa
         template = self.env.from_string("""{% stylesheet "screen_sri_sha512" %}""")
@@ -266,8 +266,8 @@ class DjangoTest(TestCase):
         self.assertEqual(
             (
                 '<script type="text/javascript" src="/static/scripts_sha256.js" '
-                'charset="utf-8" integrity="%s"></script>'
-            ).format(*hash_),
+                f'charset="utf-8" integrity="{hash_}"></script>'
+            ),
             rendered,
         )  # noqa
         rendered = self.render_template(
@@ -290,8 +290,8 @@ class DjangoTest(TestCase):
         self.assertEqual(
             (
                 '<script type="text/javascript" src="/static/scripts_sha384.js" '
-                'charset="utf-8" integrity="%s"></script>'
-            ).format(*hash_),
+                f'charset="utf-8" integrity="{hash_}"></script>'
+            ),
             rendered,
         )  # noqa
         rendered = self.render_template(
@@ -314,8 +314,8 @@ class DjangoTest(TestCase):
         self.assertEqual(
             (
                 '<script type="text/javascript" src="/static/scripts_sha512.js" '
-                'charset="utf-8" integrity="%s"></script>'
-            ).format(*hash_),
+                f'charset="utf-8" integrity="{hash_}"></script>'
+            ),
             rendered,
         )  # noqa
         rendered = self.render_template(
