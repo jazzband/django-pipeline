@@ -2,6 +2,13 @@
 
 History
 =======
+
+4.0.0
+=====
+* Drop support for Python 3.8
+* Confirm support for Django 5.1 and drop support for Django 3.2
+* Use pyproject.toml
+
 3.1.0
 =====
 
