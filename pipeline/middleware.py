@@ -1,7 +1,7 @@
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import MiddlewareNotUsed
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import DjangoUnicodeDecodeError
-from django.contrib.staticfiles.storage import staticfiles_storage
 
 from pipeline.compressors import Compressor
 from pipeline.conf import settings
@@ -20,7 +20,9 @@ class MinifyHTMLMiddleware(MiddlewareMixin):
         ):
             compressor = Compressor(storage=staticfiles_storage, verbose=False)
             try:
-                response.content = compressor.compress_html(response.content.decode("utf-8"))
+                response.content = compressor.compress_html(
+                    response.content.decode("utf-8")
+                )
                 response["Content-Length"] = str(len(response.content))
             except DjangoUnicodeDecodeError:
                 pass

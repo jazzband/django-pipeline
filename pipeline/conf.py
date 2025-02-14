@@ -55,11 +55,11 @@ DEFAULTS = {
     "LESS_BINARY": "/usr/bin/env lessc",
     "LESS_ARGUMENTS": "",
     "MINIFYHTML_PARAMS": {
-        'do_not_minify_doctype': True,
-        'ensure_spec_compliant_unquoted_attribute_values': True,
-        'keep_spaces_between_attributes': True,
-        'minify_css': True,
-        'minify_js': True,
+        "do_not_minify_doctype": True,
+        "ensure_spec_compliant_unquoted_attribute_values": True,
+        "keep_spaces_between_attributes": True,
+        "minify_css": True,
+        "minify_js": True,
     },
     "MIMETYPES": (
         (("text/coffeescript"), (".coffee")),
