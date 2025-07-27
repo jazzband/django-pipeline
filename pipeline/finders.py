@@ -18,9 +18,9 @@ from pipeline.conf import settings
 class PipelineFinder(BaseStorageFinder):
     storage = staticfiles_storage
 
-    def find(self, path, all=False):
+    def find(self, path, **kwargs):
         if not settings.PIPELINE_ENABLED:
-            return super().find(path, all)
+            return super().find(path, **kwargs)
         else:
             return []
 
@@ -29,15 +29,17 @@ class PipelineFinder(BaseStorageFinder):
 
 
 class ManifestFinder(BaseFinder):
-    def find(self, path, all=False):
+    def find(self, path, **kwargs):
         """
         Looks for files in PIPELINE.STYLESHEETS and PIPELINE.JAVASCRIPT
         """
+        match_all = kwargs.get("find_all", kwargs.get("all", False))
+
         matches = []
         for elem in chain(settings.STYLESHEETS.values(), settings.JAVASCRIPT.values()):
             if normpath(elem["output_filename"]) == normpath(path):
                 match = safe_join(settings.PIPELINE_ROOT, path)
-                if not all:
+                if not match_all:
                     return match
                 matches.append(match)
         return matches
@@ -47,7 +49,7 @@ class ManifestFinder(BaseFinder):
 
 
 class CachedFileFinder(BaseFinder):
-    def find(self, path, all=False):
+    def find(self, path, **kwargs):
         """
         Work out the uncached name of the file and look that up instead
         """
@@ -56,7 +58,7 @@ class CachedFileFinder(BaseFinder):
         except ValueError:
             return []
         path = ".".join((start, extn))
-        return find(path, all=all) or []
+        return find(path, **kwargs) or []
 
     def list(self, *args):
         return []
