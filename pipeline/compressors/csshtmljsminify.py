@@ -8,11 +8,11 @@ class CssHtmlJsMinifyCompressor(CompressorBase):
     """
 
     def compress_css(self, css):
-        from css_html_js_minify import css_minify
+        from css_html_js_minify import css_minify  # noqa: PLC0415
 
         return css_minify(css)
 
     def compress_js(self, js):
-        from css_html_js_minify import js_minify
+        from css_html_js_minify import js_minify  # noqa: PLC0415
 
         return js_minify(js)

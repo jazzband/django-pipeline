@@ -8,7 +8,6 @@ import subprocess
 import warnings
 from collections.abc import Iterator, Sequence
 from itertools import takewhile
-from typing import Optional
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.encoding import force_str, smart_bytes
@@ -108,9 +107,9 @@ class Compressor:
     def compress_js(
         self,
         paths: Sequence[str],
-        templates: Optional[Sequence[str]] = None,
+        templates: Sequence[str] | None = None,
         *,
-        output_filename: Optional[str] = None,
+        output_filename: str | None = None,
         **kwargs,
     ) -> str:
         """Concatenate and compress JS files"""
@@ -228,10 +227,10 @@ class Compressor:
         self,
         paths: Sequence[str],
         *,
-        file_sep: Optional[str] = None,
-        output_filename: Optional[str] = None,
-        rewrite_path_re: Optional[re.Pattern] = None,
-        variant: Optional[str] = None,
+        file_sep: str | None = None,
+        output_filename: str | None = None,
+        rewrite_path_re: re.Pattern | None = None,
+        variant: str | None = None,
     ) -> str:
         """Concatenate together a list of files.
 
@@ -246,7 +245,7 @@ class Compressor:
             source_path: str,
         ) -> str:
             groups = m.groupdict()
-            asset_path: Optional[str] = None
+            asset_path: str | None = None
             prefix = ""
             suffix = ""
 
