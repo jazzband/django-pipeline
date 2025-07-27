@@ -33,13 +33,11 @@ class ManifestFinder(BaseFinder):
         """
         Looks for files in PIPELINE.STYLESHEETS and PIPELINE.JAVASCRIPT
         """
-        match_all = kwargs.get("find_all", kwargs.get("all", False))
-
         matches = []
         for elem in chain(settings.STYLESHEETS.values(), settings.JAVASCRIPT.values()):
             if normpath(elem["output_filename"]) == normpath(path):
                 match = safe_join(settings.PIPELINE_ROOT, path)
-                if not match_all:
+                if not kwargs.get("find_all", kwargs.get("all", False)):
                     return match
                 matches.append(match)
         return matches
