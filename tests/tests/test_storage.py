@@ -1,5 +1,6 @@
 from io import StringIO
 
+import django
 from django.contrib.staticfiles import finders
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.management import call_command
@@ -87,6 +88,24 @@ class StorageTest(TestCase):
     def test_nonexistent_file_pipeline_finder(self):
         path = finders.find("nothing.css")
         self.assertIsNone(path)
+
+    @modify_settings(STATICFILES_FINDERS={"append": "pipeline.finders.PipelineFinder"})
+    def test_nonexistent_file_pipeline_finder_find_all(self):
+        if django.__version__ < "5.2":
+            self.skipTest("Only applicable to Django 5.2 and up")
+
+        path = finders.find("nothing.css", find_all=True)
+        self.assertIsNotNone(path)
+        self.assertEqual([], path)
+
+    @modify_settings(STATICFILES_FINDERS={"append": "pipeline.finders.PipelineFinder"})
+    def test_nonexistent_file_pipeline_finder_all(self):
+        if django.__version__ < "6.0":
+            self.skipTest("Only applicable to versions of Django before 6.0")
+
+        path = finders.find("nothing.css", all=True)
+        self.assertIsNotNone(path)
+        self.assertEqual([], path)
 
     @modify_settings(
         STATICFILES_FINDERS={"append": "pipeline.finders.CachedFileFinder"}
