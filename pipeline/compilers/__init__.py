@@ -49,8 +49,8 @@ class Compiler:
                 return input_path
 
         try:
-            import multiprocessing
-            from concurrent import futures
+            import multiprocessing  # noqa: PLC0415
+            from concurrent import futures  # noqa: PLC0415
         except ImportError:
             return list(map(_compile, paths))
         else:
