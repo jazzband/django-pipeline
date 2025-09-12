@@ -44,7 +44,7 @@ jobs:
             django-version: '5.1'
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
@@ -95,6 +95,6 @@ jobs:
   ruff:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - run: pip install --user ruff==0.12.5
     - run: ruff check . --extend-select=C4,C9,I,PLC,PLE,PLR,U --ignore=C414,I001,PLR0913,UP007,UP032 --target-version=py39
