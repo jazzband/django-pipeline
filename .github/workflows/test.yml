@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', 'pypy-3.10']
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', 'pypy-3.10']
         django-version: ['4.1', '4.2', '5.0', '5.1', '5.2', 'main']
         exclude:
           - python-version: '3.9'
@@ -34,6 +34,14 @@ jobs:
             django-version: 'main'
           - python-version: '3.12'
             django-version: '4.1'
+          - python-version: '3.13'
+            django-version: '4.1'
+          - python-version: '3.13'
+            django-version: '4.2'
+          - python-version: '3.13'
+            django-version: '5.0'
+          - python-version: '3.13'
+            django-version: '5.1'
 
     steps:
     - uses: actions/checkout@v4

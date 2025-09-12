@@ -3,6 +3,11 @@
 History
 =======
 
+Unreleased
+==========
+* Add support for Python 3.13
+* Add support for Django 5.2
+
 4.0.0
 =====
 * Drop support for Python 3.8
@@ -61,7 +66,7 @@ History
 * Edit github actions matrix: django 3.2.9 support python 3.10, remove
   python 4.0 (doesn't exist) and exclude pypy-3.8 for django-main.
 * Add .pre-commit-config.yaml. Thanks to @hugovk (#762)
-* Update package.json due to CoffeeScript on NPM has moved to "coffeescript" 
+* Update package.json due to CoffeeScript on NPM has moved to "coffeescript"
 * Update setup.py with Django 4.0 and Python 3.10
 
 2.0.7
@@ -84,7 +89,7 @@ History
   of the current version to prevent error while importing. Thank to @vmsp
 * Context in django.template.base is removed from Django and
   not used anymore in django-pipeline.
-* Fixing widgets tests of django-pipeline due to Media.render_js change in 
+* Fixing widgets tests of django-pipeline due to Media.render_js change in
   Django. More information in Django ticket #31892
 
 2.0.4
