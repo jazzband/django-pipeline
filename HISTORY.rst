@@ -3,8 +3,8 @@
 History
 =======
 
-Unreleased
-==========
+4.1.0
+=====
 * Add support for Python 3.13
 * Add support for Django 5.2
 
