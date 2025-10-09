@@ -14,6 +14,7 @@ DEFAULTS = {
     "SHOW_ERRORS_INLINE": _settings.DEBUG,
     "CSS_COMPRESSOR": "pipeline.compressors.yuglify.YuglifyCompressor",
     "JS_COMPRESSOR": "pipeline.compressors.yuglify.YuglifyCompressor",
+    "JS_DISABLE_REWRITE_PATH": False,
     "COMPILERS": [],
     "STYLESHEETS": {},
     "JAVASCRIPT": {},

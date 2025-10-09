@@ -118,12 +118,19 @@ class Compressor:
         # `expression1` with `expression2` as an argument! Superfluous
         # semicolons are valid in JavaScript and will be removed by the
         # minifier.
-        js = self.concatenate(
-            paths,
-            file_sep=";",
-            output_filename=output_filename,
-            rewrite_path_re=JS_REWRITE_PATH_RE,
-        )
+        if settings.JS_DISABLE_REWRITE_PATH:
+            js = self.concatenate(
+                paths,
+                file_sep=";",
+                output_filename=output_filename,
+            )
+        else:
+            js = self.concatenate(
+                paths,
+                file_sep=";",
+                output_filename=output_filename,
+                rewrite_path_re=JS_REWRITE_PATH_RE,
+            )
 
         if templates:
             js = js + self.compile_templates(templates)
