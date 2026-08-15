@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "Pipeline is an asset packaging library for Django.",
-  "author": "Timothée Peignier <timothee.peignier@tryphon.org>",
+  "author": "Timoth\u00e9e Peignier <timothee.peignier@tryphon.org>",
   "license": "MIT",
   "readmeFilename": "../README.rst",
   "repository": {
@@ -14,16 +14,18 @@
     "babel-cli": "latest",
     "babel-preset-es2015": "latest",
     "coffeescript": "latest",
+    "cssmin": "latest",
+    "dotenv": "^8.2.0",
+    "google-closure-compiler": "latest",
     "less": "latest",
     "livescript": "latest",
+    "node-fetch": "^3.3.2",
     "sass": "latest",
     "stylus": "latest",
-    "cssmin": "latest",
-    "google-closure-compiler": "latest",
     "terser": "latest",
+    "typescript": "latest",
     "uglify-js": "latest",
     "yuglify": "1.0.x",
-    "yuicompressor": "latest",
-    "typescript": "latest"
+    "yuicompressor": "latest"
   }
 }
