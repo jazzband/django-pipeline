@@ -30,3 +30,4 @@ django-pipeline-*/
 .tags
 node_modules/
 package-lock.json
+config.bat
